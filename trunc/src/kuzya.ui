@@ -1,0 +1,646 @@
+<ui version="4.0" >
+ <class>kuzyaForm</class>
+ <widget class="QMainWindow" name="kuzyaForm" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>MainWindow</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="images.qrc" >:/menu/images/bkuzya.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget" />
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>File</string>
+    </property>
+    <addaction name="actionNew" />
+    <addaction name="actionOpen" />
+    <addaction name="actionSave" />
+    <addaction name="actionSave_as" />
+    <addaction name="separator" />
+    <addaction name="actionExit" />
+   </widget>
+   <widget class="QMenu" name="menuEdit" >
+    <property name="title" >
+     <string>Edit</string>
+    </property>
+    <addaction name="actionUndo" />
+    <addaction name="actionRedo" />
+    <addaction name="separator" />
+    <addaction name="actionCut" />
+    <addaction name="actionCopy" />
+    <addaction name="actionPaste" />
+    <addaction name="actionGoToLine" />
+    <addaction name="actionGoToMatchingBracket" />
+   </widget>
+   <widget class="QMenu" name="menuBuild" >
+    <property name="title" >
+     <string>Build</string>
+    </property>
+    <addaction name="actionCompile" />
+    <addaction name="actionRun" />
+   </widget>
+   <widget class="QMenu" name="menuHelp" >
+    <property name="title" >
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout" />
+   </widget>
+   <widget class="QMenu" name="menuTemplates" >
+    <property name="title" >
+     <string>Templates</string>
+    </property>
+    <widget class="QMenu" name="menVar" >
+     <property name="windowIcon" >
+      <iconset resource="images.qrc" >:/menu/images/bkuzya.png</iconset>
+     </property>
+     <property name="title" >
+      <string>Var</string>
+     </property>
+     <addaction name="actionVoid" />
+     <addaction name="actionChar" />
+     <addaction name="actionWchar_t" />
+     <addaction name="actionShort" />
+     <addaction name="actionInt" />
+     <addaction name="actionDouble" />
+     <addaction name="actionFloat" />
+     <addaction name="actionLong" />
+     <addaction name="actionBool" />
+     <addaction name="separator" />
+     <addaction name="actionSigned" />
+     <addaction name="actionUnsigned" />
+     <addaction name="actionConst" />
+    </widget>
+    <widget class="QMenu" name="menuTypes" >
+     <property name="title" >
+      <string>Types</string>
+     </property>
+     <addaction name="actionTypedef" />
+     <addaction name="actionClass" />
+     <addaction name="actionStruct" />
+     <addaction name="actionEnum" />
+     <addaction name="actionUnion" />
+    </widget>
+    <widget class="QMenu" name="menuMemory" >
+     <property name="title" >
+      <string>Memory</string>
+     </property>
+     <addaction name="actionNewMemory" />
+     <addaction name="actionDelete" />
+    </widget>
+    <widget class="QMenu" name="menuCast" >
+     <property name="title" >
+      <string>Cast</string>
+     </property>
+     <addaction name="actionConst_cast" />
+     <addaction name="actionReinterpret_cast" />
+     <addaction name="actionStatic_cast" />
+    </widget>
+    <widget class="QMenu" name="menuBinary" >
+     <property name="title" >
+      <string>Binary</string>
+     </property>
+     <addaction name="actionAnd" />
+     <addaction name="actionAnd_eq" />
+     <addaction name="actionBitand" />
+     <addaction name="actionBitor" />
+     <addaction name="actionCompl" />
+     <addaction name="actionNot" />
+     <addaction name="actionNot_eq" />
+     <addaction name="actionOr" />
+     <addaction name="actionOr_eq" />
+     <addaction name="actionXor" />
+     <addaction name="actionXor_eq" />
+    </widget>
+    <widget class="QMenu" name="menuBool" >
+     <property name="title" >
+      <string>Bool</string>
+     </property>
+     <addaction name="actionTrue" />
+     <addaction name="actionFalse" />
+    </widget>
+    <widget class="QMenu" name="menuModifiers" >
+     <property name="title" >
+      <string>Modifiers</string>
+     </property>
+     <addaction name="actionPrivate" />
+     <addaction name="actionProtected" />
+     <addaction name="actionPublic" />
+     <addaction name="actionFriend" />
+     <addaction name="actionVirtual" />
+     <addaction name="actionExtern" />
+     <addaction name="actionInline" />
+     <addaction name="actionStatic" />
+    </widget>
+    <widget class="QMenu" name="menuFlow_Controll" >
+     <property name="title" >
+      <string>Flow Controll</string>
+     </property>
+     <addaction name="actionCase" />
+     <addaction name="actionBreak" />
+     <addaction name="actionContinue" />
+     <addaction name="actionDo_while" />
+     <addaction name="actionElse" />
+     <addaction name="actionFor" />
+     <addaction name="actionGoto" />
+     <addaction name="actionIf" />
+     <addaction name="actionReturn" />
+     <addaction name="actionSwitch" />
+     <addaction name="actionWhile" />
+    </widget>
+    <widget class="QMenu" name="menuAcception" >
+     <property name="title" >
+      <string>Acception</string>
+     </property>
+     <addaction name="actionTry" />
+     <addaction name="actionCatch" />
+     <addaction name="actionThrow" />
+    </widget>
+    <addaction name="menVar" />
+    <addaction name="menuTypes" />
+    <addaction name="menuMemory" />
+    <addaction name="menuCast" />
+    <addaction name="menuBinary" />
+    <addaction name="menuBool" />
+    <addaction name="menuModifiers" />
+    <addaction name="menuFlow_Controll" />
+    <addaction name="menuAcception" />
+   </widget>
+   <addaction name="menuFile" />
+   <addaction name="menuEdit" />
+   <addaction name="menuTemplates" />
+   <addaction name="menuBuild" />
+   <addaction name="menuHelp" />
+  </widget>
+  <widget class="QStatusBar" name="statusbar" />
+  <widget class="QToolBar" name="toolBar" >
+   <property name="windowTitle" >
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea" >
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="actionNew" >
+   <property name="icon" >
+    <iconset resource="images.qrc" >:/menu/images/filenew.png</iconset>
+   </property>
+   <property name="text" >
+    <string>New</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionOpen" >
+   <property name="icon" >
+    <iconset resource="images.qrc" >:/menu/images/fileopen.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Open</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSave" >
+   <property name="icon" >
+    <iconset resource="images.qrc" >:/menu/images/filesave.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Save</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_as" >
+   <property name="icon" >
+    <iconset resource="images.qrc" >:/menu/images/filesaveas.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Save as...</string>
+   </property>
+  </action>
+  <action name="actionExit" >
+   <property name="icon" >
+    <iconset resource="images.qrc" >:/menu/images/window_suppressed.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Exit</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionUndo" >
+   <property name="icon" >
+    <iconset resource="images.qrc" >:/menu/images/undo.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Undo</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo" >
+   <property name="icon" >
+    <iconset resource="images.qrc" >:/menu/images/redo.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Redo</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionRun" >
+   <property name="icon" >
+    <iconset resource="images.qrc" >:/menu/images/player_play.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Run</string>
+   </property>
+   <property name="shortcut" >
+    <string>F9</string>
+   </property>
+  </action>
+  <action name="actionCompile" >
+   <property name="icon" >
+    <iconset resource="images.qrc" >:/menu/images/configure.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Compile</string>
+   </property>
+   <property name="shortcut" >
+    <string>F8</string>
+   </property>
+  </action>
+  <action name="actionAbout" >
+   <property name="icon" >
+    <iconset resource="images.qrc" >:/menu/images/metacontact_offline.png</iconset>
+   </property>
+   <property name="text" >
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionCut" >
+   <property name="icon" >
+    <iconset resource="images.qrc" >:/menu/images/editcut.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Cut</string>
+   </property>
+   <property name="shortcut" >
+    <string>Shift+Del, Ctrl+X</string>
+   </property>
+  </action>
+  <action name="actionCopy" >
+   <property name="icon" >
+    <iconset resource="images.qrc" >:/menu/images/editcopy.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Copy</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+C, Ctrl+Ins</string>
+   </property>
+  </action>
+  <action name="actionPaste" >
+   <property name="icon" >
+    <iconset resource="images.qrc" >:/menu/images/editpaste.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Paste</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+V, Shift+Ins</string>
+   </property>
+  </action>
+  <action name="actionGoToLine" >
+   <property name="text" >
+    <string>Go to line...</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+G</string>
+   </property>
+  </action>
+  <action name="actionGoToMatchingBracket" >
+   <property name="text" >
+    <string>Go to matching bracket</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+B</string>
+   </property>
+  </action>
+  <action name="actionInt" >
+   <property name="text" >
+    <string>int</string>
+   </property>
+  </action>
+  <action name="actionFloat" >
+   <property name="text" >
+    <string>float</string>
+   </property>
+  </action>
+  <action name="actionChar" >
+   <property name="text" >
+    <string>char</string>
+   </property>
+  </action>
+  <action name="actionBool" >
+   <property name="text" >
+    <string>bool</string>
+   </property>
+  </action>
+  <action name="actionDouble" >
+   <property name="text" >
+    <string>double</string>
+   </property>
+  </action>
+  <action name="actionLong" >
+   <property name="text" >
+    <string>long</string>
+   </property>
+  </action>
+  <action name="actionShort" >
+   <property name="text" >
+    <string>short</string>
+   </property>
+  </action>
+  <action name="actionVoid" >
+   <property name="text" >
+    <string>void</string>
+   </property>
+  </action>
+  <action name="actionWchar_t" >
+   <property name="text" >
+    <string>wchar_t</string>
+   </property>
+  </action>
+  <action name="actionSigned" >
+   <property name="text" >
+    <string>signed</string>
+   </property>
+  </action>
+  <action name="actionUnsigned" >
+   <property name="text" >
+    <string>unsigned</string>
+   </property>
+  </action>
+  <action name="actionTypedef" >
+   <property name="text" >
+    <string>typedef</string>
+   </property>
+  </action>
+  <action name="actionClass" >
+   <property name="text" >
+    <string>class</string>
+   </property>
+  </action>
+  <action name="actionStruct" >
+   <property name="text" >
+    <string>struct</string>
+   </property>
+  </action>
+  <action name="actionEnum" >
+   <property name="text" >
+    <string>enum</string>
+   </property>
+  </action>
+  <action name="actionUnion" >
+   <property name="text" >
+    <string>union</string>
+   </property>
+  </action>
+  <action name="actionNewMemory" >
+   <property name="text" >
+    <string>new</string>
+   </property>
+  </action>
+  <action name="actionDelete" >
+   <property name="text" >
+    <string>delete</string>
+   </property>
+  </action>
+  <action name="actionConst_cast" >
+   <property name="text" >
+    <string>const_cast</string>
+   </property>
+  </action>
+  <action name="actionReinterpret_cast" >
+   <property name="text" >
+    <string>reinterpret_cast</string>
+   </property>
+  </action>
+  <action name="actionStatic_cast" >
+   <property name="text" >
+    <string>static_cast</string>
+   </property>
+  </action>
+  <action name="actionConst" >
+   <property name="text" >
+    <string>const</string>
+   </property>
+  </action>
+  <action name="actionAnd" >
+   <property name="text" >
+    <string>and</string>
+   </property>
+  </action>
+  <action name="actionAnd_eq" >
+   <property name="text" >
+    <string>and_eq</string>
+   </property>
+  </action>
+  <action name="actionBitand" >
+   <property name="text" >
+    <string>bitand</string>
+   </property>
+  </action>
+  <action name="actionBitor" >
+   <property name="text" >
+    <string>bitor</string>
+   </property>
+  </action>
+  <action name="actionCompl" >
+   <property name="text" >
+    <string>compl</string>
+   </property>
+  </action>
+  <action name="actionNot" >
+   <property name="text" >
+    <string>not</string>
+   </property>
+  </action>
+  <action name="actionNot_eq" >
+   <property name="text" >
+    <string>not_eq</string>
+   </property>
+  </action>
+  <action name="actionOr" >
+   <property name="text" >
+    <string>or</string>
+   </property>
+  </action>
+  <action name="actionOr_eq" >
+   <property name="text" >
+    <string>or_eq</string>
+   </property>
+  </action>
+  <action name="actionXor" >
+   <property name="text" >
+    <string>xor</string>
+   </property>
+  </action>
+  <action name="actionXor_eq" >
+   <property name="text" >
+    <string>xor_eq</string>
+   </property>
+  </action>
+  <action name="actionTrue" >
+   <property name="text" >
+    <string>true</string>
+   </property>
+  </action>
+  <action name="actionFalse" >
+   <property name="text" >
+    <string>false</string>
+   </property>
+  </action>
+  <action name="actionPrivate" >
+   <property name="text" >
+    <string>private</string>
+   </property>
+  </action>
+  <action name="actionProtected" >
+   <property name="text" >
+    <string>protected</string>
+   </property>
+  </action>
+  <action name="actionPublic" >
+   <property name="text" >
+    <string>public</string>
+   </property>
+  </action>
+  <action name="actionFriend" >
+   <property name="text" >
+    <string>friend</string>
+   </property>
+  </action>
+  <action name="actionVirtual" >
+   <property name="text" >
+    <string>virtual</string>
+   </property>
+  </action>
+  <action name="actionCase" >
+   <property name="text" >
+    <string>case</string>
+   </property>
+  </action>
+  <action name="actionBreak" >
+   <property name="text" >
+    <string>break</string>
+   </property>
+  </action>
+  <action name="actionContinue" >
+   <property name="text" >
+    <string>continue</string>
+   </property>
+  </action>
+  <action name="actionDo_while" >
+   <property name="text" >
+    <string>do...while</string>
+   </property>
+  </action>
+  <action name="actionElse" >
+   <property name="text" >
+    <string>else</string>
+   </property>
+  </action>
+  <action name="actionFor" >
+   <property name="text" >
+    <string>for</string>
+   </property>
+  </action>
+  <action name="actionGoto" >
+   <property name="text" >
+    <string>goto</string>
+   </property>
+  </action>
+  <action name="actionIf" >
+   <property name="text" >
+    <string>if</string>
+   </property>
+  </action>
+  <action name="actionReturn" >
+   <property name="text" >
+    <string>return</string>
+   </property>
+  </action>
+  <action name="actionSwitch" >
+   <property name="text" >
+    <string>switch</string>
+   </property>
+  </action>
+  <action name="actionWhile" >
+   <property name="text" >
+    <string>while</string>
+   </property>
+  </action>
+  <action name="actionExtern" >
+   <property name="text" >
+    <string>extern</string>
+   </property>
+  </action>
+  <action name="actionInline" >
+   <property name="text" >
+    <string>inline</string>
+   </property>
+  </action>
+  <action name="actionStatic" >
+   <property name="text" >
+    <string>static</string>
+   </property>
+  </action>
+  <action name="actionTry" >
+   <property name="text" >
+    <string>try</string>
+   </property>
+  </action>
+  <action name="actionCatch" >
+   <property name="text" >
+    <string>catch</string>
+   </property>
+  </action>
+  <action name="actionThrow" >
+   <property name="text" >
+    <string>throw</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="images.qrc" />
+ </resources>
+ <connections/>
+</ui>
