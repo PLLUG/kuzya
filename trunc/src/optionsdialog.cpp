@@ -31,7 +31,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 	setWindowTitle(tr("Settings"));
 	trans_ua = new QTranslator();
 	trans_en = new QTranslator();
-        mw =(Kuzya*)parent;// (Cukr*)parentWidget();
+        mw =(Kuzya*)parent;
         settings = new QSettings(QSettings::IniFormat, QSettings::UserScope, "LLUGDevTeam", "Kuzya");
 	//readODWSettings();
 	connect(closeBtn,SIGNAL(clicked()), this,SLOT(slotClose(void)));
@@ -144,7 +144,7 @@ void OptionsDialog::writeSettings(void)
 ///-----RECENT FILES------------------------------------------------------------------
 	
         settings->beginWriteArray("RecentFiles");
-		remove("");///?????????????????????????????????????????????????????????????????
+        remove("");
 		for(int i=0;i<mw->getFileListCount();i++)
 		{
                         settings->setArrayIndex(i);

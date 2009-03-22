@@ -364,8 +364,6 @@ int Kuzya::getFileListCount(void)
 **/
 void Kuzya::addFileNameToList(QString FN)
 {
-        //if (QFile::exists(FN)) ///Чи перевіряти існування файлу при зчитуванні з файлу збереження налаштувань
-        {
                 cleanMemory_ActOpenRecentFileVector();
                 if(MaxCount_RFileList!=0)
                 {
@@ -392,7 +390,6 @@ void Kuzya::addFileNameToList(QString FN)
                 {
                         if(menuRecent_Files->isEnabled()) menuRecent_Files->setEnabled(false);
                 }
-        }
 }
 /**
 **********resizeRFileList*****************************************************************************************
@@ -468,7 +465,7 @@ void Kuzya::slotOpen(void)
 {
         if(slotSaveChangesNotifier()==false) return;
         textEditor->markerDeleteAll();
-        fileName = QFileDialog::getOpenFileName(this, tr("Open File"),DefaultDir);
+        fileName = QFileDialog::getOpenFileName(this, tr("Open File"), DefaultDir, tr("C/CPP Source-Files (*.c *.cpp *.cxx *.h);;Pascal Source-Files (*.fpc *.pas *.pp);;All Files (*)"));
         if (fileName!="")
         {
                 openFile(fileName);
@@ -484,7 +481,7 @@ bool Kuzya::slotSave(void)
         if (fileName.isEmpty())
         {
                 fileName = QFileDialog::getSaveFileName(this, tr("Save as..."),
-                                           "", tr("Source-Files (*.c *.cpp *.cxx *.h);;All Files (*)"));
+                                           "", tr("C/CPP Source-Files (*.c *.cpp *.cxx *.h);;Pascal Source-Files (*.fpc *.pas *.pp);;All Files (*)"));
                 slotUpdateWindowName(false);
         }
         if (fileName.isEmpty())

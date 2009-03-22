@@ -65,6 +65,7 @@ private:
 	QString programPath;
 	int runStatus;
 	QList<compilerError> errorList;
+    QString compiler;
 	QString compilerDir;
 	QString includeDir;
 	QString libDir;
