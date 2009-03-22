@@ -36,7 +36,10 @@ GoToLineDialog::~GoToLineDialog()
 {
 }
 
-
+void GoToLineDialog::retranslate(void)
+{
+	retranslateUi(this);
+}
 void GoToLineDialog::slotGoToLine(void)
 {
 	textEditor = (QsciScintilla*)parentWidget();

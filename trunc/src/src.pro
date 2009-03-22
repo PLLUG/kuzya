@@ -1,13 +1,23 @@
 
 FORMS += kuzya.ui \
- gotolinedialog.ui
+ gotolinedialog.ui \
+ optionsdialog.ui \
+ finddialog.ui \
+ replacedialog.ui
 HEADERS += kuzya.h \
  gotolinedialog.h \
- compiler.h
+ compiler.h \
+ optionsdialog.h \
+ finddialog.h \
+ replacedialog.h \
+ helpbrowser.h
 SOURCES += kuzya.cpp \
            main.cpp \
  gotolinedialog.cpp \
- compiler.cpp
+ compiler.cpp \
+ optionsdialog.cpp \
+ finddialog.cpp \
+ replacedialog.cpp
 TARGET =../../bin/kuzya
 TEMPLATE = app
 

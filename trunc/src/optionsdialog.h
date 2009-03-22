@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Volodymyr Shevchyk   *
- *   i'mnotageycom.ua   *
+ *   Copyright (C) 2008 by Volodymyr Shevchyk                              *
+ *   i'mnotageycom.ua                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,33 +17,66 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#ifndef OPTIONSDIALOG_H
+#define OPTIONSDIALOG_H
 
-
-#include <QSplashScreen>
-#include <QApplication>
+#include <QObject>
+#include <QDialog>
+#include <QPalette>
+#include <QSettings>
 #include <QTranslator>
-#include <QDir>
+#include <QTextStream>
+#include <QFile>
+#include "kuzya.h"
+#include "ui_optionsdialog.h"
 #include "kuzya.h"
 
-int main(int argc, char ** argv)
-{
-        Q_INIT_RESOURCE(images);
 
-        QApplication a(argc, argv);
-/*	QTranslator trans_ua;
-        trans_ua.load("cukr_ua");
-        a.installTranslator(&trans_ua);
+class QsciScintilla;
+class Kuzya;
+
+/**
+	@author Volodymyr Shevchyk <>
 */
-        QSplashScreen *splash = new QSplashScreen();
-        splash->setPixmap(QPixmap(QApplication::applicationDirPath()+"/../src/images/SplashCukr.png"));
-        ///splash->setPixmap(QPixmap("./src/images/SplashCukr.png"));
-        splash->show();
-        splash->showMessage("Kyzia is ready",Qt::AlignCenter,QColor("black"));
-        Kuzya * mw = new Kuzya();
-        splash->finish(mw);
-        delete splash;
-        mw->show();
-        a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
-        return a.exec();
-}
+class OptionsDialog : public QDialog, private Ui::optionsForm
+{
+Q_OBJECT
+public:
+    OptionsDialog(QWidget *parent = 0);
+	~OptionsDialog();
+	void writeSettings(void);
+	void readODWSettings();	
+	void openLastProject();
+	void saveLastProjectName(QString);
+	void retranslate(void);
+public slots:
+	void slotCommOptions(void);
+private slots:
+	
+	void slotClose(void);
+	void slotApply(void);
+	void slotOk(void);
+	void slotChangeFont(void);
+	void slotDefaultAll(void);
+	void slotChangeFormColor(void);
+	void slotChangeDefDir(int);
+        void slotLoadCompilerSettings(void);
+private:
+	QTranslator* trans_ua;
+	QTranslator* trans_en;
+        Kuzya* mw;
+	QFile file;
+        QSettings *settings;
+	QsciScintilla* textEditor;
+	QTranslator translator;
+	QFont font;
+public:	
+	
+private:
+	
+public: 
+	
+	
+};
 
+#endif
