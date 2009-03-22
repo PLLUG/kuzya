@@ -33,10 +33,10 @@ class GoToLineDialog : public QDialog, private Ui::goToLineForm
 {
 Q_OBJECT
 public:
-    GoToLineDialog(QWidget *parent = 0);
-
-    ~GoToLineDialog();
-
+	GoToLineDialog(QWidget *parent = 0);
+	~GoToLineDialog();
+	
+	void retranslate(void);
 public slots:
 	void slotGoToLine(void);
 

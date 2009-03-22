@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Volodymyr Shevchyk   *
- *   i'mnotageycom.ua   *
+ *   Copyright (C) 2008 by Volodymyr Shevchyk                              *
+ *   i'mnotageycom.ua                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,33 +17,32 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#ifndef FINDDIALOG_H
+#define FINDDIALOG_H
 
-
-#include <QSplashScreen>
-#include <QApplication>
-#include <QTranslator>
-#include <QDir>
-#include "kuzya.h"
-
-int main(int argc, char ** argv)
-{
-        Q_INIT_RESOURCE(images);
-
-        QApplication a(argc, argv);
-/*	QTranslator trans_ua;
-        trans_ua.load("cukr_ua");
-        a.installTranslator(&trans_ua);
+#include <QObject>
+#include <QDialog>
+#include "ui_finddialog.h"
+class QsciScintilla;
+/**
+	@author Sklyar Victor
 */
-        QSplashScreen *splash = new QSplashScreen();
-        splash->setPixmap(QPixmap(QApplication::applicationDirPath()+"/../src/images/SplashCukr.png"));
-        ///splash->setPixmap(QPixmap("./src/images/SplashCukr.png"));
-        splash->show();
-        splash->showMessage("Kyzia is ready",Qt::AlignCenter,QColor("black"));
-        Kuzya * mw = new Kuzya();
-        splash->finish(mw);
-        delete splash;
-        mw->show();
-        a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
-        return a.exec();
-}
+class FindDialog : public QDialog, private Ui::findForm
+{
+		Q_OBJECT
+	public:
+		FindDialog ( QWidget *parent = 0 );
+		~FindDialog();
 
+		void retranslate ( void );
+	public slots:
+		void slotFindDialog ( void );
+	private slots:
+		void slotFind ( void );
+		void slotChangeCursPos ( int );
+	private:
+		QsciScintilla* textEditor;
+
+};
+
+#endif
