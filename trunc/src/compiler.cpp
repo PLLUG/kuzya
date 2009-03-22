@@ -168,7 +168,7 @@ void Compiler::run(void)
 {
 	if (programPath.isEmpty()) return;
     //runStatus = RUN;
-#ifdef WIN23
+#ifdef WIN32
     startDetached("cmd.exe", QStringList() << "/c " << programPath);
 #else
     startDetached("xterm", QStringList() << "-e" << "/bin/sh" << "-c" << programPath);
