@@ -176,8 +176,8 @@ void OptionsDialog::readODWSettings()
                 if(settings->value("Language","eng").toString()=="ukr")
 		{
 			ukrRBtn->setChecked(true);
-			translator.load(QApplication::applicationDirPath()+"/../src/translations/cukr_ua");
-			///translator.load("./src/translations/cukr_ua");
+			translator.load(QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua");
+			///translator.load("./src/translations/kuzya_ua");
 			qApp->installTranslator(&translator);
 			mw->retranslateAll();			
 		}

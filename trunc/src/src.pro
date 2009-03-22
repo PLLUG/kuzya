@@ -29,7 +29,7 @@ INCLUDEPATH = ../../3rdparty/QScintilla/win32/2.3.2/
 LIBS += -lqscintilla2
 
 
-TRANSLATIONS    = kuzya
+TRANSLATIONS    = ./translations/kuzya_ua.ts
 
 RESOURCES   = images.qrc
 
