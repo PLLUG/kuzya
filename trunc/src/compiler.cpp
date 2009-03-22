@@ -158,6 +158,8 @@ void Compiler::compile(QString sourceFile,int compileMode)
 		parseParamList << compilerProfile->value(key,"").toString();
 	compilerProfile->endGroup();
 
+    qDebug() << QString(compilerDir+compiler+" "+param);
+
 	start(QString(compilerDir+compiler+" "+param), QIODevice::ReadWrite);
 }
 
@@ -165,9 +167,13 @@ void Compiler::compile(QString sourceFile,int compileMode)
 void Compiler::run(void)
 {
 	if (programPath.isEmpty()) return;
-//	runStatus = RUN;
-        if (!startDetached("konsole", QStringList() << "-e" << "/bin/sh" << "-c"  "/c" << programPath))
-            startDetached("cmd.exe", QStringList() << "/c " << programPath);
+    //runStatus = RUN;
+#ifdef WIN23
+    startDetached("cmd.exe", QStringList() << "/c " << programPath);
+#else
+    startDetached("xterm", QStringList() << "-e" << "/bin/sh" << "-c" << programPath);
+    qDebug() << programPath;
+#endif
 }
 
 void Compiler::afterExit(int exitCode, QProcess::ExitStatus exitStatus)
