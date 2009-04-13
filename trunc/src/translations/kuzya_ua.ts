@@ -1,4 +1,5 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS><TS version="1.1" language="en_US">
 <defaultcodec></defaultcodec>
 <context>
     <name>Cukr</name>
@@ -132,7 +133,7 @@
     </message>
     <message>
         <source>ERROR : Could not find compiler profile or compile mode is not available.</source>
-        <translation type="unfinished">Помилка: В заданій теці немає пройайла даного компілятора</translation>
+        <translation type="unfinished">Помилка: В заданій теці немає профайла даного компілятора</translation>
     </message>
     <message>
         <source>Compiled successfuly!</source>
