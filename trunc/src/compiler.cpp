@@ -82,15 +82,15 @@ bool Compiler::isModeAvailable(int compileMode)
 		case DEFAULT:
 			param = compilerProfile->value("default","").toString();
 			break;
-//		case EXECUTIVE:
-//			param = compilerProfile->value("executive","").toString();
-//			break;
-//		case OBJECT:
-//			param = compilerProfile->value("object","").toString();
-//			break;
-//		case LIB:
-//			param = compilerProfile->value("lib","").toString();
-//			break;
+                case EXECUTIVE:
+                        param = compilerProfile->value("executive","").toString();
+                        break;
+                case OBJECT:
+                        param = compilerProfile->value("object","").toString();
+                        break;
+                case LIB:
+                        param = compilerProfile->value("lib","").toString();
+                        break;
 		case ALTERNATIVE:
 			param = compilerProfile->value("alternative").toString();
 			break;
@@ -120,15 +120,15 @@ void Compiler::compile(QString sourceFile,int compileMode)
 		case DEFAULT:
 			param = compilerProfile->value("default","").toString();
 			break;
-//		case EXECUTIVE:
-//			param = compilerProfile->value("executive","").toString();
-//			break;
-//		case OBJECT:
-//			param = compilerProfile->value("object","").toString();
-//			break;
-//		case LIB:
-//			param = compilerProfile->value("lib","").toString();
-//			break;
+                case EXECUTIVE:
+                        param = compilerProfile->value("executive","").toString();
+                        break;
+                case OBJECT:
+                        param = compilerProfile->value("object","").toString();
+                        break;
+                case LIB:
+                        param = compilerProfile->value("lib","").toString();
+                        break;
                 case ALTERNATIVE:
 			param = compilerProfile->value("alternative","").toString();
 			break;
@@ -158,7 +158,7 @@ void Compiler::compile(QString sourceFile,int compileMode)
 		parseParamList << compilerProfile->value(key,"").toString();
 	compilerProfile->endGroup();
 
-    qDebug() << QString(compilerDir+compiler+" "+param);
+        qDebug() << QString(compilerDir+compiler+" "+param);
 
 	start(QString(compilerDir+compiler+" "+param), QIODevice::ReadWrite);
 }
@@ -168,11 +168,11 @@ void Compiler::run(void)
 {
 	if (programPath.isEmpty()) return;
     //runStatus = RUN;
+        qDebug() << programPath;
 #ifdef WIN32
-    startDetached("cmd.exe", QStringList() << "/c " << programPath);
+        startDetached(programPath);
 #else
-    startDetached("xterm", QStringList() << "-e" << "/bin/sh" << "-c" << programPath);
-    qDebug() << programPath;
+        startDetached("xterm", QStringList() << "-e" << "/bin/sh" << "-c" << programPath);
 #endif
 }
 

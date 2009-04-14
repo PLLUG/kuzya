@@ -76,8 +76,8 @@
    <widget class="QMenu" name="menuBuild">
     <property name="geometry">
      <rect>
-      <x>465</x>
-      <y>197</y>
+      <x>1046</x>
+      <y>174</y>
       <width>120</width>
       <height>82</height>
      </rect>
@@ -239,6 +239,7 @@
     <property name="title">
      <string>Settings</string>
     </property>
+    <addaction name="actionNotificationList"/>
     <addaction name="actionCommon"/>
    </widget>
    <addaction name="menuFile"/>
@@ -804,6 +805,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionNotificationList">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/menu/images/application_view_list.png</normaloff>:/menu/images/application_view_list.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Notify List</string>
+   </property>
+   <property name="toolTip">
+    <string>Show/Hide Notify List</string>
    </property>
   </action>
  </widget>

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Volodymyr Shevchyk   *
- *   i'mnotageycom.ua   *
+ *   Copyright (C) 2008 by Volodymyr Shevchyk                              *
+ *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,6 +27,9 @@
 #include "optionsdialog.h"
 #include "ui_kuzya.h"
 #include "compiler.h"
+
+class QListWidget;
+class QSplitter;
 class FindDialog;
 class ReplaceDialog;
 class QSignalMapper;
@@ -35,18 +38,26 @@ class GoToLineDialog;
 class OptionsDialog;
 class QLabel;
 class QShortcut;
+class QListWidgetItem;
 //class QPrinter;
 class QsciPrinter;
 class QsciLexerCPP;
 template <typename T> class QVector;
 template <typename T> class QList;
+
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
     Q_OBJECT
 
 public:
+
+    enum notificationItemDataRoleEnum {attachedRole = Qt::UserRole+1,
+                                       lineRole = Qt::UserRole+2,
+                                       descriptionRole = Qt::UserRole+3};
+
     Kuzya(QWidget *parent = 0);
     ~Kuzya();
+    
         void openFile(QString);
         void markerDeleteAll(void);
         void setText(QString);
@@ -154,6 +165,8 @@ private slots:
         void slotOpenRecentFile(QString);
         bool slotSaveChangesNotifier(void);
         void slotShowAutoComplete(void);
+        void slotShowNotificationList(bool);
+        void slotShowErrorFromList(QListWidgetItem * item);
 protected:
         void closeEvent(QCloseEvent *event);
 //	void keyPressEvent(QKeyEvent *event);
@@ -164,6 +177,7 @@ private:
 private:
         QFile *file;
         QsciScintilla* textEditor;
+        QListWidget* notificationList;
         QString fileName;
         QString DefaultDir;
         //QString CurrentDir;

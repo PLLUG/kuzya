@@ -55,6 +55,8 @@ Kuzya::Kuzya(QWidget *parent)
         toolBar->addAction(actionCopy);
         toolBar->addAction(actionPaste);
         toolBar->addSeparator();
+        toolBar->addAction(actionNotificationList);
+        toolBar->addSeparator();
         toolBar->addAction(actionRun);
         toolBar->addAction(actionCompile);
 
@@ -66,7 +68,20 @@ Kuzya::Kuzya(QWidget *parent)
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
 
         textEditor = new QsciScintilla(this);
-        gridLayout->addWidget(textEditor, 0, 0, 1, 1);
+//      gridLayout->addWidget(textEditor, 0, 0, 1, 1);
+
+        notificationList = new QListWidget(this);
+        notificationList->setVisible(false);
+
+        QSplitter *splitter = new QSplitter(this);
+        splitter->setOrientation(Qt::Vertical);
+        splitter->addWidget(textEditor);
+        splitter->addWidget(notificationList);
+        splitter->setChildrenCollapsible(false);
+        splitter->setHandleWidth(5);
+
+        gridLayout->addWidget(splitter, 0, 0, 1, 1);
+
 
         textEditor->setCaretLineBackgroundColor(QColor(200, 200, 200));
         textEditor->setCaretLineVisible(true);
@@ -88,7 +103,7 @@ Kuzya::Kuzya(QWidget *parent)
 
         textEditor->setMarginSensitivity(1, true);
         textEditor->setMarginLineNumbers(1, true);
-        textEditor->setMarginWidth(1, 30);
+        textEditor->setMarginWidth(1, 50);
 
 
 
@@ -203,6 +218,8 @@ Kuzya::Kuzya(QWidget *parent)
         connect(textEditor,	SIGNAL(modificationChanged(bool)),	 this,	SLOT(slotUpdateWindowName(bool)));
         connect(compiler,	SIGNAL(compileEnded(int)),		 this,	SLOT(slotAfterCompile(int)));
         connect(textEditor,	SIGNAL(marginClicked (int, int, Qt::KeyboardModifiers)), this, SLOT(slotMarginClicked(int, int, Qt::KeyboardModifiers)));
+        connect(actionNotificationList, SIGNAL(toggled(bool)), this, SLOT(slotShowNotificationList(bool)));
+        connect(notificationList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotShowErrorFromList(QListWidgetItem*)));
 
         statusBar()->showMessage(tr("Ready"));
 
@@ -582,8 +599,9 @@ void Kuzya::slotRun(void)
 **/
 void Kuzya::slotCompile(void)
 {
-        textEditor->markerDeleteAll();
         if (textEditor->isModified()) slotSave();
+
+        textEditor->markerDeleteAll();
         if (fileName.isEmpty())
         {
                 statusBar()->showMessage(tr("No source to compile"), 2000);
@@ -592,7 +610,6 @@ void Kuzya::slotCompile(void)
 
         statusBar()->showMessage(tr("Compilling..."));
         textEditor->setReadOnly(true);
-//        compiler->loadProfile("/home/volder/Projects/kuzya/src/c_profile.ini");
         if (compiler->isReady() && compiler->isModeAvailable(Compiler::DEFAULT))
         {
                 statusBar()->showMessage(tr("Compilling..."));
@@ -601,12 +618,11 @@ void Kuzya::slotCompile(void)
         }
         else statusBar()->showMessage(tr("ERROR : Could not find compiler profile or compile mode is not available."));
 
-//	compiler->compile(fileName);
 }
 
 Compiler* Kuzya::getCurrentCompiler(void)
 {
-    return compiler;
+        return compiler;
 }
 
 /**
@@ -615,10 +631,24 @@ Compiler* Kuzya::getCurrentCompiler(void)
 void Kuzya::slotAfterCompile(int status)
 {
         textEditor->setReadOnly(false);
-        if (Compiler::NOERROR == status) statusBar()->showMessage(tr("Compiled successfuly!"), 2000);
+        if (Compiler::NOERROR == status)
+        {
+                notificationList->clear();
+                QListWidgetItem *newItem = new QListWidgetItem(tr("Compiled successfuly!"));
+                newItem->setData(Kuzya::attachedRole, QVariant(false));
+                newItem->setData(Kuzya::descriptionRole,QVariant(tr("Compiled successfuly!")));
+                newItem->setIcon(QIcon(":/notifications/accept"));
+                notificationList->addItem(newItem);
+        }
         else
         {
-                statusBar()->showMessage(tr("Compilation failed!!!"), 2000);
+                notificationList->clear();
+                QListWidgetItem *newItem = new QListWidgetItem(tr("Compilation failed!!!"));
+                newItem->setData(Kuzya::attachedRole, QVariant(false));
+                newItem->setData(Kuzya::descriptionRole,QVariant(tr("Compilation failed!!!")));
+                newItem->setIcon(QIcon(":/notifications/failed"));
+                notificationList->addItem(newItem);
+                emit slotShowNotificationList(true);
                 paintErrorMarkers(compiler->getLastErrors());
         }
 }
@@ -629,12 +659,22 @@ void Kuzya::slotAfterCompile(int status)
 void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
 {
         errorMap.clear();
+        textEditor->markerDeleteAll();
         if (errorList->empty()) return;
+
         for (int i = 0; i < errorList->size(); ++i)
         {
-                textEditor->markerAdd(errorList->at(i).line, errorMarker);
+                errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","PNG",Qt::AutoColor));
+                textEditor->markerAdd(errorList->at(i).line-1, errorMarker);
                 errorMap[errorList->at(i).line] = errorList->at(i).description;
-        }
+                QString str = "Compilation error (line "+QVariant(errorList->at(i).line).toString()+") : "+errorList->at(i).description;
+                QListWidgetItem *newItem = new QListWidgetItem(str);
+                newItem->setData(Kuzya::attachedRole, QVariant(true));
+                newItem->setData(Kuzya::lineRole, QVariant(errorList->at(i).line));
+                newItem->setData(Kuzya::descriptionRole,QVariant(errorList->at(i).description));
+                newItem->setIcon(QIcon(":/notifications/bug"));
+                notificationList->addItem(newItem);
+}
         textEditor->setCursorPosition(errorList->at(0).line, 0);
         statusBar()->showMessage(tr("***ERROR: ") + errorList->at(0).description);
 }
@@ -644,7 +684,7 @@ void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
 **/
 void Kuzya::slotAbout(void)
 {
-        QMessageBox::about(this, tr("About"),tr("Authors: \n Volodymyr Shevchuk \n \t && \n Andriy Shevchyk \n \t && \n Victor Sklyar "));
+        QMessageBox::about(this, tr("About"),tr("Authors: Andriy Shevchyk\n Volodymyr Shevchyk\n Victor Sklyar\n Alex Chmykhalo "));
 }
 
 /**
@@ -1278,7 +1318,7 @@ bool Kuzya::slotSaveChangesNotifier(void)
                 QAbstractButton *noBtn = msgBox->addButton(tr("No"),QMessageBox::ActionRole);
                 QAbstractButton *cancelBtn = msgBox->addButton(tr("Cancel"),QMessageBox::ActionRole);
                 msgBox->setDefaultButton((QPushButton*)cancelBtn);
-                int ret = msgBox->exec();
+                /*int ret = */msgBox->exec();
                 if (msgBox->clickedButton() ==cancelBtn)
                 {
                         return false;	// false - cancelbtn pressed
@@ -1297,7 +1337,7 @@ bool Kuzya::slotSaveChangesNotifier(void)
                         return true;
                 }
         }
-        else return true;/// true - File was saved
+        return true;/// true - File was saved
 }
 /**
 *******************************************************************************************************
@@ -1349,4 +1389,21 @@ void Kuzya::slotHelpKuzya()
         HelpBrowser* helpBrowser = new HelpBrowser(QApplication::applicationDirPath()+"/../trunc/doc/Kuzya_Help","main.htm");
         helpBrowser->resize(800,600);
         helpBrowser->show();
+}
+
+void Kuzya::slotShowNotificationList(bool visible)
+{
+    notificationList->setVisible(visible);
+    actionNotificationList->setChecked(visible);
+}
+
+void Kuzya::slotShowErrorFromList(QListWidgetItem * item)
+{
+            qDebug() << item->data(Kuzya::descriptionRole).toString();
+            if (item->data(Kuzya::attachedRole).toBool())
+            {
+                    textEditor->setFocus();
+                    textEditor->setCursorPosition(item->data(Kuzya::lineRole).toInt()-1,1);
+            }
+
 }

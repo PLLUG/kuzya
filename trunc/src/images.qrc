@@ -14,5 +14,14 @@
         <file>images/undo.png</file>
         <file>images/window_suppressed.png</file>
         <file>images/bkuzya.png</file>
+        <file>images/application_view_list.png</file>
+    </qresource>
+    <qresource prefix="/notifications" >
+        <file alias="accept" >images/accept.png</file>
+        <file alias="failed" >images/exclamation.png</file>
+        <file alias="bug" >images/bug_error.png</file>
+    </qresource>
+    <qresource prefix="/markers" >
+        <file alias="bug_line" >images/bug_go.png</file>
     </qresource>
 </RCC>
