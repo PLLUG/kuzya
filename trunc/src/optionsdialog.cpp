@@ -324,7 +324,7 @@ void OptionsDialog::slotDefaultAll(void)
 	//msgBox.setInformativeText();
 	msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 	msgBox.setDefaultButton(QMessageBox::No);
-	int ret = msgBox.exec();
+        /*int ret = */msgBox.exec();
 	if (msgBox.clickedButton() != msgBox.defaultButton()) 
 	{
                 settings->remove("Settings/MainWindow/RecentFiles");
@@ -335,7 +335,6 @@ void OptionsDialog::slotDefaultAll(void)
 }
 void OptionsDialog::slotChangeFormColor(void)
 {
-	bool ok;
 	QColor FColor=QColorDialog::getColor(QColor("blue"),this);
 	if(!FColor.isValid()) return;
 }

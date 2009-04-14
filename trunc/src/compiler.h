@@ -65,12 +65,12 @@ private:
 	QString programPath;
 	int runStatus;
 	QList<compilerError> errorList;
-    QString compiler;
+        QString compiler;
 	QString compilerDir;
 	QString includeDir;
 	QString libDir;
 	QString options;
-	QSettings *compilerProfile;
+        QSettings* compilerProfile;
 	QStringList parseParamList;
 };
 

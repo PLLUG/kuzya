@@ -54,4 +54,4 @@ class HelpBrowser:public QWidget
 			setLayout ( pvbxLayout );
 		}
 };
-#endif //_HelpBrowser_h_
+#endif
