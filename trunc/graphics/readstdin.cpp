@@ -39,7 +39,7 @@ void ReadStdIn::run()
 	QTextStream in(stdin);
 	for (;;)
 	{
- 		in >> str;
+ 		str = in.readLine();
 		emit commandAppeared(str);
 	}
 }
