@@ -1,70 +1,195 @@
-/***************************************************************************
- *   Copyright (C) 2009 by Volodymyr Shevchyk                              *
- *   volderne@gmail.com                                                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 FILE *file;
 char  command[100];
 char text[100];
+int width ;
+int height;
 
-///********initGraph*************************
-void initGraph()
+#if !defined(__COLORS)
+#define __COLORS
+enum COLORS 
 {
-	static char *command= "/mnt/fun/PlugRepo/graphics/bin/graphics";
-	file = popen(command, "w");
-}
-///*********closeGraph***********************
-void closeGraph()
+    BLACK,          /* dark colors */
+    BLUE,
+    GREEN,
+    CYAN,
+    RED,
+    MAGENTA,
+    BROWN,
+    LIGHTGRAY,
+    DARKGRAY,       /* light colors */
+    LIGHTBLUE,
+    LIGHTGREEN,
+    LIGHTCYAN,
+    LIGHTRED,
+    LIGHTMAGENTA,
+    YELLOW,
+    WHITE
+};
+#endif
+
+enum DIRECTION
 {
-	fflush(file);
-	char* command = "/mnt/fun/PlugRepo/graphics/bin/graphics";
-	pclose(file);
+	HORIZ_DIR	,	/*left to right */
+	VERT_DIR		/*bottom to top*/  
+};
+
+enum LINESTYLE
+{
+	SOLID_LINE,
+	DOTTED_LINE,
+	CENTER_LINE,
+	DASHED_LINE,
+	USERBIT_LINE
+};
+///*******************Declaration of the functions***************
+void arc(int x, int y, int stAngel, int endAngle, int radius);
+void bar(int x, int y,int x1,int  y1);
+void bar3d(int x, int y, int x1, int y1, int z, bool top);
+void circle(int x, int y, int radius);
+void cleardevice();
+void closegraph();
+void ellipse(int x, int y, int rWidth, int rHeight);
+int getmaxx();
+int getmaxy();
+void initgraph();
+void initgraph(int setWidth, int setHeight);
+void pieslice(int x, int y, int stAngle, int endAngle, int radius);
+void putpixel(int x, int y);
+void line(int x, int y, int x1, int y1);
+void outtext(char *text);
+void outtextxy(int x, int y, char *text);
+void setcolor(COLORS color);
+void setlinestyle(int linestyle, unsigned upattern, int thickness);
+void settextstyle(char* font, int direction, int size);
+///********************************************************************
+
+//*********************************************************************
+///***************arc********************************
+void arc(int x, int y, int stAngel, int endAngle, int radius)
+{
+	sprintf(command, "arc(%i,%i,%i,%i,%i);\n",x , y, stAngel*2, endAngle, radius);
+	fprintf(file, command);	
 }
-///*******putPixel*********************************
-void putPixel(int x, int y)
+//********rectangle***********************************
+void bar(int x, int y,int x1,int y1)
 {	
-	sprintf(command, "point(%i,%i);\n",x , y);
+	sprintf(command, "bar(%i,%i,%i,%i);\n",x , y, x1, y1);
 	fprintf(file, command);
 }
-///*******line**************************************
+//***************3 demention rectangle**********************************
+void bar3d(int x, int y, int x1, int y1, int z, bool top)
+{
+	char* topStr;
+	if(top == true)
+	{
+		topStr = "true";
+	}
+	else
+	{
+		topStr = "false";
+	}
+	sprintf(command, "bar3D(%i,%i,%i,%i,%i,%s);\n",x , y, x1, y1, z, topStr);
+	fprintf(file, command);
+}
+//**********circle**************************************************** 
+void circle(int x, int y, int radius)
+{
+	sprintf(command, "circle(%i,%i,%i);\n",x , y, radius);
+	fprintf(file, command);		
+}
+//**********clearDevise********************************************
+void cleardevice()
+{
+	sprintf(command, "clearDevice();\n");
+	fprintf(file, command);
+}
+//*********closeGraph***********************
+void closegraph()
+{
+	fflush(file);
+	char* command = "/mnt/fun/PlugRepo/cukr/cukr/graphics/bin/graphics";
+	pclose(file);
+}
+///******ellipse************************************
+void ellipse(int x, int y, int rWidth, int rHeight)
+{
+	sprintf(command, "ellipse(%i,%i,%i,%i);\n",x , y, rWidth, rHeight);
+	fprintf(file, command);
+}
+//*************getMaxX****************************
+int getmaxx()
+{
+	return width;
+}
+//*************getMaxY****************************
+int getmaxy()
+{
+	return height;
+}
+//********initGraph*************************
+void initgraph()
+{
+	static char *command= "/mnt/fun/PlugRepo/cukr/cukr/graphics/bin/graphics";
+	file = popen(command, "w");
+}
+//*********initGraph******************************
+void initgraph(int setWidth, int setHeight)
+{
+	initgraph();
+	width = setWidth;
+	height = setHeight;
+	sprintf(command, "initgraph(%i,%i);\n",width, height);
+	fprintf(file, command);
+}
+//********piesLice*********************************
+void pieslice(int x, int y, int stAngle, int endAngle, int radius)
+{
+	sprintf(command, "pieslice(%i,%i,%i,%i,%i);\n",x , y, stAngle, endAngle, radius);
+	fprintf(file, command);		
+}
+//*******putPixel*********************************
+void putpixel(int x, int y)
+{	
+	sprintf(command, "putPixel(%i,%i);\n",x , y);
+	fprintf(file, command);
+}
+//*******line**************************************
 void line(int x, int y, int x1, int y1)
 {
 	sprintf(command, "line(%i,%i,%i,%i);\n",x , y,x1,y1);
 	fprintf(file, command);
 }
-///******ellipse************************************
-void ellipse(int x, int y, int x1, int y1)
+//********outTextXY***********************************
+void outtextxy(int x, int y, char *text)
 {
-	sprintf(command, "ellipse(%i,%i,%i,%i);\n",x , y,x1,y1);
-	fprintf(file, command);
-
-}
-///********rectangle***********************************
-void rectangle(int x, int y,int x1,int y1)
-{	
-	sprintf(command, "rectangle(%i,%i,%i,%i);\n",x , y, x1, y1);
+	sprintf(command, "outTextXY(%i,%i,\"%s\");\n",x , y, text);
 	fprintf(file, command);
 }
-///********outTextXY***********************************
-void outTextXY(int x, int y,char *text)
+//************outText*****************************************
+void outtext(char *text)
 {
-	sprintf(command, "point(%i,%i,\"%s\");\n",x , y, text);
-	fprintf(file, command);
+	sprintf(command, "outText(\"%s\");\n", text);
+	fprintf(file, command);	
+}
+//***********setColor************************************
+void setcolor(COLORS color)
+{
+	sprintf(command, "setColor(%i);\n", color);
+	fprintf(file, command);	
+}
+//***********setLineStyle**********************************
+void setlinestyle(int linestyle, unsigned upattern, int thickness)
+{
+	sprintf(command, "setLineStyle(%i,%i);\n", linestyle, thickness);
+	fprintf(file, command);	
+}
+//***********setTetxtStyle*******************************
+void settextstyle(char *font, int direction, int size)
+{
+	sprintf(command, "setTextStyle(%s,%i,%i);\n", font, direction, size);
+	fprintf(file, command);	
 }
