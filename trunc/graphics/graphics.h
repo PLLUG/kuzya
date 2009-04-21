@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andriy Shevchyk   *
- *   sheva@sheva.immeditek   *
+ *   Copyright (C) 2009 by Volodymyr Shevchyk                              *
+ *   volderne@gmail.com                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,13 +43,37 @@ class graphics: public QDialog, private Ui::graphicsForm
 	private:
 		Ui::graphicsForm ui;
 		void paintEvent(QPaintEvent *event);
+		void createPixmap(int width, int height);
 		QString getMethodName(QString command);
 
 	private:
-		int index, x, y, x1, y1, r;		//position
+		int step;
+		int index;
+		int curentColor;
+		int textSize;
+		int	textDirection;
+		int lineThickness;
+		int lineStyle;
+		int x;
+		int y;
+		int z;
+		int x1;
+		int y1;
+		int r;
+		int stAngle;
+		int endAngle;
+		int width;
+		int height;
+		int numOfPoints;
+		int indexOfSimbol;
+		int numberOf;
+	
+	private:
  		QPixmap pix;
- 		QPainter *qpainter;
+		QPainter p;
 		QString methodText;
+		QString textFont;
+		QPen pen;
 };
 
 #endif
