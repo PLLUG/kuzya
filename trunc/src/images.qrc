@@ -22,6 +22,8 @@
         <file alias="bug" >images/bug_error.png</file>
     </qresource>
     <qresource prefix="/markers" >
-        <file alias="bug_line" >images/bug_go.png</file>
+        <file alias="bug_line" >images/bullet_red.png</file>
+        <file alias="warning_line" >images/bullet_orange.png</file>
+        <file alias="current_line" >images/arrow.png</file>
     </qresource>
 </RCC>

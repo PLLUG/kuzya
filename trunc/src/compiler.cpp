@@ -212,7 +212,6 @@ void Compiler::readStdErr(void)
 	while (!procStream.atEnd())
 	{
 		line = procStream.readLine();
-                qDebug() << line;
 		foreach(QString parseParam, parseParamList)
 		{
 			pattern = parseParam.section(":",2);
