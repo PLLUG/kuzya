@@ -73,6 +73,7 @@ Kuzya::Kuzya(QWidget *parent)
         notificationList = new QListWidget(this);
         notificationList->setVisible(false);
 
+
         QSplitter *splitter = new QSplitter(this);
         splitter->setOrientation(Qt::Vertical);
         splitter->addWidget(textEditor);
@@ -83,7 +84,7 @@ Kuzya::Kuzya(QWidget *parent)
         gridLayout->addWidget(splitter, 0, 0, 1, 1);
 
 
-        textEditor->setCaretLineBackgroundColor(QColor(200, 200, 200));
+        textEditor->setCaretLineBackgroundColor(QColor(215, 215, 250));
         textEditor->setCaretLineVisible(true);
 
         //QsciLexerCPP *
@@ -102,10 +103,12 @@ Kuzya::Kuzya(QWidget *parent)
         textEditor->setSelectionBackgroundColor(QColor(100, 100, 200));
 
         textEditor->setMarginSensitivity(1, true);
-        textEditor->setMarginLineNumbers(1, true);
-        textEditor->setMarginWidth(1, 50);
+        textEditor->setMarginLineNumbers(2, true);
+        textEditor->setMarginWidth(2, 40);
 
-
+        errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
+        warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor));
+        currentMarker = textEditor->markerDefine(QPixmap(":/markers/current_line","",Qt::AutoColor));
 
         file = new QFile();
         goToLine = new GoToLineDialog(textEditor);
@@ -128,8 +131,6 @@ Kuzya::Kuzya(QWidget *parent)
 
         shortcut = new QShortcut(textEditor);
         shortcut->setKey(Qt::CTRL+Qt::Key_Space);
-
-        errorMarker = textEditor->markerDefine(QsciScintilla::CircledPlus);
 
         ActOpenRecentFileVector.clear();
 ///-------------------------------------------------------------------------------------------------------------------
@@ -219,7 +220,8 @@ Kuzya::Kuzya(QWidget *parent)
         connect(compiler,	SIGNAL(compileEnded(int)),		 this,	SLOT(slotAfterCompile(int)));
         connect(textEditor,	SIGNAL(marginClicked (int, int, Qt::KeyboardModifiers)), this, SLOT(slotMarginClicked(int, int, Qt::KeyboardModifiers)));
         connect(actionNotificationList, SIGNAL(toggled(bool)), this, SLOT(slotShowNotificationList(bool)));
-        connect(notificationList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotShowErrorFromList(QListWidgetItem*)));
+        connect(notificationList, SIGNAL(itemSelectionChanged()), this, SLOT(slotShowErrorFromList()));
+        connect(notificationList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotGotoErrorLine(QListWidgetItem*)));
 
         statusBar()->showMessage(tr("Ready"));
 
@@ -658,25 +660,38 @@ void Kuzya::slotAfterCompile(int status)
 **/
 void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
 {
-        errorMap.clear();
         textEditor->markerDeleteAll();
         if (errorList->empty()) return;
 
+        statusBar()->showMessage(tr("Creating error list..."));
+
+        QString str;
         for (int i = 0; i < errorList->size(); ++i)
         {
-                errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","PNG",Qt::AutoColor));
                 textEditor->markerAdd(errorList->at(i).line-1, errorMarker);
-                errorMap[errorList->at(i).line] = errorList->at(i).description;
-                QString str = "Compilation error (line "+QVariant(errorList->at(i).line).toString()+") : "+errorList->at(i).description;
+
+                str = "Compilation error (line "+QVariant(errorList->at(i).line).toString()+") : "+errorList->at(i).description;
+
                 QListWidgetItem *newItem = new QListWidgetItem(str);
                 newItem->setData(Kuzya::attachedRole, QVariant(true));
                 newItem->setData(Kuzya::lineRole, QVariant(errorList->at(i).line));
                 newItem->setData(Kuzya::descriptionRole,QVariant(errorList->at(i).description));
                 newItem->setIcon(QIcon(":/notifications/bug"));
                 notificationList->addItem(newItem);
-}
-        textEditor->setCursorPosition(errorList->at(0).line, 0);
-        statusBar()->showMessage(tr("***ERROR: ") + errorList->at(0).description);
+        }
+
+        if (errorList->size()==1) str = QString(tr("1 error found in file %1")).arg(fileName);
+            else str = QString(tr("%1 errors found in file %2")).arg(errorList->size()).arg(fileName);
+
+        QListWidgetItem *newItem = new QListWidgetItem(str);
+        newItem->setData(Kuzya::attachedRole, QVariant(false));
+        newItem->setData(Kuzya::descriptionRole, str);
+        newItem->setIcon(QIcon(":/notifications/failed"));
+        notificationList->addItem(newItem);
+
+        textEditor->setCursorPosition(notificationList->item(1)->data(Kuzya::lineRole).toInt(), 0);
+
+        statusBar()->showMessage(notificationList->item(1)->data(Kuzya::descriptionRole).toString());
 }
 
 /**
@@ -712,7 +727,14 @@ void Kuzya::slotUpdateWindowName(bool m)
 **/
 void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers state)
 {
-        if (1 == textEditor->markersAtLine(line)) statusBar()->showMessage(tr("***ERROR: ") + errorMap[line]);
+        if (1 == textEditor->markersAtLine(line))
+        {
+            QListWidgetItem *item = notificationList->findItems(QString("Compilation error (line %1)").arg(line+1), Qt::MatchContains).at(0);
+            notificationList->setCurrentItem(item);
+            notificationList->setFocus();
+            textEditor->markerDeleteAll(currentMarker);
+            statusBar()->showMessage(item->data(Kuzya::descriptionRole).toString());
+        }
 }
 
 /**
@@ -1397,13 +1419,25 @@ void Kuzya::slotShowNotificationList(bool visible)
     actionNotificationList->setChecked(visible);
 }
 
-void Kuzya::slotShowErrorFromList(QListWidgetItem * item)
+void Kuzya::slotShowErrorFromList()
+{
+            QListWidgetItem * item = notificationList->currentItem();
+            textEditor->markerDeleteAll(currentMarker);
+            if (item->data(Kuzya::attachedRole).toBool())
+            {
+                    textEditor->setCursorPosition(item->data(Kuzya::lineRole).toInt()-1,1);
+                    textEditor->ensureCursorVisible();
+                    textEditor->markerAdd(item->data(Kuzya::lineRole).toInt()-1, currentMarker);
+            }
+}
+
+void Kuzya::slotGotoErrorLine(QListWidgetItem * item)
 {
             qDebug() << item->data(Kuzya::descriptionRole).toString();
+            textEditor->markerDeleteAll(currentMarker);
             if (item->data(Kuzya::attachedRole).toBool())
             {
                     textEditor->setFocus();
                     textEditor->setCursorPosition(item->data(Kuzya::lineRole).toInt()-1,1);
             }
-
 }

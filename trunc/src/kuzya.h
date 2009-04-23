@@ -166,7 +166,8 @@ private slots:
         bool slotSaveChangesNotifier(void);
         void slotShowAutoComplete(void);
         void slotShowNotificationList(bool);
-        void slotShowErrorFromList(QListWidgetItem * item);
+        void slotShowErrorFromList();
+        void slotGotoErrorLine(QListWidgetItem * item);
 protected:
         void closeEvent(QCloseEvent *event);
 //	void keyPressEvent(QKeyEvent *event);
@@ -185,10 +186,9 @@ private:
         OptionsDialog* settings;
         Compiler *compiler;
         QLabel* statusLabel;
-        int errorMarker;
+        int errorMarker, warningMarker, currentMarker;
         QVector <QAction*> ActOpenRecentFileVector;
         QSignalMapper *signalMapper;
-        QMap<int, QString> errorMap;
         int MaxCount_RFileList;
         QList<QString>* RFileList;
         QsciPrinter* printer;

@@ -30,7 +30,7 @@
      <x>0</x>
      <y>0</y>
      <width>773</width>
-     <height>21</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -79,7 +79,7 @@
       <x>1046</x>
       <y>174</y>
       <width>120</width>
-      <height>82</height>
+      <height>86</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -816,10 +816,10 @@
      <normaloff>:/menu/images/application_view_list.png</normaloff>:/menu/images/application_view_list.png</iconset>
    </property>
    <property name="text">
-    <string>Show Notify List</string>
+    <string>Show notifications</string>
    </property>
    <property name="toolTip">
-    <string>Show/Hide Notify List</string>
+    <string>Show notifications</string>
    </property>
   </action>
  </widget>
