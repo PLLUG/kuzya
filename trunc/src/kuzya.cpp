@@ -641,6 +641,7 @@ void Kuzya::slotAfterCompile(int status)
                 newItem->setData(Kuzya::descriptionRole,QVariant(tr("Compiled successfuly!")));
                 newItem->setIcon(QIcon(":/notifications/accept"));
                 notificationList->addItem(newItem);
+                statusBar()->showMessage(tr("Compiled successfuly!"));
         }
         else
         {
@@ -1437,7 +1438,6 @@ void Kuzya::slotGotoErrorLine(QListWidgetItem * item)
             textEditor->markerDeleteAll(currentMarker);
             if (item->data(Kuzya::attachedRole).toBool())
             {
-                    textEditor->setFocus();
-                    textEditor->setCursorPosition(item->data(Kuzya::lineRole).toInt()-1,1);
+                textEditor->setCursorPosition(item->data(Kuzya::lineRole).toInt()-1,1);
             }
 }
