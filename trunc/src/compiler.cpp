@@ -69,6 +69,7 @@ void Compiler::setIncludeDir(QString dir)
 
 bool Compiler::isReady()
 {
+        qDebug() << compilerDir;
 	if (compilerProfile->status() == QSettings::NoError && runStatus == STOP) return true;
 	else return false;
 }
