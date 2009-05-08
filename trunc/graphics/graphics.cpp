@@ -30,7 +30,6 @@
 
 
 #include "readstdin.h"
-
 #include "graphics.h"
 
 graphics::graphics(QWidget *parent)
