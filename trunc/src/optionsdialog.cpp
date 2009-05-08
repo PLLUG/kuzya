@@ -19,11 +19,13 @@
  ***************************************************************************/
 #include <Qsci/qsciscintilla.h>
 #include <QMessageBox>
-#include "optionsdialog.h"
 #include <QFontDialog>
 #include <QColorDialog>
 #include <QColor>
 #include <QFileDialog>
+
+#include "optionsdialog.h"
+
 OptionsDialog::OptionsDialog(QWidget *parent)
  : QDialog(parent)
 {
