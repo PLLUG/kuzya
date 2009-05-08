@@ -49,6 +49,8 @@ public:
 	void openLastProject();
 	void saveLastProjectName(QString);
 	void retranslate(void);
+        bool ukrIsCheked();
+
 public slots:
 	void slotCommOptions(void);
 private slots:

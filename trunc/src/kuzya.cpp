@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Volodymyr Shevchyk   *
- *   i'mnotageycom.ua   *
+ *   Copyright (C) 2008 by Volodymyr Shevchyk                              *
+ *   i'mnotageycom.ua                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,6 +30,7 @@
 #include <Qsci/qsciprinter.h>
 #include <QPrintDialog>
 #include <QColor>
+
 #include "gotolinedialog.h"
 #include "finddialog.h"
 #include "replacedialog.h"
@@ -601,6 +602,11 @@ void Kuzya::slotRun(void)
 **/
 void Kuzya::slotCompile(void)
 {
+    if (true == settings->ukrIsCheked())
+    {
+        translateCode("ukranian");
+        qDebug() << newFileName;
+    }
         if (textEditor->isModified()) slotSave();
 
         textEditor->markerDeleteAll();
@@ -1440,4 +1446,39 @@ void Kuzya::slotGotoErrorLine(QListWidgetItem * item)
             {
                 textEditor->setCursorPosition(item->data(Kuzya::lineRole).toInt()-1,1);
             }
+}
+/**
+******************************************************************************************
+*****************translate program code to English**************************************
+*/
+void Kuzya::translateCode(QString language)
+{
+    QString key;
+    QString translation;
+    QString lineString;
+    QByteArray line;
+    QString curentDir;
+    QFile fileTrans("/home/volder/Projects/kuzya/trunc/src/translations/code/ukranian.txt");
+    /*newFileName = "`" + fileName.section('/', -1);
+    file->setFileName(newFileName);
+    QDir::setCurrent("/home");
+    QTextStream stream(file);
+    textEditor->setText(stream.readAll());
+    */if(!fileTrans.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << tr("Can't find translation for the code");
+        statusBar()->showMessage(tr("Can't find translation for the code"));
+    }
+    while (!fileTrans.atEnd())
+    {
+        textEditor->setCursorPosition(0,0);
+        line = fileTrans.readLine();
+        lineString = line;
+        translation = lineString.section('=', 1);
+        key = lineString;
+        key.truncate(key.lastIndexOf('='));
+        translation.truncate(translation.lastIndexOf(';'));
+        replaceText->replaceCode(key, translation);
+    }
+    fileTrans.close();
 }
