@@ -76,10 +76,10 @@
    <widget class="QMenu" name="menuBuild">
     <property name="geometry">
      <rect>
-      <x>1046</x>
-      <y>174</y>
-      <width>120</width>
-      <height>86</height>
+      <x>712</x>
+      <y>109</y>
+      <width>148</width>
+      <height>106</height>
      </rect>
     </property>
     <property name="minimumSize">

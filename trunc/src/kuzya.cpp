@@ -589,12 +589,18 @@ void Kuzya::slotExit(void)
 **/
 void Kuzya::slotRun(void)
 {
-        if (fileName.isEmpty())
+    if (fileName.isEmpty())
         {
                 statusBar()->showMessage(tr("No binary to run"), 2000);
                 return;
         }
+    if (true == settings->ukrIsCheked())
+    {
+        translateCode("ukrEng");
+        qDebug() << newFileName;
+    }
         compiler->run();
+        translateCode("engUkr");
 }
 
 /**
@@ -604,7 +610,7 @@ void Kuzya::slotCompile(void)
 {
     if (true == settings->ukrIsCheked())
     {
-        translateCode("ukranian");
+        translateCode("ukrEng");
         qDebug() << newFileName;
     }
         if (textEditor->isModified()) slotSave();
@@ -625,7 +631,7 @@ void Kuzya::slotCompile(void)
                 compiler->compile(fileName,Compiler::DEFAULT);
         }
         else statusBar()->showMessage(tr("ERROR : Could not find compiler profile or compile mode is not available."));
-
+    translateCode("engUkr");
 }
 
 Compiler* Kuzya::getCurrentCompiler(void)
@@ -660,6 +666,7 @@ void Kuzya::slotAfterCompile(int status)
                 emit slotShowNotificationList(true);
                 paintErrorMarkers(compiler->getLastErrors());
         }
+        translateCode("engUkr");
 }
 
 /**
@@ -1451,7 +1458,7 @@ void Kuzya::slotGotoErrorLine(QListWidgetItem * item)
 ******************************************************************************************
 *****************translate program code to English**************************************
 */
-void Kuzya::translateCode(QString language)
+void Kuzya::translateCode(QString way)
 {
     QString key;
     QString translation;
@@ -1478,7 +1485,14 @@ void Kuzya::translateCode(QString language)
         key = lineString;
         key.truncate(key.lastIndexOf('='));
         translation.truncate(translation.lastIndexOf(';'));
-        replaceText->replaceCode(key, translation);
+        if ("ukrEng" == way)
+        {
+            replaceText->replaceCode(key, translation);
+        }
+        else
+        {
+            replaceText->replaceCode(translation, key);
+        }
     }
     fileTrans.close();
 }
