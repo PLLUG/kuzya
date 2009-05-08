@@ -24,6 +24,7 @@
 
 #include <QMainWindow>
 #include <QProcess>
+
 #include "optionsdialog.h"
 #include "ui_kuzya.h"
 #include "compiler.h"
@@ -173,6 +174,7 @@ protected:
 //	void keyPressEvent(QKeyEvent *event);
 private:
         void paintErrorMarkers(QList<Compiler::compilerError>* errorList);
+        void translateCode(QString);
 
 
 private:
@@ -180,6 +182,7 @@ private:
         QsciScintilla* textEditor;
         QListWidget* notificationList;
         QString fileName;
+        QString newFileName;
         QString DefaultDir;
         //QString CurrentDir;
         GoToLineDialog* goToLine;

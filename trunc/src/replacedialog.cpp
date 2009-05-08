@@ -41,32 +41,11 @@ ReplaceDialog::~ReplaceDialog()
 *********************************************************************
 *********translates program code to english***
 **/
-void ReplaceDialog::translateCode(void)
+void ReplaceDialog::replaceCode(QString key, QString translation)
 {
-    int count = 0;
-    QString key;
-    QString translation;
-    QString lineString;
-    QByteArray line;
-    QFile file("/home/volder/Projects/kuzya/trunc/src/translations/code/ukranian.txt");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    while(textEditor->findFirst(key,false,caseSensCB->isChecked(), wWOnlyCB->isChecked(),false,true,-1,-1,true))
     {
-        qDebug() << tr("Can't find translation for the code");
-    }
-    while (!file.atEnd())
-    {
-        textEditor->setCursorPosition(0,0);
-        line = file.readLine();
-        lineString = line;
-        translation = lineString.section('=', 1);
-        key = lineString;
-        key.truncate(key.lastIndexOf('='));
-        translation.truncate(translation.lastIndexOf(';'));
-        while(textEditor->findFirst(key,false,caseSensCB->isChecked(), wWOnlyCB->isChecked(),false,true,-1,-1,true))
-        {
-            textEditor->replace(translation);
-            count++;
-        }
+        textEditor->replace(translation);
     }
 }
 

@@ -279,7 +279,7 @@ void OptionsDialog::slotCommOptions(void)
 void OptionsDialog::saveLastProjectName(QString fileName)
 {
         settings->beginGroup("Settings/MainWindow/");
-                settings->setValue("LastProjectName",fileName);
+        settings->setValue("LastProjectName",fileName);
         settings->endGroup();
 	
 }
@@ -293,7 +293,7 @@ void OptionsDialog::openLastProject()
 	if(checkBox->isChecked())
 	{
         settings->beginGroup("Settings/MainWindow/");
-        QString fileName =settings->value("LastProjectName","/home/volder/Projects/Svitlofor/src/main.cpp").toString();
+        QString fileName =settings->value("LastProjectName").toString();
         settings->endGroup();
 	mw->openFile(fileName);
 	}
@@ -356,4 +356,9 @@ void OptionsDialog::slotChangeDefDir(int index)
 		directoryBox->setCurrentIndex(0);
 	
 	}
+}
+
+bool OptionsDialog::ukrIsCheked()
+{
+    return ukrRBtn_2->isChecked();
 }

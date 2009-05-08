@@ -37,7 +37,7 @@ class ReplaceDialog : public QDialog, private Ui::replaceForm
 		~ReplaceDialog();
                 void retranslate (void);
                 void promptMessage (void);
-                void translateCode(void);
+                void replaceCode(QString, QString);
 
 	public slots:
                 void slotReplaceDialog (void);
