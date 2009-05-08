@@ -22,6 +22,8 @@
 
 #include <QObject>
 #include <QDialog>
+#include <QFile>
+
 #include "ui_replacedialog.h"
 class QsciScintilla;
 /**
@@ -31,21 +33,22 @@ class ReplaceDialog : public QDialog, private Ui::replaceForm
 {
 		Q_OBJECT
 	public:
-		ReplaceDialog ( QWidget *parent = 0 );
+                ReplaceDialog (QWidget *parent = 0);
 		~ReplaceDialog();
+                void retranslate (void);
+                void promptMessage (void);
+                void translateCode(void);
 
-		void retranslate ( void );
-
-		void promptMessage ( void );
 	public slots:
-		void slotReplaceDialog ( void );
+                void slotReplaceDialog (void);
+
 	private slots:
-		void slotReplace ( void );
-		void slotReplaceOnce ( void );
-		void slotReplaceAll ( void );
-		void slotReplace_Close ( void );
-		void slotFindNext ( void );
-		void slotCancel ( void );
+                void slotReplace (void);
+                void slotReplaceOnce (void);
+                void slotReplaceAll (void);
+                void slotReplace_Close (void);
+                void slotFindNext (void);
+                void slotCancel (void);
 	private:
 		QsciScintilla* textEditor;
 		QWidget *promptMessageDialog;

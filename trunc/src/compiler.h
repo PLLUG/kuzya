@@ -23,6 +23,8 @@
 
 #include <QProcess>
 
+#include "replacedialog.h"
+
 class QSettings;
 
 class Compiler : public QProcess

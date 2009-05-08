@@ -17,14 +17,17 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "replacedialog.h"
 #include <Qsci/qsciscintilla.h>
 #include <QMessageBox>
+
+#include "QDebug"
+
+#include "replacedialog.h"
 
 ReplaceDialog::ReplaceDialog(QWidget *parent)
  : QDialog(parent)//, Ui::replaceForm()
 {
-	setupUi(this);
+        setupUi(this);
 	textEditor=(QsciScintilla*)parentWidget();
 	connect(closeBtn,SIGNAL(clicked()),this,SLOT(close()));
 	connect(replaceBtn,SIGNAL(clicked()),this,SLOT(slotReplace()));
@@ -34,6 +37,39 @@ ReplaceDialog::ReplaceDialog(QWidget *parent)
 ReplaceDialog::~ReplaceDialog()
 {
 }
+/**
+*********************************************************************
+*********translates program code to english***
+**/
+void ReplaceDialog::translateCode(void)
+{
+    int count = 0;
+    QString key;
+    QString translation;
+    QString lineString;
+    QByteArray line;
+    QFile file("/home/volder/Projects/kuzya/trunc/src/translations/code/ukranian.txt");
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << tr("Can't find translation for the code");
+    }
+    while (!file.atEnd())
+    {
+        textEditor->setCursorPosition(0,0);
+        line = file.readLine();
+        lineString = line;
+        translation = lineString.section('=', 1);
+        key = lineString;
+        key.truncate(key.lastIndexOf('='));
+        translation.truncate(translation.lastIndexOf(';'));
+        while(textEditor->findFirst(key,false,caseSensCB->isChecked(), wWOnlyCB->isChecked(),false,true,-1,-1,true))
+        {
+            textEditor->replace(translation);
+            count++;
+        }
+    }
+}
+
 void ReplaceDialog::retranslate(void)
 {
 	retranslateUi(this);
@@ -51,7 +87,7 @@ void ReplaceDialog::slotReplaceDialog(void)
 }
 void ReplaceDialog::slotReplace(void)
 {
-	int count=0,line,index;
+        int count=0,line,index;
 	bool startpos=false;
 	QVariant v;
 	if(!fromcurCB->isChecked())
@@ -103,15 +139,16 @@ void ReplaceDialog::slotReplaceOnce( void )
 {
 	textEditor->replace(replaceCombo->currentText());
 }
-void ReplaceDialog::slotReplaceAll ()
+
+void ReplaceDialog::slotReplaceAll()
 {
 	int count=0,line,index;
 	bool startpos=false;
 	QVariant v;
-label3:	while(textEditor->findFirst(	findCombo->currentText(),false,caseSensCB->isChecked(),
-						wWOnlyCB->isChecked(),false,true,-1,-1,true))
+label3:	while(textEditor->findFirst(    findCombo->currentText(),false,caseSensCB->isChecked(),
+                                        wWOnlyCB->isChecked(),false,true,-1,-1,true))
 		{
-			textEditor->replace(replaceCombo->currentText());
+                        textEditor->replace(replaceCombo->currentText());
 			count++;
 		}
 		close();

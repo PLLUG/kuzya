@@ -18,13 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <QSettings>
+
 #include "QDebug"
 
 #include "compiler.h"
-#include <QSettings>
 
 Compiler::Compiler(QObject *parent) : QProcess(parent)
-{
+{  
 	connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(afterExit(int, QProcess::ExitStatus)));
 	connect(this, SIGNAL(readyReadStandardError()), this, SLOT(readStdErr()));
 
