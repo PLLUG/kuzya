@@ -222,7 +222,7 @@ void graphics::processCommand(QString  command)
 		{
 			int a, c;
 			c = z;
-			a = abs(c / sqrt(2));
+                        a = (int) fabs(c / sqrt(2)); //Modified to avoid warning: passing `double' for converting 1 of `int abs(int)'
  			p.drawLine(x, y, x+a, y-a); 
 			p.drawLine(x+a, y-a, x1+a, y-a);
 			p.drawLine(x1+a, y-a, x1+a, y1-a);

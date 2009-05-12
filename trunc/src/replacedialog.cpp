@@ -66,7 +66,7 @@ void ReplaceDialog::slotReplaceDialog(void)
 }
 void ReplaceDialog::slotReplace(void)
 {
-        int count=0,line,index;
+        int line,index;
 	bool startpos=false;
 	QVariant v;
 	if(!fromcurCB->isChecked())
@@ -121,7 +121,7 @@ void ReplaceDialog::slotReplaceOnce( void )
 
 void ReplaceDialog::slotReplaceAll()
 {
-	int count=0,line,index;
+        int count=0;
 	bool startpos=false;
 	QVariant v;
 label3:	while(textEditor->findFirst(    findCombo->currentText(),false,caseSensCB->isChecked(),
