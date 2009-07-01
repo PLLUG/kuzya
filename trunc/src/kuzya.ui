@@ -30,7 +30,7 @@
      <x>0</x>
      <y>0</y>
      <width>773</width>
-     <height>24</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -76,10 +76,10 @@
    <widget class="QMenu" name="menuBuild">
     <property name="geometry">
      <rect>
-      <x>712</x>
-      <y>109</y>
-      <width>148</width>
-      <height>106</height>
+      <x>763</x>
+      <y>104</y>
+      <width>120</width>
+      <height>82</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -241,6 +241,7 @@
     </property>
     <addaction name="actionNotificationList"/>
     <addaction name="actionCommon"/>
+    <addaction name="actionNative_language"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -820,6 +821,17 @@
    </property>
    <property name="toolTip">
     <string>Show notifications</string>
+   </property>
+  </action>
+  <action name="actionNative_language">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Native language</string>
+   </property>
+   <property name="toolTip">
+    <string>Use native language for programming</string>
    </property>
   </action>
  </widget>

@@ -56,6 +56,8 @@ public:
                                        lineRole = Qt::UserRole+2,
                                        descriptionRole = Qt::UserRole+3};
 
+    enum translationEnum { fromCode, fromNative };
+
     Kuzya(QWidget *parent = 0);
     ~Kuzya();
     
@@ -169,12 +171,13 @@ private slots:
         void slotShowNotificationList(bool);
         void slotShowErrorFromList();
         void slotGotoErrorLine(QListWidgetItem * item);
+        void slotUseNativeMode(bool);
 protected:
         void closeEvent(QCloseEvent *event);
 //	void keyPressEvent(QKeyEvent *event);
 private:
         void paintErrorMarkers(QList<Compiler::compilerError>* errorList);
-        void translateCode(QString);
+        void translateCode(translationEnum);
 
 
 private:
@@ -199,6 +202,8 @@ private:
         ReplaceDialog* replaceText;
         QShortcut* shortcut;
         QsciLexerCPP *cppLexer;
+        QString translatedFileName;
+        bool nativeMode;
 public:
 
 
