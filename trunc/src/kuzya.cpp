@@ -223,6 +223,7 @@ Kuzya::Kuzya(QWidget *parent)
         connect(actionNotificationList, SIGNAL(toggled(bool)), this, SLOT(slotShowNotificationList(bool)));
         connect(notificationList, SIGNAL(itemSelectionChanged()), this, SLOT(slotShowErrorFromList()));
         connect(notificationList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotGotoErrorLine(QListWidgetItem*)));
+        connect(actionNative_language, SIGNAL(toggled(bool)), this, SLOT(slotUseNativeMode(bool)));
 
         statusBar()->showMessage(tr("Ready"));
 
@@ -317,6 +318,17 @@ void Kuzya::openFile(QString FileName)
 {
         fileName=FileName;
         if (FileName.isEmpty()) return;
+
+        if (nativeMode)
+        {
+            textEditor->setUtf8(true);
+            translatedFileName = FileName;
+        }
+        else
+        {
+            textEditor->setUtf8(false);
+            fileName = FileName;
+        }
 
         file->setFileName(FileName);
         if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) return;
@@ -469,6 +481,7 @@ void Kuzya::slotNew(void)
         textEditor->markerDeleteAll();
 
         fileName = QString::null;
+        translatedFileName = QString::null;
         textEditor->clear();
         setWindowTitle("Kuzya");
         statusBar()->showMessage(tr("Created new file"), 2000);
@@ -485,10 +498,10 @@ void Kuzya::slotOpen(void)
 {
         if(slotSaveChangesNotifier()==false) return;
         textEditor->markerDeleteAll();
-        fileName = QFileDialog::getOpenFileName(this, tr("Open File"), DefaultDir, tr("C/CPP Source-Files (*.c *.cpp *.cxx *.h);;Pascal Source-Files (*.fpc *.pas *.pp);;All Files (*)"));
-        if (fileName!="")
+        QString openedFileName = QFileDialog::getOpenFileName(this, tr("Open File"), DefaultDir, tr("C/CPP Source-Files (*.c *.cpp *.cxx *.h);;Pascal Source-Files (*.fpc *.pas *.pp);;All Files (*)"));
+        if ("" != openedFileName)
         {
-                openFile(fileName);
+                openFile(openedFileName);
         }
 
 }
@@ -508,7 +521,19 @@ bool Kuzya::slotSave(void)
         {
                 return false;
         }
-        QFile file(fileName);
+        QString name;
+        if (nativeMode)
+        {
+                translateCode(fromCode);
+                name = translatedFileName;
+        }
+        else
+        {
+                translateCode(fromNative);
+                name = fileName;
+        }
+
+        QFile file(name);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
                 return false ;
@@ -518,31 +543,10 @@ bool Kuzya::slotSave(void)
         textEditor->setModified(false);
         file.close();
         statusBar()->showMessage(tr("Saved"), 2000);
-        addFileNameToList(fileName);
+        addFileNameToList(file.fileName());
 
         return true;
 }
-/*void Kuzya::slotSave(void)
-{
-        if (fileName.isEmpty())
-        {
-                fileName = QFileDialog::getSaveFileName(this, tr("Save as..."),
-                                           "", tr("Source-Files (*.c *.cpp *.cxx *.h);;All Files (*)"));
-                slotUpdateWindowName(false);
-        }
-
-        if (fileName.isEmpty()) return;
-
-        QFile file(fileName);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) return;
-
-        QTextStream stream(&file);
-        stream << textEditor->text();
-        textEditor->setModified(false);
-        file.close();
-        statusBar()->showMessage(tr("Saved"), 2000);
-
-}*/
 
 /**
 *******************************************************************************************************
@@ -550,9 +554,13 @@ bool Kuzya::slotSave(void)
 void Kuzya::slotSave_as(void)
 {
         //QFileDialog::setDirectory(DefaultDir);
-        fileName = QFileDialog::getSaveFileName(this, tr("Save as..."),
+        newFileName = QFileDialog::getSaveFileName(this, tr("Save as..."),
                                            DefaultDir , tr("Source-Files (*.c *.cpp *.cxx *.h);;All Files (*)"));
         if (fileName.isEmpty()) return;
+
+        if (nativeMode) translatedFileName = newFileName;
+        else fileName = newFileName;
+
         slotSave();
 }
 /**
@@ -596,11 +604,11 @@ void Kuzya::slotRun(void)
         }
     if (true == settings->ukrIsCheked())
     {
-        translateCode("ukrEng");
+       // translateCode(fromNative);
         qDebug() << newFileName;
     }
         compiler->run();
-        translateCode("engUkr");
+       // translateCode(fromCode);
 }
 
 /**
@@ -610,7 +618,7 @@ void Kuzya::slotCompile(void)
 {
     if (true == settings->ukrIsCheked())
     {
-        translateCode("ukrEng");
+      //  translateCode(fromCode);
         qDebug() << newFileName;
     }
         if (textEditor->isModified()) slotSave();
@@ -631,7 +639,7 @@ void Kuzya::slotCompile(void)
                 compiler->compile(fileName,Compiler::DEFAULT);
         }
         else statusBar()->showMessage(tr("ERROR : Could not find compiler profile or compile mode is not available."));
-    translateCode("engUkr");
+//    translateCode(fromCode);
 }
 
 Compiler* Kuzya::getCurrentCompiler(void)
@@ -666,7 +674,7 @@ void Kuzya::slotAfterCompile(int status)
                 emit slotShowNotificationList(true);
                 paintErrorMarkers(compiler->getLastErrors());
         }
-        translateCode("engUkr");
+//        translateCode(fromCode);
 }
 
 /**
@@ -1458,24 +1466,85 @@ void Kuzya::slotGotoErrorLine(QListWidgetItem * item)
 ******************************************************************************************
 *****************translate program code to English**************************************
 */
-void Kuzya::translateCode(QString way)
+void Kuzya::translateCode(translationEnum direction)
 {
+    qDebug() << fileName;
+    QFile fileTrans("d:/Work/ukranian.tr");
+    if(!fileTrans.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << tr("Can't find translation for the code");
+        statusBar()->showMessage(tr("Can't find translation for the code"));
+        return;
+    }
+    QTextStream trStream(&fileTrans);
+    translatedFileName = QString::null;
+    QString name;
+    if (fromCode == direction)
+    {
+        if (translatedFileName.isEmpty())
+            translatedFileName = fileName+"t" ;
+        name = translatedFileName;
+    }
+    else
+    {
+        if (fileName.isEmpty())
+            fileName = "pgr_" + translatedFileName.section('/', -1);
+        name = fileName;
+    }
+
+    QString text = textEditor->text();
+
+    QString trLine;
     QString key;
+    QString translation;
+    while (!trStream.atEnd())
+    {
+        trLine = trStream.readLine();
+        key = trLine;
+        key.truncate(key.lastIndexOf('='));
+        translation = trLine.section('=', 1);
+//        translation.truncate(translation.lastIndexOf(';'));
+        if (fromCode == direction)
+        {
+            qDebug() << "key " << key;
+            qDebug() << "tr " << translation;
+            qDebug() << "line " << trLine;
+            text.replace(key, translation);
+        }
+        else
+        {
+            text.replace(translation, key);
+        }
+    }
+    fileTrans.close();
+
+    QFile outFile(name);
+    if (!outFile.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+         qDebug() << tr("Can't open out file    ") << name;
+         return ;
+    }
+    QTextStream outStream(&outFile);
+    outStream << text;
+    outFile.close();
+
+
+    /*    QString key;
     QString translation;
     QString lineString;
     QByteArray line;
     QString curentDir;
-    QFile fileTrans("/home/volder/Projects/kuzya/trunc/src/translations/code/ukranian.txt");
-    /*newFileName = "`" + fileName.section('/', -1);
-    file->setFileName(newFileName);
-    QDir::setCurrent("/home");
-    QTextStream stream(file);
+//    QFile fileTrans("d:/Work/ukranian.tr");
+//    newFileName = "tr_" + fileName.section('/', -1);
+//    file->setFileName(newFileName);
+    QDir::setCurrent("d:/Work");
+//    QTextStream stream(file);
     textEditor->setText(stream.readAll());
-    */if(!fileTrans.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug() << tr("Can't find translation for the code");
-        statusBar()->showMessage(tr("Can't find translation for the code"));
-    }
+//    if(!fileTrans.open(QIODevice::ReadOnly | QIODevice::Text))
+//    {
+//        qDebug() << tr("Can't find translation for the code");
+//       statusBar()->showMessage(tr("Can't find translation for the code"));
+//    }
     while (!fileTrans.atEnd())
     {
         textEditor->setCursorPosition(0,0);
@@ -1485,7 +1554,7 @@ void Kuzya::translateCode(QString way)
         key = lineString;
         key.truncate(key.lastIndexOf('='));
         translation.truncate(translation.lastIndexOf(';'));
-        if ("ukrEng" == way)
+        if (fromNative == direction)
         {
             replaceText->replaceCode(key, translation);
         }
@@ -1494,5 +1563,27 @@ void Kuzya::translateCode(QString way)
             replaceText->replaceCode(translation, key);
         }
     }
-    fileTrans.close();
+    fileTrans.close();*/
+}
+
+void Kuzya::slotUseNativeMode(bool isNative)
+{
+    nativeMode = isNative;
+    if (!fileName.isEmpty())
+    {
+        if (textEditor->isModified())
+        {
+            slotSave();
+        }
+        if (nativeMode)
+        {
+            translateCode(fromCode);
+            qDebug() << "Ya!";
+            openFile(translatedFileName);
+        }
+        else
+        {
+            openFile(fileName);
+        }
+    }
 }

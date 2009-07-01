@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by LLUG_DEV Programmers Group                      *
- *                                                                         *
+ *   Copyright (C) 2009 by Alex Chmykhalo                                  *
+ *   alexchmykhalo@users.sourceforge.net                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

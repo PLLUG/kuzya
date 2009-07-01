@@ -22,9 +22,9 @@
 #include <QtGui>
 #include <QTextStream>
 #include <QPainterPath>
-#include <qwt/qwt_plot.h>
-#include <qwt/qwt_plot_curve.h>
-#include <qwt/qwt_painter.h>
+//#include <qwt/qwt_plot.h>
+//#include <qwt/qwt_plot_curve.h>
+//#include <qwt/qwt_painter.h>
 #include <QPoint>
 #include <math.h>
 
