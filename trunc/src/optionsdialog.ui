@@ -261,7 +261,7 @@
       <bool>false</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -685,7 +685,7 @@
       <widget class="QComboBox" name="comboBox">
        <property name="geometry">
         <rect>
-         <x>130</x>
+         <x>120</x>
          <y>120</y>
          <width>221</width>
          <height>27</height>

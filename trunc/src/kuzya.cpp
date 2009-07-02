@@ -125,16 +125,15 @@ Kuzya::Kuzya(QWidget *parent)
         RFileList = new QList<QString>();
 
         DefaultDir=DefaultDir;
-
-        settings->readODWSettings();
-        settings->openLastProject();
-      //  textEditor->setIndentationGuides(true);
-       // textEditor->setIndentationsUseTabs(true);
-        //textEditor->setIndentation(7,20);
-
         shortcut = new QShortcut(textEditor);
         shortcut->setKey(Qt::CTRL+Qt::Key_Space);
 
+        //textEditor->setIndentationGuides(true);
+        //textEditor->setIndentationsUseTabs(true);
+        //textEditor->setIndentation(7,20);
+
+        settings->readODWSettings();
+        settings->openLastProject();
         settings->openLastProject();
         ActOpenRecentFileVector.clear();
 ///-------------------------------------------------------------------------------------------------------------------
@@ -215,7 +214,6 @@ Kuzya::Kuzya(QWidget *parent)
         connect(actionThrow,	SIGNAL(triggered()),this,		SLOT(slotThrow()));
         connect(actionCommon,	SIGNAL(triggered()), settings, 		SLOT(slotCommOptions()));
         connect(actionRGB,	SIGNAL(triggered()),this,		SLOT(slotRGB()));
-       // connect(shortcut,	SIGNAL(activated()),this,		SLOT(slotShowAutoComplete()));///typo
         connect(actionKuzya_Help,	SIGNAL(triggered()),this,		SLOT(slotHelpKuzya()));
         connect(actionFind,	SIGNAL(triggered()),findText,		SLOT(slotFindDialog()));
         connect(actionReplace,	SIGNAL(triggered()),replaceText,	SLOT(slotReplaceDialog()));
@@ -263,7 +261,10 @@ void Kuzya::setAutoCompletionEnabled(bool b)
         }
         else
         {
+           try
+           {
                 disconnect(shortcut,SIGNAL(activated()),this,SLOT(slotShowAutoComplete()));
+           }catch(int e){}
         }
 }
 
@@ -380,6 +381,7 @@ void Kuzya::openFile(QString FileName)
         slotUpdateWindowName(false);
 
         addFileNameToList(FileName);
+        settings->saveLastProjectName(fileName);
 }
 
 /**
@@ -604,20 +606,25 @@ void Kuzya::slotSave_as(void)
 **/
 void Kuzya::slotPrint(void)
 {
-        //printer = new QsciPrinter(QPrinter::ScreenResolution);
-        //QsciScintillaBase* qsb;
-        //qsb=new QsciScintillaBase(textEditor);
-        //formatPage   (QPainter&painter,bool drawing,QPrinter::setFullPage(),int   pagenr )
-        //printer->printRange(qsb,-1,-1);
-/*	QPrintDialog printDialog(printer,textEditor);
+        printer = new QsciPrinter(QPrinter::ScreenResolution);
+      //  QsciScintillaBase* qsb;
+       // qsb=new QsciScintillaBase(textEditor);
+        //formatPage(QPainter&painter,bool drawing,QPrinter::setFullPage(),int   pagenr );
+      //  printer->printRange(qsb,-1,-1);
+        QPrintDialog printDialog(printer,textEditor);
+
         if(printDialog.exec()==QDialog::Accepted)
         {
-
-                QPainter painter(printer);
+            QTextDocument doc;
+            doc.setPlainText(textEditor->text());
+            doc.print(printer);
+           /*     QPainter painter(printer);
                 QRect rect(painter.viewport());
-                painter.drawText(rect,Qt::AlignCenter,"ffffffffffffffffffffffffff");
-        }*/
-        //delete printer;
+                painter.drawText(rect,textEditor->text());
+              */
+
+        }
+        delete printer;
 }
 /**
 *******************************************************************************************************
@@ -625,7 +632,7 @@ void Kuzya::slotPrint(void)
 void Kuzya::slotExit(void)
 {
         settings->writeSettings();
-        settings->saveLastProjectName(fileName);
+//        settings->saveLastProjectName(fileName);
         close();
 }
 /**
@@ -1449,7 +1456,7 @@ void Kuzya :: slotOpenRecentFile(QString FileName)
                 event->ignore();
         }
         settings->writeSettings();
-        settings->saveLastProjectName(fileName);
+//        settings->saveLastProjectName(fileName);
 
  }
 /**
