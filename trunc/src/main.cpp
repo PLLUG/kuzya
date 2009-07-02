@@ -34,6 +34,7 @@ int main(int argc, char ** argv)
         trans_ua.load("cukr_ua");
         a.installTranslator(&trans_ua);
 */
+
         QSplashScreen *splash = new QSplashScreen();
         splash->setPixmap(QPixmap(QApplication::applicationDirPath()+"/../src/images/SplashCukr.png"));
         ///splash->setPixmap(QPixmap("./src/images/SplashCukr.png"));
