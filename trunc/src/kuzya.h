@@ -87,6 +87,9 @@ public:
         void loadCPPLexer(void);
         QFont getEditorFont(void);
 
+        QsciScintilla* getTextEditorPointer(void);
+        void toggleFoldsActionEnabled(bool b);
+        void setAutoCompletionEnabled(bool b);
         Compiler* getCurrentCompiler();
 
 protected:
@@ -172,6 +175,11 @@ private slots:
         void slotShowErrorFromList();
         void slotGotoErrorLine(QListWidgetItem * item);
         void slotUseNativeMode(bool);
+
+        void slotToggleFolds(void);
+        void slotZoomDef(void);
+        void slotZoomIn(void);
+        void slotZoomOut(void);
 protected:
         void closeEvent(QCloseEvent *event);
 //	void keyPressEvent(QKeyEvent *event);

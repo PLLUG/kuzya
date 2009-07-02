@@ -34,6 +34,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 	trans_ua = new QTranslator();
 	trans_en = new QTranslator();
         mw =(Kuzya*)parent;
+        textEditor=mw->getTextEditorPointer();
         settings = new QSettings(QSettings::IniFormat, QSettings::UserScope, "LLUGDevTeam", "Kuzya");
 	//readODWSettings();
 	connect(closeBtn,SIGNAL(clicked()), this,SLOT(slotClose(void)));
@@ -162,10 +163,23 @@ void OptionsDialog::writeSettings(void)
                 settings->setValue("FontBold",font.bold());
                 settings->endGroup();
         settings->endGroup();
+///***************************TEXT_EDITOR************************************************************************
+        settings->beginGroup("/Settings/TextEditor");
+                settings->setValue("ShowLineNumber",lineNumbCHB->isChecked());
+                settings->setValue("WordCompletion",autoComplCHB->isChecked());
+                settings->setValue("WordWrap",wordWrapCHB->isChecked());
+                settings->setValue("CodeFolding",foldingMarkersCHB->isChecked());
+                settings->beginGroup("/Indentation");
+                        settings->setValue("AutoIndentation",autoIndentCHB->isChecked());
+                        settings->setValue("ShowIndentLine",indentLineCHB->isChecked());
+                        settings->setValue("UseTabIndent",tabKeyindentCHB->isChecked());
+                        settings->setValue("UseBackspaceIndent",BkspaceIndentCHB->isChecked());
+                settings->endGroup();
+        settings->endGroup();
 }
 ///****
 ///************************************
-///*******readOtionDialogWindowSettings***************************************************************************
+///*******readOptionDialogWindowSettings***************************************************************************
 void OptionsDialog::readODWSettings()
 {	
         settings->beginGroup("Settings/MainWindow");
@@ -263,8 +277,57 @@ void OptionsDialog::readODWSettings()
 			qApp->setFont(font);
                 settings->endGroup();
         settings->endGroup();
-///-------------------------------------------------------------------------------------
+///***************************TEXT_EDITOR************************************************************************
+        settings->beginGroup("/Settings/TextEditor");
+
+                lineNumbCHB->setChecked(settings->value("ShowLineNumber",false).toBool());
+                textEditor->setMarginLineNumbers(1,lineNumbCHB->isChecked());
+
+                autoComplCHB->setChecked(settings->value("WordCompletion",false).toBool());
+                //mw->setAutoCompletionEnabled(autoComplCHB->isChecked());         /// nado shoto sdelat'
+
+                wordWrapCHB->setChecked(settings->value("WordWrap",false).toBool());
+                if(wordWrapCHB->isChecked())
+                {
+                        textEditor->setWrapMode(QsciScintilla::WrapWord);
+                }
+                else
+                {
+                        textEditor->setWrapMode(QsciScintilla::WrapNone);
+                }
+
+                foldingMarkersCHB->setChecked(settings->value("CodeFolding",true).toBool());
+               if(foldingMarkersCHB->isChecked())
+                {
+                        textEditor->setFolding(QsciScintilla::PlainFoldStyle,2);
+                        mw->toggleFoldsActionEnabled(true);
+                }
+                else
+                {
+                        textEditor->setFolding(QsciScintilla::NoFoldStyle,2);
+                        mw->toggleFoldsActionEnabled(false);
+
+                }
+                settings->beginGroup("/Indentation");
+
+                        autoIndentCHB->setChecked(settings->value("AutoIndentation",false).toBool());
+                        textEditor->setAutoIndent(settings->value("AutoIndentation",false).toBool());
+
+                        indentLineCHB->setChecked(settings->value("ShowIndentLine",false).toBool());
+                        textEditor->setIndentationGuides(indentLineCHB->isChecked());
+
+                        tabKeyindentCHB->setChecked(settings->value("UseTabIndent",true).toBool());
+                        textEditor->setIndentationsUseTabs(tabKeyindentCHB->isChecked());
+                        if(tabKeyindentCHB->isChecked())
+                                {	textEditor->setTabWidth(tabWidthSpinBox->value());	}
+                        BkspaceIndentCHB->setChecked(settings->value("UseBackspaceIndent",false).toBool());
+                        textEditor->setBackspaceUnindents(BkspaceIndentCHB->isChecked());
+                settings->endGroup();
+       settings->endGroup();
+
+ ///-------------------------------------------------------------------------------------
 }
+
 ///****
 ///************************************
 ///*******showForm***********************************************************************************************
@@ -292,10 +355,10 @@ void OptionsDialog::openLastProject()
         //if(!settings->value("/StartupPro").toBool()) return;
 	if(checkBox->isChecked())
 	{
-        settings->beginGroup("Settings/MainWindow/");
-        QString fileName =settings->value("LastProjectName").toString();
-        settings->endGroup();
-	mw->openFile(fileName);
+            settings->beginGroup("Settings/MainWindow/");
+                QString fileName =settings->value("LastProjectName").toString();
+            settings->endGroup();
+            mw->openFile(fileName);
 	}
 }
 ///***********************************

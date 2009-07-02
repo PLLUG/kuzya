@@ -69,7 +69,7 @@ Kuzya::Kuzya(QWidget *parent)
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
 
         textEditor = new QsciScintilla(this);
-//      gridLayout->addWidget(textEditor, 0, 0, 1, 1);
+        gridLayout->addWidget(textEditor, 0, 0, 1, 1);
 
         notificationList = new QListWidget(this);
         notificationList->setVisible(false);
@@ -93,7 +93,7 @@ Kuzya::Kuzya(QWidget *parent)
         //cppLexer->setAutoIndentStyle(QsciScintilla::AiClosing);
         textEditor->setLexer(cppLexer);
 
-        textEditor->setAutoIndent(true);///!!!!!!!!!!!!!!!!!!!!!!!
+   //     textEditor->setAutoIndent(true);///!!!!!!!!!!!!!!!!!!!!!!!
 /*
         QsciLexerPascal *pascalLexer = new QsciLexerPascal(this);
         textEditor->setLexer(pascalLexer);
@@ -106,6 +106,8 @@ Kuzya::Kuzya(QWidget *parent)
         textEditor->setMarginSensitivity(1, true);
         textEditor->setMarginLineNumbers(2, true);
         textEditor->setMarginWidth(2, 40);
+
+        textEditor->setUtf8(true);
 
         errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
         warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor));
@@ -126,13 +128,14 @@ Kuzya::Kuzya(QWidget *parent)
 
         settings->readODWSettings();
         settings->openLastProject();
-        textEditor->setIndentationGuides(true);
-        textEditor->setIndentationsUseTabs(true);
+      //  textEditor->setIndentationGuides(true);
+       // textEditor->setIndentationsUseTabs(true);
         //textEditor->setIndentation(7,20);
 
         shortcut = new QShortcut(textEditor);
         shortcut->setKey(Qt::CTRL+Qt::Key_Space);
 
+        settings->openLastProject();
         ActOpenRecentFileVector.clear();
 ///-------------------------------------------------------------------------------------------------------------------
 
@@ -212,18 +215,25 @@ Kuzya::Kuzya(QWidget *parent)
         connect(actionThrow,	SIGNAL(triggered()),this,		SLOT(slotThrow()));
         connect(actionCommon,	SIGNAL(triggered()), settings, 		SLOT(slotCommOptions()));
         connect(actionRGB,	SIGNAL(triggered()),this,		SLOT(slotRGB()));
-        connect(shortcut,	SIGNAL(activated()),this,		SLOT(slotShowAutoComplete()));///typo
+       // connect(shortcut,	SIGNAL(activated()),this,		SLOT(slotShowAutoComplete()));///typo
         connect(actionKuzya_Help,	SIGNAL(triggered()),this,		SLOT(slotHelpKuzya()));
         connect(actionFind,	SIGNAL(triggered()),findText,		SLOT(slotFindDialog()));
         connect(actionReplace,	SIGNAL(triggered()),replaceText,	SLOT(slotReplaceDialog()));
         connect(textEditor,	SIGNAL(cursorPositionChanged (int, int)),this,	SLOT(slotUpdateStatusLabel(int, int)));
         connect(textEditor,	SIGNAL(modificationChanged(bool)),	 this,	SLOT(slotUpdateWindowName(bool)));
-        connect(compiler,	SIGNAL(compileEnded(int)),		 this,	SLOT(slotAfterCompile(int)));
         connect(textEditor,	SIGNAL(marginClicked (int, int, Qt::KeyboardModifiers)), this, SLOT(slotMarginClicked(int, int, Qt::KeyboardModifiers)));
+        connect(compiler,	SIGNAL(compileEnded(int)),		 this,	SLOT(slotAfterCompile(int)));
+
         connect(actionNotificationList, SIGNAL(toggled(bool)), this, SLOT(slotShowNotificationList(bool)));
         connect(notificationList, SIGNAL(itemSelectionChanged()), this, SLOT(slotShowErrorFromList()));
         connect(notificationList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotGotoErrorLine(QListWidgetItem*)));
         connect(actionNative_language, SIGNAL(toggled(bool)), this, SLOT(slotUseNativeMode(bool)));
+
+        connect ( actionDefFontSize,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomDef() ) );
+        connect ( actionEnlFont,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomIn() ) );
+        connect ( actionShrinkFont,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomOut() ) );
+        connect	(actionToggleFolds,	SIGNAL(triggered()),	this,	SLOT (slotToggleFolds()));
+        connect ( actionAbout_Qt,	SIGNAL ( triggered() ),	qApp,	SLOT ( aboutQt() ) );
 
         statusBar()->showMessage(tr("Ready"));
 
@@ -243,11 +253,37 @@ ________________________________________________________________________________
 PUBLIC		PUBLIC		PUBLIC		PUBLIC		PUBLIC		PUBLIC		PUBLIC		PUBLIC	|
 ________________________________________________________________________________________________________________________|
 **/
+
+
+void Kuzya::setAutoCompletionEnabled(bool b)
+{
+        if(b)
+        {
+                connect(shortcut,SIGNAL(activated()),this,SLOT(slotShowAutoComplete()));
+        }
+        else
+        {
+                disconnect(shortcut,SIGNAL(activated()),this,SLOT(slotShowAutoComplete()));
+        }
+}
+
+
 ///***********************************************************************************************************///
+
 void Kuzya::loadPascalLexer(void)
 {
         QsciLexerPascal *pascalLexer = new QsciLexerPascal(this);
         textEditor->setLexer(pascalLexer);
+}
+///***********************************************************************************************************///
+void Kuzya::toggleFoldsActionEnabled(bool b)
+{
+       actionToggleFolds->setEnabled(b);
+}
+///***********************************************************************************************************///
+QsciScintilla* Kuzya::getTextEditorPointer(void)
+{
+        return textEditor;
 }
 ///***********************************************************************************************************///
 void Kuzya::loadCPPLexer(void)
@@ -1434,13 +1470,35 @@ void Kuzya::slotHelpKuzya()
         helpBrowser->resize(800,600);
         helpBrowser->show();
 }
+///***********************************************************************************************************///
+void Kuzya::slotToggleFolds(void)
+{
+        textEditor->foldAll();
+}
 
+///***********************************************************************************************************///
+
+void Kuzya::slotZoomDef(void)
+{
+        textEditor->zoomTo(0);
+}
+///***********************************************************************************************************///
+void Kuzya::slotZoomOut(void)
+{
+        textEditor->zoomOut();
+}
+///***********************************************************************************************************///
+void Kuzya::slotZoomIn(void)
+{
+        textEditor->zoomIn();
+}
+///***********************************************************************************************************///
 void Kuzya::slotShowNotificationList(bool visible)
 {
     notificationList->setVisible(visible);
     actionNotificationList->setChecked(visible);
 }
-
+///***********************************************************************************************************///
 void Kuzya::slotShowErrorFromList()
 {
             QListWidgetItem * item = notificationList->currentItem();
@@ -1452,7 +1510,7 @@ void Kuzya::slotShowErrorFromList()
                     textEditor->markerAdd(item->data(Kuzya::lineRole).toInt()-1, currentMarker);
             }
 }
-
+///***********************************************************************************************************///
 void Kuzya::slotGotoErrorLine(QListWidgetItem * item)
 {
             qDebug() << item->data(Kuzya::descriptionRole).toString();
