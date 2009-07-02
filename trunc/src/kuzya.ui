@@ -30,7 +30,7 @@
      <x>0</x>
      <y>0</y>
      <width>773</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -79,7 +79,7 @@
       <x>763</x>
       <y>104</y>
       <width>120</width>
-      <height>82</height>
+      <height>90</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -106,6 +106,7 @@
     </property>
     <addaction name="actionKuzya_Help"/>
     <addaction name="actionAbout"/>
+    <addaction name="actionAbout_Qt"/>
    </widget>
    <widget class="QMenu" name="menuTemplates">
     <property name="title">
@@ -243,8 +244,20 @@
     <addaction name="actionCommon"/>
     <addaction name="actionNative_language"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionToggleFolds"/>
+    <addaction name="separator"/>
+    <addaction name="actionDefFontSize"/>
+    <addaction name="actionEnlFont"/>
+    <addaction name="actionShrinkFont"/>
+    <addaction name="separator"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
    <addaction name="menuTemplates"/>
    <addaction name="menuSettings"/>
    <addaction name="menuBuild"/>
@@ -832,6 +845,31 @@
    </property>
    <property name="toolTip">
     <string>Use native language for programming</string>
+   </property>
+  </action>
+  <action name="actionToggleFolds">
+   <property name="text">
+    <string>Toggle All Folds</string>
+   </property>
+  </action>
+  <action name="actionDefFontSize">
+   <property name="text">
+    <string>Default Font Size</string>
+   </property>
+  </action>
+  <action name="actionEnlFont">
+   <property name="text">
+    <string>Enlarge Font</string>
+   </property>
+  </action>
+  <action name="actionShrinkFont">
+   <property name="text">
+    <string>Shrink Font</string>
+   </property>
+  </action>
+  <action name="actionAbout_Qt">
+   <property name="text">
+    <string>About Qt</string>
    </property>
   </action>
  </widget>
