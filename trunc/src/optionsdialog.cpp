@@ -284,7 +284,7 @@ void OptionsDialog::readODWSettings()
                 textEditor->setMarginLineNumbers(1,lineNumbCHB->isChecked());
 
                 autoComplCHB->setChecked(settings->value("WordCompletion",false).toBool());
-                //mw->setAutoCompletionEnabled(autoComplCHB->isChecked());         /// nado shoto sdelat'
+                mw->setAutoCompletionEnabled(autoComplCHB->isChecked());         /// nado shoto sdelat'
 
                 wordWrapCHB->setChecked(settings->value("WordWrap",false).toBool());
                 if(wordWrapCHB->isChecked())
@@ -306,7 +306,6 @@ void OptionsDialog::readODWSettings()
                 {
                         textEditor->setFolding(QsciScintilla::NoFoldStyle,2);
                         mw->toggleFoldsActionEnabled(false);
-
                 }
                 settings->beginGroup("/Indentation");
 
