@@ -1,3 +1,3 @@
 TEMPLATE=subdirs
-SUBDIRS=src \
-	graphics
+SUBDIRS=graphics \
+        src
