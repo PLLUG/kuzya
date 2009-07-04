@@ -493,7 +493,7 @@
     </layout>
    </item>
    <item row="0" column="0">
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="QTabWidget" name="tabFontsColors">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -919,7 +919,7 @@
       <bool>false</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -1064,7 +1064,7 @@
            <string>Default projects directory</string>
           </property>
           <property name="buddy">
-           <cstring>tabWidget</cstring>
+           <cstring>tabFontsColors</cstring>
           </property>
          </widget>
         </item>
@@ -2081,6 +2081,57 @@
          </spacer>
         </item>
        </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Colors and Fonts</string>
+      </attribute>
+      <widget class="QLabel" name="label_18">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>40</y>
+         <width>46</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Style</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_19">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>80</y>
+         <width>46</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Skin</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="styleCBox">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>40</y>
+         <width>101</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="SkinCBox">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>80</y>
+         <width>101</width>
+         <height>22</height>
+        </rect>
+       </property>
       </widget>
      </widget>
     </widget>

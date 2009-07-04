@@ -23,7 +23,6 @@
 #include <QColorDialog>
 #include <QColor>
 #include <QFileDialog>
-
 #include "optionsdialog.h"
 
 OptionsDialog::OptionsDialog(QWidget *parent)
@@ -46,6 +45,10 @@ OptionsDialog::OptionsDialog(QWidget *parent)
         connect(cppBtn, SIGNAL(clicked()), this, SLOT(slotLoadCompilerSettings(void)));
 //	connect(formClrBtn,SIGNAL(clicked()),this,SLOT(slotChangeFormColor(void)));
 	connect(directoryBox,SIGNAL(activated(int)),this,SLOT(slotChangeDefDir(int)));
+        connect(styleCBox, SIGNAL(activated(int)), this ,SLOT(slotChangeStyle(int)));
+///-----------------------------Fonts and Colors-------------------------------------------------------
+       styleCBox->addItems(QStyleFactory::keys());
+
 }
 void OptionsDialog::slotLoadCompilerSettings(void)
 {
@@ -90,6 +93,10 @@ void OptionsDialog::slotChangeFont()
 	//mw->setEditorFont(font);
 	qApp->setFont(font);
 }
+void OptionsDialog::slotChangeStyle(int)
+{
+    qApp->setStyle(styleCBox->currentText());
+}
 ///**************
 ///*************************************************
 ///*******writeSettings****************************************************************************************
@@ -103,6 +110,10 @@ void OptionsDialog::writeSettings(void)
 		mw->setMaxCount_RFileList(sB_LOFCount->value());
 		mw->resizeRFileList(mw->getMaxCount_RFileList());
                 settings->setValue("LOFCount",sB_LOFCount->value());
+///-----Style&Skins----------------------------------------------------------------------
+                settings->beginGroup("Interface");
+                    settings->setValue("Style",styleCBox->currentText());
+                settings->endGroup();
 ///-----DefaultDirectory-------------------------------------------------------------------------
                 settings->setValue("DefaultDir",directoryBox->currentText());
 
@@ -187,7 +198,11 @@ void OptionsDialog::readODWSettings()
 		///-----------------------------------------------------------------------------
                 sB_LOFCount->setValue(settings->value("LOFCount",5).toInt());
 		mw->setMaxCount_RFileList(sB_LOFCount->value());
-
+///-----Style&Skins----------------------------------------------------------------------
+                settings->beginGroup("Interface");
+                    styleCBox->setEditText(settings->value("Style","").toString());
+                    qApp->setStyle(settings->value("Style","").toString());
+                settings->endGroup();
 ///-----LANGUAGE-------------------------------------------------------------------------
                 if(settings->value("Language","eng").toString()=="ukr")
 		{
@@ -364,6 +379,7 @@ void OptionsDialog::openLastProject()
 ///*******slotClose***********************************************************************************************
 void OptionsDialog::slotClose(void)
 {
+        readODWSettings();
 	close();
 }
 ///****
