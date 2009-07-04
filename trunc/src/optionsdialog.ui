@@ -919,7 +919,7 @@
       <bool>false</bool>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -2123,7 +2123,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QComboBox" name="SkinCBox">
+      <widget class="QComboBox" name="skinCBox">
        <property name="geometry">
         <rect>
          <x>100</x>

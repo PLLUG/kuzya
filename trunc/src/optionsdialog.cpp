@@ -46,9 +46,20 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 //	connect(formClrBtn,SIGNAL(clicked()),this,SLOT(slotChangeFormColor(void)));
 	connect(directoryBox,SIGNAL(activated(int)),this,SLOT(slotChangeDefDir(int)));
         connect(styleCBox, SIGNAL(activated(int)), this ,SLOT(slotChangeStyle(int)));
+        connect(skinCBox, SIGNAL(activated(QString)), this, SLOT(slotChangeSkin(QString)));
 ///-----------------------------Fonts and Colors-------------------------------------------------------
        styleCBox->addItems(QStyleFactory::keys());
+       filters<<"*.qss";
+       stylesDir.setNameFilters(filters);
+       stylesDir.setCurrent(".\\..\\qss\\");
+       slotUpdateSkinsCBox();
 
+
+
+}
+void OptionsDialog::slotUpdateSkinsCBox(void)
+{
+     skinCBox->addItems(stylesDir.entryList(stylesDir.nameFilters(),QDir::Files,QDir::Name));
 }
 void OptionsDialog::slotLoadCompilerSettings(void)
 {
@@ -97,6 +108,14 @@ void OptionsDialog::slotChangeStyle(int)
 {
     qApp->setStyle(styleCBox->currentText());
 }
+void OptionsDialog::slotChangeSkin(QString sheetName)
+{
+    QFile file(".\\..\\qss\\" + sheetName.toLower());
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(file.readAll());
+    qApp->setStyleSheet(styleSheet);
+    //qApp->setStyleSheet(".\\..\\qss\\"+styleSheet);
+}
 ///**************
 ///*************************************************
 ///*******writeSettings****************************************************************************************
@@ -113,6 +132,7 @@ void OptionsDialog::writeSettings(void)
 ///-----Style&Skins----------------------------------------------------------------------
                 settings->beginGroup("Interface");
                     settings->setValue("Style",styleCBox->currentText());
+                    settings->setValue("Skin",skinCBox->currentText());
                 settings->endGroup();
 ///-----DefaultDirectory-------------------------------------------------------------------------
                 settings->setValue("DefaultDir",directoryBox->currentText());
@@ -200,14 +220,16 @@ void OptionsDialog::readODWSettings()
 		mw->setMaxCount_RFileList(sB_LOFCount->value());
 ///-----Style&Skins----------------------------------------------------------------------
                 settings->beginGroup("Interface");
-                    styleCBox->setEditText(settings->value("Style","").toString());
-                    qApp->setStyle(settings->value("Style","").toString());
+                    styleCBox->setCurrentIndex(styleCBox->findText(settings->value("Style","default").toString()));
+                    qApp->setStyle(settings->value("Style","default").toString());
+                    skinCBox->setCurrentIndex(skinCBox->findText(settings->value("Skin","default").toString()));
+                    slotChangeSkin(settings->value("Skin","default").toString());
                 settings->endGroup();
 ///-----LANGUAGE-------------------------------------------------------------------------
                 if(settings->value("Language","eng").toString()=="ukr")
 		{
 			ukrRBtn->setChecked(true);
-			translator.load(QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua");
+                        translator.load(QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua.ts");
 			///translator.load("./src/translations/kuzya_ua");
 			qApp->installTranslator(&translator);
 			mw->retranslateAll();			
@@ -348,6 +370,7 @@ void OptionsDialog::readODWSettings()
 void OptionsDialog::slotCommOptions(void)
 {
 	show();
+
 }
 ///****
 ///****************************************
