@@ -27,6 +27,7 @@
 #include <QTranslator>
 #include <QTextStream>
 #include <QFile>
+#include <QDir>
 #include <QStyleFactory>
 #include "kuzya.h"
 #include "ui_optionsdialog.h"
@@ -64,7 +65,10 @@ private slots:
 	void slotChangeFormColor(void);
 	void slotChangeDefDir(int);
         void slotChangeStyle(int);
+        void slotChangeSkin(QString);
         void slotLoadCompilerSettings(void);
+        void slotUpdateSkinsCBox(void);
+
 private:
 	QTranslator* trans_ua;
 	QTranslator* trans_en;
@@ -74,6 +78,8 @@ private:
 	QsciScintilla* textEditor;
 	QTranslator translator;
 	QFont font;
+        QDir stylesDir;
+        QStringList filters;
 public:	
 	
 private:
