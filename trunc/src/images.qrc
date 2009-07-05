@@ -15,6 +15,13 @@
         <file>images/window_suppressed.png</file>
         <file>images/bkuzya.png</file>
         <file>images/application_view_list.png</file>
+        <file>images/default_lang.png</file>
+        <file>images/font_enlarge.png</file>
+        <file>images/font_shrink.png</file>
+        <file>images/default_font_size.png</file>
+        <file>images/find.png</file>
+        <file>images/text_replace.png</file>
+        <file>images/printer.png</file>
     </qresource>
     <qresource prefix="/notifications" >
         <file alias="accept" >images/accept.png</file>
