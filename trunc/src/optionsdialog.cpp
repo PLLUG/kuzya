@@ -51,7 +51,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
        styleCBox->addItems(QStyleFactory::keys());
        filters<<"*.qss";
        stylesDir.setNameFilters(filters);
-       stylesDir.setCurrent(".\\..\\qss\\");
+       stylesDir.setCurrent("./../qss/");
        slotUpdateSkinsCBox();
 
 
