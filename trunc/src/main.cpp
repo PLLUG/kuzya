@@ -34,9 +34,14 @@ int main(int argc, char ** argv)
         trans_ua.load("cukr_ua");
         a.installTranslator(&trans_ua);
 */
-
+        QString splashDir;
         QSplashScreen *splash = new QSplashScreen();
-        splash->setPixmap(QPixmap(QApplication::applicationDirPath()+"/../trunc/src/images/SplashCukr.png"));
+#ifdef WIN32
+      splashDir=QApplication::applicationDirPath()+"/../resources/SplashCukr.png";
+#else
+        splashDir="/usr/share/kuzyaresources/SplashCukr.png";
+#endif
+        splash->setPixmap(QPixmap(splashDir));
         ///splash->setPixmap(QPixmap("./src/images/SplashCukr.png"));
         splash->show();
         splash->showMessage("Kyzia is ready",Qt::AlignCenter,QColor("black"));
