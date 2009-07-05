@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="en_US">
-<defaultcodec></defaultcodec>
+<!DOCTYPE TS>
+<TS version="2.0" language="en_US">
 <context>
     <name>Cukr</name>
     <message>
@@ -82,189 +82,194 @@
     <name>FindDialog</name>
     <message>
         <source>Sorry</source>
-        <translation type="unfinished">Вибачте</translation>
+        <translation>Вибачте</translation>
     </message>
     <message>
         <source>No matches found for:  </source>
-        <translation type="unfinished">Нічого не знайдено</translation>
+        <translation>Нічого не знайдено</translation>
     </message>
 </context>
 <context>
     <name>Kuzya</name>
     <message>
         <source>Ready</source>
-        <translation type="unfinished">Готово</translation>
+        <translation>Готово</translation>
     </message>
     <message>
         <source>Opened</source>
-        <translation type="unfinished">Відкритоі</translation>
+        <translation>Відкрито</translation>
     </message>
     <message>
         <source>Created new file</source>
-        <translation type="unfinished">Створено новий файл</translation>
+        <translation>Створено новий файл</translation>
     </message>
     <message>
         <source>Open File</source>
-        <translation type="unfinished">Відкрити Файл</translation>
+        <translation>Відкрити Файл</translation>
     </message>
     <message>
         <source>Save as...</source>
-        <translation type="unfinished">Зберегти як</translation>
+        <translation>Зберегти як</translation>
     </message>
     <message>
         <source>Source-Files (*.c *.cpp *.cxx *.h);;All Files (*)</source>
-        <translation type="unfinished">Тип файлу (*.c *.cpp *.cxx *.h);;Усі Файи (*)</translation>
+        <translation>Тип файлу (*.c *.cpp *.cxx *.h);;Усі Файи (*)</translation>
     </message>
     <message>
         <source>Saved</source>
-        <translation type="unfinished">Збережено</translation>
+        <translation>Збережено</translation>
     </message>
     <message>
         <source>No binary to run</source>
-        <translation type="unfinished">Відсутня програма для запуску</translation>
+        <translation>Відсутня програма для запуску</translation>
     </message>
     <message>
         <source>No source to compile</source>
-        <translation type="unfinished">Відсутній код для компіляції</translation>
+        <translation>Відсутній код для компіляції</translation>
     </message>
     <message>
         <source>Compilling...</source>
-        <translation type="unfinished">Іде компіляція...</translation>
+        <translation>Іде компіляція...</translation>
     </message>
     <message>
         <source>ERROR : Could not find compiler profile or compile mode is not available.</source>
-        <translation type="unfinished">Помилка: В заданій теці немає профайла даного компілятора</translation>
+        <translation>Помилка: В заданій теці немає профайла даного компілятора</translation>
     </message>
     <message>
         <source>Compiled successfuly!</source>
-        <translation type="unfinished">Успішно скомпільовано!</translation>
+        <translation>Успішно скомпільовано!</translation>
     </message>
     <message>
         <source>Compilation failed!!!</source>
-        <translation type="unfinished">Не вдалось скомпілювати!!!</translation>
+        <translation>Не вдалось скомпілювати!!!</translation>
     </message>
     <message>
         <source>***ERROR: </source>
-        <translation type="unfinished">***ПОМИЛКА: </translation>
+        <translation>***ПОМИЛКА: </translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished">Про</translation>
+        <translation>Про</translation>
     </message>
     <message>
         <source>Authors: 
  Volodymyr Shevchuk 
- <byte value="x9"/> &amp;&amp; 
+ 	 &amp;&amp; 
  Andriy Shevchyk 
- <byte value="x9"/> &amp;&amp; 
+ 	 &amp;&amp; 
  Victor Sklyar </source>
-        <translation type="unfinished"></translation>
+        <translation>Автори:
+Володимир Шевчик
+                     &amp;&amp;
+Віктор Скляр
+                     &amp;&amp;
+Чмихало Сашко</translation>
     </message>
     <message>
         <source>Line: %1 Pos: %2</source>
-        <translation type="unfinished">Стрічка: %1 Позиція: %2</translation>
+        <translation>Рядок: %1 Позиція: %2</translation>
     </message>
     <message>
         <source> [modified] - kuzya</source>
-        <translation type="unfinished">[змінено] - кузя</translation>
+        <translation>[змінено] - кузя</translation>
     </message>
     <message>
         <source> - kuzya</source>
-        <translation type="unfinished">- кузя</translation>
+        <translation>- кузя</translation>
     </message>
     <message>
         <source>File was modified</source>
-        <translation type="unfinished">Файл було змінено</translation>
+        <translation>Файл було змінено</translation>
     </message>
     <message>
         <source>Do you want to save changes?</source>
-        <translation type="unfinished">Ви бажаєте зберегти зміни?</translation>
+        <translation>Ви бажаєте зберегти зміни?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Відмінити</translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <source>Sorry</source>
-        <translation type="unfinished">Вибачте</translation>
+        <translation>Вибачте</translation>
     </message>
     <message>
         <source>This file wasn&apos;t founded</source>
-        <translation type="unfinished">Даний файл не було знайдено</translation>
+        <translation>Даний файл не було знайдено</translation>
     </message>
 </context>
 <context>
     <name>OptionsDialog</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Налаштування</translation>
+        <translation>Налаштування</translation>
     </message>
     <message>
         <source>Set default settings?</source>
-        <translation type="unfinished">Встановити стандартні налаштування</translation>
+        <translation>Cтандартні налаштування</translation>
     </message>
     <message>
         <source>Are you sure?</source>
-        <translation type="unfinished">Ви впевнені?</translation>
+        <translation>Ви впевнені?</translation>
     </message>
     <message>
         <source>&lt;Other...&gt;</source>
-        <translation type="unfinished">&lt;Інші...&gt;</translation>
+        <translation>&lt;Інші...&gt;</translation>
     </message>
     <message>
         <source>Open Directory</source>
-        <translation type="unfinished">Відкрити теку</translation>
+        <translation>Відкрити теку</translation>
     </message>
 </context>
 <context>
     <name>ReplaceDialog</name>
     <message>
         <source>Replace</source>
-        <translation type="unfinished">Замінити</translation>
+        <translation>Замінити</translation>
     </message>
     <message>
         <source>Replace &amp; Close</source>
-        <translation type="unfinished">Замінити і закрити</translation>
+        <translation>Замінити і закрити</translation>
     </message>
     <message>
         <source>Replace All</source>
-        <translation type="unfinished">Замінити все</translation>
+        <translation>Замінити все</translation>
     </message>
     <message>
         <source>Find Next</source>
-        <translation type="unfinished">Знайти наступне</translation>
+        <translation>Знайти наступне</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Відмінити</translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <source>Replace - Cukr</source>
-        <translation type="unfinished">Замінити - Кузя</translation>
+        <translation>Замінити - Кузя</translation>
     </message>
     <message>
         <source>replacements made</source>
-        <translation type="unfinished">Здійснено заміни</translation>
+        <translation>Здійснено заміни</translation>
     </message>
     <message>
         <source>Continu from the begining?</source>
-        <translation type="unfinished">Почати з початку?</translation>
+        <translation>Почати з початку?</translation>
     </message>
     <message>
         <source>Continue</source>
-        <translation type="unfinished">Продовжити</translation>
+        <translation>Продовжити</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished">Зупинити</translation>
+        <translation>Зупинити</translation>
     </message>
 </context>
 <context>
@@ -358,70 +363,70 @@
     <name>findForm</name>
     <message>
         <source>Find Text</source>
-        <translation type="unfinished">Знайти текст</translation>
+        <translation>Знайти текст</translation>
     </message>
     <message>
         <source>Find</source>
-        <translation type="unfinished">Знайти</translation>
+        <translation>Знайти</translation>
     </message>
     <message>
         <source>Text to find</source>
-        <translation type="unfinished">Знайти текст</translation>
+        <translation>Знайти текст</translation>
     </message>
     <message>
         <source>Regular Expression</source>
-        <translation type="unfinished">Регулярний вираз</translation>
+        <translation>Регулярний вираз</translation>
     </message>
     <message>
         <source>Edit...</source>
-        <translation type="unfinished">Зедагувати</translation>
+        <translation>Редагувати</translation>
     </message>
     <message>
         <source>Options</source>
-        <translation type="unfinished">Налаштування</translation>
+        <translation>Налаштування</translation>
     </message>
     <message>
         <source>Case sensitive</source>
-        <translation type="unfinished">Залежний від регістру</translation>
+        <translation>Залежний від регістру</translation>
     </message>
     <message>
         <source>Forward</source>
-        <translation type="unfinished">Вперед</translation>
+        <translation>Вперед</translation>
     </message>
     <message>
         <source>Backward</source>
-        <translation type="unfinished">Назад</translation>
+        <translation>Назад</translation>
     </message>
     <message>
         <source>Whole word only</source>
-        <translation type="unfinished">Лише ціле слово</translation>
+        <translation>Лише ціле слово</translation>
     </message>
     <message>
         <source>From cursor</source>
-        <translation type="unfinished">Від курсору</translation>
+        <translation>Від курсору</translation>
     </message>
     <message>
         <source>Wrap arround the text</source>
-        <translation type="unfinished">Перейти на новий рядок</translation>
+        <translation>Перейти на новий рядок</translation>
     </message>
     <message>
         <source>Find next</source>
-        <translation type="unfinished">Знайти наступне</translation>
+        <translation>Знайти наступне</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Закрити</translation>
+        <translation>Закрити</translation>
     </message>
 </context>
 <context>
     <name>goToLineForm</name>
     <message>
         <source>Go</source>
-        <translation type="unfinished">Іти</translation>
+        <translation>Іти</translation>
     </message>
     <message>
         <source>Go To Line</source>
-        <translation type="unfinished">Іти до лінії</translation>
+        <translation>Іти до лінії</translation>
     </message>
 </context>
 <context>
@@ -576,7 +581,7 @@
     </message>
     <message>
         <source>About Cukr</source>
-        <translation type="unfinished">Про Кузю</translation>
+        <translation>Про Кузю</translation>
     </message>
     <message>
         <source>Cut</source>
@@ -608,7 +613,7 @@
     </message>
     <message>
         <source>Alt+G</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Go to matching bracket</source>
@@ -616,7 +621,7 @@
     </message>
     <message>
         <source>Alt+B</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>int</source>
@@ -708,7 +713,7 @@
     </message>
     <message>
         <source>and</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>and_eq</source>
@@ -856,23 +861,23 @@
     </message>
     <message>
         <source>1.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>2.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>3.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>4.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>5.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Find</source>
@@ -923,182 +928,182 @@
     <name>optionsForm</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Налаштування</translation>
+        <translation>Налаштування</translation>
     </message>
     <message>
         <source>Default All</source>
-        <translation type="unfinished">Скинути до стандартних налаштувань</translation>
+        <translation>Скинути до стандартних налаштувань</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished">Гаразд</translation>
+        <translation>Гаразд</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation type="unfinished">Прийняти</translation>
+        <translation>Прийняти</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Закрити</translation>
+        <translation>Закрити</translation>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished">Загальні</translation>
+        <translation>Загальні</translation>
     </message>
     <message>
         <source>Load last project on startup</source>
-        <translation type="unfinished">Завантажити останній файл при запуску</translation>
+        <translation>Завантажити останній файл при запуску</translation>
     </message>
     <message>
         <source>Project settings</source>
-        <translation type="unfinished">Налаштування проекту</translation>
+        <translation>Налаштування проекту</translation>
     </message>
     <message>
         <source>Interface language:</source>
-        <translation type="unfinished">Мова інтерфейсу</translation>
+        <translation>Мова інтерфейсу</translation>
     </message>
     <message>
         <source>English</source>
-        <translation type="unfinished">Англійська</translation>
+        <translation>Англійська</translation>
     </message>
     <message>
         <source>Ukrainian</source>
-        <translation type="unfinished">Українська</translation>
+        <translation>Українська</translation>
     </message>
     <message>
         <source>Show last</source>
-        <translation type="unfinished">Показати останній</translation>
+        <translation>Показати останній</translation>
     </message>
     <message>
         <source>opened files</source>
-        <translation type="unfinished">Відкриті файли</translation>
+        <translation>Відкриті файли</translation>
     </message>
     <message>
         <source>Default projects directory</source>
-        <translation type="unfinished">Станартна тека проекту</translation>
+        <translation>Станартна тека проекту</translation>
     </message>
     <message>
         <source>/home</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;Other...&gt;</source>
-        <translation type="unfinished">&lt;Інші...&gt;</translation>
+        <translation>&lt;Інші...&gt;</translation>
     </message>
     <message>
         <source>Window Font:</source>
-        <translation type="unfinished">Шрифт вікна</translation>
+        <translation>Шрифт вікна</translation>
     </message>
     <message>
         <source>TextLabel</source>
-        <translation type="unfinished">ТекстоваМітка</translation>
+        <translation>ТекстоваМітка</translation>
     </message>
     <message>
         <source>Choose...</source>
-        <translation type="unfinished">Вибрати</translation>
+        <translation>Вибрати</translation>
     </message>
     <message>
         <source>TextEditor</source>
-        <translation type="unfinished">Редактор тексту</translation>
+        <translation>Редактор тексту</translation>
     </message>
     <message>
         <source>Use Cukr for programing on</source>
-        <translation type="unfinished">Мова програмування</translation>
+        <translation>Мова програмування</translation>
     </message>
     <message>
         <source>C/C++</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Pascal</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>code  language:</source>
-        <translation type="unfinished">Мова коду</translation>
+        <translation>Мова коду</translation>
     </message>
     <message>
         <source>Compiler</source>
-        <translation type="unfinished">Компілятор</translation>
+        <translation>Компілятор</translation>
     </message>
     <message>
         <source>Profile directory :</source>
-        <translation type="unfinished">Тека профілю</translation>
+        <translation>Тека профілю</translation>
     </message>
     <message>
         <source>Compiler options :</source>
-        <translation type="unfinished">Налаштування компілтора</translation>
+        <translation>Налаштування компілтора</translation>
     </message>
     <message>
         <source>Default compilation mode</source>
-        <translation type="unfinished">Стандартний режим компілятора</translation>
+        <translation>Стандартний режим компілятора</translation>
     </message>
     <message>
         <source>Compilation mode :</source>
-        <translation type="unfinished">Режим коспілятора</translation>
+        <translation>Режим коспілятора</translation>
     </message>
     <message>
         <source>Compiler directory :</source>
-        <translation type="unfinished">Тека компілятора</translation>
+        <translation>Тека компілятора</translation>
     </message>
     <message>
         <source>Include directory :</source>
-        <translation type="unfinished">Тека інклуд файлів</translation>
+        <translation>Тека інклуд файлів</translation>
     </message>
     <message>
         <source>Lib directory :</source>
-        <translation type="unfinished">Тека бібліотек</translation>
+        <translation>Тека бібліотек</translation>
     </message>
 </context>
 <context>
     <name>replaceForm</name>
     <message>
         <source>Replace Text</source>
-        <translation type="unfinished">Замінити текст</translation>
+        <translation>Замінити текст</translation>
     </message>
     <message>
         <source>Find</source>
-        <translation type="unfinished">Знайти</translation>
+        <translation>Знайти</translation>
     </message>
     <message>
         <source>Text to find</source>
-        <translation type="unfinished">Знайти текст</translation>
+        <translation>Знайти текст</translation>
     </message>
     <message>
         <source>Replace with</source>
-        <translation type="unfinished">Замінити із</translation>
+        <translation>Замінити із</translation>
     </message>
     <message>
         <source>Replacement text</source>
-        <translation type="unfinished">Текст для заміни</translation>
+        <translation>Текст для заміни</translation>
     </message>
     <message>
         <source>Options</source>
-        <translation type="unfinished">Налаштування</translation>
+        <translation>Налаштування</translation>
     </message>
     <message>
         <source>Case sensitive</source>
-        <translation type="unfinished">Залежний від регістру</translation>
+        <translation>Залежний від регістру</translation>
     </message>
     <message>
         <source>From cursor</source>
-        <translation type="unfinished">Від курсора</translation>
+        <translation>Від курсора</translation>
     </message>
     <message>
         <source>Whole word only</source>
-        <translation type="unfinished">Лише ціле слово</translation>
+        <translation>Лише ціле слово</translation>
     </message>
     <message>
         <source>With prompt</source>
-        <translation type="unfinished">Із prompt</translation>
+        <translation>Із prompt</translation>
     </message>
     <message>
         <source>Replace</source>
-        <translation type="unfinished">Замінити</translation>
+        <translation>Замінити</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Закрити</translation>
+        <translation>Закрити</translation>
     </message>
 </context>
 </TS>
