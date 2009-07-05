@@ -39,7 +39,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 	connect(closeBtn,SIGNAL(clicked()), this,SLOT(slotClose(void)));
 	connect(applyBtn,SIGNAL(clicked()), this,SLOT(slotApply(void)));
 	connect(okBtn,	 SIGNAL(clicked()), this,SLOT(slotOk(void)));
-//	connect(fontBtn, SIGNAL(clicked()), this,SLOT(slotChangeFont(void)));
+        connect(fontBtn_5, SIGNAL(clicked()), this,SLOT(slotChangeFont(void)));
 	connect(defaultBtn,SIGNAL(clicked()),this,SLOT(slotDefaultAll(void)));
         connect(pascalBtn, SIGNAL(clicked()), this, SLOT(slotLoadCompilerSettings(void)));
         connect(cppBtn, SIGNAL(clicked()), this, SLOT(slotLoadCompilerSettings(void)));
@@ -95,16 +95,16 @@ void OptionsDialog::retranslate(void)
 {
 	retranslateUi(this);
 }
-/*
+
 void OptionsDialog::slotChangeFont()
 {
 	bool ok;
 	font=QFontDialog::getFont( &ok, font, this);
 	QString s=font.toString();
-	fontLable->setText(s.remove(s.indexOf(","),s.count()-s.indexOf(",")));
+        fontLable_5->setText(s.remove(s.indexOf(","),s.count()-s.indexOf(",")));
 	//mw->setEditorFont(font);
 	qApp->setFont(font);
-}*/
+}
 void OptionsDialog::slotChangeStyle(int)
 {
     qApp->setStyle(styleCBox->currentText());
@@ -187,7 +187,7 @@ void OptionsDialog::writeSettings(void)
 		}	
         settings->endArray();
 ///-----EDITOR--------------------------------------------------------------------------------	
- /*       settings->beginGroup("Settings/TextEditor");
+        settings->beginGroup("Settings/TextEditor");
                 settings->beginGroup("Font");
                 settings->setValue("FontName",font.toString());
                 settings->setValue("FontSize",font.pointSize());
@@ -195,7 +195,7 @@ void OptionsDialog::writeSettings(void)
                 settings->setValue("FontBold",font.bold());
                 settings->endGroup();
         settings->endGroup();
-  */
+
 ///***************************TEXT_EDITOR************************************************************************
         settings->beginGroup("/Settings/TextEditor");
                 settings->setValue("ShowLineNumber",lineNumbCHB->isChecked());
@@ -304,11 +304,11 @@ void OptionsDialog::readODWSettings()
 	}
         settings->endArray();
 ///-----EDITOR--------------------------------------------------------------------------------	
- /*       settings->beginGroup("Settings/TextEditor");
+        settings->beginGroup("Settings/TextEditor");
                 settings->beginGroup("Font");
                         font=QFont(settings->value("FontName","").toString());
                         QString s=(settings->value("FontName",qApp->font()).toString());
-			fontLable->setText(s.remove(s.indexOf(","),s.count()-s.indexOf(",")));
+                        fontLable_5->setText(s.remove(s.indexOf(","),s.count()-s.indexOf(",")));
                         font.setPointSize(settings->value("FontSize",10).toInt());
                         font.setItalic(settings->value("FontItalic",false).toBool());
                         font.setBold(settings->value("FontBold",false).toBool());
@@ -316,7 +316,7 @@ void OptionsDialog::readODWSettings()
 			qApp->setFont(font);
                 settings->endGroup();
         settings->endGroup();
-*/
+
 ///***************************TEXT_EDITOR************************************************************************
         settings->beginGroup("/Settings/TextEditor");
 
