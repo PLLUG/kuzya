@@ -36,7 +36,7 @@ int main(int argc, char ** argv)
 */
 
         QSplashScreen *splash = new QSplashScreen();
-        splash->setPixmap(QPixmap(QApplication::applicationDirPath()+"/../src/images/SplashCukr.png"));
+        splash->setPixmap(QPixmap(QApplication::applicationDirPath()+"/../trunc/src/images/SplashCukr.png"));
         ///splash->setPixmap(QPixmap("./src/images/SplashCukr.png"));
         splash->show();
         splash->showMessage("Kyzia is ready",Qt::AlignCenter,QColor("black"));
