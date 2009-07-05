@@ -919,7 +919,7 @@
       <bool>false</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -964,7 +964,7 @@
        </property>
        <property name="geometry">
         <rect>
-         <x>50</x>
+         <x>20</x>
          <y>100</y>
          <width>141</width>
          <height>121</height>
@@ -1087,168 +1087,20 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget_2">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>400</y>
-         <width>461</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout">
-        <item>
-         <widget class="QLabel" name="label_5">
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Window Font:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QLabel" name="fontLable">
-          <property name="minimumSize">
-           <size>
-            <width>170</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::WinPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Plain</enum>
-          </property>
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-          <property name="scaledContents">
-           <bool>false</bool>
-          </property>
-          <property name="openExternalLinks">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="fontBtn">
-          <property name="maximumSize">
-           <size>
-            <width>110</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Choose...</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-     <widget class="QWidget" name="tabTextEditor">
-      <attribute name="title">
-       <string>TextEditor</string>
-      </attribute>
-      <widget class="QGroupBox" name="progLang">
-       <property name="geometry">
-        <rect>
-         <x>80</x>
-         <y>30</y>
-         <width>351</width>
-         <height>171</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Use Cukr for programing on</string>
-       </property>
-       <property name="checkable">
-        <bool>false</bool>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-       <widget class="QRadioButton" name="cppBtn">
-        <property name="geometry">
-         <rect>
-          <x>110</x>
-          <y>50</y>
-          <width>109</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>C/C++</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-       <widget class="QRadioButton" name="pascalBtn">
-        <property name="geometry">
-         <rect>
-          <x>110</x>
-          <y>90</y>
-          <width>109</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Pascal</string>
-        </property>
-       </widget>
-      </widget>
       <widget class="QGroupBox" name="codelangBox">
        <property name="enabled">
         <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
-         <x>80</x>
-         <y>230</y>
-         <width>351</width>
+         <x>180</x>
+         <y>100</y>
+         <width>141</width>
          <height>121</height>
         </rect>
        </property>
        <property name="title">
-        <string>code  language:</string>
+        <string>Code  language:</string>
        </property>
        <property name="checkable">
         <bool>false</bool>
@@ -1256,13 +1108,13 @@
        <widget class="QWidget" name="layoutWidget_3">
         <property name="geometry">
          <rect>
-          <x>90</x>
+          <x>10</x>
           <y>40</y>
-          <width>181</width>
+          <width>111</width>
           <height>56</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout">
+        <layout class="QVBoxLayout" name="_39">
          <item>
           <widget class="QRadioButton" name="engRBtn_2">
            <property name="enabled">
@@ -1289,168 +1141,174 @@
         </layout>
        </widget>
       </widget>
+      <widget class="QGroupBox" name="progLang">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>100</y>
+         <width>151</width>
+         <height>121</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Use Kuzya for programing on</string>
+       </property>
+       <property name="checkable">
+        <bool>false</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+       <widget class="QWidget" name="layoutWidget_16">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>40</y>
+          <width>101</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QRadioButton" name="cppBtn">
+           <property name="text">
+            <string>C/C++</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="pascalBtn">
+           <property name="text">
+            <string>Pascal</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
      </widget>
      <widget class="QWidget" name="tab">
       <attribute name="title">
        <string>Compiler</string>
       </attribute>
-      <widget class="QLineEdit" name="profileDirLineEdit">
+      <widget class="QLabel" name="label_77">
        <property name="geometry">
         <rect>
-         <x>120</x>
+         <x>10</x>
          <y>20</y>
-         <width>381</width>
-         <height>28</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_6">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>25</y>
-         <width>90</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Profile directory :</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="compilerOptionsLineEdit">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>70</y>
-         <width>381</width>
-         <height>28</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_7">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>75</y>
-         <width>101</width>
+         <width>471</width>
          <height>18</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
-        <string>Compiler options :</string>
+        <string>Compiler settings</string>
        </property>
       </widget>
-      <widget class="QComboBox" name="comboBox">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>120</y>
-         <width>221</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>Default compilation mode</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QLabel" name="label_8">
+      <widget class="QWidget" name="">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>125</y>
-         <width>101</width>
-         <height>18</height>
+         <y>60</y>
+         <width>481</width>
+         <height>331</height>
         </rect>
        </property>
-       <property name="text">
-        <string>Compilation mode :</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="compilerDirLineEdit">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>170</y>
-         <width>381</width>
-         <height>28</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="includeDirLineEdit">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>220</y>
-         <width>381</width>
-         <height>28</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>/usr/include/</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="libDirLineEdit">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>270</y>
-         <width>381</width>
-         <height>28</height>
-        </rect>
-       </property>
-       <property name="frame">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_9">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>175</y>
-         <width>111</width>
-         <height>18</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Compiler directory :</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_10">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>225</y>
-         <width>111</width>
-         <height>18</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Include directory :</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_11">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>275</y>
-         <width>71</width>
-         <height>18</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Lib directory :</string>
-       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Profile directory :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="profileDirLineEdit"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>Compiler options :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="compilerOptionsLineEdit"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>Compilation mode :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QComboBox" name="comboBox">
+          <item>
+           <property name="text">
+            <string>Default compilation mode</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>Compiler directory :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="compilerDirLineEdit">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>Include directory :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLineEdit" name="includeDirLineEdit">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>/usr/include/</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>Lib directory :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLineEdit" name="libDirLineEdit">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="frame">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
      <widget class="QWidget" name="tabEditorOpt">
@@ -1503,7 +1361,7 @@
        <widget class="QCheckBox" name="indentLineCHB">
         <property name="geometry">
          <rect>
-          <x>160</x>
+          <x>180</x>
           <y>50</y>
           <width>211</width>
           <height>23</height>
@@ -1779,7 +1637,7 @@
        <widget class="QCheckBox" name="autoIndentCHB">
         <property name="geometry">
          <rect>
-          <x>160</x>
+          <x>180</x>
           <y>20</y>
           <width>211</width>
           <height>23</height>
@@ -2087,51 +1945,94 @@
       <attribute name="title">
        <string>Colors and Fonts</string>
       </attribute>
-      <widget class="QLabel" name="label_18">
+      <widget class="QFrame" name="frame_21">
        <property name="geometry">
         <rect>
-         <x>50</x>
-         <y>40</y>
-         <width>46</width>
-         <height>21</height>
+         <x>10</x>
+         <y>10</y>
+         <width>481</width>
+         <height>151</height>
         </rect>
        </property>
-       <property name="text">
-        <string>Style</string>
+       <property name="autoFillBackground">
+        <bool>false</bool>
        </property>
-      </widget>
-      <widget class="QLabel" name="label_19">
-       <property name="geometry">
-        <rect>
-         <x>50</x>
-         <y>80</y>
-         <width>46</width>
-         <height>21</height>
-        </rect>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
        </property>
-       <property name="text">
-        <string>Skin</string>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
        </property>
-      </widget>
-      <widget class="QComboBox" name="styleCBox">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>40</y>
-         <width>101</width>
-         <height>22</height>
-        </rect>
+       <property name="lineWidth">
+        <number>1</number>
        </property>
-      </widget>
-      <widget class="QComboBox" name="skinCBox">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>80</y>
-         <width>101</width>
-         <height>22</height>
-        </rect>
+       <property name="midLineWidth">
+        <number>2</number>
        </property>
+       <layout class="QGridLayout" name="_40">
+        <item row="0" column="0" colspan="3">
+         <widget class="QLabel" name="label_78">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Interface</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QComboBox" name="skinCBox"/>
+        </item>
+        <item row="3" column="0" colspan="2">
+         <widget class="QLabel" name="label_18">
+          <property name="text">
+           <string>Style:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <widget class="QLabel" name="label_19">
+          <property name="text">
+           <string>Skin:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Maximum</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>70</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="1">
+         <widget class="QComboBox" name="styleCBox"/>
+        </item>
+        <item row="5" column="1">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </widget>
      </widget>
     </widget>
