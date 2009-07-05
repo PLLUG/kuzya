@@ -139,6 +139,8 @@ Kuzya::Kuzya(QWidget *parent)
         settings->openLastProject();
         ActOpenRecentFileVector.clear();
 
+        QStringList list = compiler->getSupportedLanguages();
+
 ///-------------------------------------------------------------------------------------------------------------------
 
         connect(actionNew,	SIGNAL(triggered()),this,		SLOT(slotNew()));
@@ -529,7 +531,18 @@ void Kuzya::slotOpen(void)
 {
         if(slotSaveChangesNotifier()==false) return;
         textEditor->markerDeleteAll();
-        QString openedFileName = QFileDialog::getOpenFileName(this, tr("Open File"), DefaultDir, tr("C/CPP Source-Files (*.c *.cpp *.cxx *.h);;Pascal Source-Files (*.fpc *.pas *.pp);;All Files (*)"));
+
+        QString filter;
+        QStringList supportedList = compiler->getSupportedLanguages();
+        foreach (QString lang, supportedList)
+        {
+            filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
+        }
+
+        filter = filter+"All Files (*)";
+
+        QString openedFileName = QFileDialog::getOpenFileName(this, tr("Open File"), DefaultDir, filter/*tr("C/CPP Source-Files (*.c *.cpp *.cxx *.h);;Pascal Source-Files (*.fpc *.pas *.pp);;All Files (*)")*/);
+
         if ("" != openedFileName)
         {
                 openFile(openedFileName);

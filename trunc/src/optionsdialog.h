@@ -29,7 +29,7 @@
 #include <QFile>
 #include <QDir>
 #include <QStyleFactory>
-#include "kuzya.h"
+//#include "kuzya.h"
 #include "ui_optionsdialog.h"
 #include "kuzya.h"
 
