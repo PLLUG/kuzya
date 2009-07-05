@@ -764,7 +764,18 @@ void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
 **/
 void Kuzya::slotAbout(void)
 {
-        QMessageBox::about(this, tr("About"),tr("Authors: Andriy Shevchyk\n Volodymyr Shevchyk\n Victor Sklyar\n Alex Chmykhalo "));
+        QMessageBox::about(this, tr("About"),tr("\t\t The Kuzya\n"
+                                              "\t          Free Development Environment\n\n"
+
+                                              "     Kuzya is simple crossplatform IDE for people who study  programming.Main\n"
+                                              "idea of it is to concentrate attention  of the users only on learning the programming \n"
+                                              "\t          language  but not on usage of IDE\n\n"
+
+                                              "Idea:             Grygoriy Zlobin <zlobin@electronics.wups.lviv.ua>"
+                                              "\nTeam leader: Andriy Shevchyk <shevchyk@users.sourceforge.net> "
+                                              "\nAuthors:       Volodymyr Shevchyk <volder@users.sourceforge.net>"
+                                              "\n                     Viktor Sklyar <bouyantgrambler@users.sourceforge.net>"
+                                              "\n                     Alex Chmykhalo <alexchmykhalo@users.sourceforge.net>"));
 }
 
 /**
