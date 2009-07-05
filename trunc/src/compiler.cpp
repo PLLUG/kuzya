@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include <QSettings>
-
+#include <QDirIterator>
 #include "QDebug"
 
 #include "compiler.h"
@@ -36,6 +36,50 @@ Compiler::Compiler(QObject *parent) : QProcess(parent)
 Compiler::~Compiler()
 {
 	if (compilerProfile!=NULL) free(compilerProfile);
+}
+
+void Compiler::refresh()
+{
+    supportedLanguges.clear();
+    supportedExtensions.clear();
+
+    QString path = QApplication::applicationDirPath();
+    path.truncate(path.lastIndexOf("/", -1));
+    path = path+"/profiles";
+
+    QDirIterator it(path, QDir::NoDotAndDotDot|QDir::AllDirs, QDirIterator::NoIteratorFlags);
+
+    QString name;
+    while (it.hasNext())
+    {
+        it.next();
+        if (it.fileInfo().isDir())
+        {
+            name = it.fileInfo().filePath()+"/"+it.fileInfo().fileName()+".ini";
+            QSettings info(name, QSettings::IniFormat);
+            if (QSettings::NoError == info.status())
+            {
+                info.beginGroup("info");
+                supportedLanguges << info.value("language", "").toString();
+                supportedExtensions << info.value("filter","").toString();
+                info.endGroup();
+            }
+        }
+    }
+}
+
+QStringList Compiler::getSupportedLanguages()
+{
+    refresh();
+    return supportedLanguges;
+}
+
+QString Compiler::getSupportedExtensions(QString lang)
+{
+    int index = supportedLanguges.indexOf(lang);
+
+    if (-1 == index) return QString("");
+    else return supportedExtensions.at(index);
 }
 
 void Compiler::loadProfile(QString profile)

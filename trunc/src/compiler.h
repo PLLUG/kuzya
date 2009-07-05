@@ -44,12 +44,14 @@ public:
 	Compiler(QObject *parent = 0);
         ~Compiler();
 
+        QStringList getSupportedLanguages();
+        QString getSupportedExtensions(QString lang);
 	void loadProfile(QString profile);
 	void setOptions(QString str);
 	void setCompilerDir(QString dir);
 	void setLibDir(QString dir);
 	void setIncludeDir(QString dir);
-	bool isReady();
+        bool isReady(void);
 	bool isModeAvailable(int compileMode);
 	void compile(QString sourceFile,int compileMode = DEFAULT);
 	void run(void);
@@ -64,7 +66,9 @@ private slots:
 	void readStdErr(void);
 
 private:
-	QString programPath;
+        void refresh();
+
+        QString programPath;
 	int runStatus;
 	QList<compilerError> errorList;
         QString compiler;
@@ -74,6 +78,8 @@ private:
 	QString options;
         QSettings* compilerProfile;
 	QStringList parseParamList;
+        QStringList supportedLanguges;
+        QStringList supportedExtensions;
 };
 
 #endif
