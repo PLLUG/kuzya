@@ -491,8 +491,8 @@
    <widget class="QMenu" name="menuBuild">
     <property name="geometry">
      <rect>
-      <x>589</x>
-      <y>94</y>
+      <x>581</x>
+      <y>118</y>
       <width>120</width>
       <height>82</height>
      </rect>
@@ -810,7 +810,10 @@
      <normaloff>:/menu/images/metacontact_offline.png</normaloff>:/menu/images/metacontact_offline.png</iconset>
    </property>
    <property name="text">
-    <string>About Cukr</string>
+    <string>About Kuzya</string>
+   </property>
+   <property name="toolTip">
+    <string>About Kuzya</string>
    </property>
   </action>
   <action name="actionCut">
