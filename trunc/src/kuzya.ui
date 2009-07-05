@@ -445,7 +445,7 @@
      <x>0</x>
      <y>0</y>
      <width>773</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -494,7 +494,7 @@
       <x>589</x>
       <y>94</y>
       <width>120</width>
-      <height>90</height>
+      <height>82</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -657,7 +657,7 @@
     </property>
     <addaction name="actionNotificationList"/>
     <addaction name="actionCommon"/>
-    <addaction name="actionNative_language"/>
+    <addaction name="actionCode_language"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -1189,6 +1189,10 @@
    </property>
   </action>
   <action name="actionFind">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/menu/images/find.png</normaloff>:/menu/images/find.png</iconset>
+   </property>
    <property name="text">
     <string>Find</string>
    </property>
@@ -1197,6 +1201,10 @@
    </property>
   </action>
   <action name="actionReplace">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/menu/images/text_replace.png</normaloff>:/menu/images/text_replace.png</iconset>
+   </property>
    <property name="text">
     <string>Replace</string>
    </property>
@@ -1207,6 +1215,10 @@
   <action name="actionPrint">
    <property name="enabled">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/menu/images/printer.png</normaloff>:/menu/images/printer.png</iconset>
    </property>
    <property name="text">
     <string>Print</string>
@@ -1251,15 +1263,20 @@
     <string>Show notifications</string>
    </property>
   </action>
-  <action name="actionNative_language">
+  <action name="actionCode_language">
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/menu/images/default_lang.png</normaloff>
+     <normalon>:/menu/images/default_lang.png</normalon>:/menu/images/default_lang.png</iconset>
+   </property>
    <property name="text">
-    <string>Native language</string>
+    <string>Code language</string>
    </property>
    <property name="toolTip">
-    <string>Use native language for programming</string>
+    <string>Choose language for programming</string>
    </property>
   </action>
   <action name="actionToggleFolds">
@@ -1268,16 +1285,28 @@
    </property>
   </action>
   <action name="actionDefFontSize">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/menu/images/default_font_size.png</normaloff>:/menu/images/default_font_size.png</iconset>
+   </property>
    <property name="text">
     <string>Default Font Size</string>
    </property>
   </action>
   <action name="actionEnlFont">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/menu/images/font_enlarge.png</normaloff>:/menu/images/font_enlarge.png</iconset>
+   </property>
    <property name="text">
     <string>Enlarge Font</string>
    </property>
   </action>
   <action name="actionShrinkFont">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/menu/images/font_shrink.png</normaloff>:/menu/images/font_shrink.png</iconset>
+   </property>
    <property name="text">
     <string>Shrink Font</string>
    </property>
