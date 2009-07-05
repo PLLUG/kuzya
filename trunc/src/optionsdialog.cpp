@@ -51,7 +51,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
        styleCBox->addItems(QStyleFactory::keys());
        filters<<"*.qss";
        stylesDir.setNameFilters(filters);
-       stylesDir.setCurrent("./../qss/");
+       stylesDir.setCurrent(QApplication::applicationDirPath()+"/../trunc/src/qss/");
        slotUpdateSkinsCBox();
 
 
@@ -111,7 +111,7 @@ void OptionsDialog::slotChangeStyle(int)
 }
 void OptionsDialog::slotChangeSkin(QString sheetName)
 {
-    QFile file("./../qss/" + sheetName.toLower());
+    QFile file(QApplication::applicationDirPath()+"/../trunc/src/qss/"+ sheetName.toLower());
     file.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(file.readAll());
     qApp->setStyleSheet(styleSheet);
