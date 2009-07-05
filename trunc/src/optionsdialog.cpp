@@ -51,7 +51,11 @@ OptionsDialog::OptionsDialog(QWidget *parent)
        styleCBox->addItems(QStyleFactory::keys());
        filters<<"*.qss";
        stylesDir.setNameFilters(filters);
-       stylesDir.setCurrent(QApplication::applicationDirPath()+"/../trunc/src/qss/");
+#ifdef WIN32
+        stylesDir=QDir(QApplication::applicationDirPath()+"/../resources/qss/");
+#else
+        stylesDir=QDir("/usr/share/kuzya/resources/qss/");
+#endif
        slotUpdateSkinsCBox();
 
 
@@ -111,11 +115,15 @@ void OptionsDialog::slotChangeStyle(int)
 }
 void OptionsDialog::slotChangeSkin(QString sheetName)
 {
-    QFile file(QApplication::applicationDirPath()+"/../trunc/src/qss/"+ sheetName.toLower());
+ #ifdef WIN32
+    QFile file(QApplication::applicationDirPath()+"/../resources/qss/"+sheetName.toLower());
+ #else
+    QFile file("/usr/share/kuzya/resources/qss/"+sheetName.toLower());
+#endif
     file.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(file.readAll());
     qApp->setStyleSheet(styleSheet);
-    //qApp->setStyleSheet(".\\..\\qss\\"+styleSheet);
+
 }
 ///**************
 ///*************************************************
@@ -231,7 +239,13 @@ void OptionsDialog::readODWSettings()
                 if(settings->value("Language","eng").toString()=="ukr")
 		{
 			ukrRBtn->setChecked(true);
-                        translator.load(QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua");
+#ifdef WIN32
+                        translator.load(QApplication::applicationDirPath()+"/../resources/translations/kuzya_ua");
+
+#else
+                        translator.load("/usr/share/kuzya/resources/translations/kuzya_ua");    //QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua"
+
+#endif
 			///translator.load("./src/translations/kuzya_ua");
 			qApp->installTranslator(&translator);
 			mw->retranslateAll();			
