@@ -39,7 +39,7 @@ FindDialog::~FindDialog()
 }
 void FindDialog::retranslate(void)
 {
-	retranslateUi(this);
+        retranslateUi(this);
 }
 void FindDialog::slotFindDialog(void)
 {
