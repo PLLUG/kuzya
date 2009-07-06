@@ -764,7 +764,7 @@ void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
 **/
 void Kuzya::slotAbout(void)
 {
-        QMessageBox::about(this, tr("About"),tr("\t\t The Kuzya\n"
+       /* QMessageBox::about(this, tr("About"),tr("\t\t The Kuzya\n"
                                               "\t          Free Development Environment\n\n"
 
                                               "     Kuzya is simple crossplatform IDE for people who study  programming.Main\n"
@@ -776,6 +776,21 @@ void Kuzya::slotAbout(void)
                                               "\nAuthors:       Volodymyr Shevchyk <volder@users.sourceforge.net>"
                                               "\n                     Viktor Sklyar <bouyantgrambler@users.sourceforge.net>"
                                               "\n                     Alex Chmykhalo <alexchmykhalo@users.sourceforge.net>"));
+    */
+    QMessageBox *aboutBox= new QMessageBox( QMessageBox::Information,tr("About"),tr("\t The Kuzya 0.9beta1 \n"
+                                              "   Free Development Environment\n\n"
+                                              "Idea:\n\t Grygoriy Zlobin \n <zlobin@electronics.wups.lviv.ua>\n"
+                                              "\n\Team leader: \n \t Andriy Shevchyk \n<shevchyk@users.sourceforge.net> "
+                                              "\n\n\n Authors:      \n \t Volodymyr Shevchyk \n<volder@users.sourceforge.net>"
+                                              "\n              \n \t Viktor Sklyar \n<bouyantgrambler@users.sourceforge.net>"
+                                              "\n              \n \t Alex Chmykhalo \n<alexchmykhalo@users.sourceforge.net>"),QMessageBox::Ok,this,Qt::Dialog);
+    #ifdef WIN32
+        aboutBox->setIconPixmap(QPixmap(QApplication::applicationDirPath()+"/../resources/Kuzya.png"));
+    #else
+        aboutBox->setIconPixmap(QPixmap("/usr/share/kuzya/resources/Kuzya.png"));
+#endif
+        aboutBox->exec();
+    delete aboutBox;
 }
 
 /**
