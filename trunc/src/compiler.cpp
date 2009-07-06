@@ -29,6 +29,8 @@ Compiler::Compiler(QObject *parent) : QProcess(parent)
 	connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(afterExit(int, QProcess::ExitStatus)));
 	connect(this, SIGNAL(readyReadStandardError()), this, SLOT(readStdErr()));
 
+        refreshSupported();
+
 	runStatus = STOP;
 	compilerProfile = NULL;
 }
@@ -38,14 +40,19 @@ Compiler::~Compiler()
 	if (compilerProfile!=NULL) free(compilerProfile);
 }
 
-void Compiler::refresh()
+void Compiler::refreshSupported()
 {
-    supportedLanguges.clear();
+    supportedLanguages.clear();
     supportedExtensions.clear();
+    profileLocations.clear();
 
+#ifdef WIN32
     QString path = QApplication::applicationDirPath();
     path.truncate(path.lastIndexOf("/", -1));
     path = path+"/profiles";
+#else
+    QString path = "/usr/share/kuzya/profiles";
+#endif
 
     QDirIterator it(path, QDir::NoDotAndDotDot|QDir::AllDirs, QDirIterator::NoIteratorFlags);
 
@@ -60,26 +67,86 @@ void Compiler::refresh()
             if (QSettings::NoError == info.status())
             {
                 info.beginGroup("info");
-                supportedLanguges << info.value("language", "").toString();
+                supportedLanguages << info.value("language", "").toString();
                 supportedExtensions << info.value("filter","").toString();
                 info.endGroup();
+
+                QString location =  it.fileInfo().filePath();
+                profileLocations << location;
+
+                QDirIterator fileIt(location, QStringList()<< "*.prof", QDir::NoDotAndDotDot|QDir::Files, QDirIterator::NoIteratorFlags);
+                QString prof;
+                QString profiles("");
+                QString compilers("");
+                while (fileIt.hasNext())
+                {
+                    fileIt.next();
+                    if (fileIt.fileInfo().isReadable())
+                    {
+                        prof = fileIt.fileInfo().filePath();
+                        QSettings profile(prof, QSettings::IniFormat);
+                        if (QSettings::NoError == info.status())
+                        {
+                            profile.beginGroup("info");
+                            QString str = profile.value("compiler", "").toString()+" ";
+                            profile.endGroup();
+                            if (str.isEmpty()) continue;
+                            compilers = compilers + str + " ";
+                            profiles = profiles + fileIt.fileInfo().filePath() + " ";
+                        }
+                    }
+                }
+                supportedCompilers << compilers;
+                profilesPathList << profiles;
+                qDebug() << compilers;
+                qDebug() << profiles;
             }
         }
     }
 }
 
+
+
 QStringList Compiler::getSupportedLanguages()
 {
-    refresh();
-    return supportedLanguges;
+    refreshSupported();
+    return supportedLanguages;
 }
 
 QString Compiler::getSupportedExtensions(QString lang)
 {
-    int index = supportedLanguges.indexOf(lang);
+    int index = supportedLanguages.indexOf(lang);
 
     if (-1 == index) return QString("");
     else return supportedExtensions.at(index);
+}
+
+QStringList Compiler::getSupportedCompilers(QString lang)
+{
+    QStringList supportedCompilers;
+
+ /*   int index = supportedLanguages.indexOf(lang);
+
+    if (-1 == index) return supportedCompilers;
+*/
+ /*   while (it.hasNext())
+    {
+        it.next();
+        if (it.fileInfo().isReadable())
+        {
+            name = it.fileInfo().filePath();
+            qDebug() << name;
+            QSettings info(name, QSettings::IniFormat);
+            if (QSettings::NoError == info.status())
+            {
+                info.beginGroup("info");
+                supportedCompilers << info.value("compiler", "").toString();
+                info.endGroup();
+                supportedCompilers << it.fileInfo().filePath();
+            }
+       }
+    }*/
+    return supportedCompilers;
 }
 
 void Compiler::loadProfile(QString profile)

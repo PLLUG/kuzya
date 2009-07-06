@@ -46,6 +46,7 @@ public:
 
         QStringList getSupportedLanguages();
         QString getSupportedExtensions(QString lang);
+        QStringList getSupportedCompilers(QString lang);
 	void loadProfile(QString profile);
 	void setOptions(QString str);
 	void setCompilerDir(QString dir);
@@ -66,7 +67,7 @@ private slots:
 	void readStdErr(void);
 
 private:
-        void refresh();
+        void refreshSupported();
 
         QString programPath;
 	int runStatus;
@@ -78,8 +79,11 @@ private:
 	QString options;
         QSettings* compilerProfile;
 	QStringList parseParamList;
-        QStringList supportedLanguges;
+        QStringList supportedLanguages;
         QStringList supportedExtensions;
+        QStringList profileLocations;
+        QStringList supportedCompilers;
+        QStringList profilesPathList;
 };
 
 #endif

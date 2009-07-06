@@ -139,8 +139,6 @@ Kuzya::Kuzya(QWidget *parent)
         settings->openLastProject();
         ActOpenRecentFileVector.clear();
 
-        QStringList list = compiler->getSupportedLanguages();
-
 ///-------------------------------------------------------------------------------------------------------------------
 
         connect(actionNew,	SIGNAL(triggered()),this,		SLOT(slotNew()));
