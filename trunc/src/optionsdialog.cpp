@@ -59,7 +59,6 @@ OptionsDialog::OptionsDialog(QWidget *parent)
        slotUpdateSkinsCBox();
 
 
-
 }
 void OptionsDialog::slotUpdateSkinsCBox(void)
 {
@@ -320,7 +319,7 @@ void OptionsDialog::readODWSettings()
 ///-----EDITOR--------------------------------------------------------------------------------	
         settings->beginGroup("Settings/TextEditor");
                 settings->beginGroup("Font");
-                        font=QFont(settings->value("FontName","").toString());
+                        font=QFont(settings->value("FontName","Arial Cyr").toString());
                         QString s=(settings->value("FontName",qApp->font()).toString());
                         fontLable_5->setText(s.remove(s.indexOf(","),s.count()-s.indexOf(",")));
                         font.setPointSize(settings->value("FontSize",10).toInt());

@@ -33,4 +33,36 @@
         <file alias="warning_line" >images/bullet_orange.png</file>
         <file alias="current_line" >images/arrow.png</file>
     </qresource>
+    <qresource prefix="/" >
+        <file>images/pagefold/sizegrip.png</file>
+        <file>images/pagefold/checkbox_unchecked.png</file>
+        <file>images/pagefold/checkbox_unchecked_hover.png</file>
+        <file>images/pagefold/up_arrow_disabled.png</file>
+        <file>images/pagefold/down_arrow_disabled.png</file>
+        <file>images/pagefold/down_arrow.png</file>
+        <file>images/pagefold/up_arrow.png</file>
+        <file>images/pagefold/radiobutton_unchecked.png</file>
+        <file>images/pagefold/spindown_off.png</file>
+        <file>images/pagefold/frame.png</file>
+        <file>images/pagefold/checkbox_checked.png</file>
+        <file>images/pagefold/spindown_pressed.png</file>
+        <file>images/pagefold/checkbox_checked_hover.png</file>
+        <file>images/pagefold/spindown_hover.png</file>
+        <file>images/pagefold/spinup_off.png</file>
+        <file>images/pagefold/spindown.png</file>
+        <file>images/pagefold/spinup_hover.png</file>
+        <file>images/pagefold/spinup_pressed.png</file>
+        <file>images/pagefold/spinup.png</file>
+        <file>images/pagefold/checkbox_unchecked_pressed.png</file>
+        <file>images/pagefold/radiobutton_checked.png</file>
+        <file>images/pagefold/checkbox_checked_pressed.png</file>
+        <file>images/pagefold/radiobutton_unchecked_hover.png</file>
+        <file>images/pagefold/pushbutton_pressed.png</file>
+        <file>images/pagefold/pushbutton_hover.png</file>
+        <file>images/pagefold/radiobutton_checked_hover.png</file>
+        <file>images/pagefold/pushbutton.png</file>
+        <file>images/pagefold/radiobutton_unchecked_pressed.png</file>
+        <file>images/pagefold/radiobutton_checked_pressed.png</file>
+        <file>images/pagefold/pagefold.png</file>
+    </qresource>
 </RCC>
