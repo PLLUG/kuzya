@@ -207,7 +207,7 @@
     </message>
     <message>
         <source>C/CPP Source-Files (*.c *.cpp *.cxx *.h);;Pascal Source-Files (*.fpc *.pas *.pp);;All Files (*)</source>
-        <translation type="unfinished">C/CPP Source-Files (*.c *.cpp *.cxx *.h);;Pascal Source-Files (*.fpc *.pas *.pp);;All Files (*)</translation>
+        <translation>C/CPP Source-Files (*.c *.cpp *.cxx *.h);;Pascal Source-Files (*.fpc *.pas *.pp);;All Files (*)</translation>
     </message>
     <message>
         <source>Creating error list...</source>
@@ -242,7 +242,17 @@ Team leader: Andriy Shevchyk &lt;shevchyk@users.sourceforge.net&gt;
 Authors:       Volodymyr Shevchyk &lt;volder@users.sourceforge.net&gt;
                      Viktor Sklyar &lt;bouyantgrambler@users.sourceforge.net&gt;
                      Alex Chmykhalo &lt;alexchmykhalo@users.sourceforge.net&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>                                         Кузя
+                 Безкоштовна оболонка для програмування
+    Кузя, кросплатформена оболонка створена для людей, які вивчають 
+програмування. Головною ідеєю було сконцетрувати увагі на вивченні
+мови а не можливостей програми.
+
+Автор ідеї:             Григорій Злобін &lt;zlobin@electronics.wups.lviv.ua&gt;
+Керівник проекту: Андрій Шевчик &lt;shevchyk@users.sourceforge.net&gt; 
+Автори:                  Володимир Шевчик &lt;volder@users.sourceforge.net&gt;
+                               Віктор Скляр &lt;bouyantgrambler@users.sourceforge.net&gt;
+                               Олександер Чмихало &lt;alexchmykhalo@users.sourceforge.net&gt;</translation>
     </message>
 </context>
 <context>
@@ -876,27 +886,27 @@ Authors:       Volodymyr Shevchyk &lt;volder@users.sourceforge.net&gt;
     </message>
     <message>
         <source>static</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>try</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>catch</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>throw</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Common</source>
-        <translation type="unfinished">Загальні</translation>
+        <translation>Загальні</translation>
     </message>
     <message>
         <source>Ctrl+Shift+C</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>1.</source>
@@ -920,87 +930,87 @@ Authors:       Volodymyr Shevchyk &lt;volder@users.sourceforge.net&gt;
     </message>
     <message>
         <source>Find</source>
-        <translation type="unfinished">Знайти</translation>
+        <translation>Знайти</translation>
     </message>
     <message>
         <source>Ctrl+F</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Replace</source>
-        <translation type="unfinished">Замінити</translation>
+        <translation>Замінити</translation>
     </message>
     <message>
         <source>Ctrl+Shift+R</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Print</source>
-        <translation type="unfinished">На друк</translation>
+        <translation>На друк</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Kuzya Help  </source>
-        <translation type="unfinished">Довідник</translation>
+        <translation>Довідник</translation>
     </message>
     <message>
         <source>F1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>RGB</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation type="unfinished">Вибрати все</translation>
+        <translation>Вибрати все</translation>
     </message>
     <message>
         <source>Ctrl+A</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Вигляд</translation>
     </message>
     <message>
         <source>Show notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>Показати повідомлення</translation>
     </message>
     <message>
         <source>Toggle All Folds</source>
-        <translation type="unfinished"></translation>
+        <translation>Згорнути дужки</translation>
     </message>
     <message>
         <source>Default Font Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Стандартний розмір шрифта</translation>
     </message>
     <message>
         <source>Enlarge Font</source>
-        <translation type="unfinished"></translation>
+        <translation>Збільшити шрифт</translation>
     </message>
     <message>
         <source>Shrink Font</source>
-        <translation type="unfinished"></translation>
+        <translation>Зменшити шрифт</translation>
     </message>
     <message>
         <source>About Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>Про Qt</translation>
     </message>
     <message>
         <source>About Kuzya</source>
-        <translation type="unfinished"></translation>
+        <translation>Про Кузю</translation>
     </message>
     <message>
         <source>Code language</source>
-        <translation type="unfinished"></translation>
+        <translation>Мова коду</translation>
     </message>
     <message>
         <source>Choose language for programming</source>
-        <translation type="unfinished"></translation>
+        <translation>Обрати мову для програмування</translation>
     </message>
 </context>
 <context>
@@ -1175,11 +1185,11 @@ Authors:       Volodymyr Shevchyk &lt;volder@users.sourceforge.net&gt;
     </message>
     <message>
         <source>Backspace key indents</source>
-        <translation type="unfinished"></translation>
+        <translation>Витерання табуляції</translation>
     </message>
     <message>
         <source>Automatic indentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматичний відступ</translation>
     </message>
     <message>
         <source>Code Folding</source>
@@ -1187,7 +1197,7 @@ Authors:       Volodymyr Shevchyk &lt;volder@users.sourceforge.net&gt;
     </message>
     <message>
         <source>Show folding markers</source>
-        <translation type="unfinished"></translation>
+        <translation>Відзначати місця згортання</translation>
     </message>
     <message>
         <source>Border</source>
@@ -1195,7 +1205,7 @@ Authors:       Volodymyr Shevchyk &lt;volder@users.sourceforge.net&gt;
     </message>
     <message>
         <source>Show line numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Номерація рядків</translation>
     </message>
     <message>
         <source>Word Wrap</source>
@@ -1203,7 +1213,7 @@ Authors:       Volodymyr Shevchyk &lt;volder@users.sourceforge.net&gt;
     </message>
     <message>
         <source>Dynamic word wrap</source>
-        <translation type="unfinished"></translation>
+        <translation>Розрив рядка</translation>
     </message>
     <message>
         <source>Word Completion</source>
@@ -1219,11 +1229,11 @@ Authors:       Volodymyr Shevchyk &lt;volder@users.sourceforge.net&gt;
     </message>
     <message>
         <source>Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Інтеряейс</translation>
     </message>
     <message>
         <source>Style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Стиль</translation>
     </message>
     <message>
         <source>Skin:</source>
