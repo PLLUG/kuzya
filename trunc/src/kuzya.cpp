@@ -1508,7 +1508,11 @@ void Kuzya::slotShowAutoComplete()
 **/
 void Kuzya::slotHelpKuzya()
 {
-        HelpBrowser* helpBrowser = new HelpBrowser(QApplication::applicationDirPath()+"/../trunc/doc/Kuzya_Help","main.htm");
+#ifdef WIN32
+        HelpBrowser* helpBrowser = new HelpBrowser(QApplication::applicationDirPath()+"/../doc/Kuzya_Help","main.htm");
+#else
+              HelpBrowser* helpBrowser = new HelpBrowser(/usr/doc/kuzya/doc/Kuzya_Help","main.htm");
+#endif
         helpBrowser->resize(800,600);
         helpBrowser->show();
 }
