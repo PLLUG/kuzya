@@ -334,6 +334,14 @@ void OptionsDialog::readODWSettings()
         settings->beginGroup("/Settings/TextEditor");
 
                 lineNumbCHB->setChecked(settings->value("ShowLineNumber",false).toBool());
+                if(lineNumbCHB->isChecked())
+                {
+                    textEditor->setMarginWidth(1,"1234");
+                }
+                else
+                {
+                    textEditor->setMarginWidth(1,"");
+                }
                 textEditor->setMarginLineNumbers(1,lineNumbCHB->isChecked());
 
                 autoComplCHB->setChecked(settings->value("WordCompletion",false).toBool());

@@ -104,7 +104,7 @@ void ReplaceDialog::promptMessage(void)
 	connect(repl_closeBtn,SIGNAL(clicked()),this,SLOT(slotReplace_Close()));
 	connect(replaceAllBtn,SIGNAL(clicked()),this,SLOT(slotReplaceAll()));
 	connect(findNextBtn,SIGNAL(clicked()),this,SLOT(slotFindNext()));
-	connect(cancelBtn,SIGNAL(clicked()),this,SLOT(close()));
+        connect(cancelBtn,SIGNAL(clicked()),this,SLOT(slotCancel()));
 	QHBoxLayout *layout = new QHBoxLayout;
 	layout->addWidget(replcBtn);
 	layout->addWidget(repl_closeBtn);
@@ -141,7 +141,7 @@ label3:	while(textEditor->findFirst(    findCombo->currentText(),false,caseSensC
 		{
 			v.setValue(count);
 			QMessageBox msgBox;
-			msgBox.setIcon(QMessageBox::Information);
+                        msgBox.setIcon(QMessageBox::Information);
 			msgBox.setWindowTitle(tr("Replace - Cukr"));
 			msgBox.setText("End of document reached.");
 			msgBox.setInformativeText(tr("Continu from the begining?"));
@@ -155,6 +155,11 @@ label3:	while(textEditor->findFirst(    findCombo->currentText(),false,caseSensC
 				count=0;	
 				goto label3;	
 			}
+                        if (msgBox.clickedButton()==stopBtn)
+                        {
+                            msgBox.close();
+                            promptMessageDialog->close();
+                        }
 		}
 	
 }
@@ -169,5 +174,5 @@ void ReplaceDialog::slotFindNext(void)
 }
 void ReplaceDialog::slotCancel()
 {
-	promptMessageDialog->close();
+         promptMessageDialog->close();
 }
