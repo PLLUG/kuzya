@@ -45,6 +45,8 @@ void Compiler::refreshSupported()
     supportedLanguages.clear();
     supportedExtensions.clear();
     profileLocations.clear();
+    supportedCompilers.clear();
+    profilesPathList.clear();
 
 #ifdef WIN32
     QString path = QApplication::applicationDirPath();
@@ -90,6 +92,7 @@ void Compiler::refreshSupported()
                             profile.beginGroup("info");
                             QString str = profile.value("compiler", "").toString()+" ";
                             profile.endGroup();
+
                             if (str.isEmpty()) continue;
                             compilers = compilers + str + " ";
                             profiles = profiles + fileIt.fileInfo().filePath() + " ";
@@ -98,8 +101,6 @@ void Compiler::refreshSupported()
                 }
                 supportedCompilers << compilers;
                 profilesPathList << profiles;
-                qDebug() << compilers;
-                qDebug() << profiles;
             }
         }
     }
@@ -123,40 +124,43 @@ QString Compiler::getSupportedExtensions(QString lang)
 
 QStringList Compiler::getSupportedCompilers(QString lang)
 {
-    QStringList supportedCompilers;
+    QStringList supported;
 
- /*   int index = supportedLanguages.indexOf(lang);
+    int index = supportedLanguages.indexOf(lang);
 
-    if (-1 == index) return supportedCompilers;
-*/
- /*   while (it.hasNext())
-    {
-        it.next();
-        if (it.fileInfo().isReadable())
-        {
-            name = it.fileInfo().filePath();
-            qDebug() << name;
-            QSettings info(name, QSettings::IniFormat);
-            if (QSettings::NoError == info.status())
-            {
-                info.beginGroup("info");
-                supportedCompilers << info.value("compiler", "").toString();
-                info.endGroup();
-                supportedCompilers << it.fileInfo().filePath();
-            }
-       }
-    }*/
-    return supportedCompilers;
+    if (-1 == index) return QStringList();
+    QString str = supportedCompilers.at(index);
+
+    supported = str.split(" ");
+    supported.removeAll("");
+
+    return supported;
 }
 
-void Compiler::loadProfile(QString profile)
+void Compiler::loadProfile(QString lang, QString profile)
 {
 	if (compilerProfile!=NULL) 
 	{
 		free(compilerProfile);
 	}
 	
-	compilerProfile = new QSettings(profile, QSettings::IniFormat);
+        QStringList profiles;
+        QStringList locations;
+
+        int index = supportedLanguages.indexOf(lang);
+        if (-1 == index) return;
+
+        QString str = supportedCompilers.at(index);
+        profiles = str.split(" ");
+        profiles.removeAll("");
+
+        str = profilesPathList.at(index);
+        locations = str.split(" ");
+        locations.removeAll("");
+
+        index = profiles.indexOf(profile);
+        if (-1 == index) return;
+        compilerProfile = new QSettings(locations.at(index), QSettings::IniFormat);
 }
 
 void Compiler::setOptions(QString str)

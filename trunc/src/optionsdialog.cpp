@@ -279,7 +279,7 @@ void OptionsDialog::readODWSettings()
                         includeDirLineEdit->setText(settings->value("includeDir").toString());
                         compilerOptionsLineEdit->setText(settings->value("compilerOptions").toString());
                         settings->endGroup();
-                        mw->getCurrentCompiler()->loadProfile(profileDirLineEdit->text()+QString("c_profile.ini"));
+                        mw->getCurrentCompiler()->loadProfile("c++", "g++");
                         mw->getCurrentCompiler()->setOptions(compilerOptionsLineEdit->text());
                         mw->getCurrentCompiler()->setIncludeDir(includeDirLineEdit->text());
                         mw->getCurrentCompiler()->setCompilerDir(compilerDirLineEdit->text());
@@ -296,7 +296,7 @@ void OptionsDialog::readODWSettings()
                         compilerOptionsLineEdit->setText(settings->value("compilerOptions").toString());
                         settings->endGroup();
                         mw->loadCPPLexer();
-                        mw->getCurrentCompiler()->loadProfile(profileDirLineEdit->text()+QString("pascal_profile.ini"));
+                        mw->getCurrentCompiler()->loadProfile("pascal", "fpc");
                         mw->getCurrentCompiler()->setOptions(compilerOptionsLineEdit->text());
                         mw->getCurrentCompiler()->setIncludeDir(includeDirLineEdit->text());
                         mw->getCurrentCompiler()->setCompilerDir(compilerDirLineEdit->text());

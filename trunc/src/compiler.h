@@ -47,7 +47,7 @@ public:
         QStringList getSupportedLanguages();
         QString getSupportedExtensions(QString lang);
         QStringList getSupportedCompilers(QString lang);
-	void loadProfile(QString profile);
+        void loadProfile(QString lang, QString profile);
 	void setOptions(QString str);
 	void setCompilerDir(QString dir);
 	void setLibDir(QString dir);
