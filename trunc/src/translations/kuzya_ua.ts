@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="en_US">
+<TS version="2.0" language="en_US" sourcelanguage="en_US">
 <context>
     <name>Cukr</name>
     <message>
@@ -145,7 +145,7 @@
     </message>
     <message>
         <source>***ERROR: </source>
-        <translation>***ПОМИЛКА: </translation>
+        <translation type="obsolete">***ПОМИЛКА: </translation>
     </message>
     <message>
         <source>About</source>
@@ -158,7 +158,7 @@
  Andriy Shevchyk 
  	 &amp;&amp; 
  Victor Sklyar </source>
-        <translation>Автори:
+        <translation type="obsolete">Автори:
 Володимир Шевчик
                      &amp;&amp;
 Віктор Скляр
@@ -204,6 +204,45 @@
     <message>
         <source>This file wasn&apos;t founded</source>
         <translation>Даний файл не було знайдено</translation>
+    </message>
+    <message>
+        <source>C/CPP Source-Files (*.c *.cpp *.cxx *.h);;Pascal Source-Files (*.fpc *.pas *.pp);;All Files (*)</source>
+        <translation type="unfinished">C/CPP Source-Files (*.c *.cpp *.cxx *.h);;Pascal Source-Files (*.fpc *.pas *.pp);;All Files (*)</translation>
+    </message>
+    <message>
+        <source>Creating error list...</source>
+        <translation>Створення списку помилок</translation>
+    </message>
+    <message>
+        <source>1 error found in file %1</source>
+        <translation>1 помилка знаходиться у файлі %1</translation>
+    </message>
+    <message>
+        <source>%1 errors found in file %2</source>
+        <translation>%1 помилок знаходиться у файлі %2</translation>
+    </message>
+    <message>
+        <source>Can&apos;t find translation for the code</source>
+        <translation>Відсутній переклад для коду</translation>
+    </message>
+    <message>
+        <source>Can&apos;t open out file    </source>
+        <translation>Не можливо відкрити зовнішній файл</translation>
+    </message>
+    <message>
+        <source>		 The Kuzya
+	          Free Development Environment
+
+     Kuzya is simple crossplatform IDE for people who study  programming.Main
+idea of it is to concentrate attention  of the users only on learning the programming 
+	          language  but not on usage of IDE
+
+Idea:             Grygoriy Zlobin &lt;zlobin@electronics.wups.lviv.ua&gt;
+Team leader: Andriy Shevchyk &lt;shevchyk@users.sourceforge.net&gt; 
+Authors:       Volodymyr Shevchyk &lt;volder@users.sourceforge.net&gt;
+                     Viktor Sklyar &lt;bouyantgrambler@users.sourceforge.net&gt;
+                     Alex Chmykhalo &lt;alexchmykhalo@users.sourceforge.net&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -433,183 +472,183 @@
     <name>kuzyaForm</name>
     <message>
         <source>MainWindow</source>
-        <translation type="unfinished">Головне вікно</translation>
+        <translation>Головне вікно</translation>
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished">Файл</translation>
+        <translation>Файл</translation>
     </message>
     <message>
         <source>Recent Files</source>
-        <translation type="unfinished">Останні файли</translation>
+        <translation>Останні файли</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished">Правка</translation>
+        <translation>Правка</translation>
     </message>
     <message>
         <source>Build</source>
-        <translation type="unfinished">Будувати</translation>
+        <translation>Будувати</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished">Допомога</translation>
+        <translation>Допомога</translation>
     </message>
     <message>
         <source>Templates</source>
-        <translation type="unfinished">Вставки</translation>
+        <translation>Вставки</translation>
     </message>
     <message>
         <source>Var</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Types</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Cast</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Binary</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Bool</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Modifiers</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Flow Controll</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Acception</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштування</translation>
     </message>
     <message>
         <source>toolBar</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Новий</translation>
+        <translation>Новий</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished">Відкрити</translation>
+        <translation>Відкрити</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Зберегти</translation>
+        <translation>Зберегти</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Save as...</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберегти як</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation type="unfinished">Вихід</translation>
+        <translation>Вихід</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation type="unfinished">Відмінити</translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <source>Ctrl+Z</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation type="unfinished">Повторити</translation>
+        <translation>Повторити</translation>
     </message>
     <message>
         <source>Ctrl+Y</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Run</source>
-        <translation type="unfinished">Запустити</translation>
+        <translation>Запустити</translation>
     </message>
     <message>
         <source>Run  </source>
-        <translation type="unfinished"></translation>
+        <translation>Запустити</translation>
     </message>
     <message>
         <source>F9</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Compile</source>
-        <translation type="unfinished">Скомпілити</translation>
+        <translation>Скомпілити</translation>
     </message>
     <message>
         <source>F8</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>About Cukr</source>
-        <translation>Про Кузю</translation>
+        <translation type="obsolete">Про Кузю</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation type="unfinished">Вирізати</translation>
+        <translation>Вирізати</translation>
     </message>
     <message>
         <source>Shift+Del, Ctrl+X</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Скопіювати</translation>
+        <translation>Скопіювати</translation>
     </message>
     <message>
         <source>Ctrl+C, Ctrl+Ins</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation type="unfinished">Вставити</translation>
+        <translation>Вставити</translation>
     </message>
     <message>
         <source>Ctrl+V, Shift+Ins</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Go to line...</source>
-        <translation type="unfinished">Перейти до рядка...</translation>
+        <translation>Перейти до рядка...</translation>
     </message>
     <message>
         <source>Alt+G</source>
@@ -617,7 +656,7 @@
     </message>
     <message>
         <source>Go to matching bracket</source>
-        <translation type="unfinished">Перейти до відповідної душки</translation>
+        <translation>Перейти до відповідної душки</translation>
     </message>
     <message>
         <source>Alt+B</source>
@@ -625,91 +664,91 @@
     </message>
     <message>
         <source>int</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>float</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>char</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>bool</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>double</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>long</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>short</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>void</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>wchar_t</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>signed</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>unsigned</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>typedef</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>class</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>struct</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>enum</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>union</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>new</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>delete</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>const_cast</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>reinterpret_cast</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>static_cast</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>const</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>and</source>
@@ -717,123 +756,123 @@
     </message>
     <message>
         <source>and_eq</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>bitand</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>bitor</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>compl</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>not</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>not_eq</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>or</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>or_eq</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>xor</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>xor_eq</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>true</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>false</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>private</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>protected</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>public</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>friend</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>virtual</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>case</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>break</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>continue</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>do...while</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>else</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>for</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>goto</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>if</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>return</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>switch</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>while</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>extern</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>inline</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>static</source>
@@ -923,6 +962,46 @@
         <source>Ctrl+A</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show notifications</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle All Folds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default Font Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enlarge Font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shrink Font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About Qt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About Kuzya</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Code language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose language for programming</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>optionsForm</name>
@@ -1004,11 +1083,11 @@
     </message>
     <message>
         <source>TextEditor</source>
-        <translation>Редактор тексту</translation>
+        <translation type="obsolete">Редактор тексту</translation>
     </message>
     <message>
         <source>Use Cukr for programing on</source>
-        <translation>Мова програмування</translation>
+        <translation type="obsolete">Мова програмування</translation>
     </message>
     <message>
         <source>C/C++</source>
@@ -1020,7 +1099,7 @@
     </message>
     <message>
         <source>code  language:</source>
-        <translation>Мова коду</translation>
+        <translation type="obsolete">Мова коду</translation>
     </message>
     <message>
         <source>Compiler</source>
@@ -1053,6 +1132,102 @@
     <message>
         <source>Lib directory :</source>
         <translation>Тека бібліотек</translation>
+    </message>
+    <message>
+        <source>Code  language:</source>
+        <translation>Мова коду</translation>
+    </message>
+    <message>
+        <source>Use Kuzya for programing on</source>
+        <translation>Використовувати кузу для програмування на</translation>
+    </message>
+    <message>
+        <source>Compiler settings</source>
+        <translation>Налаштування компілятора</translation>
+    </message>
+    <message>
+        <source>/usr/include/</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>TextEditorAdditional</source>
+        <translation>Текстовий редактор</translation>
+    </message>
+    <message>
+        <source>Indentations</source>
+        <translation>Відступи</translation>
+    </message>
+    <message>
+        <source>Show indentation lines</source>
+        <translation>Показати позначки відступів</translation>
+    </message>
+    <message>
+        <source>Keys to use</source>
+        <translation>Використовувати клавіші</translation>
+    </message>
+    <message>
+        <source>Tab key indents</source>
+        <translation>Табуляція</translation>
+    </message>
+    <message>
+        <source>Tab width:</source>
+        <translation>Довжина табуляції</translation>
+    </message>
+    <message>
+        <source>Backspace key indents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatic indentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Code Folding</source>
+        <translation>Згортання коду</translation>
+    </message>
+    <message>
+        <source>Show folding markers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Border</source>
+        <translation>Облямування</translation>
+    </message>
+    <message>
+        <source>Show line numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Word Wrap</source>
+        <translation>Розрив рядка</translation>
+    </message>
+    <message>
+        <source>Dynamic word wrap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Word Completion</source>
+        <translation>Автозавершення слів</translation>
+    </message>
+    <message>
+        <source>Use auto-completion</source>
+        <translation>Авто завершення</translation>
+    </message>
+    <message>
+        <source>Colors and Fonts</source>
+        <translation>Колір і шрифт</translation>
+    </message>
+    <message>
+        <source>Interface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Skin:</source>
+        <translation>Вигляд</translation>
     </message>
 </context>
 <context>
