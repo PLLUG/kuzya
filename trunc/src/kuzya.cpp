@@ -37,6 +37,7 @@
 #include "compiler.h"
 #include "kuzya.h"
 #include "helpbrowser.h"
+#include "translator.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -45,6 +46,8 @@ Kuzya::Kuzya(QWidget *parent)
         setupUi(this);
         setObjectName("Kuzya");
         setWindowTitle("Kuzya");
+
+        languageComboBox = new QComboBox(this);
 
         toolBar->addAction(actionNew);
         toolBar->addAction(actionOpen);
@@ -61,7 +64,9 @@ Kuzya::Kuzya(QWidget *parent)
         toolBar->addAction(actionRun);
         toolBar->addAction(actionCompile);
         toolBar->addSeparator();
-        toolBar->addAction(actionCode_language);
+        //toolBar->addAction(actionCode_language);
+        toolBar->addWidget(languageComboBox);
+
 
         statusLabel = new QLabel(this);
         statusBar()->addPermanentWidget(statusLabel);
@@ -118,6 +123,7 @@ Kuzya::Kuzya(QWidget *parent)
         file = new QFile();
         goToLine = new GoToLineDialog(textEditor);
         compiler = new Compiler(this);
+        translator = new Translator(this);
         settings = new OptionsDialog(this);
 
         findText = new FindDialog(textEditor);
@@ -518,6 +524,7 @@ void Kuzya::slotNew(void)
         textEditor->clear();
         setWindowTitle("Kuzya");
         statusBar()->showMessage(tr("Created new file"), 2000);
+
 //        QTextStream stream(file);
 //        textEditor->setText(stream.readAll());
 //        file->close();
@@ -546,8 +553,47 @@ void Kuzya::slotOpen(void)
         if ("" != openedFileName)
         {
                 openFile(openedFileName);
+                refreshProfileSettings();
         }
+}
 
+/**
+*******************************************************************************************************
+**/
+
+void Kuzya::refreshProfileSettings()
+{
+    QStringList supportedList = compiler->getSupportedLanguages();    
+    QString ex(fileName);
+    ex = ex.remove(0, ex.lastIndexOf("."));
+
+    QString language;
+    foreach (QString lang, supportedList)
+    {
+        if (compiler->getSupportedExtensions(lang).contains(ex))
+        {
+            language = lang;
+            break;
+        }
+    }
+
+    compiler->loadProfile(language, compiler->getSupportedCompilers(language).at(0));
+
+#ifdef WIN32
+    QString path = QApplication::applicationDirPath();
+    path.truncate(path.lastIndexOf("/", -1));
+    path = path+"/resources/";
+#else
+    QString path = "/usr/share/kuzya/resources/";
+#endif
+
+    languageComboBox->clear();
+    languageComboBox->addItem(QIcon(path+"uk.png"), "en");
+    QStringList supportedTranslations = translator->getSupportedTranslations(language);
+    foreach (QString trans, supportedTranslations)
+    {
+       languageComboBox->addItem(QIcon(path+trans+".png"), trans);
+    }
 }
 
 /**
@@ -565,7 +611,7 @@ bool Kuzya::slotSave(void)
         {
                 return false;
         }
-        QString name;
+/*        QString name;
         if (nativeMode)
         {
                 translateCode(fromCode);
@@ -575,9 +621,9 @@ bool Kuzya::slotSave(void)
         {
                 translateCode(fromNative);
                 name = fileName;
-        }
+        }*/
 
-        QFile file(name);
+        QFile file(fileName);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
                 return false ;
@@ -588,6 +634,7 @@ bool Kuzya::slotSave(void)
         file.close();
         statusBar()->showMessage(tr("Saved"), 2000);
         addFileNameToList(file.fileName());
+        refreshProfileSettings();
 
         return true;
 }
