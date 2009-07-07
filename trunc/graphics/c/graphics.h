@@ -111,7 +111,7 @@ void cleardevice()
 void closegraph()
 {
 	fflush(file);
-	char* command = "/mnt/fun/PlugRepo/cukr/cukr/graphics/bin/graphics";
+	char* command = "/usr/bin/kuzyagraph";
 	pclose(file);
 }
 ///******ellipse************************************
@@ -133,7 +133,7 @@ int getmaxy()
 //********initGraph*************************
 void initgraph()
 {
-	static char *command= "/mnt/fun/PlugRepo/cukr/cukr/graphics/bin/graphics";
+	static char *command= "/usr/bin/kuzyagraph";
 	file = popen(command, "w");
 }
 //*********initGraph******************************
