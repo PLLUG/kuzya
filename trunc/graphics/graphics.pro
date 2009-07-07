@@ -4,6 +4,5 @@ HEADERS += readstdin.h \
 SOURCES += main.cpp \
  readstdin.cpp \
  graphics.cpp
-TARGET =../../bin/kuzyagraph
+TARGET =../../bin/graphics
 FORMS += graphics.ui
-
