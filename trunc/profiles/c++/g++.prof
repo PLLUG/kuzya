@@ -4,7 +4,7 @@ language=c,c++
 comment=GNU project C and C++ compiler
 
 [compile]
-default=-O2 -o $output$ $options$ $source$
+default=-O2 -o $output$ -I /usr/include/kuzya $options$ $source$
 alternative=-o $output$ $options$ $source$ 
 
 [parse]

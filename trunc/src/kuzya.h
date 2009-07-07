@@ -45,6 +45,7 @@ class QsciPrinter;
 class QsciLexerCPP;
 template <typename T> class QVector;
 template <typename T> class QList;
+class Translator;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -91,6 +92,8 @@ public:
         void toggleFoldsActionEnabled(bool b);
         void setAutoCompletionEnabled(bool b);
         Compiler* getCurrentCompiler();
+
+        void refreshProfileSettings();
 
 protected:
 
@@ -212,6 +215,8 @@ private:
         QsciLexerCPP *cppLexer;
         QString translatedFileName;
         bool nativeMode;
+        Translator *translator;
+        QComboBox *languageComboBox;
 public:
 
 
