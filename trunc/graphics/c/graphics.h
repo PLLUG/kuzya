@@ -111,6 +111,7 @@ void cleardevice()
 void closegraph()
 {
 	fflush(file);
+	sprintf(command, "closegraph();\n");
 	char* command = "/usr/bin/kuzyagraph";
 	pclose(file);
 }
