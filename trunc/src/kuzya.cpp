@@ -601,16 +601,26 @@ void Kuzya::refreshProfileSettings()
 **/
 bool Kuzya::slotSave(void)
 {
+        QString filter;
+        QStringList supportedList = compiler->getSupportedLanguages();
+        foreach (QString lang, supportedList)
+        {
+            filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
+        }
+
+        filter = filter+"All Files (*)";
+
         if (fileName.isEmpty())
         {
-                fileName = QFileDialog::getSaveFileName(this, tr("Save as..."),
-                                           "", tr("C/CPP Source-Files (*.c *.cpp *.cxx *.h);;Pascal Source-Files (*.fpc *.pas *.pp);;All Files (*)"));
+                fileName = QFileDialog::getSaveFileName(this, tr("Save as..."), "", filter);
                 slotUpdateWindowName(false);
         }
+
         if (fileName.isEmpty())
         {
                 return false;
         }
+
 /*        QString name;
         if (nativeMode)
         {
@@ -811,19 +821,6 @@ void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
 **/
 void Kuzya::slotAbout(void)
 {
-       /* QMessageBox::about(this, tr("About"),tr("\t\t The Kuzya\n"
-                                              "\t          Free Development Environment\n\n"
-
-                                              "     Kuzya is simple crossplatform IDE for people who study  programming.Main\n"
-                                              "idea of it is to concentrate attention  of the users only on learning the programming \n"
-                                              "\t          language  but not on usage of IDE\n\n"
-
-                                              "Idea:             Grygoriy Zlobin <zlobin@electronics.wups.lviv.ua>"
-                                              "\nTeam leader: Andriy Shevchyk <shevchyk@users.sourceforge.net> "
-                                              "\nAuthors:       Volodymyr Shevchyk <volder@users.sourceforge.net>"
-                                              "\n                     Victor Sklyar <bouyantgrambler@users.sourceforge.net>"
-                                              "\n                     Alex Chmykhalo <alexchmykhalo@users.sourceforge.net>"));
-    */
     QMessageBox *aboutBox= new QMessageBox( QMessageBox::Information,tr("About"),tr("\t  <big><b><centre> \t    The Kuzya 2.0.1 </centre> </b></big>  "
                                               "\n  <p> Free Development Environment</p>\n\n"
                                               "build on Jul 6 2009"
@@ -844,7 +841,7 @@ void Kuzya::slotAbout(void)
         aboutBox->setIconPixmap(QPixmap(QApplication::applicationDirPath()+"/../resources/Kuzya.png"));
     #else
         aboutBox->setIconPixmap(QPixmap("/usr/share/kuzya/resources/Kuzya.png"));
-#endif
+    #endif
         aboutBox->exec();
     delete aboutBox;
 }
