@@ -3,7 +3,7 @@
 #include <QDirIterator>
 #include <QApplication>
 
-#include "QDebug.h"
+#include <QDebug>
 
 Translator::Translator(QObject *parent) : QObject(parent)
 {
