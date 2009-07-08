@@ -25,6 +25,7 @@
 #include <QDialog>
 #include <QPainter>
 
+#include "readstdin.h"
 #include "ui_graphics.h"
 
 class graphics: public QDialog, private Ui::graphicsForm
@@ -67,6 +68,7 @@ class graphics: public QDialog, private Ui::graphicsForm
 		int numOfPoints;
 		int indexOfSimbol;
 		int numberOf;
+                bool readKomands;
 	
 	private:
  		QPixmap pix;
@@ -74,6 +76,7 @@ class graphics: public QDialog, private Ui::graphicsForm
 		QString methodText;
 		QString textFont;
 		QPen pen;
+                ReadStdIn* rsi;
 };
 
 #endif
