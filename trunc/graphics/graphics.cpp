@@ -22,14 +22,12 @@
 #include <QtGui>
 #include <QTextStream>
 #include <QPainterPath>
-//#include <qwt/qwt_plot.h>
-//#include <qwt/qwt_plot_curve.h>
-//#include <qwt/qwt_painter.h>
 #include <QPoint>
 #include <math.h>
+#include <QDebug>
+#include <QShortcut>
 
 
-#include "readstdin.h"
 #include "graphics.h"
 
 graphics::graphics(QWidget *parent)
@@ -40,6 +38,8 @@ graphics::graphics(QWidget *parent)
 
 	width = 600;
 	height = 400;
+
+        new QShortcut(Qt::Key_Return, this, SLOT(close()));
 
 	curentColor = 0;
 	textSize = 12;
@@ -53,9 +53,11 @@ graphics::graphics(QWidget *parent)
 
 	resize(width, height);
 
-	ReadStdIn* rsi = new ReadStdIn(this);
+        rsi = new ReadStdIn(this);
+        rsi->readKomand = true;
 	connect(rsi, SIGNAL(commandAppeared(QString)), this, SLOT(processCommand(QString)));
-	rsi->start();
+        rsi->start();
+
 }
 
 graphics::~graphics()
@@ -255,6 +257,10 @@ void graphics::processCommand(QString  command)
 	{
 		pix.fill(Qt::transparent);
 	}
+        if(getMethodName(command) == "closegraph")
+        {
+            rsi->readKomand = false;
+        }
 	if(getMethodName(command) == "drawpoly")
 	{
 /*		int pX, pY;

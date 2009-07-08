@@ -19,9 +19,9 @@
  ***************************************************************************/
 
 #include <QDebug>
+#include <stdio.h>
 
 #include "readstdin.h"
-#include <stdio.h>
 
 ReadStdIn::ReadStdIn(QObject *parent)
  : QThread(parent)
@@ -37,9 +37,10 @@ void ReadStdIn::run()
 {
 	QString str;
 	QTextStream in(stdin);
-	for (;;)
+        while (true == readKomand)
 	{
- 		str = in.readLine();
-		emit commandAppeared(str);
+            str = in.readLine();
+            emit commandAppeared(str);
 	}
+        quit();
 }

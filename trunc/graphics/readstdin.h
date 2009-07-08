@@ -33,6 +33,8 @@ public:
     ~ReadStdIn();
 	void run();
 
+        public:
+            bool readKomand;
 
 	signals:
 	void commandAppeared(QString command);
