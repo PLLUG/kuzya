@@ -13,7 +13,8 @@ public:
     Translator(QObject *parent = 0);
     ~Translator();
 
-    QStringList getSupportedTranslations(QString lang);
+    QStringList getSupportedTranslations(QString);
+    QString detectCodeLanguage(QString, QString);
 
 private:
     QStringList supportedTranslations;
