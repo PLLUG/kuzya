@@ -34,6 +34,7 @@ graphics::graphics(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
+        this->setWindowTitle("GraphicCore");
 	setObjectName("graphics");
 
 	width = 600;
