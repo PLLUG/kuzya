@@ -145,8 +145,6 @@ Kuzya::Kuzya(QWidget *parent)
         settings->openLastProject();
         ActOpenRecentFileVector.clear();
 
-        QStringList list = compiler->getSupportedCompilers("c++");
-
 ///-------------------------------------------------------------------------------------------------------------------
 
         connect(actionNew,	SIGNAL(triggered()),this,		SLOT(slotNew()));
@@ -594,6 +592,8 @@ void Kuzya::refreshProfileSettings()
     {
        languageComboBox->addItem(QIcon(path+trans+".png"), trans);
     }
+    QString codeLang = translator->detectCodeLanguage(fileName, language);
+    languageComboBox->setCurrentIndex(supportedTranslations.indexOf(codeLang)+1);
 }
 
 /**
@@ -711,7 +711,6 @@ void Kuzya::slotRun(void)
     if (true == settings->ukrIsCheked())
     {
        // translateCode(fromNative);
-        qDebug() << newFileName;
     }
         compiler->run();
        // translateCode(fromCode);
@@ -1603,7 +1602,6 @@ void Kuzya::slotShowErrorFromList()
 ///***********************************************************************************************************///
 void Kuzya::slotGotoErrorLine(QListWidgetItem * item)
 {
-            qDebug() << item->data(Kuzya::descriptionRole).toString();
             textEditor->markerDeleteAll(currentMarker);
             if (item->data(Kuzya::attachedRole).toBool())
             {
@@ -1616,13 +1614,9 @@ void Kuzya::slotGotoErrorLine(QListWidgetItem * item)
 */
 void Kuzya::translateCode(translationEnum direction)
 {
-
-    qDebug() << fileName;
     QFile fileTrans("d:/Work/ukranian.tr");
     if(!fileTrans.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qDebug() << tr("Can't find translation for the code");
-        statusBar()->showMessage(tr("Can't find translation for the code"));
         return;
     }
     QTextStream trStream(&fileTrans);
@@ -1659,9 +1653,6 @@ void Kuzya::translateCode(translationEnum direction)
         }
         else
         {
-            qDebug() << "key " << key;
-            qDebug() << "tr " << translation;
-            qDebug() << "line " << trLine;
             text.replace(translation, key);
         }
     }
@@ -1670,7 +1661,6 @@ void Kuzya::translateCode(translationEnum direction)
     QFile outFile(name);
     if (!outFile.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-         qDebug() << tr("Can't open out file    ") << name;
          return ;
     }
     QTextStream outStream(&outFile);
