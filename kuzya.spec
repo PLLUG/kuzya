@@ -47,6 +47,7 @@ make
 
 %install
 rm -rf $RPM_BUILD_ROOT
+mkdir -p $RPM_BUILD_ROOT/usr/share/kuzya/bin/
 mkdir -p $RPM_BUILD_ROOT/usr/bin
 mkdir -p $RPM_BUILD_ROOT/usr/doc/%{name}
 mkdir -p $RPM_BUILD_ROOT/usr/include/%{name}
@@ -59,7 +60,7 @@ mkdir -p $RPM_BUILD_ROOT/usr/share/%{name}/resources/translations
 cp -fr ./src/images $RPM_BUILD_ROOT/usr/share/%{name}/src/
 cp -fr ./src/qss $RPM_BUILD_ROOT/usr/share/%{name}/resources/
 
-install -Dpm 755 ./bin/%{name}graph $RPM_BUILD_ROOT/usr/bin/%{name}graph
+install -Dpm 755 ./bin/%{name}graph $RPM_BUILD_ROOT/usr/share/kuzya/bin/%{name}graph
 install -Dpm 755 ./bin/%{name}      $RPM_BUILD_ROOT/usr/bin/%{name}
 install -Dpm 755 ./src/translations/*.qm $RPM_BUILD_ROOT/usr/share/%{name}/src/translations
 
