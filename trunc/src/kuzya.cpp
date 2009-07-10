@@ -55,8 +55,11 @@ Kuzya::Kuzya(QWidget *parent)
         toolBar->addSeparator();
         toolBar->addAction(actionUndo);
         toolBar->addAction(actionRedo);
+        actionCut->setShortcuts(QKeySequence::Cut);
         toolBar->addAction(actionCut);
+        actionCopy->setShortcuts(QKeySequence::Copy);
         toolBar->addAction(actionCopy);
+        actionPaste->setShortcuts(QKeySequence::Paste);
         toolBar->addAction(actionPaste);
         toolBar->addSeparator();
         toolBar->addAction(actionNotificationList);
@@ -234,7 +237,6 @@ Kuzya::Kuzya(QWidget *parent)
         connect(actionNotificationList, SIGNAL(toggled(bool)), this, SLOT(slotShowNotificationList(bool)));
         connect(notificationList, SIGNAL(itemSelectionChanged()), this, SLOT(slotShowErrorFromList()));
         connect(notificationList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotGotoErrorLine(QListWidgetItem*)));
-        connect(actionCode_language, SIGNAL(toggled(bool)), this, SLOT(slotUseNativeMode(bool)));
 
         connect ( actionDefFontSize,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomDef() ) );
         connect ( actionEnlFont,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomIn() ) );
@@ -515,6 +517,7 @@ void Kuzya::slotNew(void)
         if(slotSaveChangesNotifier()==false) return;
 
         textEditor->markerDeleteAll();
+        notificationList->clear();
 
         fileName = QString::null;
         translatedFileName = QString::null;
@@ -537,6 +540,8 @@ void Kuzya::slotOpen(void)
         if(slotSaveChangesNotifier()==false) return;
         textEditor->markerDeleteAll();
 
+        notificationList->clear();
+
         QString filter;
         QStringList supportedList = compiler->getSupportedLanguages();
         foreach (QString lang, supportedList)
@@ -546,7 +551,7 @@ void Kuzya::slotOpen(void)
 
         filter = filter+"All Files (*)";
 
-        QString openedFileName = QFileDialog::getOpenFileName(this, tr("Open File"), DefaultDir, filter/*tr("C/CPP Source-Files (*.c *.cpp *.cxx *.h);;Pascal Source-Files (*.fpc *.pas *.pp);;All Files (*)")*/);
+        QString openedFileName = QFileDialog::getOpenFileName(this, tr("Open File"), DefaultDir, filter);
 
         if ("" != openedFileName)
         {
@@ -575,7 +580,9 @@ void Kuzya::refreshProfileSettings()
         }
     }
 
-    compiler->loadProfile(language, compiler->getSupportedCompilers(language).at(0));
+    if (!language.isEmpty()) compiler->loadProfile(language, compiler->getSupportedCompilers(language).at(0));
+    else compiler->loadProfile("", "");
+
 
 #ifdef WIN32
     QString path = QApplication::applicationDirPath();
@@ -587,6 +594,7 @@ void Kuzya::refreshProfileSettings()
 
     languageComboBox->clear();
     languageComboBox->addItem(QIcon(path+"uk.png"), "en");
+
     QStringList supportedTranslations = translator->getSupportedTranslations(language);
     foreach (QString trans, supportedTranslations)
     {
@@ -601,19 +609,18 @@ void Kuzya::refreshProfileSettings()
 **/
 bool Kuzya::slotSave(void)
 {
-        QString filter;
-        QStringList supportedList = compiler->getSupportedLanguages();
-        foreach (QString lang, supportedList)
-        {
-            filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
-        }
-
-        filter = filter+"All Files (*)";
-
         if (fileName.isEmpty())
         {
-                fileName = QFileDialog::getSaveFileName(this, tr("Save as..."), "", filter);
-                slotUpdateWindowName(false);
+            QString filter;
+            QStringList supportedList = compiler->getSupportedLanguages();
+            foreach (QString lang, supportedList)
+            {
+                filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
+            }
+
+            filter = filter+"All Files (*)";
+            fileName = QFileDialog::getSaveFileName(this, tr("Save as..."), DefaultDir, filter);
+            slotUpdateWindowName(false);
         }
 
         if (fileName.isEmpty())
@@ -655,12 +662,20 @@ bool Kuzya::slotSave(void)
 void Kuzya::slotSave_as(void)
 {
         //QFileDialog::setDirectory(DefaultDir);
-        newFileName = QFileDialog::getSaveFileName(this, tr("Save as..."),
-                                           DefaultDir , tr("Source-Files (*.c *.cpp *.cxx *.h);;All Files (*)"));
-        if (fileName.isEmpty()) return;
+        QString filter;
+        QStringList supportedList = compiler->getSupportedLanguages();
+        foreach (QString lang, supportedList)
+        {
+            filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
+        }
 
-        if (nativeMode) translatedFileName = newFileName;
-        else fileName = newFileName;
+        filter = filter+"All Files (*)";
+        newFileName = QFileDialog::getSaveFileName(this, tr("Save as..."),
+                                           DefaultDir , filter);
+        if (fileName.isEmpty()) fileName = newFileName;
+
+//        if (nativeMode) translatedFileName = newFileName;
+//        else fileName = newFileName;
 
         slotSave();
 }
@@ -1513,6 +1528,7 @@ void Kuzya :: slotOpenRecentFile(QString FileName)
         if(QFile::exists(FileName))
         {
                 openFile(FileName);
+                refreshProfileSettings();
         }
         else
         {
