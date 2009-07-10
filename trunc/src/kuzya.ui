@@ -491,8 +491,8 @@
    <widget class="QMenu" name="menuBuild">
     <property name="geometry">
      <rect>
-      <x>581</x>
-      <y>118</y>
+      <x>802</x>
+      <y>104</y>
       <width>120</width>
       <height>82</height>
      </rect>
@@ -657,7 +657,6 @@
     </property>
     <addaction name="actionNotificationList"/>
     <addaction name="actionCommon"/>
-    <addaction name="actionCode_language"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -824,9 +823,6 @@
    <property name="text">
     <string>Cut</string>
    </property>
-   <property name="shortcut">
-    <string>Shift+Del, Ctrl+X</string>
-   </property>
   </action>
   <action name="actionCopy">
    <property name="icon">
@@ -836,9 +832,6 @@
    <property name="text">
     <string>Copy</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+C, Ctrl+Ins</string>
-   </property>
   </action>
   <action name="actionPaste">
    <property name="icon">
@@ -847,9 +840,6 @@
    </property>
    <property name="text">
     <string>Paste</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+V, Shift+Ins</string>
    </property>
   </action>
   <action name="actionGoToLine">

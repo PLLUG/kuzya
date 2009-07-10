@@ -116,6 +116,8 @@ QStringList Compiler::getSupportedLanguages()
 
 QString Compiler::getSupportedExtensions(QString lang)
 {
+    if (!supportedLanguages.contains(lang)) return QString::null;
+
     int index = supportedLanguages.indexOf(lang);
 
     if (-1 == index) return QString("");
@@ -126,6 +128,7 @@ QStringList Compiler::getSupportedCompilers(QString lang)
 {
     QStringList supported;
 
+    if (!supportedLanguages.contains(lang)) return QStringList();
     int index = supportedLanguages.indexOf(lang);
 
     if (-1 == index) return QStringList();
@@ -139,11 +142,13 @@ QStringList Compiler::getSupportedCompilers(QString lang)
 
 void Compiler::loadProfile(QString lang, QString profile)
 {
-	if (compilerProfile!=NULL) 
+        if (NULL!=compilerProfile)
 	{
 		free(compilerProfile);
 	}
 	
+        if (lang.isEmpty() || profile.isEmpty()) return;
+
         QStringList profiles;
         QStringList locations;
 
@@ -185,6 +190,7 @@ void Compiler::setIncludeDir(QString dir)
 
 bool Compiler::isReady()
 {
+        if (NULL == compilerProfile) return false;
 	if (compilerProfile->status() == QSettings::NoError && runStatus == STOP) return true;
 	else return false;
 }
@@ -286,7 +292,7 @@ void Compiler::run(void)
     //runStatus = RUN;
         qDebug() << programPath;
 #ifdef WIN32
-        startDetached(programPath);
+        startDetached("cmd", QStringList() << "/C" << programPath+"&&pause");
 #else
         startDetached("konsole", QStringList() << "-e" << "/bin/sh" << "-c" << programPath);
 #endif
