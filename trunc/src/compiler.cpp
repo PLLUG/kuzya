@@ -294,7 +294,7 @@ void Compiler::run(void)
 #ifdef WIN32
         startDetached("cmd", QStringList() << "/C" << programPath+"&&pause");
 #else
-        startDetached("konsole", QStringList() << "-e" << "/bin/sh" << "-c" << programPath);
+        startDetached("xterm", QStringList() << "-e" << "/bin/sh" << "-c" << programPath);
 #endif
 }
 
