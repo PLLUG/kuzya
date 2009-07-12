@@ -57,8 +57,6 @@ public:
                                        lineRole = Qt::UserRole+2,
                                        descriptionRole = Qt::UserRole+3};
 
-    enum translationEnum { fromCode, fromNative };
-
     Kuzya(QWidget *parent = 0);
     ~Kuzya();
     
@@ -102,7 +100,6 @@ private slots:
         void slotUpdateWindowName(bool m);
         void slotNew(void);
         void slotOpen(void);
-///void slotSave(void);
         bool slotSave(void);
         void slotSave_as(void);
         void slotPrint(void);
@@ -175,9 +172,9 @@ private slots:
         bool slotSaveChangesNotifier(void);
         void slotShowAutoComplete(void);
         void slotShowNotificationList(bool);
-        void slotShowErrorFromList();
-        void slotGotoErrorLine(QListWidgetItem * item);
-        void slotUseNativeMode(bool);
+        void slotShowErrorFromList(void);
+        void slotGotoErrorLine(QListWidgetItem *);
+        void slotChangeTranslation(QString);
 
         void slotToggleFolds(void);
         void slotZoomDef(void);
@@ -188,8 +185,6 @@ protected:
 //	void keyPressEvent(QKeyEvent *event);
 private:
         void paintErrorMarkers(QList<Compiler::compilerError>* errorList);
-        void translateCode(translationEnum);
-
 
 private:
         QFile *file;
@@ -214,7 +209,6 @@ private:
         QShortcut* shortcut;
         QsciLexerCPP *cppLexer;
         QString translatedFileName;
-        bool nativeMode;
         Translator *translator;
         QComboBox *languageComboBox;
 public:

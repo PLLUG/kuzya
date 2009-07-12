@@ -238,6 +238,8 @@ Kuzya::Kuzya(QWidget *parent)
         connect(notificationList, SIGNAL(itemSelectionChanged()), this, SLOT(slotShowErrorFromList()));
         connect(notificationList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotGotoErrorLine(QListWidgetItem*)));
 
+        connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
+
         connect ( actionDefFontSize,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomDef() ) );
         connect ( actionEnlFont,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomIn() ) );
         connect ( actionShrinkFont,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomOut() ) );
@@ -518,6 +520,7 @@ void Kuzya::slotNew(void)
 
         textEditor->markerDeleteAll();
         notificationList->clear();
+        languageComboBox->clear();
 
         fileName = QString::null;
         translatedFileName = QString::null;
@@ -525,10 +528,6 @@ void Kuzya::slotNew(void)
         textEditor->clear();
         setWindowTitle("Kuzya");
         statusBar()->showMessage(tr("Created new file"), 2000);
-
-//        QTextStream stream(file);
-//        textEditor->setText(stream.readAll());
-//        file->close();
         textEditor->setModified(false);
 }
 
@@ -538,9 +537,6 @@ void Kuzya::slotNew(void)
 void Kuzya::slotOpen(void)
 {
         if(slotSaveChangesNotifier()==false) return;
-        textEditor->markerDeleteAll();
-
-        notificationList->clear();
 
         QString filter;
         QStringList supportedList = compiler->getSupportedLanguages();
@@ -555,6 +551,8 @@ void Kuzya::slotOpen(void)
 
         if ("" != openedFileName)
         {
+                textEditor->markerDeleteAll();
+                notificationList->clear();
                 openFile(openedFileName);
                 refreshProfileSettings();
         }
@@ -592,6 +590,7 @@ void Kuzya::refreshProfileSettings()
     QString path = "/usr/share/kuzya/resources/";
 #endif
 
+    disconnect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
     languageComboBox->clear();
     languageComboBox->addItem(QIcon(path+"uk.png"), "en");
 
@@ -600,8 +599,10 @@ void Kuzya::refreshProfileSettings()
     {
        languageComboBox->addItem(QIcon(path+trans+".png"), trans);
     }
-    QString codeLang = translator->detectCodeLanguage(fileName, language);
-    languageComboBox->setCurrentIndex(supportedTranslations.indexOf(codeLang)+1);
+    translator->openFile(fileName, language);
+    QString codeTranslation = translator->translation();
+    languageComboBox->setCurrentIndex(supportedTranslations.indexOf(codeTranslation)+1);
+    connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
 }
 
 /**
@@ -627,18 +628,6 @@ bool Kuzya::slotSave(void)
         {
                 return false;
         }
-
-/*        QString name;
-        if (nativeMode)
-        {
-                translateCode(fromCode);
-                name = translatedFileName;
-        }
-        else
-        {
-                translateCode(fromNative);
-                name = fileName;
-        }*/
 
         QFile file(fileName);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -672,10 +661,7 @@ void Kuzya::slotSave_as(void)
         filter = filter+"All Files (*)";
         newFileName = QFileDialog::getSaveFileName(this, tr("Save as..."),
                                            DefaultDir , filter);
-        if (fileName.isEmpty()) fileName = newFileName;
-
-//        if (nativeMode) translatedFileName = newFileName;
-//        else fileName = newFileName;
+        if (!fileName.isEmpty()) fileName = newFileName;
 
         slotSave();
 }
@@ -751,7 +737,8 @@ void Kuzya::slotCompile(void)
         {
                 statusBar()->showMessage(tr("Compilling..."));
                 textEditor->setReadOnly(true);
-                compiler->compile(fileName,Compiler::DEFAULT);
+                translator->retranslate();
+                compiler->compile(translator->codeFile(), Compiler::DEFAULT);
         }
         else statusBar()->showMessage(tr("ERROR : Could not find compiler profile or compile mode is not available."));
 }
@@ -1628,84 +1615,8 @@ void Kuzya::slotGotoErrorLine(QListWidgetItem * item)
 ******************************************************************************************
 *****************translate program code to English**************************************
 */
-void Kuzya::translateCode(translationEnum direction)
+void Kuzya::slotChangeTranslation(QString translation)
 {
-    QFile fileTrans("d:/Work/ukranian.tr");
-    if(!fileTrans.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        return;
-    }
-    QTextStream trStream(&fileTrans);
-    translatedFileName = QString::null;
-    QString name;
-    if (fromCode == direction)
-    {
-        if (translatedFileName.isEmpty())
-            translatedFileName = fileName+"t" ;
-        name = translatedFileName;
-    }
-    else
-    {
-        if (fileName.isEmpty())
-            fileName = translatedFileName+"s";
-        name = fileName;
-    }
-
-    QString text = textEditor->text();
-
-    QString trLine;
-    QString key;
-    QString translation;
-    while (!trStream.atEnd())
-    {
-        trLine = trStream.readLine();
-        key = trLine;
-        key.truncate(key.lastIndexOf('='));
-        translation = trLine.section('=', 1);
-//        translation.truncate(translation.lastIndexOf(';'));
-        if (fromCode == direction)
-        {
-            text.replace(key, translation);
-        }
-        else
-        {
-            text.replace(translation, key);
-        }
-    }
-    fileTrans.close();
-
-    QFile outFile(name);
-    if (!outFile.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-         return ;
-    }
-    QTextStream outStream(&outFile);
-    outStream << text;
-    outFile.close();
-
-}
-
-void Kuzya::slotUseNativeMode(bool isNative)
-{
-    nativeMode = isNative;
-
-//    if (nativeMode)
-//        textEditor->setUtf8(true);
-//    else textEditor->setUtf8(false);
-
-   if (!fileName.isEmpty())
-    {
-        if (textEditor->isModified())
-        {
-            slotSave();
-        }
-        if (nativeMode)
-        {
-            openFile(translatedFileName);
-        }
-        else
-        {
-            openFile(fileName);
-        }
-    }
+    translator->setTranslation(translation);
+    openFile(translator->translatedCodeFile());
 }
