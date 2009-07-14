@@ -632,6 +632,17 @@ bool Kuzya::slotSave(void)
         QFile file(fileName);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
+                QMessageBox *msgBox= new QMessageBox();
+                msgBox->setIcon(QMessageBox::Warning);
+                msgBox->setWindowTitle(tr("File cannot be saved "));
+                msgBox->setText(tr("Do you have permision to access data in this folder? Select another place to save this file"));
+                QAbstractButton *OkBtn = msgBox->addButton(tr("Ok"),QMessageBox::ActionRole);
+                msgBox->exec();
+                if (msgBox->clickedButton()==(OkBtn))
+                {
+                    slotSave_as();
+                }
+                delete msgBox;
                 return false ;
         }
         QTextStream stream(&file);
@@ -1495,16 +1506,23 @@ bool Kuzya::slotSaveChangesNotifier(void)
                         if(slotSave()==true)
                         {
                                 addFileNameToList(fileName);
+                                delete msgBox;
                                 return true;
                         }
-                        else return false;///false - Saving was canceled
+                        else
+                        {
+                            delete msgBox;
+                            return false;///false - Saving was canceled
+                        }
                 }
                 if (msgBox->clickedButton() ==noBtn)
                 {
+                        delete msgBox;
                         return true;
                 }
         }
         return true;/// true - File was saved
+
 }
 /**
 *******************************************************************************************************

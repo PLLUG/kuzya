@@ -256,10 +256,10 @@ void OptionsDialog::readODWSettings()
 			mw->retranslateAll();			
 		}
 ///-----DefaultDirectory-------------------------------------------------------------------------
-                if(directoryBox->findText(settings->value("DefaultDir","/home").toString())==-1)
+                if(directoryBox->findText(settings->value("DefaultDir",QDir::homePath()).toString())==-1)
 		{
 			directoryBox->removeItem(0);
-                        directoryBox->insertItem(0,settings->value("DefaultDir","/home").toString());
+                        directoryBox->insertItem(0,settings->value("DefaultDir",QDir::homePath()).toString());
 			directoryBox->setCurrentIndex(0);	
 		}
 		mw->setDefaultDir(directoryBox->currentText());
