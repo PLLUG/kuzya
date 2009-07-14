@@ -672,8 +672,11 @@ void Kuzya::slotSave_as(void)
         filter = filter+"All Files (*)";
         newFileName = QFileDialog::getSaveFileName(this, tr("Save as..."),
                                            DefaultDir , filter);
+        if (!newFileName.isEmpty()) fileName = newFileName;
+/*=======
         if (!fileName.isEmpty()) fileName = newFileName;
-
+>>>>>>> .r78
+*/
         slotSave();
 }
 /**
@@ -725,6 +728,7 @@ void Kuzya::slotRun(void)
        // translateCode(fromNative);
     }
         compiler->run();
+
        // translateCode(fromCode);
 }
 
@@ -881,7 +885,7 @@ void Kuzya::slotUpdateWindowName(bool m)
 /**
 *******************************************************************************************************
 **/
-void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers state)
+void Kuzya::slotMarginClicked(int line)
 {
         if (1 == textEditor->markersAtLine(line))
         {

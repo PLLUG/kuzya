@@ -108,7 +108,7 @@ private slots:
         void slotCompile(void);
         void slotAbout(void);
         void slotAfterCompile(int status);
-        void slotMarginClicked(int margin, int line, Qt::KeyboardModifiers state);
+        void slotMarginClicked(int line);
         void slotVoid(void);
         void slotChar(void);
         void slotWchar_t(void);
