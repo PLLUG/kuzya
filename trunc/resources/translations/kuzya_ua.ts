@@ -1229,7 +1229,7 @@ Authors:       Volodymyr Shevchyk &lt;volder@users.sourceforge.net&gt;
     </message>
     <message>
         <source>Interface</source>
-        <translation>Інтеряейс</translation>
+        <translation>Інтерфейс</translation>
     </message>
     <message>
         <source>Style:</source>
