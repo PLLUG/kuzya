@@ -1280,7 +1280,7 @@ Authors:       Volodymyr Shevchyk &lt;volder@users.sourceforge.net&gt;
     </message>
     <message>
         <source>With prompt</source>
-        <translation>Із prompt</translation>
+        <translation>Із попередженням</translation>
     </message>
     <message>
         <source>Replace</source>
