@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading ui file 'finddialog.ui'
 **
-** Created: Tue Jul 14 22:07:15 2009
-**      by: Qt User Interface Compiler version 4.5.2
+** Created: Wed 15. Jul 03:05:57 2009
+**      by: Qt User Interface Compiler version 4.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
 ********************************************************************************/

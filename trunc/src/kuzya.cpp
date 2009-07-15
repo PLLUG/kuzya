@@ -640,7 +640,7 @@ bool Kuzya::slotSave(void)
                 msgBox->exec();
                 if (msgBox->clickedButton()==(OkBtn))
                 {
-                    slotSave_as();
+                    //slotSave_as();
                 }
                 delete msgBox;
                 return false ;
