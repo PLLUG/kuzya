@@ -60,6 +60,7 @@ void initgraph(int setWidth, int setHeight);
 void pieslice(int x, int y, int stAngle, int endAngle, int radius);
 void putpixel(int x, int y);
 void line(int x, int y, int x1, int y1);
+void lineto(int x, int y);
 void outtext(char *text);
 void outtextxy(int x, int y, char *text);
 void setcolor(COLORS color);
@@ -162,6 +163,12 @@ void putpixel(int x, int y)
 void line(int x, int y, int x1, int y1)
 {
 	sprintf(command, "line(%i,%i,%i,%i);\n",x , y,x1,y1);
+	fprintf(file, command);
+}
+//*********lineto*************************************
+void lineto(int x, int y)
+{
+  	sprintf(command, "lineto(%i, %i);\n", x, y);
 	fprintf(file, command);
 }
 //********outTextXY***********************************
