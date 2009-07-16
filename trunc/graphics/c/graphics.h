@@ -61,6 +61,7 @@ void pieslice(int x, int y, int stAngle, int endAngle, int radius);
 void putpixel(int x, int y);
 void line(int x, int y, int x1, int y1);
 void lineto(int x, int y);
+void moveto(int x, int y);
 void outtext(char *text);
 void outtextxy(int x, int y, char *text);
 void setcolor(COLORS color);
@@ -169,6 +170,12 @@ void line(int x, int y, int x1, int y1)
 void lineto(int x, int y)
 {
   	sprintf(command, "lineto(%i, %i);\n", x, y);
+	fprintf(file, command);
+}
+//*********moveto*************************************
+void moveto(int x, int y)
+{
+  	sprintf(command, "moveto(%i,%i);\n",x , y);
 	fprintf(file, command);
 }
 //********outTextXY***********************************

@@ -404,6 +404,18 @@ void graphics::processCommand(QString  command)
                 x1 = x;
                 y1 = y;
         }
+         if(getMethodName(command) == "lineto")
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
+                x1 = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(")", index+1);
+                numberOf = indexOfSimbol - index;
+                y1 = command.mid(index+1, numberOf-1).toInt(0,10);
+        }
 	if (getMethodName(command) == "outText")
 	{
 		index = command.indexOf("\"", 0);
