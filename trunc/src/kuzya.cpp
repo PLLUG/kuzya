@@ -1675,7 +1675,7 @@ void Kuzya::loadTemplates(QString templatesPath)
     QMenu *menu;
     for(int j=0; j<templatesCroupsList.count();++j)
     {
-        menu=menuTemplates2->addMenu(templatesCroupsList.at(j));
+        menu=menuTemplates->addMenu(templatesCroupsList.at(j));
         size=tlist->beginReadArray(templatesCroupsList.at(j));
         for(int i=0;i<size;++i)
         {
@@ -1696,7 +1696,7 @@ void Kuzya::loadTemplates(QString templatesPath)
 ///***********************************************************************************************************///
 void Kuzya::unloadTemplates()
 {
-    menuTemplates2->clear();
+    menuTemplates->clear();
     disconnect(templatesSignalMapper,SIGNAL(mapped(QString)),this,SLOT(slotPastTemplate(QString)));
 
 
