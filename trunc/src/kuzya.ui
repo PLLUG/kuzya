@@ -527,129 +527,6 @@
     <property name="title">
      <string>Templates</string>
     </property>
-    <widget class="QMenu" name="menVar">
-     <property name="windowIcon">
-      <iconset>
-       <normaloff>:/menu/images/bcukr.png</normaloff>:/menu/images/bcukr.png</iconset>
-     </property>
-     <property name="title">
-      <string>Var</string>
-     </property>
-     <addaction name="actionVoid"/>
-     <addaction name="actionChar"/>
-     <addaction name="actionWchar_t"/>
-     <addaction name="actionShort"/>
-     <addaction name="actionInt"/>
-     <addaction name="actionDouble"/>
-     <addaction name="actionFloat"/>
-     <addaction name="actionLong"/>
-     <addaction name="actionBool"/>
-     <addaction name="separator"/>
-     <addaction name="actionSigned"/>
-     <addaction name="actionUnsigned"/>
-     <addaction name="actionConst"/>
-    </widget>
-    <widget class="QMenu" name="menuTypes">
-     <property name="title">
-      <string>Types</string>
-     </property>
-     <addaction name="actionTypedef"/>
-     <addaction name="actionClass"/>
-     <addaction name="actionStruct"/>
-     <addaction name="actionEnum"/>
-     <addaction name="actionUnion"/>
-    </widget>
-    <widget class="QMenu" name="menuMemory">
-     <property name="title">
-      <string>Memory</string>
-     </property>
-     <addaction name="actionNewMemory"/>
-     <addaction name="actionDelete"/>
-    </widget>
-    <widget class="QMenu" name="menuCast">
-     <property name="title">
-      <string>Cast</string>
-     </property>
-     <addaction name="actionConst_cast"/>
-     <addaction name="actionReinterpret_cast"/>
-     <addaction name="actionStatic_cast"/>
-    </widget>
-    <widget class="QMenu" name="menuBinary">
-     <property name="title">
-      <string>Binary</string>
-     </property>
-     <addaction name="actionAnd"/>
-     <addaction name="actionAnd_eq"/>
-     <addaction name="actionBitand"/>
-     <addaction name="actionBitor"/>
-     <addaction name="actionCompl"/>
-     <addaction name="actionNot"/>
-     <addaction name="actionNot_eq"/>
-     <addaction name="actionOr"/>
-     <addaction name="actionOr_eq"/>
-     <addaction name="actionXor"/>
-     <addaction name="actionXor_eq"/>
-    </widget>
-    <widget class="QMenu" name="menuBool">
-     <property name="title">
-      <string>Bool</string>
-     </property>
-     <addaction name="actionTrue"/>
-     <addaction name="actionFalse"/>
-    </widget>
-    <widget class="QMenu" name="menuModifiers">
-     <property name="title">
-      <string>Modifiers</string>
-     </property>
-     <addaction name="actionPrivate"/>
-     <addaction name="actionProtected"/>
-     <addaction name="actionPublic"/>
-     <addaction name="actionFriend"/>
-     <addaction name="actionVirtual"/>
-     <addaction name="actionExtern"/>
-     <addaction name="actionInline"/>
-     <addaction name="actionStatic"/>
-    </widget>
-    <widget class="QMenu" name="menuFlow_Controll">
-     <property name="title">
-      <string>Flow Controll</string>
-     </property>
-     <addaction name="actionCase"/>
-     <addaction name="actionBreak"/>
-     <addaction name="actionContinue"/>
-     <addaction name="actionDo_while"/>
-     <addaction name="actionElse"/>
-     <addaction name="actionFor"/>
-     <addaction name="actionGoto"/>
-     <addaction name="actionIf"/>
-     <addaction name="actionReturn"/>
-     <addaction name="actionSwitch"/>
-     <addaction name="actionWhile"/>
-    </widget>
-    <widget class="QMenu" name="menuAcception">
-     <property name="title">
-      <string>Acception</string>
-     </property>
-     <addaction name="actionTry"/>
-     <addaction name="actionCatch"/>
-     <addaction name="actionThrow"/>
-    </widget>
-    <widget class="QMenu" name="menuGraphics">
-     <property name="title">
-      <string>Graphics</string>
-     </property>
-     <addaction name="actionRGB"/>
-    </widget>
-    <addaction name="menVar"/>
-    <addaction name="menuTypes"/>
-    <addaction name="menuMemory"/>
-    <addaction name="menuCast"/>
-    <addaction name="menuBinary"/>
-    <addaction name="menuBool"/>
-    <addaction name="menuModifiers"/>
-    <addaction name="menuFlow_Controll"/>
-    <addaction name="menuAcception"/>
-    <addaction name="menuGraphics"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
@@ -669,11 +546,6 @@
     <addaction name="actionShrinkFont"/>
     <addaction name="separator"/>
    </widget>
-   <widget class="QMenu" name="menuTemplates2">
-    <property name="title">
-     <string>Templates2</string>
-    </property>
-   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
@@ -681,7 +553,6 @@
    <addaction name="menuSettings"/>
    <addaction name="menuBuild"/>
    <addaction name="menuHelp"/>
-   <addaction name="menuTemplates2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
