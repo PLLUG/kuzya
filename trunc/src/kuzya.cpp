@@ -578,8 +578,17 @@ void Kuzya::refreshProfileSettings()
         }
     }
 
-    if (!language.isEmpty()) compiler->loadProfile(language, compiler->getSupportedCompilers(language).at(0));
-    else compiler->loadProfile("", "");
+    if (!language.isEmpty())
+    {
+        compiler->loadProfile(language, compiler->getSupportedCompilers(language).at(0));
+
+        QString path = QApplication::applicationDirPath();
+        path.truncate(path.lastIndexOf("/", -1));
+        path = path+"/profiles/";
+        unloadTemplates();
+        loadTemplates(path+"/"+language+"/"+language+".ini");
+    }
+    else compiler->loadProfile("","");
 
 
 #ifdef WIN32
@@ -1641,4 +1650,51 @@ void Kuzya::slotChangeTranslation(QString translation)
 {
     translator->setTranslation(translation);
     openFile(translator->translatedCodeFile());
+}
+///***********************************************************************************************************///
+void Kuzya::slotPastTemplate(QString keyStr)
+{
+    tlist->beginGroup("templates");
+        tlist->beginReadArray(keyStr.left(keyStr.indexOf("/")));
+            tlist->setArrayIndex((keyStr.right(keyStr.length()-keyStr.indexOf("/")-1)).toUInt());
+           textEditor->insert(tlist->value("template").toString());
+        tlist->endArray();
+    tlist->endGroup();
+}
+///***********************************************************************************************************///
+void Kuzya::loadTemplates(QString templatesPath)
+{
+    tlist=new QSettings(templatesPath,QSettings::IniFormat);
+    tlist->beginGroup("templates");
+    int size;
+    templatesCroupsList=tlist->childGroups();
+    templatesSignalMapper = new QSignalMapper(this);
+    QMenu *menu;
+    for(int j=0; j<templatesCroupsList.count();++j)
+    {
+        menu=menuTemplates2->addMenu(templatesCroupsList.at(j));
+        size=tlist->beginReadArray(templatesCroupsList.at(j));
+        for(int i=0;i<size;++i)
+        {
+
+            tlist->setArrayIndex(i);
+            templlateAct.push_back(new QAction(tlist->value("label").toString(),this));
+            menu->addAction(templlateAct[i]);
+            connect(templlateAct[i],SIGNAL(triggered()),templatesSignalMapper,SLOT(map()));
+            templatesSignalMapper->setMapping(templlateAct[i],templatesCroupsList.at(j)+"/"+QVariant(i).toString());
+        }
+        tlist->endArray();
+        templlateAct.clear();
+    }
+    tlist->endGroup();
+    connect(templatesSignalMapper,SIGNAL(mapped(QString)),this,SLOT(slotPastTemplate(QString)));
+
+}
+///***********************************************************************************************************///
+void Kuzya::unloadTemplates()
+{
+
+    disconnect(templatesSignalMapper,SIGNAL(mapped(QString)),this,SLOT(slotPastTemplate(QString)));
+    menuTemplates2->clear();
+
 }
