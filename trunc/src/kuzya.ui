@@ -669,6 +669,11 @@
     <addaction name="actionShrinkFont"/>
     <addaction name="separator"/>
    </widget>
+   <widget class="QMenu" name="menuTemplates2">
+    <property name="title">
+     <string>Templates2</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
@@ -676,6 +681,7 @@
    <addaction name="menuSettings"/>
    <addaction name="menuBuild"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuTemplates2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -1294,6 +1300,9 @@
    <property name="text">
     <string>Enlarge Font</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl++</string>
+   </property>
   </action>
   <action name="actionShrinkFont">
    <property name="icon">
@@ -1302,6 +1311,9 @@
    </property>
    <property name="text">
     <string>Shrink Font</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
    </property>
   </action>
   <action name="actionAbout_Qt">

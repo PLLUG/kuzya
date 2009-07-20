@@ -92,7 +92,7 @@ public:
         Compiler* getCurrentCompiler();
 
         void refreshProfileSettings();
-
+        void LoadTemplates(QString);
 protected:
 
 private slots:
@@ -176,6 +176,7 @@ private slots:
         void slotGotoErrorLine(QListWidgetItem *);
         void slotChangeTranslation(QString);
 
+        void slotPastTemplate(QString);
         void slotToggleFolds(void);
         void slotZoomDef(void);
         void slotZoomIn(void);
@@ -185,6 +186,8 @@ protected:
 //	void keyPressEvent(QKeyEvent *event);
 private:
         void paintErrorMarkers(QList<Compiler::compilerError>* errorList);
+        void loadTemplates(QString);
+        void unloadTemplates();
 
 private:
         QFile *file;
@@ -211,6 +214,11 @@ private:
         QString translatedFileName;
         Translator *translator;
         QComboBox *languageComboBox;
+
+        QSettings *tlist;
+        QVector <QAction*> templlateAct;
+        QSignalMapper *templatesSignalMapper;
+        QStringList templatesCroupsList;
 public:
 
 
