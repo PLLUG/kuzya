@@ -581,12 +581,15 @@ void Kuzya::refreshProfileSettings()
     if (!language.isEmpty())
     {
         compiler->loadProfile(language, compiler->getSupportedCompilers(language).at(0));
-
+   #ifdef WIN32
         QString path = QApplication::applicationDirPath();
         path.truncate(path.lastIndexOf("/", -1));
         path = path+"/profiles/";
+   #else
+        QString path = "/usr/share/kuzya/profiles/";
+   #endif
         unloadTemplates();
-        loadTemplates(path+"/"+language+"/"+language+".ini");
+        loadTemplates(path+language+"/"+language+".ini");
     }
     else compiler->loadProfile("","");
 
@@ -1693,8 +1696,8 @@ void Kuzya::loadTemplates(QString templatesPath)
 ///***********************************************************************************************************///
 void Kuzya::unloadTemplates()
 {
-
-    disconnect(templatesSignalMapper,SIGNAL(mapped(QString)),this,SLOT(slotPastTemplate(QString)));
     menuTemplates2->clear();
+    disconnect(templatesSignalMapper,SIGNAL(mapped(QString)),this,SLOT(slotPastTemplate(QString)));
+
 
 }
