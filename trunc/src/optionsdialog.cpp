@@ -1,22 +1,23 @@
-/***************************************************************************
- *   Copyright (C) 2008 by Volodymyr Shevchyk                              *
- *   i'mnotageycom.ua                                                      *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
+/******************************************************************************
+ *   Copyright (C) 2008 by                                                    *
+ *                     Victor Sklyar (bouyantgrambler@users.sourceforge.net), *
+ *                     Alex Chmykhalo (alexchmykhalo@users.sourceforge.net)   *
+ *                                                                            *
+ *                                                                            *
+ *   This program is free software: you can redistribute it and/or modify     *
+ *   it under the terms of the GNU General Public License as published by     *
+ *   the Free Software Foundation, either version 3 of the License, or        *
+ *   (at your option) any later version.                                      *
+ *                                                                            *
+ *   This program is distributed in the hope that it will be useful,          *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            *
+ *   GNU General Public License for more details.                             *
+ *                                                                            *
+ *   You should have received a copy of the GNU General Public License        *
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>     *
+ ******************************************************************************/
+
 #include <Qsci/qsciscintilla.h>
 #include <QMessageBox>
 #include <QFontDialog>
@@ -34,8 +35,12 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 	trans_en = new QTranslator();
         mw =(Kuzya*)parent;
         textEditor=mw->getTextEditorPointer();
-        settings = new QSettings(QSettings::IniFormat, QSettings::UserScope, "LLUGDevTeam", "Kuzya");
-	//readODWSettings();
+#ifdef WIN32
+        settings = new QSettings(QApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat);
+#else
+        settings = new QSettings("/usr/share/kuzya/settings.ini", QSettings::IniFormat);
+#endif
+        //readODWSettings();
 	connect(closeBtn,SIGNAL(clicked()), this,SLOT(slotClose(void)));
 	connect(applyBtn,SIGNAL(clicked()), this,SLOT(slotApply(void)));
 	connect(okBtn,	 SIGNAL(clicked()), this,SLOT(slotOk(void)));
@@ -47,6 +52,9 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 	connect(directoryBox,SIGNAL(activated(int)),this,SLOT(slotChangeDefDir(int)));
         connect(styleCBox, SIGNAL(activated(int)), this ,SLOT(slotChangeStyle(int)));
         connect(skinCBox, SIGNAL(activated(QString)), this, SLOT(slotChangeSkin(QString)));
+        connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotUpdateCompilerCBox(QString)));
+        connect(compilerComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotLoadCompilerOptions(QString)));
+        connect(browseButton, SIGNAL(clicked()), this, SLOT(slotChangeCompilerLocation()));
 ///-----------------------------Fonts and Colors-------------------------------------------------------
        styleCBox->addItems(QStyleFactory::keys());
        filters<<"*.qss";
@@ -66,28 +74,23 @@ void OptionsDialog::slotUpdateSkinsCBox(void)
 }
 void OptionsDialog::slotLoadCompilerSettings(void)
 {
-       settings->beginGroup("Settings");
+
+/*       settings->beginGroup("Settings");
                 if (cppBtn->isChecked())
                 {
                         settings->beginGroup("Prog_Lang_Cpp");
-                        profileDirLineEdit->setText(settings->value("profileDir").toString());
                         compilerDirLineEdit->setText(settings->value("compilerDir").toString());
-                        libDirLineEdit->setText(settings->value("libDir").toString());
-                        includeDirLineEdit->setText(settings->value("includeDir").toString());
-                        compilerOptionsLineEdit->setText(settings->value("compilerOptions").toString());
+                        compilerOptionsEdit->setPlainText(settings->value("compilerOptions").toString());
                         settings->endGroup();
                 }
                 else
                 {
                         settings->beginGroup("Prog_Lang_Pascal");
-                        profileDirLineEdit->setText(settings->value("profileDir").toString());
                         compilerDirLineEdit->setText(settings->value("compilerDir").toString());
-                        libDirLineEdit->setText(settings->value("libDir").toString());
-                        includeDirLineEdit->setText(settings->value("includeDir").toString());
-                        compilerOptionsLineEdit->setText(settings->value("compilerOptions").toString());
+                        compilerOptionsEdit->setPlainText(settings->value("compilerOptions").toString());
                         settings->endGroup();
                 }
-        settings->endGroup();
+        settings->endGroup();*/
 }
 
 
@@ -114,9 +117,9 @@ void OptionsDialog::slotChangeStyle(int)
 }
 void OptionsDialog::slotChangeSkin(QString sheetName)
 {
- #ifdef WIN32
+#ifdef WIN32
     QFile file(QApplication::applicationDirPath()+"/../resources/qss/"+sheetName.toLower());
- #else
+#else
     QFile file("/usr/share/kuzya/resources/qss/"+sheetName.toLower());
 #endif
     file.open(QFile::ReadOnly);
@@ -163,11 +166,8 @@ void OptionsDialog::writeSettings(void)
 		{
                         settings->setValue("Prog_Lang","cpp");
                         settings->beginGroup("Prog_Lang_Cpp");
-                        settings->setValue("profileDir",profileDirLineEdit->text());
                         settings->setValue("compilerDir",compilerDirLineEdit->text());
-                        settings->setValue("libDir",libDirLineEdit->text());
-                        settings->setValue("includeDir",includeDirLineEdit->text());
-                        settings->setValue("compilerOptions",compilerOptionsLineEdit->text());
+                        settings->setValue("compilerOptions",compilerOptionsEdit->toPlainText().replace("\n", " "));
                         settings->endGroup();
 
 		}
@@ -175,11 +175,8 @@ void OptionsDialog::writeSettings(void)
 		{
                         settings->setValue("Prog_Lang","pascal");
                         settings->beginGroup("Prog_Lang_Pascal");
-                        settings->setValue("profileDir",profileDirLineEdit->text());
                         settings->setValue("compilerDir",compilerDirLineEdit->text());
-                        settings->setValue("libDir",libDirLineEdit->text());
-                        settings->setValue("includeDir",includeDirLineEdit->text());
-                        settings->setValue("compilerOptions",compilerOptionsLineEdit->text());
+                        settings->setValue("compilerOptions",compilerOptionsEdit->toPlainText().replace("\n", " "));
                         settings->endGroup();
                 }
         settings->endGroup();
@@ -267,39 +264,31 @@ void OptionsDialog::readODWSettings()
         settings->endGroup();
 ///-----PROGRAMING--LANGUAGE---------------------------------------------------
         settings->beginGroup("Settings");
+        languageComboBox->clear();
+        languageComboBox->addItems(mw->getCurrentCompiler()->getSupportedLanguages());
                 if(settings->value("Prog_Lang","cpp").toString()=="cpp")
 		{
 			cppBtn->setChecked(true);
                         mw->loadCPPLexer();
                         settings->beginGroup("Prog_Lang_Cpp");
-                        profileDirLineEdit->setText(settings->value("profileDir").toString());
                         compilerDirLineEdit->setText(settings->value("compilerDir").toString());
-                        libDirLineEdit->setText(settings->value("libDir").toString());
-                        includeDirLineEdit->setText(settings->value("includeDir").toString());
-                        compilerOptionsLineEdit->setText(settings->value("compilerOptions").toString());
+                        compilerOptionsEdit->setPlainText(settings->value("compilerOptions").toString());
                         settings->endGroup();
                         mw->getCurrentCompiler()->loadProfile("c++", "g++");
-                        mw->getCurrentCompiler()->setOptions(compilerOptionsLineEdit->text());
-                        mw->getCurrentCompiler()->setIncludeDir(includeDirLineEdit->text());
+                        mw->getCurrentCompiler()->setOptions(compilerOptionsEdit->toPlainText().replace("\n", " "));
                         mw->getCurrentCompiler()->setCompilerDir(compilerDirLineEdit->text());
-                        mw->getCurrentCompiler()->setLibDir(libDirLineEdit->text());
 }
 		else
 		{
 			pascalBtn->setChecked(true);
                         settings->beginGroup("Prog_Lang_Pascal");
-                        profileDirLineEdit->setText(settings->value("profileDir").toString());
                         compilerDirLineEdit->setText(settings->value("compilerDir").toString());
-                        libDirLineEdit->setText(settings->value("libDir").toString());
-                        includeDirLineEdit->setText(settings->value("includeDir").toString());
-                        compilerOptionsLineEdit->setText(settings->value("compilerOptions").toString());
+                        compilerOptionsEdit->setPlainText(settings->value("compilerOptions").toString());
                         settings->endGroup();
                         mw->loadCPPLexer();
                         mw->getCurrentCompiler()->loadProfile("pascal", "fpc");
-                        mw->getCurrentCompiler()->setOptions(compilerOptionsLineEdit->text());
-                        mw->getCurrentCompiler()->setIncludeDir(includeDirLineEdit->text());
+                        mw->getCurrentCompiler()->setOptions(compilerOptionsEdit->toPlainText().replace("\n", " "));
                         mw->getCurrentCompiler()->setCompilerDir(compilerDirLineEdit->text());
-                        mw->getCurrentCompiler()->setLibDir(libDirLineEdit->text());
                         mw->loadPascalLexer();
 		}	
         settings->endGroup();
@@ -486,4 +475,33 @@ void OptionsDialog::slotChangeDefDir(int index)
 bool OptionsDialog::ukrIsCheked()
 {
     return ukrRBtn_2->isChecked();
+}
+
+void OptionsDialog::slotUpdateCompilerCBox(QString lang)
+{
+        QStringList compilers = mw->getCurrentCompiler()->getSupportedCompilers(lang);
+        compilerComboBox->clear();
+        compilerComboBox->addItems(compilers);
+}
+
+void OptionsDialog::slotLoadCompilerOptions(QString comp)
+{
+       QString lang = languageComboBox->currentText();
+       QString info = mw->getCurrentCompiler()->getCompilerInfo(lang, comp);
+       compilerInfo->setText(info);
+}
+
+void OptionsDialog::slotChangeCompilerLocation()
+{
+    QString comp = compilerComboBox->currentText();
+    QString dir = QFileDialog::getExistingDirectory(this,
+                                                   tr("Show compiler location: (")+comp+")",
+                                                   "/home",
+                                                   QFileDialog::ShowDirsOnly
+                                                   | QFileDialog::DontResolveSymlinks);
+    if((dir!="")&&(directoryBox->findText(dir)==-1))
+    {
+        compilerDirLineEdit->clear();
+        compilerDirLineEdit->setText(dir);
+    }
 }

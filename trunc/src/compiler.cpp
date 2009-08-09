@@ -1,22 +1,23 @@
-/***************************************************************************
- *   Copyright (C) 2009 by Alex Chmykhalo                                  *
- *   alexchmykhalo@users.sourceforge.net                                   *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
+/******************************************************************************
+ *   Copyright (C) 2008 by                                                    *
+ *                     Alex Chmykhalo (alexchmykhalo@users.sourceforge.net)   *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *   This program is free software: you can redistribute it and/or modify     *
+ *   it under the terms of the GNU General Public License as published by     *
+ *   the Free Software Foundation, either version 3 of the License, or        *
+ *   (at your option) any later version.                                      *
+ *                                                                            *
+ *   This program is distributed in the hope that it will be useful,          *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            *
+ *   GNU General Public License for more details.                             *
+ *                                                                            *
+ *   You should have received a copy of the GNU General Public License        *
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>     *
+ ******************************************************************************/
+
 
 #include <QSettings>
 #include <QDirIterator>
@@ -140,6 +141,35 @@ QStringList Compiler::getSupportedCompilers(QString lang)
     return supported;
 }
 
+QString Compiler::getCompilerInfo(QString lang, QString profile)
+{
+        if (lang.isEmpty() || profile.isEmpty()) return "<none>";
+
+        QStringList profiles;
+        QStringList locations;
+
+        int index = supportedLanguages.indexOf(lang);
+        if (-1 == index) return "<none>";
+
+        QString str = supportedCompilers.at(index);
+        profiles = str.split(" ");
+        profiles.removeAll("");
+
+        str = profilesPathList.at(index);
+        locations = str.split(" ");
+        locations.removeAll("");
+
+        index = profiles.indexOf(profile);
+        if (-1 == index) return "<none>";
+
+        QSettings prof(locations.at(index), QSettings::IniFormat);
+        prof.beginGroup("info");
+        QString info = prof.value("comment", "<none>").toString();
+        prof.endGroup();
+    
+        return info;
+}
+
 void Compiler::loadProfile(QString lang, QString profile)
 {
         if (NULL!=compilerProfile)
@@ -176,16 +206,6 @@ void Compiler::setOptions(QString str)
 void Compiler::setCompilerDir(QString dir)
 {
 	compilerDir = dir;
-}
-
-void Compiler::setLibDir(QString dir)
-{
-	libDir = dir;
-}
-
-void Compiler::setIncludeDir(QString dir)
-{
-	includeDir = dir;
 }
 
 bool Compiler::isReady()
@@ -230,6 +250,7 @@ void Compiler::compile(QString sourceFile,int compileMode)
 	errorList.clear();
 
 	programPath = sourceFile.left(sourceFile.lastIndexOf('.'));
+        QString sourcePath = sourceFile.left(sourceFile.lastIndexOf('/'));
 
 	compilerProfile->beginGroup("info");
 	QString compiler = compilerProfile->value("compiler","").toString();	
@@ -269,9 +290,9 @@ void Compiler::compile(QString sourceFile,int compileMode)
 		param.replace(QString("$source$"),sourceFile);
 		param.replace(QString("$output$"),programPath);
 		param.replace(QString("$options$"),options);	
-		param.replace(QString("$libdir$"),libDir);	
+                param.replace(QString("$libdir$"),libDir);
 		param.replace(QString("$compilerdir$"),compilerDir);	
-		param.replace(QString("$includedir$"),includeDir);	
+                param.replace(QString("$includedir$"),includeDir);
 	}
 
 	compilerProfile->beginGroup("parse");
