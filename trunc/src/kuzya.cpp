@@ -100,28 +100,26 @@ Kuzya::Kuzya(QWidget *parent)
 
         //QsciLexerCPP *
         cppLexer = new QsciLexerCPP(this);
-        //cppLexer->setAutoIndentStyle(QsciScintilla::AiClosing);
+       
         textEditor->setLexer(cppLexer);
 
-   //     textEditor->setAutoIndent(true);///!!!!!!!!!!!!!!!!!!!!!!!
-/*
-        QsciLexerPascal *pascalLexer = new QsciLexerPascal(this);
-        textEditor->setLexer(pascalLexer);
-*/
         textEditor->setBraceMatching(QsciScintilla::SloppyBraceMatch);
         textEditor->setMatchedBraceBackgroundColor(QColor(200, 100, 100));
 
         textEditor->setSelectionBackgroundColor(QColor(100, 100, 200));
-
-        textEditor->setMarginSensitivity(1, true);
-        textEditor->setMarginLineNumbers(2, true);
-        textEditor->setMarginWidth(2, 40);
-
         textEditor->setUtf8(true);
 
         errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
         warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor));
         currentMarker = textEditor->markerDefine(QPixmap(":/markers/current_line","",Qt::AutoColor));
+
+        textEditor->setMarginMarkerMask(1,1);
+        textEditor->setMarginMarkerMask(2,4);
+        textEditor->setMarginWidth(1, 15);
+        textEditor->setMarginWidth(2, 20);
+       
+        textEditor->setMarginSensitivity(1, true);
+        //textEditor->setMarginsBackgroundColor(QColor(190, 178, 157,255));
 
         file = new QFile();
         goToLine = new GoToLineDialog(textEditor);
@@ -139,10 +137,7 @@ Kuzya::Kuzya(QWidget *parent)
         shortcut = new QShortcut(textEditor);
         shortcut->setKey(Qt::CTRL+Qt::Key_Space);
 
-        //textEditor->setIndentationGuides(true);
-        //textEditor->setIndentationsUseTabs(true);
-        //textEditor->setIndentation(7,20);
-
+        
         settings->readODWSettings();
         settings->openLastProject();
         settings->openLastProject();
@@ -173,7 +168,7 @@ Kuzya::Kuzya(QWidget *parent)
         connect(actionReplace,	SIGNAL(triggered()),replaceText,	SLOT(slotReplaceDialog()));
         connect(textEditor,	SIGNAL(cursorPositionChanged (int, int)),this,	SLOT(slotUpdateStatusLabel(int, int)));
         connect(textEditor,	SIGNAL(modificationChanged(bool)),	 this,	SLOT(slotUpdateWindowName(bool)));
-        connect(textEditor,	SIGNAL(marginClicked (int, int, Qt::KeyboardModifiers)), this, SLOT(slotMarginClicked(int)));
+        connect(textEditor,	SIGNAL(marginClicked (int, int, Qt::KeyboardModifiers)), this, SLOT(slotMarginClicked(int, int, Qt::KeyboardModifiers)));
         connect(compiler,	SIGNAL(compileEnded(int)),		 this,	SLOT(slotAfterCompile(int)));
 
         connect(actionNotificationList, SIGNAL(toggled(bool)), this, SLOT(slotShowNotificationList(bool)));
@@ -317,6 +312,8 @@ void Kuzya::openFile(QString FileName)
         QTextStream stream(file);
         textEditor->setText(stream.readAll());
         file->close();
+
+        if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
 
         textEditor->setModified(false);
 
@@ -468,6 +465,7 @@ void Kuzya::slotNew(void)
         translatedFileName = QString::null;
 
         textEditor->clear();
+        textEditor->setMarginWidth(3,"12");
         setWindowTitle("Kuzya");
         statusBar()->showMessage(tr("Created new file"), 2000);
         textEditor->setModified(false);
@@ -677,10 +675,10 @@ void Kuzya::slotRun(void)
                 statusBar()->showMessage(tr("No binary to run"), 2000);
                 return;
         }
-    if (true == settings->ukrIsCheked())
+    /*if (true == settings->ukrIsCheked())
     {
        // translateCode(fromNative);
-    }
+    }*/
         compiler->run();
 
        // translateCode(fromCode);
@@ -839,14 +837,15 @@ void Kuzya::slotUpdateWindowName(bool m)
 /**
 *******************************************************************************************************
 **/
-void Kuzya::slotMarginClicked(int line)
+void Kuzya::slotMarginClicked(int margin,int line,Qt::KeyboardModifiers)
 {
         if (1 == textEditor->markersAtLine(line))
         {
             QListWidgetItem *item = notificationList->findItems(QString("Compilation error (line %1)").arg(line+1), Qt::MatchContains).at(0);
             notificationList->setCurrentItem(item);
             notificationList->setFocus();
-            textEditor->markerDeleteAll(currentMarker);
+            textEditor->markerDeleteAll(currentMarker);            
+            textEditor->markerAdd(line,currentMarker);
             statusBar()->showMessage(item->data(Kuzya::descriptionRole).toString());
         }
 }
@@ -1054,7 +1053,7 @@ void Kuzya::loadTemplates(QString templatesPath)
 void Kuzya::unloadTemplates()
 {
     menuTemplates->clear();
-    disconnect(templatesSignalMapper,SIGNAL(mapped(QString)),this,SLOT(slotPastTemplate(QString)));
+    if(templatesSignalMapper==0) disconnect(templatesSignalMapper,SIGNAL(mapped(QString)),this,SLOT(slotPastTemplate(QString)));
 
 
 }

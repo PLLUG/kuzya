@@ -40,16 +40,12 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 #else
         settings = new QSettings("/usr/share/kuzya/settings.ini", QSettings::IniFormat);
 #endif
-        //readODWSettings();
-	connect(closeBtn,SIGNAL(clicked()), this,SLOT(slotClose(void)));
+        connect(closeBtn,SIGNAL(clicked()), this,SLOT(slotClose(void)));
 	connect(applyBtn,SIGNAL(clicked()), this,SLOT(slotApply(void)));
 	connect(okBtn,	 SIGNAL(clicked()), this,SLOT(slotOk(void)));
         connect(fontBtn_5, SIGNAL(clicked()), this,SLOT(slotChangeFont(void)));
 	connect(defaultBtn,SIGNAL(clicked()),this,SLOT(slotDefaultAll(void)));
-        connect(pascalBtn, SIGNAL(clicked()), this, SLOT(slotLoadCompilerSettings(void)));
-        connect(cppBtn, SIGNAL(clicked()), this, SLOT(slotLoadCompilerSettings(void)));
-//	connect(formClrBtn,SIGNAL(clicked()),this,SLOT(slotChangeFormColor(void)));
-	connect(directoryBox,SIGNAL(activated(int)),this,SLOT(slotChangeDefDir(int)));
+        connect(directoryBox,SIGNAL(activated(int)),this,SLOT(slotChangeDefDir(int)));
         connect(styleCBox, SIGNAL(activated(int)), this ,SLOT(slotChangeStyle(int)));
         connect(skinCBox, SIGNAL(activated(QString)), this, SLOT(slotChangeSkin(QString)));
         connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotUpdateCompilerCBox(QString)));
@@ -72,28 +68,6 @@ void OptionsDialog::slotUpdateSkinsCBox(void)
 {
      skinCBox->addItems(stylesDir.entryList(stylesDir.nameFilters(),QDir::Files,QDir::Name));
 }
-void OptionsDialog::slotLoadCompilerSettings(void)
-{
-
-/*       settings->beginGroup("Settings");
-                if (cppBtn->isChecked())
-                {
-                        settings->beginGroup("Prog_Lang_Cpp");
-                        compilerDirLineEdit->setText(settings->value("compilerDir").toString());
-                        compilerOptionsEdit->setPlainText(settings->value("compilerOptions").toString());
-                        settings->endGroup();
-                }
-                else
-                {
-                        settings->beginGroup("Prog_Lang_Pascal");
-                        compilerDirLineEdit->setText(settings->value("compilerDir").toString());
-                        compilerOptionsEdit->setPlainText(settings->value("compilerOptions").toString());
-                        settings->endGroup();
-                }
-        settings->endGroup();*/
-}
-
-
 OptionsDialog::~OptionsDialog()
 {
 }
@@ -160,26 +134,7 @@ void OptionsDialog::writeSettings(void)
 		}
 		///-------------------------------------------------------------------------------------------
         settings->endGroup();
-///-----PROGRAMING--LANGUAGE---------------------------------------------------
-        settings->beginGroup("Settings");
-		if (cppBtn->isChecked())
-		{
-                        settings->setValue("Prog_Lang","cpp");
-                        settings->beginGroup("Prog_Lang_Cpp");
-                        settings->setValue("compilerDir",compilerDirLineEdit->text());
-                        settings->setValue("compilerOptions",compilerOptionsEdit->toPlainText().replace("\n", " "));
-                        settings->endGroup();
 
-		}
-		else
-		{
-                        settings->setValue("Prog_Lang","pascal");
-                        settings->beginGroup("Prog_Lang_Pascal");
-                        settings->setValue("compilerDir",compilerDirLineEdit->text());
-                        settings->setValue("compilerOptions",compilerOptionsEdit->toPlainText().replace("\n", " "));
-                        settings->endGroup();
-                }
-        settings->endGroup();
 ///-----RECENT FILES------------------------------------------------------------------
 	
         settings->beginWriteArray("RecentFiles");
@@ -226,10 +181,10 @@ void OptionsDialog::readODWSettings()
 		mw->setMaxCount_RFileList(sB_LOFCount->value());
 ///-----Style&Skins----------------------------------------------------------------------
                 settings->beginGroup("Interface");
-                    styleCBox->setCurrentIndex(styleCBox->findText(settings->value("Style","default").toString()));
-                    qApp->setStyle(settings->value("Style","default").toString());
-                    skinCBox->setCurrentIndex(skinCBox->findText(settings->value("Skin","default").toString()));
-                    slotChangeSkin(settings->value("Skin","default").toString());
+                    styleCBox->setCurrentIndex(styleCBox->findText(settings->value("Style","Cleanlooks").toString()));
+                    qApp->setStyle(settings->value("Style","Cleanlooks").toString());
+                    skinCBox->setCurrentIndex(skinCBox->findText(settings->value("Skin","default.qss").toString()));
+                    slotChangeSkin(settings->value("Skin","default.qss").toString());
                 settings->endGroup();
 ///-----LANGUAGE-------------------------------------------------------------------------
                 if(settings->value("Language","eng").toString()=="ukr")
@@ -262,36 +217,7 @@ void OptionsDialog::readODWSettings()
 		mw->setDefaultDir(directoryBox->currentText());
 		///------------------------------------------------------------------------------
         settings->endGroup();
-///-----PROGRAMING--LANGUAGE---------------------------------------------------
-        settings->beginGroup("Settings");
-        languageComboBox->clear();
-        languageComboBox->addItems(mw->getCurrentCompiler()->getSupportedLanguages());
-                if(settings->value("Prog_Lang","cpp").toString()=="cpp")
-		{
-			cppBtn->setChecked(true);
-                        mw->loadCPPLexer();
-                        settings->beginGroup("Prog_Lang_Cpp");
-                        compilerDirLineEdit->setText(settings->value("compilerDir").toString());
-                        compilerOptionsEdit->setPlainText(settings->value("compilerOptions").toString());
-                        settings->endGroup();
-                        mw->getCurrentCompiler()->loadProfile("c++", "g++");
-                        mw->getCurrentCompiler()->setOptions(compilerOptionsEdit->toPlainText().replace("\n", " "));
-                        mw->getCurrentCompiler()->setCompilerDir(compilerDirLineEdit->text());
-}
-		else
-		{
-			pascalBtn->setChecked(true);
-                        settings->beginGroup("Prog_Lang_Pascal");
-                        compilerDirLineEdit->setText(settings->value("compilerDir").toString());
-                        compilerOptionsEdit->setPlainText(settings->value("compilerOptions").toString());
-                        settings->endGroup();
-                        mw->loadCPPLexer();
-                        mw->getCurrentCompiler()->loadProfile("pascal", "fpc");
-                        mw->getCurrentCompiler()->setOptions(compilerOptionsEdit->toPlainText().replace("\n", " "));
-                        mw->getCurrentCompiler()->setCompilerDir(compilerDirLineEdit->text());
-                        mw->loadPascalLexer();
-		}	
-        settings->endGroup();
+
 ///-----RECENT FILES------------------------------------------------------------------
 
         int size=settings->beginReadArray("RecentFiles");
@@ -325,13 +251,21 @@ void OptionsDialog::readODWSettings()
                 lineNumbCHB->setChecked(settings->value("ShowLineNumber",false).toBool());
                 if(lineNumbCHB->isChecked())
                 {
-                    textEditor->setMarginWidth(1,"1234");
+                    if(textEditor->lines()>2)
+                    {
+                        textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
+                    }else
+                    {
+                        textEditor->setMarginWidth(3,"12");
+                    }
+                    isLineMarginVisible=true;
                 }
                 else
                 {
-                    textEditor->setMarginWidth(1,"");
+                    textEditor->setMarginWidth(3,"");
+                    isLineMarginVisible=false;
                 }
-                textEditor->setMarginLineNumbers(1,lineNumbCHB->isChecked());
+                textEditor->setMarginLineNumbers(3,lineNumbCHB->isChecked());
 
                 autoComplCHB->setChecked(settings->value("WordCompletion",false).toBool());
                 mw->setAutoCompletionEnabled(autoComplCHB->isChecked());         /// nado shoto sdelat'
@@ -349,12 +283,12 @@ void OptionsDialog::readODWSettings()
                 foldingMarkersCHB->setChecked(settings->value("CodeFolding",true).toBool());
                if(foldingMarkersCHB->isChecked())
                 {
-                        textEditor->setFolding(QsciScintilla::PlainFoldStyle,2);
+                        textEditor->setFolding(QsciScintilla::PlainFoldStyle,4);
                         mw->toggleFoldsActionEnabled(true);
                 }
                 else
                 {
-                        textEditor->setFolding(QsciScintilla::NoFoldStyle,2);
+                        textEditor->setFolding(QsciScintilla::NoFoldStyle,4);
                         mw->toggleFoldsActionEnabled(false);
                 }
                 settings->beginGroup("/Indentation");
@@ -437,10 +371,9 @@ void OptionsDialog::slotDefaultAll(void)
 	QMessageBox msgBox;
 	msgBox.setWindowTitle(tr("Set default settings?"));
 	msgBox.setText(tr("Are you sure?"));
-	//msgBox.setInformativeText();
 	msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 	msgBox.setDefaultButton(QMessageBox::No);
-        /*int ret = */msgBox.exec();
+        msgBox.exec();
 	if (msgBox.clickedButton() != msgBox.defaultButton()) 
 	{
                 settings->remove("Settings/MainWindow/RecentFiles");
@@ -472,10 +405,6 @@ void OptionsDialog::slotChangeDefDir(int index)
 	}
 }
 
-bool OptionsDialog::ukrIsCheked()
-{
-    return ukrRBtn_2->isChecked();
-}
 
 void OptionsDialog::slotUpdateCompilerCBox(QString lang)
 {
