@@ -109,7 +109,7 @@ private slots:
         void slotCompile(void);
         void slotAbout(void);
         void slotAfterCompile(int status);
-        void slotMarginClicked(int line);
+        void slotMarginClicked(int margin,int line,Qt::KeyboardModifiers);
         void slotHelpKuzya(void);
         void slotOpenRecentFile(QString);
         bool slotSaveChangesNotifier(void);

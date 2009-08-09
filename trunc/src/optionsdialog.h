@@ -67,7 +67,7 @@ private slots:
 	void slotChangeDefDir(int);
         void slotChangeStyle(int);
         void slotChangeSkin(QString);
-        void slotLoadCompilerSettings(void);
+      //  void slotLoadCompilerSettings(void);
         void slotUpdateSkinsCBox(void);
         void slotUpdateCompilerCBox(QString);
         void slotLoadCompilerOptions(QString);
@@ -85,6 +85,7 @@ private:
         QDir stylesDir;
         QStringList filters;
 public:	
+    bool isLineMarginVisible;
 	
 private:
 	
