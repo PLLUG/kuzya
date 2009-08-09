@@ -40,7 +40,8 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 #else
         settings = new QSettings("/usr/share/kuzya/settings.ini", QSettings::IniFormat);
 #endif
-        connect(closeBtn,SIGNAL(clicked()), this,SLOT(slotClose(void)));
+        //readODWSettings();
+	connect(closeBtn,SIGNAL(clicked()), this,SLOT(slotClose(void)));
 	connect(applyBtn,SIGNAL(clicked()), this,SLOT(slotApply(void)));
 	connect(okBtn,	 SIGNAL(clicked()), this,SLOT(slotOk(void)));
         connect(fontBtn_5, SIGNAL(clicked()), this,SLOT(slotChangeFont(void)));
@@ -68,6 +69,8 @@ void OptionsDialog::slotUpdateSkinsCBox(void)
 {
      skinCBox->addItems(stylesDir.entryList(stylesDir.nameFilters(),QDir::Files,QDir::Name));
 }
+
+
 OptionsDialog::~OptionsDialog()
 {
 }
@@ -134,7 +137,26 @@ void OptionsDialog::writeSettings(void)
 		}
 		///-------------------------------------------------------------------------------------------
         settings->endGroup();
+///-----PROGRAMING--LANGUAGE---------------------------------------------------
+ /*       settings->beginGroup("Settings");
+		if (cppBtn->isChecked())
+		{
+                        settings->setValue("Prog_Lang","cpp");
+                        settings->beginGroup("Prog_Lang_Cpp");
+                        settings->setValue("compilerDir",compilerDirLineEdit->text());
+                        settings->setValue("compilerOptions",compilerOptionsEdit->toPlainText().replace("\n", " "));
+                        settings->endGroup();
 
+		}
+		else
+		{
+                        settings->setValue("Prog_Lang","pascal");
+                        settings->beginGroup("Prog_Lang_Pascal");
+                        settings->setValue("compilerDir",compilerDirLineEdit->text());
+                        settings->setValue("compilerOptions",compilerOptionsEdit->toPlainText().replace("\n", " "));
+                        settings->endGroup();
+                }
+        settings->endGroup();*/
 ///-----RECENT FILES------------------------------------------------------------------
 	
         settings->beginWriteArray("RecentFiles");
@@ -217,7 +239,12 @@ void OptionsDialog::readODWSettings()
 		mw->setDefaultDir(directoryBox->currentText());
 		///------------------------------------------------------------------------------
         settings->endGroup();
+///-----PROGRAMING--LANGUAGE---------------------------------------------------
 
+        languageComboBox->clear();
+        languageComboBox->addItems(mw->getCurrentCompiler()->getSupportedLanguages());
+
+        settings->endGroup();
 ///-----RECENT FILES------------------------------------------------------------------
 
         int size=settings->beginReadArray("RecentFiles");
@@ -371,9 +398,10 @@ void OptionsDialog::slotDefaultAll(void)
 	QMessageBox msgBox;
 	msgBox.setWindowTitle(tr("Set default settings?"));
 	msgBox.setText(tr("Are you sure?"));
+	//msgBox.setInformativeText();
 	msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 	msgBox.setDefaultButton(QMessageBox::No);
-        msgBox.exec();
+        /*int ret = */msgBox.exec();
 	if (msgBox.clickedButton() != msgBox.defaultButton()) 
 	{
                 settings->remove("Settings/MainWindow/RecentFiles");
@@ -404,8 +432,12 @@ void OptionsDialog::slotChangeDefDir(int index)
 	
 	}
 }
-
-
+/*
+bool OptionsDialog::ukrIsCheked()
+{
+    return ukrRBtn_2->isChecked();
+}
+*/
 void OptionsDialog::slotUpdateCompilerCBox(QString lang)
 {
         QStringList compilers = mw->getCurrentCompiler()->getSupportedCompilers(lang);
