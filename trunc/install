@@ -1,23 +1,25 @@
-#!
-#sh
+#!/bin/sh
+echo "starting installing kuzya into system  ...please wait"
 
 mkdir -p /usr/share/kuzya
 mkdir -p /usr/share/kuzya/bin
 mkdir -p /usr/bin
 mkdir -p /usr/doc/kuzya
 mkdir -p /usr/include/kuzya
+mkdir -p /usr/share/kuzya/resources/translations
+echo "needed dirs were made"
 
 cp -f ./graphics/c/graphics.h /usr/include/kuzya/
 cp -fr ./doc /usr/doc/kuzya
 cp -fr ./profiles /usr/share/kuzya/
 cp -fr ./resources /usr/share/kuzya/
-
-mkdir -p /usr/share/kuzya/resources/translations
-
 cp -fr ./src/images /usr/share/kuzya/src/
 cp -fr ./resources/qss /usr/share/kuzya/resources/
+echo "needed files were copyred"
 
 install -Dpm 755 ../bin/kuzyagraph /usr/share/kuzya/bin/kuzyagraph
 install -Dpm 755 ../bin/kuzya      /usr/bin/kuzya
 install -Dpm 755 ./resources/translations/*.qm /usr/share/%{name}/src/translations
+echo "kuzya was instiled"
 
+echo "finished instiling!"
