@@ -38,6 +38,7 @@
 #include "kuzya.h"
 #include "helpbrowser.h"
 #include "translator.h"
+#include "helpassistant.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -951,6 +952,7 @@ void Kuzya::slotHelpKuzya()
 #endif
         helpBrowser->resize(800,600);
         helpBrowser->show();
+        //HelpAssistant::showPage("main.htm");
 }
 ///***********************************************************************************************************///
 void Kuzya::slotToggleFolds(void)
