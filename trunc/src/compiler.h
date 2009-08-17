@@ -41,6 +41,8 @@ public:
 		QString description;
 	};
 
+        typedef compilerError compilerWarning;
+
 	Compiler(QObject *parent = 0);
         ~Compiler();
 
@@ -55,7 +57,8 @@ public:
 	bool isModeAvailable(int compileMode);
 	void compile(QString sourceFile,int compileMode = DEFAULT);
 	void run(void);
-	QList<compilerError>* getLastErrors(void);
+        QList<compilerError>* getLastErrors(void);
+        QList<compilerWarning>* getLastWarnings(void);
 
 signals:
         void compileEnded(int status);
@@ -67,17 +70,20 @@ private slots:
 
 private:
         void refreshSupported();
+        QString getProfilePath(QString lang, QString profile);
 
         QString programPath;
 	int runStatus;
-	QList<compilerError> errorList;
+        QList<compilerError> errorList;
+        QList<compilerWarning> warningList;
         QString compiler;
 	QString compilerDir;
 	QString includeDir;
 	QString libDir;
 	QString options;
         QSettings* compilerProfile;
-	QStringList parseParamList;
+        QStringList parseErrorList;
+        QStringList parseWarningList;
         QStringList supportedLanguages;
         QStringList supportedExtensions;
         QStringList profileLocations;

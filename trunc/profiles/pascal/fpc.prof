@@ -7,6 +7,6 @@ comment=Free Pascal Compiler
 default=$options$ $source$
 alternative=-n $options$ $source$
 
-[parse]
-error_messages_1=
-error_messages_2=
+[errors]
+
+[warnings]
