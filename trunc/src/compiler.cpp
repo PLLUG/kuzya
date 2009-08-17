@@ -107,7 +107,27 @@ void Compiler::refreshSupported()
     }
 }
 
+QString Compiler::getProfilePath(QString lang, QString profile)
+{
+        QStringList profiles;
+        QStringList locations;
 
+        int index = supportedLanguages.indexOf(lang);
+        if (-1 == index) return QString::Null();
+
+        QString str = supportedCompilers.at(index);
+        profiles = str.split(" ");
+        profiles.removeAll("");
+
+        str = profilesPathList.at(index);
+        locations = str.split(" ");
+        locations.removeAll("");
+
+        index = profiles.indexOf(profile);
+        if (-1 == index) return QString::Null();
+
+        return locations.at(index);
+}
 
 QStringList Compiler::getSupportedLanguages()
 {
@@ -145,24 +165,10 @@ QString Compiler::getCompilerInfo(QString lang, QString profile)
 {
         if (lang.isEmpty() || profile.isEmpty()) return "<none>";
 
-        QStringList profiles;
-        QStringList locations;
+        QString profPath = getProfilePath(lang, profile);
+        if (QString::Null() == profPath) return "<none>";
 
-        int index = supportedLanguages.indexOf(lang);
-        if (-1 == index) return "<none>";
-
-        QString str = supportedCompilers.at(index);
-        profiles = str.split(" ");
-        profiles.removeAll("");
-
-        str = profilesPathList.at(index);
-        locations = str.split(" ");
-        locations.removeAll("");
-
-        index = profiles.indexOf(profile);
-        if (-1 == index) return "<none>";
-
-        QSettings prof(locations.at(index), QSettings::IniFormat);
+        QSettings prof(profPath, QSettings::IniFormat);
         prof.beginGroup("info");
         QString info = prof.value("comment", "<none>").toString();
         prof.endGroup();
@@ -179,23 +185,10 @@ void Compiler::loadProfile(QString lang, QString profile)
 	
         if (lang.isEmpty() || profile.isEmpty()) return;
 
-        QStringList profiles;
-        QStringList locations;
+        QString profPath = getProfilePath(lang, profile);
+        if (QString::Null() == profPath) return;
 
-        int index = supportedLanguages.indexOf(lang);
-        if (-1 == index) return;
-
-        QString str = supportedCompilers.at(index);
-        profiles = str.split(" ");
-        profiles.removeAll("");
-
-        str = profilesPathList.at(index);
-        locations = str.split(" ");
-        locations.removeAll("");
-
-        index = profiles.indexOf(profile);
-        if (-1 == index) return;
-        compilerProfile = new QSettings(locations.at(index), QSettings::IniFormat);
+        compilerProfile = new QSettings(profPath, QSettings::IniFormat);
 }
 
 void Compiler::setOptions(QString str)
@@ -248,6 +241,7 @@ void Compiler::compile(QString sourceFile,int compileMode)
 	if (sourceFile.isEmpty()) return;
 	runStatus = COMP;
 	errorList.clear();
+        warningList.clear();
 
 	programPath = sourceFile.left(sourceFile.lastIndexOf('.'));
         QString sourcePath = sourceFile.left(sourceFile.lastIndexOf('/'));
@@ -295,11 +289,19 @@ void Compiler::compile(QString sourceFile,int compileMode)
                 param.replace(QString("$includedir$"),includeDir);
 	}
 
-	compilerProfile->beginGroup("parse");
-	QStringList keyList = compilerProfile->childKeys();	
-	foreach(QString key, keyList)
-		parseParamList << compilerProfile->value(key,"").toString();
-	compilerProfile->endGroup();
+        QStringList keyList;
+
+        compilerProfile->beginGroup("errors");
+        keyList = compilerProfile->childKeys();
+        foreach(QString key, keyList)
+                parseErrorList << compilerProfile->value(key,"").toString();
+        compilerProfile->endGroup();
+
+        compilerProfile->beginGroup("warnings");
+        keyList = compilerProfile->childKeys();
+        foreach(QString key, keyList)
+                parseWarningList << compilerProfile->value(key,"").toString();
+        compilerProfile->endGroup();
 
         qDebug() << QString(compilerDir+compiler+" "+param);
 
@@ -313,7 +315,7 @@ void Compiler::run(void)
     //runStatus = RUN;
         qDebug() << programPath;
 #ifdef WIN32
-        startDetached("cmd", QStringList() << "/C" << programPath+"&&pause");
+        startDetached("cmd", QStringList() << "/C" << "(title "+programPath+")&"+programPath+"&pause");
 #else
         startDetached("xterm", QStringList() << "-e" << "/bin/sh" << "-c"<< programPath);
 #endif
@@ -337,7 +339,12 @@ void Compiler::afterExit(int exitCode, QProcess::ExitStatus exitStatus)
 
 QList<Compiler::compilerError>* Compiler::getLastErrors(void)
 {
-	return &errorList;
+        return &errorList;
+}
+
+QList<Compiler::compilerWarning>* Compiler::getLastWarnings(void)
+{
+        return &warningList;
 }
 
 
@@ -346,30 +353,47 @@ void Compiler::readStdErr(void)
 	
 	if (COMP != runStatus) return;
 	Compiler::compilerError ce;
+        Compiler::compilerWarning cw;
 
 	QByteArray result = readAllStandardError();
 	QTextStream procStream(&result);
 	QString line,pattern;
+        QString parseParam;
 	int ln,desc;
-	QRegExp errorRe;
+        QRegExp re;
 	while (!procStream.atEnd())
 	{
 		line = procStream.readLine();
-		foreach(QString parseParam, parseParamList)
-		{
-			pattern = parseParam.section(":",2);
-			errorRe.setPattern(pattern);
-			if (errorRe.indexIn(line) > -1)
-			{
-				ln = parseParam.section(":",0,0).toInt();
-				ce.line = errorRe.cap(ln).toInt();
-				desc = parseParam.section(":",1,1).toInt();
-				ce.description = errorRe.cap(desc);
-				errorList.append(ce);
-				break;
-			}
-		}
-	}
+                foreach(parseParam, parseErrorList)
+                {
+                        pattern = parseParam.section(":",2);
+                        re.setPattern(pattern);
+                        if (re.indexIn(line) > -1)
+                        {
+                                ln = parseParam.section(":",0,0).toInt();
+                                ce.line = re.cap(ln).toInt();
+                                desc = parseParam.section(":",1,1).toInt();
+                                ce.description = re.cap(desc);
+                                errorList.append(ce);
+                                break;
+                        }
+                }
+
+                foreach(parseParam, parseWarningList)
+                {
+                        pattern = parseParam.section(":",2);
+                        re.setPattern(pattern);
+                        if (re.indexIn(line) > -1)
+                        {
+                                ln = parseParam.section(":",0,0).toInt();
+                                cw.line = re.cap(ln).toInt();
+                                desc = parseParam.section(":",1,1).toInt();
+                                cw.description = re.cap(desc);
+                                warningList.append(cw);
+                                break;
+                        }
+                }
+        }
 }
 
 

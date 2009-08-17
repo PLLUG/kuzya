@@ -58,6 +58,8 @@ public:
                                        lineRole = Qt::UserRole+2,
                                        descriptionRole = Qt::UserRole+3};
 
+    enum notificationTypeEnum {ERROR, WARNING, SUCCESS, FAILING, WAIT, INFO};
+
     Kuzya(QWidget *parent = 0);
     ~Kuzya();
     
@@ -119,7 +121,7 @@ private slots:
         void slotGotoErrorLine(QListWidgetItem *);
         void slotChangeTranslation(QString);
 
-        void slotPastTemplate(QString);
+        void slotPasteTemplate(QString);
         void slotToggleFolds(void);
         void slotZoomDef(void);
         void slotZoomIn(void);
@@ -129,6 +131,9 @@ protected:
 //	void keyPressEvent(QKeyEvent *event);
 private:
         void paintErrorMarkers(QList<Compiler::compilerError>* errorList);
+        void paintWarningMarkers(QList<Compiler::compilerWarning>* warningList);
+        void addNotification(int type, QString descr, bool attached = false, int line = -1);
+        void removeAllNotifications();
         void loadTemplates(QString);
         void unloadTemplates();
 
@@ -162,8 +167,6 @@ private:
         QVector <QAction*> templlateAct;
         QSignalMapper *templatesSignalMapper;
         QStringList templatesCroupsList;
-public:
-
 
 };
 

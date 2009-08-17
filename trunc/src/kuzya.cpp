@@ -38,7 +38,7 @@
 #include "kuzya.h"
 #include "helpbrowser.h"
 #include "translator.h"
-#include "helpassistant.h"
+//#include "helpassistant.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -68,8 +68,8 @@ Kuzya::Kuzya(QWidget *parent)
         toolBar->addAction(actionRun);
         toolBar->addAction(actionCompile);
         toolBar->addSeparator();
-        //toolBar->addAction(actionCode_language);
         toolBar->addWidget(languageComboBox);
+
 
 
         statusLabel = new QLabel(this);
@@ -80,21 +80,20 @@ Kuzya::Kuzya(QWidget *parent)
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
 
         textEditor = new QsciScintilla(this);
-        gridLayout->addWidget(textEditor, 0, 0, 1, 1);
 
         notificationList = new QListWidget(this);
         notificationList->setVisible(false);
-
 
         QSplitter *splitter = new QSplitter(this);
         splitter->setOrientation(Qt::Vertical);
         splitter->addWidget(textEditor);
         splitter->addWidget(notificationList);
         splitter->setChildrenCollapsible(false);
+        splitter->setStretchFactor(0, 5);
+        splitter->setStretchFactor(1, 2);
         splitter->setHandleWidth(5);
 
         gridLayout->addWidget(splitter, 0, 0, 1, 1);
-
 
         textEditor->setCaretLineBackgroundColor(QColor(215, 215, 250));
         textEditor->setCaretLineVisible(true);
@@ -110,11 +109,11 @@ Kuzya::Kuzya(QWidget *parent)
         textEditor->setSelectionBackgroundColor(QColor(100, 100, 200));
         textEditor->setUtf8(true);
 
-        errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
         warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor));
+        errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
         currentMarker = textEditor->markerDefine(QPixmap(":/markers/current_line","",Qt::AutoColor));
 
-        textEditor->setMarginMarkerMask(1,1);
+        textEditor->setMarginMarkerMask(1,3);
         textEditor->setMarginMarkerMask(2,4);
         textEditor->setMarginWidth(1, 15);
         textEditor->setMarginWidth(2, 20);
@@ -185,8 +184,6 @@ Kuzya::Kuzya(QWidget *parent)
         connect ( actionAbout_Qt,	SIGNAL ( triggered() ),	qApp,	SLOT ( aboutQt() ) );
 
         statusBar()->showMessage(tr("Ready"));
-
-
 }
 ///___________________________________________________________________________________________________________________
 /**
@@ -543,19 +540,27 @@ void Kuzya::refreshProfileSettings()
     QString path = "/usr/share/kuzya/resources/";
 #endif
 
-    disconnect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
-    languageComboBox->clear();
-    languageComboBox->addItem(QIcon(path+"uk.png"), "en");
+    translator->openFile(fileName, language);
 
     QStringList supportedTranslations = translator->getSupportedTranslations(language);
-    foreach (QString trans, supportedTranslations)
+    if (supportedTranslations.isEmpty())
     {
-       languageComboBox->addItem(QIcon(path+trans+".png"), trans);
+        languageComboBox->setVisible(true);
+        return;
     }
-    translator->openFile(fileName, language);
-    QString codeTranslation = translator->translation();
-    languageComboBox->setCurrentIndex(supportedTranslations.indexOf(codeTranslation)+1);
-    connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
+    else
+    {
+        disconnect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
+        languageComboBox->clear();
+        languageComboBox->addItem(QIcon(path+"uk.png"), "en");
+        foreach (QString trans, supportedTranslations)
+        {
+           languageComboBox->addItem(QIcon(path+trans+".png"), trans);
+        }
+        QString codeTranslation = translator->translation();
+        languageComboBox->setCurrentIndex(supportedTranslations.indexOf(codeTranslation)+1);
+        connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
+    }
 }
 
 /**
@@ -672,17 +677,11 @@ void Kuzya::slotExit(void)
 void Kuzya::slotRun(void)
 {
     if (fileName.isEmpty())
-        {
-                statusBar()->showMessage(tr("No binary to run"), 2000);
-                return;
-        }
-    /*if (true == settings->ukrIsCheked())
     {
-       // translateCode(fromNative);
-    }*/
-        compiler->run();
-
-       // translateCode(fromCode);
+        statusBar()->showMessage(tr("No binary to run"), 2000);
+        return;
+    }
+    compiler->run();
 }
 
 /**
@@ -692,23 +691,25 @@ void Kuzya::slotCompile(void)
 {
         if (textEditor->isModified()) slotSave();
 
-        textEditor->markerDeleteAll();
+        removeAllNotifications();
         if (fileName.isEmpty())
         {
-                statusBar()->showMessage(tr("No source to compile"), 2000);
+//                statusBar()->showMessage(tr("No source to compile"), 2000);
+                addNotification(FAILING, tr("No source to compile"));
                 return;
         }
 
-        statusBar()->showMessage(tr("Compilling..."));
         textEditor->setReadOnly(true);
         if (compiler->isReady() && compiler->isModeAvailable(Compiler::DEFAULT))
         {
-                statusBar()->showMessage(tr("Compilling..."));
+                addNotification(WAIT, tr("Compilling..."));
                 textEditor->setReadOnly(true);
                 translator->retranslate();
                 compiler->compile(translator->codeFile(), Compiler::DEFAULT);
+                removeAllNotifications();
         }
-        else statusBar()->showMessage(tr("ERROR : Could not find compiler profile or compile mode is not available."));
+        else addNotification(FAILING, tr("ERROR : Could not find compiler profile or compile mode is not available."));
+            //statusBar()->showMessage(tr("ERROR : Could not find compiler profile or compile mode is not available."));
 }
 
 Compiler* Kuzya::getCurrentCompiler(void)
@@ -722,28 +723,20 @@ Compiler* Kuzya::getCurrentCompiler(void)
 void Kuzya::slotAfterCompile(int status)
 {
         textEditor->setReadOnly(false);
+        notificationList->clear();
         if (Compiler::NOERROR == status)
         {
-                notificationList->clear();
-                QListWidgetItem *newItem = new QListWidgetItem(tr("Compiled successfuly!"));
-                newItem->setData(Kuzya::attachedRole, QVariant(false));
-                newItem->setData(Kuzya::descriptionRole,QVariant(tr("Compiled successfuly!")));
-                newItem->setIcon(QIcon(":/notifications/accept"));
-                notificationList->addItem(newItem);
-                statusBar()->showMessage(tr("Compiled successfuly!"));
+                addNotification(SUCCESS, tr("Compiled successfuly!"));
+                paintWarningMarkers(compiler->getLastWarnings());
         }
         else
         {
-                notificationList->clear();
-                QListWidgetItem *newItem = new QListWidgetItem(tr("Compilation failed!!!"));
-                newItem->setData(Kuzya::attachedRole, QVariant(false));
-                newItem->setData(Kuzya::descriptionRole,QVariant(tr("Compilation failed!!!")));
-                newItem->setIcon(QIcon(":/notifications/failed"));
-                notificationList->addItem(newItem);
-                emit slotShowNotificationList(true);
+                addNotification(FAILING, tr("Compilation failed!!!"));
                 paintErrorMarkers(compiler->getLastErrors());
+                paintWarningMarkers(compiler->getLastWarnings());
+                //slotShowNotificationList(true);
         }
-//        translateCode(fromCode);
+
 }
 
 /**
@@ -751,38 +744,42 @@ void Kuzya::slotAfterCompile(int status)
 **/
 void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
 {
-        textEditor->markerDeleteAll();
         if (errorList->empty()) return;
-
-        statusBar()->showMessage(tr("Creating error list..."));
-
-        QString str;
         for (int i = 0; i < errorList->size(); ++i)
         {
-                textEditor->markerAdd(errorList->at(i).line-1, errorMarker);
-
-                str = "Compilation error (line "+QVariant(errorList->at(i).line).toString()+") : "+errorList->at(i).description;
-
-                QListWidgetItem *newItem = new QListWidgetItem(str);
-                newItem->setData(Kuzya::attachedRole, QVariant(true));
-                newItem->setData(Kuzya::lineRole, QVariant(errorList->at(i).line));
-                newItem->setData(Kuzya::descriptionRole,QVariant(errorList->at(i).description));
-                newItem->setIcon(QIcon(":/notifications/bug"));
-                notificationList->addItem(newItem);
+                addNotification(ERROR, errorList->at(i).description, true, errorList->at(i).line);
         }
 
-        if (errorList->size()==1) str = QString(tr("1 error found in file %1")).arg(fileName);
-            else str = QString(tr("%1 errors found in file %2")).arg(errorList->size()).arg(fileName);
+        QString str;
+        //if (errorList->size()==1) str = QString(tr("1 error found in file %1")).arg(fileName);
+          //  else str = QString(tr("%1 errors found in file %2")).arg(errorList->size()).arg(fileName);
 
-        QListWidgetItem *newItem = new QListWidgetItem(str);
-        newItem->setData(Kuzya::attachedRole, QVariant(false));
-        newItem->setData(Kuzya::descriptionRole, str);
-        newItem->setIcon(QIcon(":/notifications/failed"));
-        notificationList->addItem(newItem);
+        addNotification(INFO, tr("Found errors (%2) in file %1").arg(fileName).arg(errorList->size()));
 
         textEditor->setCursorPosition(notificationList->item(1)->data(Kuzya::lineRole).toInt(), 0);
-
         statusBar()->showMessage(notificationList->item(1)->data(Kuzya::descriptionRole).toString());
+}
+/**
+*******************************************************************************************************
+**/
+void Kuzya::paintWarningMarkers(QList<Compiler::compilerWarning>* warningList)
+{
+        if (warningList->empty()) return;
+        for (int i = 0; i < warningList->size(); ++i)
+        {
+                addNotification(WARNING, warningList->at(i).description, true, warningList->at(i).line);
+        }
+
+        QString str;
+        addNotification(INFO, tr("Found warnings (%2) in file %1").arg(fileName).arg(warningList->size()));
+        //if (errorList->size()==1) str = QString(tr("1 error found in file %1")).arg(fileName);
+            //else str = QString(tr("%1 errors found in file %2")).arg(errorList->size()).arg(fileName);
+
+        //addNotification(FAILING, str);
+
+        //textEditor->setCursorPosition(notificationList->item(1)->data(Kuzya::lineRole).toInt(), 0);
+
+        //statusBar()->showMessage(notificationList->item(1)->data(Kuzya::descriptionRole).toString());
 }
 
 /**
@@ -977,6 +974,57 @@ void Kuzya::slotZoomIn(void)
         textEditor->zoomIn();
 }
 ///***********************************************************************************************************///
+void Kuzya::addNotification(int type, QString descr, bool attached, int line)
+{
+    QString str;
+    QIcon icon;
+
+    switch (type) {
+        case ERROR:
+            str = "Compilation error (line "+QVariant(line).toString()+") "+descr;
+            icon.addFile(":/notifications/error");
+            textEditor->markerAdd(line-1, errorMarker);
+            break;
+        case WARNING:
+            str = "Compilation warning (line "+QVariant(line).toString()+") "+descr;
+            icon.addFile(":/notifications/warning");
+            textEditor->markerAdd(line-1, warningMarker);
+            break;
+        case SUCCESS:
+            icon.addFile(":/notifications/success");
+            statusBar()->showMessage(descr, 3000);
+            break;
+        case FAILING:
+            icon.addFile(":/notifications/failing");
+            statusBar()->showMessage(descr, 3000);
+            slotShowNotificationList(true);
+            break;
+        case WAIT:
+            icon.addFile(":/notifications/wait");
+            statusBar()->showMessage(descr, 3000);
+            break;
+        case INFO:
+            icon.addFile(":/notifications/info");
+            break;
+    }
+
+    if (str.isEmpty()) str = descr;
+
+    QListWidgetItem *newItem = new QListWidgetItem(str);
+    newItem->setData(Kuzya::attachedRole, QVariant(attached));
+    newItem->setData(Kuzya::lineRole, QVariant(line));
+    newItem->setData(Kuzya::descriptionRole,QVariant(descr));
+    newItem->setIcon(icon);
+    //newItem->setSizeHint(QSize(0,fontMetrics().height()*2));
+    notificationList->addItem(newItem);
+}
+///***********************************************************************************************************///
+void Kuzya::removeAllNotifications()
+{
+    textEditor->markerDeleteAll();
+    notificationList->clear();
+}
+///***********************************************************************************************************///
 void Kuzya::slotShowNotificationList(bool visible)
 {
     notificationList->setVisible(visible);
@@ -1013,7 +1061,7 @@ void Kuzya::slotChangeTranslation(QString translation)
     openFile(translator->translatedCodeFile());
 }
 ///***********************************************************************************************************///
-void Kuzya::slotPastTemplate(QString keyStr)
+void Kuzya::slotPasteTemplate(QString keyStr)
 {
     tlist->beginGroup("templates");
         tlist->beginReadArray(keyStr.left(keyStr.indexOf("/")));
@@ -1033,13 +1081,13 @@ void Kuzya::loadTemplates(QString templatesPath)
     QMenu *menu;
     for(int j=0; j<templatesCroupsList.count();++j)
     {
-        menu=menuTemplates->addMenu(templatesCroupsList.at(j));
+        menu=menuTemplates->addMenu(QIcon(":/menu/templates_menu"), templatesCroupsList.at(j));
         size=tlist->beginReadArray(templatesCroupsList.at(j));
         for(int i=0;i<size;++i)
         {
 
             tlist->setArrayIndex(i);
-            templlateAct.push_back(new QAction(tlist->value("label").toString(),this));
+            templlateAct.push_back(new QAction(QIcon(":/menu/template"), tlist->value("label").toString(),this));
             menu->addAction(templlateAct[i]);
             connect(templlateAct[i],SIGNAL(triggered()),templatesSignalMapper,SLOT(map()));
             templatesSignalMapper->setMapping(templlateAct[i],templatesCroupsList.at(j)+"/"+QVariant(i).toString());
@@ -1048,14 +1096,14 @@ void Kuzya::loadTemplates(QString templatesPath)
         templlateAct.clear();
     }
     tlist->endGroup();
-    connect(templatesSignalMapper,SIGNAL(mapped(QString)),this,SLOT(slotPastTemplate(QString)));
+    connect(templatesSignalMapper,SIGNAL(mapped(QString)),this,SLOT(slotPasteTemplate(QString)));
 
 }
 ///***********************************************************************************************************///
 void Kuzya::unloadTemplates()
 {
     menuTemplates->clear();
-    if(templatesSignalMapper==0) disconnect(templatesSignalMapper,SIGNAL(mapped(QString)),this,SLOT(slotPastTemplate(QString)));
+    if(templatesSignalMapper==0) disconnect(templatesSignalMapper,SIGNAL(mapped(QString)),this,SLOT(slotPasteTemplate(QString)));
 
 
 }

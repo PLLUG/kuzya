@@ -13,7 +13,6 @@
         <file>images/redo.png</file>
         <file>images/undo.png</file>
         <file>images/window_suppressed.png</file>
-        <file>images/bkuzya.png</file>
         <file>images/application_view_list.png</file>
         <file>images/default_lang.png</file>
         <file>images/font_enlarge.png</file>
@@ -22,11 +21,19 @@
         <file>images/find.png</file>
         <file>images/text_replace.png</file>
         <file>images/printer.png</file>
+        <file alias="template" >images/brick.png</file>
+        <file alias="templates_menu" >images/bricks.png</file>
+        <file>images/help.png</file>
     </qresource>
     <qresource prefix="/notifications" >
-        <file alias="accept" >images/accept.png</file>
-        <file alias="failed" >images/exclamation.png</file>
-        <file alias="bug" >images/bug_error.png</file>
+        <file alias="success" >images/accept.png</file>
+        <file alias="failing" >images/exclamation.png</file>
+        <file alias="error" >images/bug_error.png</file>
+        <file alias="warning" >images/lightbulb.png</file>
+        <file alias="wait" >images/time.png</file>
+        <file alias="info" >images/information.png</file>
+        <file alias="incorrect" >images/cross.png</file>
+        <file alias="correct" >images/tick.png</file>
     </qresource>
     <qresource prefix="/markers" >
         <file alias="bug_line" >images/bullet_red.png</file>
