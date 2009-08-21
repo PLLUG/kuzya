@@ -1,8 +1,8 @@
 /******************************************************************************
  *   Copyright (C) 2008 by                                                    *
+ *                     Volodymyr Shevchyk (volder@users.sourceforge.net),     *
  *                     Victor Sklyar (bouyantgrambler@users.sourceforge.net), *
  *                     Alex Chmykhalo (alexchmykhalo@users.sourceforge.net)   *
- *                                                                            *
  *                                                                            *
  *   This program is free software: you can redistribute it and/or modify     *
  *   it under the terms of the GNU General Public License as published by     *
@@ -62,6 +62,8 @@ OptionsDialog::OptionsDialog(QWidget *parent)
         stylesDir=QDir("/usr/share/kuzya/resources/qss/");
 #endif
        slotUpdateSkinsCBox();
+       languageComboBox->clear();
+       languageComboBox->addItems(mw->getCurrentCompiler()->getSupportedLanguages());
 
 
 }
@@ -138,25 +140,11 @@ void OptionsDialog::writeSettings(void)
 		///-------------------------------------------------------------------------------------------
         settings->endGroup();
 ///-----PROGRAMING--LANGUAGE---------------------------------------------------
- /*       settings->beginGroup("Settings");
-		if (cppBtn->isChecked())
-		{
-                        settings->setValue("Prog_Lang","cpp");
-                        settings->beginGroup("Prog_Lang_Cpp");
-                        settings->setValue("compilerDir",compilerDirLineEdit->text());
-                        settings->setValue("compilerOptions",compilerOptionsEdit->toPlainText().replace("\n", " "));
-                        settings->endGroup();
-
-		}
-		else
-		{
-                        settings->setValue("Prog_Lang","pascal");
-                        settings->beginGroup("Prog_Lang_Pascal");
-                        settings->setValue("compilerDir",compilerDirLineEdit->text());
-                        settings->setValue("compilerOptions",compilerOptionsEdit->toPlainText().replace("\n", " "));
-                        settings->endGroup();
-                }
-        settings->endGroup();*/
+        settings->beginGroup("compilation_settings");
+        QString val = languageComboBox->currentText()+"/"+compilerComboBox->currentText();
+        settings->setValue(val+"/location", compilerDirLineEdit->text());
+        settings->setValue(val+"/options", compilerOptionsEdit->toPlainText().remove("\n"));
+        settings->endGroup();
 ///-----RECENT FILES------------------------------------------------------------------
 	
         settings->beginWriteArray("RecentFiles");
@@ -241,10 +229,8 @@ void OptionsDialog::readODWSettings()
         settings->endGroup();
 ///-----PROGRAMING--LANGUAGE---------------------------------------------------
 
-        languageComboBox->clear();
-        languageComboBox->addItems(mw->getCurrentCompiler()->getSupportedLanguages());
 
-        settings->endGroup();
+//        settings->endGroup();
 ///-----RECENT FILES------------------------------------------------------------------
 
         int size=settings->beginReadArray("RecentFiles");
@@ -450,6 +436,12 @@ void OptionsDialog::slotLoadCompilerOptions(QString comp)
        QString lang = languageComboBox->currentText();
        QString info = mw->getCurrentCompiler()->getCompilerInfo(lang, comp);
        compilerInfo->setText(info);
+       settings->beginGroup("compilation_settings");
+       QString val = languageComboBox->currentText()+"/"+compilerComboBox->currentText();
+       compilerDirLineEdit->setText(settings->value(val+"/location", "").toString());
+       compilerOptionsEdit->setPlainText(settings->value(val+"/options", "").toString());
+       settings->endGroup();
+
 }
 
 void OptionsDialog::slotChangeCompilerLocation()

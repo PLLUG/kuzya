@@ -1,8 +1,8 @@
 /******************************************************************************
  *   Copyright (C) 2008 by                                                    *
+ *                     Volodymyr Shevchyk (volder@users.sourceforge.net),     *
  *                     Victor Sklyar (bouyantgrambler@users.sourceforge.net), *
  *                     Alex Chmykhalo (alexchmykhalo@users.sourceforge.net)   *
- *                                                                            *
  *                                                                            *
  *   This program is free software: you can redistribute it and/or modify     *
  *   it under the terms of the GNU General Public License as published by     *
@@ -30,7 +30,6 @@
 #include <QFile>
 #include <QDir>
 #include <QStyleFactory>
-//#include "kuzya.h"
 #include "ui_optionsdialog.h"
 #include "kuzya.h"
 
@@ -38,9 +37,7 @@
 class QsciScintilla;
 class Kuzya;
 
-/**
-	@author Volodymyr Shevchyk <>
-*/
+
 class OptionsDialog : public QDialog, private Ui::optionsForm
 {
 Q_OBJECT
