@@ -24,6 +24,7 @@
 #include <QColorDialog>
 #include <QColor>
 #include <QFileDialog>
+#include <QDebug>
 #include "optionsdialog.h"
 
 OptionsDialog::OptionsDialog(QWidget *parent)
@@ -38,7 +39,8 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 #ifdef WIN32
         settings = new QSettings(QApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat);
 #else
-        settings = new QSettings("/usr/share/kuzya/settings.ini", QSettings::IniFormat);
+        settings = new QSettings(QDir::homePath()+"/settings.ini", QSettings::IniFormat);
+        qDebug() << QDir::homePath()+"/settings.ini";
 #endif
         //readODWSettings();
 	connect(closeBtn,SIGNAL(clicked()), this,SLOT(slotClose(void)));
@@ -64,7 +66,6 @@ OptionsDialog::OptionsDialog(QWidget *parent)
        slotUpdateSkinsCBox();
        languageComboBox->clear();
        languageComboBox->addItems(mw->getCurrentCompiler()->getSupportedLanguages());
-
 
 }
 void OptionsDialog::slotUpdateSkinsCBox(void)
@@ -142,8 +143,15 @@ void OptionsDialog::writeSettings(void)
 ///-----PROGRAMING--LANGUAGE---------------------------------------------------
         settings->beginGroup("compilation_settings");
         QString val = languageComboBox->currentText()+"/"+compilerComboBox->currentText();
-        settings->setValue(val+"/location", compilerDirLineEdit->text());
-        settings->setValue(val+"/options", compilerOptionsEdit->toPlainText().remove("\n"));
+        QString location = QDir::toNativeSeparators(compilerDirLineEdit->text());
+        if (!location.isEmpty())
+        {
+            location = QDir::cleanPath(location)+QDir::separator();
+            compilerDirLineEdit->setText(location);
+        }
+        settings->setValue(val+"/location", location);
+        settings->setValue(val+"/options", compilerOptionsEdit->toPlainText().remove("\n"));/**/
+
         settings->endGroup();
 ///-----RECENT FILES------------------------------------------------------------------
 	
@@ -228,8 +236,7 @@ void OptionsDialog::readODWSettings()
 		///------------------------------------------------------------------------------
         settings->endGroup();
 ///-----PROGRAMING--LANGUAGE---------------------------------------------------
-
-
+         slotLoadCompilerOptions(compilerComboBox->currentText());
 //        settings->endGroup();
 ///-----RECENT FILES------------------------------------------------------------------
 
@@ -371,13 +378,15 @@ void OptionsDialog::slotClose(void)
 void OptionsDialog::slotApply(void)
 {
 	writeSettings();
-	readODWSettings();	
+        readODWSettings();
+        mw->refreshProfileSettings();
 }
 void OptionsDialog::slotOk(void)
 {
 	writeSettings();
 	readODWSettings();
-	close();
+        mw->refreshProfileSettings();
+        close();
 }
 void OptionsDialog::slotDefaultAll(void)
 {
@@ -441,7 +450,6 @@ void OptionsDialog::slotLoadCompilerOptions(QString comp)
        compilerDirLineEdit->setText(settings->value(val+"/location", "").toString());
        compilerOptionsEdit->setPlainText(settings->value(val+"/options", "").toString());
        settings->endGroup();
-
 }
 
 void OptionsDialog::slotChangeCompilerLocation()
@@ -449,12 +457,36 @@ void OptionsDialog::slotChangeCompilerLocation()
     QString comp = compilerComboBox->currentText();
     QString dir = QFileDialog::getExistingDirectory(this,
                                                    tr("Show compiler location: (")+comp+")",
-                                                   "/home",
+                                                   "",
                                                    QFileDialog::ShowDirsOnly
                                                    | QFileDialog::DontResolveSymlinks);
-    if((dir!="")&&(directoryBox->findText(dir)==-1))
+    if((""!=dir)&&(directoryBox->findText(dir)==-1))
     {
         compilerDirLineEdit->clear();
-        compilerDirLineEdit->setText(dir);
+        compilerDirLineEdit->setText(dir+"/");
     }
+}
+
+QString OptionsDialog::readDefaultCompiler(QString lang)
+{
+       settings->beginGroup("compilation_settings");
+       QString def = settings->value(lang+"/default", "").toString();
+       settings->endGroup();
+       return def;
+}
+
+QString OptionsDialog::readCompilerLocation(QString lang, QString comp)
+{
+       settings->beginGroup("compilation_settings");
+       QString location = settings->value(lang+"/"+comp+"/location", "").toString();
+       settings->endGroup();
+       return location;
+}
+
+QString OptionsDialog::readCompilerOptions(QString lang, QString comp)
+{
+       settings->beginGroup("compilation_settings");
+       QString options = settings->value(lang+"/"+comp+"/options", "").toString();
+       settings->endGroup();
+       return options;
 }

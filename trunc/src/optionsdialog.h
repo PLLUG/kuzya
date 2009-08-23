@@ -50,6 +50,9 @@ public:
 	void saveLastProjectName(QString);
 	void retranslate(void);
         bool ukrIsCheked();
+        QString readDefaultCompiler(QString lang);
+        QString readCompilerLocation(QString lang, QString comp);
+        QString readCompilerOptions(QString lang, QString comp);
 
 public slots:
 	void slotCommOptions(void);

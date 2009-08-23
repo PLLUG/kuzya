@@ -502,6 +502,8 @@ void Kuzya::slotOpen(void)
 
 void Kuzya::refreshProfileSettings()
 {
+    if (fileName.isEmpty()) return;
+
     QStringList supportedList = compiler->getSupportedLanguages();    
     QString ex(fileName);
     ex = ex.remove(0, ex.lastIndexOf("."));
@@ -518,7 +520,12 @@ void Kuzya::refreshProfileSettings()
 
     if (!language.isEmpty())
     {
-        compiler->loadProfile(language, compiler->getSupportedCompilers(language).at(0));
+        QString comp = settings->readDefaultCompiler(language);
+        if (comp.isEmpty()) comp = compiler->getSupportedCompilers(language).at(0);
+        compiler->loadProfile(language, comp);
+        compiler->setCompilerDir(settings->readCompilerLocation(language, comp));
+        compiler->setOptions(settings->readCompilerOptions(language, comp));
+
    #ifdef WIN32
         QString path = QApplication::applicationDirPath();
         path.truncate(path.lastIndexOf("/", -1));

@@ -27,8 +27,6 @@
 
 Translator::Translator(QObject *parent) : QObject(parent)
 {
-//    QStringList list = getSupportedTranslations("c++");
-
 }
 
 Translator::~Translator()
@@ -80,13 +78,15 @@ QString Translator::detectCodeLanguage(QString filePath, QString lang)
     QString translation;
     foreach (QString transl, supportedTransl)
     {
-        fileTrans.setFileName(translationsPath+"/"+transl+".tr");
+        fileTrans.setFileName(translationsPath+transl+".tr");
+        qDebug() << translationsPath+transl+".tr";
         if(!fileTrans.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            qDebug() << tr("Can't find translation for the code");
+            qDebug() << tr("Can't open translation file for detect");
             return QString::null;
         }
         trStream.setDevice(&fileTrans);
+        trStream.setCodec("UTF-8");
         while (!trStream.atEnd())
         {
             trLine = trStream.readLine();
@@ -113,7 +113,7 @@ void Translator::openFile(QString file, QString lang)
     path.truncate(path.lastIndexOf("/", -1));
     translationsPath = path+"/profiles/"+lang+"/";
 #else
-    QString translationsPath = "/usr/share/kuzya/profiles/"+lang+"/";
+    translationsPath = "/usr/share/kuzya/profiles/"+lang+"/";
 #endif
 
     codeTranslation = detectCodeLanguage(file, language);
@@ -180,6 +180,7 @@ void Translator::translateCode(QString srcFile, QString destFile, DirectionEnum 
         return;
     }
     QTextStream trStream(&fileTrans);
+    trStream.setCodec("UTF-8");
 
     QFile inFile(srcFile);
     if(!inFile.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -199,7 +200,6 @@ void Translator::translateCode(QString srcFile, QString destFile, DirectionEnum 
         key = trLine;
         key.truncate(key.lastIndexOf('='));
         translation = trLine.section('=', 1);
-//        translation.truncate(translation.lastIndexOf(';'));
         if (fromCode == direction)
         {
             text.replace(key, translation);
