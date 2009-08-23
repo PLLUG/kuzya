@@ -507,6 +507,8 @@ void Kuzya::refreshProfileSettings()
     QStringList supportedList = compiler->getSupportedLanguages();    
     QString ex(fileName);
     ex = ex.remove(0, ex.lastIndexOf("."));
+    ex = ex.toLower();
+    qDebug() << ex;
 
     QString language;
     foreach (QString lang, supportedList)
