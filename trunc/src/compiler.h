@@ -31,9 +31,8 @@ class Compiler : public QProcess
 {
 	Q_OBJECT
 public:
-	enum endStatusEnum{NOERROR, ERROR};
-	enum runStatusEnum{STOP ,COMP, RUN};
-	enum compileModeEnum{DEFAULT,EXECUTIVE,OBJECT,LIB,ALTERNATIVE};
+        enum endStatusEnum{NOERROR, ERROR, FAILED_TO_START, CRASHED};
+        enum compileModeEnum{DEFAULT, EXECUTIVE, OBJECT, LIB, ALTERNATIVE};
 
 	struct compilerError
 	{
@@ -62,10 +61,10 @@ public:
 
 signals:
         void compileEnded(int status);
-        void runEnded(int status);
 
 private slots:
 	void afterExit(int exitCode, QProcess::ExitStatus exitStatus);
+        void compilerProcessError(QProcess::ProcessError error);
 	void readStdErr(void);
 
 private:

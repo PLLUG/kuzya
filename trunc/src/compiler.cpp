@@ -29,10 +29,9 @@ Compiler::Compiler(QObject *parent) : QProcess(parent)
 {  
 	connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(afterExit(int, QProcess::ExitStatus)));
 	connect(this, SIGNAL(readyReadStandardError()), this, SLOT(readStdErr()));
+        connect(this, SIGNAL(error(QProcess::ProcessError)), this, SLOT(compilerProcessError(QProcess::ProcessError)));
 
         refreshSupported();
-
-	runStatus = STOP;
 	compilerProfile = NULL;
 }
 
@@ -204,7 +203,7 @@ void Compiler::setCompilerDir(QString dir)
 bool Compiler::isReady()
 {
         if (NULL == compilerProfile) return false;
-	if (compilerProfile->status() == QSettings::NoError && runStatus == STOP) return true;
+        if (compilerProfile->status() == QSettings::NoError) return true;
 	else return false;
 }
 
@@ -239,7 +238,6 @@ bool Compiler::isModeAvailable(int compileMode)
 void Compiler::compile(QString sourceFile,int compileMode)
 {
 	if (sourceFile.isEmpty()) return;
-	runStatus = COMP;
 	errorList.clear();
         warningList.clear();
 
@@ -274,29 +272,25 @@ void Compiler::compile(QString sourceFile,int compileMode)
 	}
 	compilerProfile->endGroup();
 
-	if (param.isEmpty() || compiler.isEmpty())
-	{
-		runStatus = STOP;
-		return;
-	}
+        if (param.isEmpty() || compiler.isEmpty()) return;
 	else
 	{
 		param.replace(QString("$source$"),sourceFile);
 		param.replace(QString("$output$"),programPath);
 		param.replace(QString("$options$"),options);	
-                param.replace(QString("$libdir$"),libDir);
 		param.replace(QString("$compilerdir$"),compilerDir);	
-                param.replace(QString("$includedir$"),includeDir);
 	}
 
         QStringList keyList;
 
+        parseErrorList.clear();
         compilerProfile->beginGroup("errors");
         keyList = compilerProfile->childKeys();
         foreach(QString key, keyList)
                 parseErrorList << compilerProfile->value(key,"").toString();
         compilerProfile->endGroup();
 
+        parseWarningList.clear();
         compilerProfile->beginGroup("warnings");
         keyList = compilerProfile->childKeys();
         foreach(QString key, keyList)
@@ -312,8 +306,6 @@ void Compiler::compile(QString sourceFile,int compileMode)
 void Compiler::run(void)
 {
 	if (programPath.isEmpty()) return;
-    //runStatus = RUN;
-        qDebug() << programPath;
 #ifdef WIN32
         startDetached("cmd", QStringList() << "/C" << "(title "+programPath+")&"+programPath+"&pause");
 #else
@@ -330,12 +322,16 @@ void Compiler::afterExit(int exitCode, QProcess::ExitStatus exitStatus)
 		programPath = QString::null;
 		endSt = ERROR;
 	}
-
-        if (COMP == runStatus) emit compileEnded(endSt);
-        else if (RUN == runStatus) emit runEnded(endSt);
-	runStatus = STOP;
+        emit compileEnded(endSt);
 }
 
+void Compiler::compilerProcessError(QProcess::ProcessError error)
+{
+        int endSt;
+        if (QProcess::FailedToStart == error) endSt = FAILED_TO_START;
+        else endSt = CRASHED;
+        emit compileEnded(endSt);
+}
 
 QList<Compiler::compilerError>* Compiler::getLastErrors(void)
 {
@@ -350,8 +346,6 @@ QList<Compiler::compilerWarning>* Compiler::getLastWarnings(void)
 
 void Compiler::readStdErr(void)
 {
-	
-	if (COMP != runStatus) return;
 	Compiler::compilerError ce;
         Compiler::compilerWarning cw;
 
