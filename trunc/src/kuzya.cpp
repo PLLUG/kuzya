@@ -619,7 +619,7 @@ bool Kuzya::slotSave(void)
         statusBar()->showMessage(tr("Saved"), 2000);
         addFileNameToList(file.fileName());
         refreshProfileSettings();
-
+        if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
         return true;
 }
 
@@ -836,15 +836,15 @@ void Kuzya::slotUpdateWindowName(bool m)
 /**
 *******************************************************************************************************
 **/
-void Kuzya::slotMarginClicked(int margin,int line,Qt::KeyboardModifiers)
+void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers)
 {
-        if (1 == textEditor->markersAtLine(line))
+        if ((0 != textEditor->markersAtLine(line)) && (1 == margin))
         {
-            QListWidgetItem *item = notificationList->findItems(QString("Compilation error (line %1)").arg(line+1), Qt::MatchContains).at(0);
+            QListWidgetItem *item = notificationList->findItems(QString(" %1)").arg(line+1), Qt::MatchContains).at(0);
+            textEditor->markerDeleteAll(currentMarker);
+            textEditor->markerAdd(line,currentMarker);
             notificationList->setCurrentItem(item);
             notificationList->setFocus();
-            textEditor->markerDeleteAll(currentMarker);            
-            textEditor->markerAdd(line,currentMarker);
             statusBar()->showMessage(item->data(Kuzya::descriptionRole).toString());
         }
 }
@@ -1049,6 +1049,7 @@ void Kuzya::slotGotoErrorLine(QListWidgetItem * item)
             if (item->data(Kuzya::attachedRole).toBool())
             {
                 textEditor->setCursorPosition(item->data(Kuzya::lineRole).toInt()-1,1);
+                textEditor->setFocus();
             }
 }
 /**
