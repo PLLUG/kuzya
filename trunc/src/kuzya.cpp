@@ -703,22 +703,19 @@ void Kuzya::slotCompile(void)
         removeAllNotifications();
         if (fileName.isEmpty())
         {
-//                statusBar()->showMessage(tr("No source to compile"), 2000);
                 addNotification(FAILING, tr("No source to compile"));
                 return;
         }
 
         textEditor->setReadOnly(true);
-        if (compiler->isReady() && compiler->isModeAvailable(Compiler::DEFAULT))
+        if (compiler->isReady() /*&& compiler->isModeAvailable(Compiler::DEFAULT)*/)
         {
                 addNotification(WAIT, tr("Compilling..."));
                 textEditor->setReadOnly(true);
                 translator->retranslate();
                 compiler->compile(translator->codeFile(), Compiler::DEFAULT);
-                removeAllNotifications();
         }
-        else addNotification(FAILING, tr("ERROR : Could not find compiler profile or compile mode is not available."));
-            //statusBar()->showMessage(tr("ERROR : Could not find compiler profile or compile mode is not available."));
+        else addNotification(FAILING, tr("ERROR : Could not open compiler profile"));
 }
 
 Compiler* Kuzya::getCurrentCompiler(void)
@@ -740,10 +737,16 @@ void Kuzya::slotAfterCompile(int status)
         }
         else
         {
-                addNotification(FAILING, tr("Compilation failed!!!"));
-                paintErrorMarkers(compiler->getLastErrors());
-                paintWarningMarkers(compiler->getLastWarnings());
-                //slotShowNotificationList(true);
+                if (Compiler::FAILED_TO_START == status)
+                {
+                    addNotification(FAILING, tr("Unable to start compiler"));
+                }
+                else
+                {
+                    addNotification(FAILING, tr("Compilation failed!"));
+                    paintErrorMarkers(compiler->getLastErrors());
+                    paintWarningMarkers(compiler->getLastWarnings());
+                }
         }
 
 }
@@ -760,9 +763,6 @@ void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
         }
 
         QString str;
-        //if (errorList->size()==1) str = QString(tr("1 error found in file %1")).arg(fileName);
-          //  else str = QString(tr("%1 errors found in file %2")).arg(errorList->size()).arg(fileName);
-
         addNotification(INFO, tr("Found errors (%2) in file %1").arg(fileName).arg(errorList->size()));
 
         textEditor->setCursorPosition(notificationList->item(1)->data(Kuzya::lineRole).toInt(), 0);
@@ -781,14 +781,6 @@ void Kuzya::paintWarningMarkers(QList<Compiler::compilerWarning>* warningList)
 
         QString str;
         addNotification(INFO, tr("Found warnings (%2) in file %1").arg(fileName).arg(warningList->size()));
-        //if (errorList->size()==1) str = QString(tr("1 error found in file %1")).arg(fileName);
-            //else str = QString(tr("%1 errors found in file %2")).arg(errorList->size()).arg(fileName);
-
-        //addNotification(FAILING, str);
-
-        //textEditor->setCursorPosition(notificationList->item(1)->data(Kuzya::lineRole).toInt(), 0);
-
-        //statusBar()->showMessage(notificationList->item(1)->data(Kuzya::descriptionRole).toString());
 }
 
 /**
@@ -1024,7 +1016,6 @@ void Kuzya::addNotification(int type, QString descr, bool attached, int line)
     newItem->setData(Kuzya::lineRole, QVariant(line));
     newItem->setData(Kuzya::descriptionRole,QVariant(descr));
     newItem->setIcon(icon);
-    //newItem->setSizeHint(QSize(0,fontMetrics().height()*2));
     notificationList->addItem(newItem);
 }
 ///***********************************************************************************************************///
