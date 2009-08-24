@@ -39,8 +39,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 #ifdef WIN32
         settings = new QSettings(QApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat);
 #else
-        settings = new QSettings(QDir::homePath()+"/settings.ini", QSettings::IniFormat);
-        qDebug() << QDir::homePath()+"/settings.ini";
+        settings = new QSettings(QDir::homePath()+"/.config/kuzya/settings.ini", QSettings::IniFormat);
 #endif
         //readODWSettings();
 	connect(closeBtn,SIGNAL(clicked()), this,SLOT(slotClose(void)));

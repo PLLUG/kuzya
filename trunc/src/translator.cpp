@@ -67,8 +67,8 @@ QString Translator::detectCodeLanguage(QString filePath, QString lang)
         qDebug() << tr("Can't open") << filePath;
         return QString::null;
     }
-    QTextStream codeSream(&code);
-    QString text = codeSream.readAll();
+    QTextStream codeStream(&code);
+    QString text = codeStream.readAll();
 
     QStringList supportedTransl = getSupportedTranslations(lang);
 
