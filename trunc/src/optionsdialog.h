@@ -72,6 +72,8 @@ private slots:
         void slotUpdateCompilerCBox(QString);
         void slotLoadCompilerOptions(QString);
         void slotChangeCompilerLocation();
+        void slotDefaultCompiler();
+        void slotResetCompilerOptions();
 
 private:
 	QTranslator* trans_ua;

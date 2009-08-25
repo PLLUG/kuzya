@@ -53,6 +53,9 @@ OptionsDialog::OptionsDialog(QWidget *parent)
         connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotUpdateCompilerCBox(QString)));
         connect(compilerComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotLoadCompilerOptions(QString)));
         connect(browseButton, SIGNAL(clicked()), this, SLOT(slotChangeCompilerLocation()));
+        connect(defaultUsePushButton, SIGNAL(clicked()), this, SLOT(slotDefaultCompiler()));
+        connect(compilerResetPushButton, SIGNAL(clicked()) ,this, SLOT(slotResetCompilerOptions()));
+
 ///-----------------------------Fonts and Colors-------------------------------------------------------
        styleCBox->addItems(QStyleFactory::keys());
        filters<<"*.qss";
@@ -488,4 +491,24 @@ QString OptionsDialog::readCompilerOptions(QString lang, QString comp)
        QString options = settings->value(lang+"/"+comp+"/options", "").toString();
        settings->endGroup();
        return options;
+}
+
+void OptionsDialog::slotDefaultCompiler()
+{
+       QString lang = languageComboBox->currentText();
+       settings->beginGroup("compilation_settings");
+       settings->setValue(lang+"/default", compilerComboBox->currentText());
+       settings->endGroup();
+}
+
+void OptionsDialog::slotResetCompilerOptions()
+{
+       QString lang = languageComboBox->currentText();
+       QString comp = compilerComboBox->currentText();
+       settings->beginGroup("default_compilation_settings");
+       QString location = settings->value(lang+"/"+comp+"/location", "").toString();
+       QString options = settings->value(lang+"/"+comp+"/options", "").toString();
+       settings->endGroup();
+       compilerDirLineEdit->setText(location);
+       compilerOptionsEdit->setPlainText(options);
 }
