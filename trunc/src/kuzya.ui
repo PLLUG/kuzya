@@ -436,7 +436,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="images.qrc">
-    <normaloff>:/images/icon.png</normaloff>:/images/icon.png</iconset>
+    <normaloff>:/menu/images/kuzya.png</normaloff>:/menu/images/kuzya.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
@@ -445,7 +445,7 @@
      <x>0</x>
      <y>0</y>
      <width>773</width>
-     <height>21</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -493,8 +493,8 @@
      <rect>
       <x>802</x>
       <y>104</y>
-      <width>120</width>
-      <height>82</height>
+      <width>138</width>
+      <height>106</height>
      </rect>
     </property>
     <property name="minimumSize">
