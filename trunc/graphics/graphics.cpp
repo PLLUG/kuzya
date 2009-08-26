@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2009 by Volodymyr Shevchyk                              *
- *   volderne@gmail.com                                                    *
+ *   volder@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,8 +40,6 @@ graphics::graphics(QWidget *parent)
 	width = 600;
 	height = 400;
 
-        new QShortcut(Qt::Key_Return, this, SLOT(close()));
-
 	curentColor = 0;
 	textSize = 12;
 	textFont = "Arial";
@@ -56,7 +54,7 @@ graphics::graphics(QWidget *parent)
 	resize(width, height);
 
         rsi = new ReadStdIn(this);
-        rsi->readKomand = true;
+        new QShortcut(Qt::Key_Return, this, SLOT(close()));
 	connect(rsi, SIGNAL(commandAppeared(QString)), this, SLOT(processCommand(QString)));
         rsi->start();
 
@@ -81,6 +79,7 @@ void graphics::processCommand(QString  command)
 		height = command.mid(index+1, numberOf-1).toInt(0,10);
 
 		createPixmap(width, height);
+                update();
 	}
 	QPainterPath myPath;
 	
@@ -261,7 +260,7 @@ void graphics::processCommand(QString  command)
 	}
         if(getMethodName(command) == "closegraph")
         {
-            rsi->readKomand = false;
+            //rsi->readKomand = false;
         }
 	if(getMethodName(command) == "drawpoly")
 	{
@@ -543,13 +542,14 @@ void graphics::processCommand(QString  command)
 		textSize = command.mid(index+1, numberOf-1).toInt(0,10);
 	}
 	p.end();
+        update();
 }
 
 void graphics::paintEvent(QPaintEvent * /*event*/ )
 {
  	QPainter painter(this );
 	painter.drawPixmap( 0 , 0 , pix ) ;
-	update();
+        //update();
 }
 
 void graphics::createPixmap(int width, int height)

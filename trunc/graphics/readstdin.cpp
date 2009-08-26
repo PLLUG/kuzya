@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andriy Shevchyk   *
- *   sheva@sheva.immeditek   *
+ *   Copyright (C) 2009 by Volodymyr Shevchyk                              *
+ *   volder@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,10 +37,10 @@ void ReadStdIn::run()
 {
 	QString str;
 	QTextStream in(stdin);
-        while (true == readKomand)
+        do
 	{
             str = in.readLine();
             emit commandAppeared(str);
-	}
-        quit();
+        }
+        while ("closegraph();" != str);
 }

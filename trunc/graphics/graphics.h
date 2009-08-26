@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2009 by Volodymyr Shevchyk                              *
- *   volderne@gmail.com                                                    *
+ *   volder@users.sourceforge.nets                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,6 +25,7 @@
 #include <QDialog>
 #include <QPainter>
 
+
 #include "readstdin.h"
 #include "ui_graphics.h"
 
@@ -39,7 +40,7 @@ class graphics: public QDialog, private Ui::graphicsForm
 	protected:
 
 	private slots:
-		void processCommand(QString  command);
+                void processCommand(QString  command);
 
 	private:
 		Ui::graphicsForm ui;
@@ -47,12 +48,13 @@ class graphics: public QDialog, private Ui::graphicsForm
 		void createPixmap(int width, int height);
 		QString getMethodName(QString command);
 
+
 	private:
 		int step;
 		int index;
 		int curentColor;
 		int textSize;
-		int	textDirection;
+                int textDirection;
 		int lineThickness;
 		int lineStyle;
 		int x;

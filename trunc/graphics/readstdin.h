@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andriy Shevchyk   *
- *   sheva@sheva.immeditek   *
+ *   Copyright (C) 2009 by Volodymyr Shevchyk                              *
+ *   volder@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,9 +22,6 @@
 
 #include <QThread>
 
-/**
-	@author Andriy Shevchyk <sheva@sheva.immeditek>
-*/
 class ReadStdIn : public QThread
 {
 Q_OBJECT
@@ -32,9 +29,6 @@ public:
     ReadStdIn(QObject *parent = 0);
     ~ReadStdIn();
 	void run();
-
-        public:
-            bool readKomand;
 
 	signals:
 	void commandAppeared(QString command);
