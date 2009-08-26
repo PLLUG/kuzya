@@ -445,7 +445,7 @@
      <x>0</x>
      <y>0</y>
      <width>773</width>
-     <height>24</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -493,8 +493,8 @@
      <rect>
       <x>802</x>
       <y>104</y>
-      <width>138</width>
-      <height>106</height>
+      <width>120</width>
+      <height>82</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -532,7 +532,18 @@
     <property name="title">
      <string>Settings</string>
     </property>
+    <widget class="QMenu" name="menuCompilation_Mode">
+     <property name="title">
+      <string>Compilation Mode</string>
+     </property>
+     <addaction name="actionDefaultMode"/>
+     <addaction name="actionAlternativeMode"/>
+     <addaction name="actionObjectMode"/>
+     <addaction name="actionStaticLibMode"/>
+     <addaction name="actionDynamicLibMode"/>
+    </widget>
     <addaction name="actionNotificationList"/>
+    <addaction name="menuCompilation_Mode"/>
     <addaction name="actionCommon"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -1190,6 +1201,46 @@
   <action name="actionAbout_Qt">
    <property name="text">
     <string>About Qt</string>
+   </property>
+  </action>
+  <action name="actionDefaultMode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Default</string>
+   </property>
+  </action>
+  <action name="actionObjectMode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Create object file</string>
+   </property>
+  </action>
+  <action name="actionStaticLibMode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Build static library</string>
+   </property>
+  </action>
+  <action name="actionDynamicLibMode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Build dynamic library</string>
+   </property>
+  </action>
+  <action name="actionAlternativeMode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Alternative</string>
    </property>
   </action>
  </widget>

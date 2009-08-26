@@ -32,7 +32,7 @@ class Compiler : public QProcess
 	Q_OBJECT
 public:
         enum endStatusEnum{NOERROR, ERROR, FAILED_TO_START, CRASHED};
-        enum compileModeEnum{DEFAULT, EXECUTIVE, OBJECT, LIB, ALTERNATIVE};
+        enum compileModeEnum{DEFAULT, ALTERNATIVE, OBJECT, STATIC_LIB, DYNAMIC_LIB};
 
 	struct compilerError
 	{
@@ -52,9 +52,10 @@ public:
         void loadProfile(QString lang, QString profile);
 	void setOptions(QString str);
 	void setCompilerDir(QString dir);
+        void setCompilerMode(int mode);
         bool isReady(void);
 	bool isModeAvailable(int compileMode);
-	void compile(QString sourceFile,int compileMode = DEFAULT);
+        void compile(QString sourceFile);
 	void run(void);
         QList<compilerError>* getLastErrors(void);
         QList<compilerWarning>* getLastWarnings(void);
@@ -73,6 +74,7 @@ private:
 
         QString programPath;
 	int runStatus;
+        int compileMode;
         QList<compilerError> errorList;
         QList<compilerWarning> warningList;
         QString compiler;
