@@ -64,7 +64,6 @@ QString Translator::detectCodeLanguage(QString filePath, QString lang)
     QFile code(filePath);
     if(!code.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qDebug() << tr("Can't open") << filePath;
         return QString::null;
     }
     QTextStream codeStream(&code);
@@ -79,10 +78,8 @@ QString Translator::detectCodeLanguage(QString filePath, QString lang)
     foreach (QString transl, supportedTransl)
     {
         fileTrans.setFileName(translationsPath+transl+".tr");
-        qDebug() << translationsPath+transl+".tr";
         if(!fileTrans.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            qDebug() << tr("Can't open translation file for detect");
             return QString::null;
         }
         trStream.setDevice(&fileTrans);
@@ -185,7 +182,6 @@ void Translator::translateCode(QString srcFile, QString destFile, DirectionEnum 
     QFile inFile(srcFile);
     if(!inFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qDebug() << tr("Can't open inFile");
         return;
     }
     QTextStream inStream(&inFile);

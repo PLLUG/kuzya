@@ -764,7 +764,7 @@ void Kuzya::slotCompile(void)
                 translator->retranslate();
                 compiler->compile(translator->codeFile());
         }
-        else addNotification(FAILING, tr("ERROR : Could not open compiler profile"));
+        else addNotification(FAILING, tr("Could not open compiler profile"));
 }
 
 Compiler* Kuzya::getCurrentCompiler(void)
@@ -837,7 +837,7 @@ void Kuzya::paintWarningMarkers(QList<Compiler::compilerWarning>* warningList)
 **/
 void Kuzya::slotAbout(void)
 {
-    QMessageBox *aboutBox= new QMessageBox( QMessageBox::Information,tr("About"),tr("\t  <big><b><centre> \t    The Kuzya 2.0.1 </centre> </b></big>  "
+    QMessageBox *aboutBox= new QMessageBox( QMessageBox::Information,tr("About"),"\t  <big><b><centre> \t    The Kuzya 2.0.1 </centre> </b></big>  "
                                               "\n  <p> Free Development Environment</p>\n\n"
                                               "build on Jul 6 2009"
                                               "<p> Kuzya is simple crossplatform IDE for people who study  programming."
@@ -852,7 +852,7 @@ void Kuzya::slotAbout(void)
                                               "\n              \n \t <centre>Victor Sklyar</centre> "
                                               "\n <u>bouyantgrambler@users.sourceforge.net</u>"
                                               "\n              \n \t <centre>Alex Chmykhalo</centre> "
-                                              "\n <u>alexchmykhalo@users.sourceforge.net</u> </pre>"),QMessageBox::Ok,this,Qt::Dialog);
+                                              "\n <u>alexchmykhalo@users.sourceforge.net</u> </pre>",QMessageBox::Ok,this,Qt::Dialog);
     #ifdef WIN32
         aboutBox->setIconPixmap(QPixmap(QApplication::applicationDirPath()+"/../resources/Kuzya.png"));
     #else
@@ -1031,12 +1031,12 @@ void Kuzya::addNotification(int type, QString descr, bool attached, int line)
 
     switch (type) {
         case ERROR:
-            str = "Compilation error (line "+QVariant(line).toString()+") "+descr;
+            str = tr("Compilation error (line ")+QVariant(line).toString()+") "+descr;
             icon.addFile(":/notifications/error");
             textEditor->markerAdd(line-1, errorMarker);
             break;
         case WARNING:
-            str = "Compilation warning (line "+QVariant(line).toString()+") "+descr;
+            str = tr("Compilation warning (line ")+QVariant(line).toString()+") "+descr;
             icon.addFile(":/notifications/warning");
             textEditor->markerAdd(line-1, warningMarker);
             break;
