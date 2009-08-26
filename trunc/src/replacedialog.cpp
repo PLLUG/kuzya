@@ -133,7 +133,7 @@ label3:	while(textEditor->findFirst(    findCombo->currentText(),false,caseSensC
 		close();
 		v.setValue(count);
 		QMessageBox msgBox;
-		msgBox.setWindowTitle(tr("Replace - Cukr"));
+                msgBox.setWindowTitle(tr("Replace"));
 		msgBox.setText(v.toString()+" "+tr("replacements made"));
 		msgBox.exec();	
 		
@@ -142,9 +142,9 @@ label3:	while(textEditor->findFirst(    findCombo->currentText(),false,caseSensC
 			v.setValue(count);
 			QMessageBox msgBox;
                         msgBox.setIcon(QMessageBox::Information);
-			msgBox.setWindowTitle(tr("Replace - Cukr"));
+                        msgBox.setWindowTitle(tr("Replace"));
 			msgBox.setText("End of document reached.");
-			msgBox.setInformativeText(tr("Continu from the begining?"));
+                        msgBox.setInformativeText(tr("Continue from the begining?"));
 			QAbstractButton *continueBtn = msgBox.addButton(tr("Continue"),QMessageBox::ActionRole);
 			QAbstractButton *stopBtn = msgBox.addButton(tr("Stop"),QMessageBox::ActionRole);
 			msgBox.exec();
