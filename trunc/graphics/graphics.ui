@@ -1,10 +1,11 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>graphicsForm</class>
- <widget class="QDialog" name="graphicsForm" >
-  <property name="windowModality" >
+ <widget class="QDialog" name="graphicsForm">
+  <property name="windowModality">
    <enum>Qt::NonModal</enum>
   </property>
-  <property name="geometry" >
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -12,8 +13,15 @@
     <height>500</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Dialog</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>:/menu/images/kuzya.png</normaloff>:/menu/images/kuzya.png</iconset>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
   </property>
  </widget>
  <resources/>

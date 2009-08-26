@@ -115,7 +115,7 @@ void closegraph()
 	sprintf(command, "closegraph();");
 	fprintf(file, command);
 	fflush(file);
-	char* command = "/usr/share/kuzya/bin/kuzyagraph";
+	char* command = ".//graphics//kuzyagraph";
 	pclose(file);
 }
 ///******ellipse************************************
@@ -137,7 +137,7 @@ int getmaxy()
 //********initGraph*************************
 void initgraph()
 {
-	static char *command= "/usr/share/kuzya/bin/kuzyagraph";
+	static char *command= ".//graphics//kuzyagraph";
 	file = popen(command, "w");
 }
 //*********initGraph******************************
