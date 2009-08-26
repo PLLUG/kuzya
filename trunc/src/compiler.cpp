@@ -188,6 +188,7 @@ void Compiler::loadProfile(QString lang, QString profile)
         if (QString::Null() == profPath) return;
 
         compilerProfile = new QSettings(profPath, QSettings::IniFormat);
+        compileMode = DEFAULT;
 }
 
 void Compiler::setOptions(QString str)
@@ -216,18 +217,18 @@ bool Compiler::isModeAvailable(int compileMode)
 		case DEFAULT:
 			param = compilerProfile->value("default","").toString();
 			break;
-                case EXECUTIVE:
-                        param = compilerProfile->value("executive","").toString();
+                case ALTERNATIVE:
+                        param = compilerProfile->value("alternative").toString();
                         break;
                 case OBJECT:
                         param = compilerProfile->value("object","").toString();
                         break;
-                case LIB:
-                        param = compilerProfile->value("lib","").toString();
+                case STATIC_LIB:
+                        param = compilerProfile->value("static_lib","").toString();
                         break;
-		case ALTERNATIVE:
-			param = compilerProfile->value("alternative").toString();
-			break;
+                case DYNAMIC_LIB:
+                        param = compilerProfile->value("dynamic_lib","").toString();
+                        break;
 		default:
 			param = "";
 	}
@@ -235,7 +236,12 @@ bool Compiler::isModeAvailable(int compileMode)
 	return !param.isEmpty();
 }
 
-void Compiler::compile(QString sourceFile,int compileMode)
+void Compiler::setCompilerMode(int mode)
+{
+    compileMode = mode;
+}
+
+void Compiler::compile(QString sourceFile)
 {
 	if (sourceFile.isEmpty()) return;
 	errorList.clear();
@@ -252,24 +258,24 @@ void Compiler::compile(QString sourceFile,int compileMode)
 	QString param;
 	switch (compileMode) 
 	{
-		case DEFAULT:
-			param = compilerProfile->value("default","").toString();
-			break;
-                case EXECUTIVE:
-                        param = compilerProfile->value("executive","").toString();
+                case DEFAULT:
+                        param = compilerProfile->value("default","").toString();
+                        break;
+                case ALTERNATIVE:
+                        param = compilerProfile->value("alternative").toString();
                         break;
                 case OBJECT:
                         param = compilerProfile->value("object","").toString();
                         break;
-                case LIB:
-                        param = compilerProfile->value("lib","").toString();
+                case STATIC_LIB:
+                        param = compilerProfile->value("static_lib","").toString();
                         break;
-                case ALTERNATIVE:
-			param = compilerProfile->value("alternative","").toString();
-			break;
-		default:
-			param = "";
-	}
+                case DYNAMIC_LIB:
+                        param = compilerProfile->value("dynamic_lib","").toString();
+                        break;
+                default:
+                        param = "";
+        }
 	compilerProfile->endGroup();
 
         if (param.isEmpty() || compiler.isEmpty()) return;

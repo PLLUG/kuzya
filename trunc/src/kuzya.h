@@ -126,6 +126,12 @@ private slots:
         void slotZoomDef(void);
         void slotZoomIn(void);
         void slotZoomOut(void);
+
+        void slotDefaultMode();
+        void slotAlternativeMode();
+        void slotObjectMode();
+        void slotStaticLibMode();
+        void slotDynamicLibMode();
 protected:
         void closeEvent(QCloseEvent *event);
 //	void keyPressEvent(QKeyEvent *event);
@@ -136,6 +142,7 @@ private:
         void removeAllNotifications();
         void loadTemplates(QString);
         void unloadTemplates();
+        void refreshCompileModes();
 
 private:
         QFile *file;
@@ -162,6 +169,7 @@ private:
         QString translatedFileName;
         Translator *translator;
         QComboBox *languageComboBox;
+        QActionGroup *compilerModeGroup;
 
         QSettings *tlist;
         QVector <QAction*> templlateAct;

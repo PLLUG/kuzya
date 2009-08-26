@@ -70,7 +70,13 @@ Kuzya::Kuzya(QWidget *parent)
         toolBar->addSeparator();
         toolBar->addWidget(languageComboBox);
 
-
+        compilerModeGroup = new QActionGroup(this);
+        compilerModeGroup->setVisible(false);
+        compilerModeGroup->addAction(actionDefaultMode);
+        compilerModeGroup->addAction(actionObjectMode);
+        compilerModeGroup->addAction(actionStaticLibMode);
+        compilerModeGroup->addAction(actionDynamicLibMode);
+        compilerModeGroup->addAction(actionAlternativeMode);
 
         statusLabel = new QLabel(this);
         statusBar()->addPermanentWidget(statusLabel);
@@ -182,6 +188,12 @@ Kuzya::Kuzya(QWidget *parent)
         connect ( actionShrinkFont,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomOut() ) );
         connect	(actionToggleFolds,	SIGNAL(triggered()),	this,	SLOT (slotToggleFolds()));
         connect ( actionAbout_Qt,	SIGNAL ( triggered() ),	qApp,	SLOT ( aboutQt() ) );
+
+        connect(actionDefaultMode, SIGNAL(triggered()), this, SLOT(slotDefaultMode()));
+        connect(actionAlternativeMode, SIGNAL(triggered()), this, SLOT(slotAlternativeMode()));
+        connect(actionObjectMode, SIGNAL(triggered()), this, SLOT(slotObjectMode()));
+        connect(actionStaticLibMode, SIGNAL(triggered()), this, SLOT(slotStaticLibMode()));
+        connect(actionDynamicLibMode, SIGNAL(triggered()), this, SLOT(slotDynamicLibMode()));
 
         statusBar()->showMessage(tr("Ready"));
 }
@@ -467,6 +479,7 @@ void Kuzya::slotNew(void)
         setWindowTitle("Kuzya");
         statusBar()->showMessage(tr("Created new file"), 2000);
         textEditor->setModified(false);
+        compilerModeGroup->setVisible(false);
 }
 
 /**
@@ -500,6 +513,41 @@ void Kuzya::slotOpen(void)
 *******************************************************************************************************
 **/
 
+void Kuzya::refreshCompileModes()
+{
+    actionDefaultMode->setChecked(true);
+    compiler->setCompilerMode(Compiler::DEFAULT);
+    actionAlternativeMode->setVisible(compiler->isModeAvailable(Compiler::ALTERNATIVE));
+    actionObjectMode->setVisible(compiler->isModeAvailable(Compiler::OBJECT));
+    actionStaticLibMode->setVisible(compiler->isModeAvailable(Compiler::STATIC_LIB));
+    actionDynamicLibMode->setVisible(compiler->isModeAvailable(Compiler::DYNAMIC_LIB));
+}
+
+void Kuzya::slotDefaultMode()
+{
+    compiler->setCompilerMode(Compiler::DEFAULT);
+}
+
+void Kuzya::slotAlternativeMode()
+{
+    compiler->setCompilerMode(Compiler::ALTERNATIVE);
+}
+
+void Kuzya::slotObjectMode()
+{
+    compiler->setCompilerMode(Compiler::OBJECT);
+}
+
+void Kuzya::slotStaticLibMode()
+{
+    compiler->setCompilerMode(Compiler::STATIC_LIB);
+}
+
+void Kuzya::slotDynamicLibMode()
+{
+    compiler->setCompilerMode(Compiler::DYNAMIC_LIB);
+}
+
 void Kuzya::refreshProfileSettings()
 {
     if (fileName.isEmpty()) return;
@@ -508,7 +556,6 @@ void Kuzya::refreshProfileSettings()
     QString ex(fileName);
     ex = ex.remove(0, ex.lastIndexOf("."));
     ex = ex.toLower();
-    qDebug() << ex;
 
     QString language;
     foreach (QString lang, supportedList)
@@ -527,6 +574,8 @@ void Kuzya::refreshProfileSettings()
         compiler->loadProfile(language, comp);
         compiler->setCompilerDir(settings->readCompilerLocation(language, comp));
         compiler->setOptions(settings->readCompilerOptions(language, comp));
+        refreshCompileModes();
+        compilerModeGroup->setVisible(true);
 
    #ifdef WIN32
         QString path = QApplication::applicationDirPath();
@@ -708,12 +757,12 @@ void Kuzya::slotCompile(void)
         }
 
         textEditor->setReadOnly(true);
-        if (compiler->isReady() /*&& compiler->isModeAvailable(Compiler::DEFAULT)*/)
+        if (compiler->isReady())
         {
                 addNotification(WAIT, tr("Compilling..."));
                 textEditor->setReadOnly(true);
                 translator->retranslate();
-                compiler->compile(translator->codeFile(), Compiler::DEFAULT);
+                compiler->compile(translator->codeFile());
         }
         else addNotification(FAILING, tr("ERROR : Could not open compiler profile"));
 }
