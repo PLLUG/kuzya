@@ -47,6 +47,8 @@ graphics::graphics(QWidget *parent)
 	lineThickness = 1;
 	lineStyle = 0;
 
+        textDirection = 0;
+
 	pix = QPixmap(width, height);
 	pix.fill(Qt::white);
 
@@ -256,7 +258,7 @@ void graphics::processCommand(QString  command)
 	}
 	if(getMethodName(command) == "clearDevice")
 	{
-		pix.fill(Qt::transparent);
+                pix.fill(Qt::white);
 	}
         if(getMethodName(command) == "closegraph")
         {
@@ -403,7 +405,7 @@ void graphics::processCommand(QString  command)
                 x1 = x;
                 y1 = y;
         }
-         if(getMethodName(command) == "lineto")
+         if(getMethodName(command) == "moveto")
         {
                 index = command.indexOf("(",0);
                 indexOfSimbol = command.indexOf(",", index);
@@ -447,7 +449,7 @@ void graphics::processCommand(QString  command)
 
 		switch(textDirection)
 		{
-			case 0: p.drawText(x, y, methodText); break;
+                        case 0: p.drawText(x1, y1, methodText); break;
 			case 1:
 				for(int i = 0; i <= methodText.length(); i++)
 				{
@@ -456,7 +458,6 @@ void graphics::processCommand(QString  command)
 					y += textSize;
 				}
 		}
-
 // 		p.drawText(x, y, methodText);
 		update();
 	}
