@@ -148,6 +148,8 @@ void initgraph(int setWidth, int setHeight)
 	height = setHeight;
 	sprintf(command, "initgraph(%i,%i);\n",width, height);
 	fprintf(file, command);
+	width = 600;
+	height = 400;
 }
 //********piesLice*********************************
 void pieslice(int x, int y, int stAngle, int endAngle, int radius)
