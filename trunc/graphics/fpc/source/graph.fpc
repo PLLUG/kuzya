@@ -1,0 +1,213 @@
+Unit Graph;
+
+interface
+
+type COLORS = 
+(
+	BLACK,			{dark colours}
+	BLUE ,
+	GREEN,
+	CYAN,
+	RED,
+	MAGENTA,
+	BROWN,
+	LIGHTGRAY,
+	DARKGRAY,			{light colours}
+	LIGHTBLUE,
+	LIGHTGREEN,
+	LIGHTCYAN,
+	LIGHTRED,
+	LIGHTMAGENTA,
+	YELLOW,
+	WHITE
+);
+	
+type DIRECTION =
+(
+	HORIZ_DIR,			{left to right }
+	VERT_DIR 				{bottom to top}
+);
+
+type LINESTYLE =
+(
+	SOLID_LINE,
+	DOTTED_LINE,
+	CENTER_LINE,
+	DASHED_LINE,
+	USERBIT_LINE
+);
+
+{*************All_procedures_and_Functions******************}
+Procedure arc(x, y,stAngle, endAngle, radius:longint);
+Procedure bar( x, y, x1, y1:longint);
+Procedure bar3d(x, y,  x1,  y1, z:longint;  top:boolean);
+Procedure circle(x, y, radius:longint);
+Procedure cleardevice();
+Procedure closegraph();
+Procedure ellipse(x, y, rWidth, rHeight:longint);
+Function getmaxx():longint;
+Function getmaxy():longint;
+Procedure initgraph();
+Procedure initgraph(setWidth, setHeight:longint);
+Procedure pieslice(x, y, stAngle, endAngle, radius:longint);
+Procedure putpixel(x, y:longint);
+Procedure line(x, y, x1, y1:longint);
+Procedure lineto(x, y:longint);
+Procedure moveto(x, y:longint);
+Procedure outtextxy(x, y:longint; text:string);
+Procedure outtext(text:string);
+Procedure setcolor(color:COLORS);
+Procedure setcolor(color:longint);
+Procedure setlinestyle(style:LINESTYLE; upattern, thickness:longint);
+Procedure setlinestyle(style, upattern, thickness:longint);
+Procedure settextstyle(font:string; mydirection:DIRECTION; size:longint);
+Procedure settextstyle(font:string; mydirection, size:longint);
+{*************All_procedures_and_Functions******************}
+
+implementation
+
+uses Unix, Crt;
+
+var    	     
+			f:text;
+	height,width:longint;
+	const kuzyagraph = '/usr/share/kuzya/bin/kuzyagraph';
+
+{****************ARC********************************************}
+Procedure arc(x, y,stAngle, endAngle, radius:longint);
+begin
+	writeln(f, 'arc(', x, ',', y, ',', stAngle, ',', endAngle, ',', radius, ');');	
+end;
+{****************rectangle**************************************}
+Procedure bar( x, y, x1, y1:longint);
+Begin
+	writeln(f, 'bar(', x, ',',  y, ',', x1,',' ,y1, ');');
+End;
+{****************3 demention rectangle************************}
+Procedure bar3d(x, y,  x1,  y1, z:longint;  top:boolean);
+Var topStr:string;
+Begin
+	if true = top then
+	begin
+		topStr := 'true';
+	end
+	else
+	begin
+		topStr := 'false';
+	end;
+	writeln(f, 'bar3D(', x, ',',y,',',x1,',',y1,',',z,',',topStr, ');');
+End;
+{***********circle***************************************************}
+Procedure circle(x, y, radius:longint);
+Begin
+	writeln(f, 'circle(', x,',', y,',', radius, ');');
+End;
+{***********clearDevise********************************************}
+Procedure cleardevice();
+Begin
+	writeln(f, 'clearDevice();');
+End;
+{*************closeGraph***************************************}
+Procedure closegraph();
+Begin
+	writeln(f, 'closegraph();');
+	flush(f);
+	pclose(f);
+End;
+{******************ellipse***************************************}
+Procedure ellipse(x, y, rWidth, rHeight:longint);
+Begin
+	writeln(f, 'ellipse(', x,',', y,',', rWidth,',', rHeight , ');');
+End;
+{*****************getMaxX*************************************}
+Function getmaxx():longint;
+Begin
+	getmaxx := width;
+End;
+{******************getMaxY*************************************}
+Function getmaxy():longint;
+Begin
+	getmaxy := height;
+End;
+{*******************initGraph************************************}
+Procedure initgraph();
+Begin
+	popen(f,kuzyagraph,'W') ;
+	width := 600;
+	height := 400;
+End;
+{*********************initGraph**********************************}
+Procedure initgraph(setWidth, setHeight:longint);
+Begin
+	initgraph();
+	width := setWidth;
+	height := setHeight;
+	writeln(f, 'initgraph(', width, ',', height, ');');
+End;
+{**********************piesLice*********************************}
+Procedure pieslice(x, y, stAngle, endAngle, radius:longint);
+Begin
+	writeln(f, 'pieslice(',x, ',', y,',', stAngle,',', endAngle,',', radius, ');');
+End;
+{*******************putPixel************************************}
+Procedure putpixel(x, y:longint);
+Begin	
+	writeln(f, 'putPixel(',x , ',', y, ');');
+End;
+{********************line***************************************}
+Procedure line(x, y, x1, y1:longint);
+Begin
+	writeln(f, 'line(',x , ',', y, ',',x1, ',', y1, ');');
+End;
+{*****************lineto**************************************}
+Procedure lineto(x, y:longint);
+Begin
+  	writeln(f, 'lineto(', x, ',', y, ');');
+End;
+{*******************moveto**********************************}
+Procedure moveto(x, y:longint);
+Begin
+  	writeln(f, 'moveto(', x, ',', y, ');');
+End;
+{*******************outTextXY*******************************}
+Procedure outtextxy(x, y:longint; text:string);
+Begin
+	writeln(f, 'outTextXY(', x, ',', y,',"',  text, '");');
+End;
+{********************outText********************************}
+Procedure outtext(text:string);
+Begin
+	writeln(f, 'outText("', text, '");');
+End;
+{***************setColor____colour*************************}
+Procedure setcolor(color:COLORS);
+Begin
+	writeln(f, 'setColor(',ord(color),');');
+End;
+{***************setColor____number*************************}
+Procedure setcolor(color:longint);
+Begin
+	writeln(f, 'setColor(',color,');');
+End;
+{************setLineStyle____style**************************}
+Procedure setlinestyle(style:LINESTYLE; upattern, thickness:longint);
+Begin
+	writeln(f, 'setLineStyle(', ord(style), ',', thickness, ');');
+End;
+{************setLineStyle_____number**********************}
+Procedure setlinestyle(style, upattern, thickness:longint);
+Begin
+	writeln(f, 'setLineStyle(', style, ',', thickness, ');');
+End;
+{*************setTetxtStyle____style************************}
+Procedure settextstyle(font:string; mydirection:DIRECTION; size:longint);
+Begin
+	writeln(f, 'setTextStyle(', font, ',', ord(mydirection), ',',  size, ');');
+End;
+{*************setTetxtStyle_____number********************}
+Procedure settextstyle(font:string; mydirection, size:longint);
+Begin
+	writeln(f, 'setTextStyle(', font, ',', mydirection, ',',  size, ');');
+End;
+
+End.
