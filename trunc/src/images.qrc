@@ -35,6 +35,7 @@
         <file alias="info" >images/information.png</file>
         <file alias="incorrect" >images/cross.png</file>
         <file alias="correct" >images/tick.png</file>
+        <file alias="comment" >images/comment.png</file>
     </qresource>
     <qresource prefix="/markers" >
         <file alias="bug_line" >images/bullet_red.png</file>

@@ -21,6 +21,7 @@
 
 #include <QSettings>
 #include <QDirIterator>
+#include <QTemporaryFile>
 #include "QDebug"
 
 #include "compiler.h"
@@ -28,9 +29,10 @@
 Compiler::Compiler(QObject *parent) : QProcess(parent)
 {  
 	connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(afterExit(int, QProcess::ExitStatus)));
-	connect(this, SIGNAL(readyReadStandardError()), this, SLOT(readStdErr()));
+        connect(this, SIGNAL(readyReadStandardOutput()), this, SLOT(readStdErr()));
         connect(this, SIGNAL(error(QProcess::ProcessError)), this, SLOT(compilerProcessError(QProcess::ProcessError)));
 
+        setProcessChannelMode(MergedChannels);
         refreshSupported();
 	compilerProfile = NULL;
 }
@@ -162,14 +164,14 @@ QStringList Compiler::getSupportedCompilers(QString lang)
 
 QString Compiler::getCompilerInfo(QString lang, QString profile)
 {
-        if (lang.isEmpty() || profile.isEmpty()) return "<none>";
+        if (lang.isEmpty() || profile.isEmpty()) return "";
 
         QString profPath = getProfilePath(lang, profile);
-        if (QString::Null() == profPath) return "<none>";
+        if (QString::Null() == profPath) return "";
 
         QSettings prof(profPath, QSettings::IniFormat);
         prof.beginGroup("info");
-        QString info = prof.value("comment", "<none>").toString();
+        QString info = prof.value("comment", "").toString();
         prof.endGroup();
     
         return info;
@@ -184,6 +186,7 @@ void Compiler::loadProfile(QString lang, QString profile)
 	
         if (lang.isEmpty() || profile.isEmpty()) return;
 
+        refreshSupported();
         QString profPath = getProfilePath(lang, profile);
         if (QString::Null() == profPath) return;
 
@@ -244,14 +247,20 @@ void Compiler::setCompilerMode(int mode)
 void Compiler::compile(QString sourceFile)
 {
 	if (sourceFile.isEmpty()) return;
-	errorList.clear();
+        errorList.clear();
         warningList.clear();
+        outFile.clear();
 
-	programPath = sourceFile.left(sourceFile.lastIndexOf('.'));
-        QString sourcePath = sourceFile.left(sourceFile.lastIndexOf('/'));
+        sourceFile = sourceFile.replace("/", QDir::separator());
+        programPath = sourceFile.left(sourceFile.lastIndexOf('.'));
+        QString sourcePath = sourceFile.left(sourceFile.lastIndexOf(QDir::separator()));
+        qDebug() << sourceFile;
+        qDebug() << programPath;
+        qDebug() << sourcePath;
 
 	compilerProfile->beginGroup("info");
-	QString compiler = compilerProfile->value("compiler","").toString();	
+        QString compiler = compilerProfile->value("compiler", "").toString();
+        config = compilerProfile->value("config", "").toString();
 	compilerProfile->endGroup();
 
 	compilerProfile->beginGroup("compile");
@@ -281,10 +290,10 @@ void Compiler::compile(QString sourceFile)
         if (param.isEmpty() || compiler.isEmpty()) return;
 	else
 	{
-		param.replace(QString("$source$"),sourceFile);
-		param.replace(QString("$output$"),programPath);
-		param.replace(QString("$options$"),options);	
-		param.replace(QString("$compilerdir$"),compilerDir);	
+                param.replace(QString("$source$"), sourceFile);
+                param.replace(QString("$output$"), programPath);
+                param.replace(QString("$options$"), options);
+                param.replace(QString("$compilerdir$"), compilerDir);
 	}
 
         QStringList keyList;
@@ -303,15 +312,28 @@ void Compiler::compile(QString sourceFile)
                 parseWarningList << compilerProfile->value(key,"").toString();
         compilerProfile->endGroup();
 
-        qDebug() << QString(compilerDir+compiler+" "+param);
+        qDebug() << QString(compiler+" "+param);
 
-	start(QString(compilerDir+compiler+" "+param), QIODevice::ReadWrite);
+#ifdef WIN32
+        if (config.contains("nostd"))
+        {
+            outFile = QApplication::applicationDirPath()+QDir::separator()+"out.txt";
+            outFile.replace("/", QDir::separator());
+            param = param+" > "+outFile;
+        }
+#endif
+
+
+        QString prevDir = QDir::currentPath();
+        if (!compilerDir.isEmpty()) QDir::setCurrent(compilerDir);
+        start(QString(compiler+" "+param), QIODevice::ReadWrite);
+        qDebug() << QString(compiler+" "+param);
+        QDir::setCurrent(prevDir);
 }
 
 
 void Compiler::run(void)
 {
-	if (programPath.isEmpty()) return;
 #ifdef WIN32
         startDetached("cmd", QStringList() << "/C" << "(title "+programPath+")&"+programPath+"&pause");
 #else
@@ -328,6 +350,7 @@ void Compiler::afterExit(int exitCode, QProcess::ExitStatus exitStatus)
 		programPath = QString::null;
 		endSt = ERROR;
 	}
+        if (!outFile.isEmpty()) readStdErr();
         emit compileEnded(endSt);
 }
 
@@ -336,6 +359,7 @@ void Compiler::compilerProcessError(QProcess::ProcessError error)
         int endSt;
         if (QProcess::FailedToStart == error) endSt = FAILED_TO_START;
         else endSt = CRASHED;
+
         emit compileEnded(endSt);
 }
 
@@ -349,14 +373,20 @@ QList<Compiler::compilerWarning>* Compiler::getLastWarnings(void)
         return &warningList;
 }
 
-
 void Compiler::readStdErr(void)
 {
 	Compiler::compilerError ce;
         Compiler::compilerWarning cw;
 
-	QByteArray result = readAllStandardError();
-	QTextStream procStream(&result);
+        QByteArray result;
+        if (outFile.isEmpty()) result = readAllStandardOutput();
+        else
+        {
+            QFile out(outFile);
+            if(!out.open(QIODevice::ReadOnly | QIODevice::Text)) return;
+            result = out.readAll();
+        }
+        QTextStream procStream(&result);
 	QString line,pattern;
         QString parseParam;
 	int ln,desc;
@@ -364,6 +394,7 @@ void Compiler::readStdErr(void)
 	while (!procStream.atEnd())
 	{
 		line = procStream.readLine();
+                qDebug() << line;
                 foreach(parseParam, parseErrorList)
                 {
                         pattern = parseParam.section(":",2);
@@ -371,7 +402,8 @@ void Compiler::readStdErr(void)
                         if (re.indexIn(line) > -1)
                         {
                                 ln = parseParam.section(":",0,0).toInt();
-                                ce.line = re.cap(ln).toInt();
+                                if (0 != ln) ce.line = re.cap(ln).toInt();
+                                else ce.line = 0;
                                 desc = parseParam.section(":",1,1).toInt();
                                 ce.description = re.cap(desc);
                                 errorList.append(ce);
@@ -386,7 +418,8 @@ void Compiler::readStdErr(void)
                         if (re.indexIn(line) > -1)
                         {
                                 ln = parseParam.section(":",0,0).toInt();
-                                cw.line = re.cap(ln).toInt();
+                                if (0 != ln) cw.line = re.cap(ln).toInt();
+                                else cw.line = 0;
                                 desc = parseParam.section(":",1,1).toInt();
                                 cw.description = re.cap(desc);
                                 warningList.append(cw);

@@ -44,9 +44,13 @@ class QListWidgetItem;
 //class QPrinter;
 class QsciPrinter;
 class QsciLexerCPP;
+class QsciLexerPascal;
+class QsciLexerFortran;
+class QsciLexerJava;
 template <typename T> class QVector;
 template <typename T> class QList;
 class Translator;
+class QsciLexer;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -58,7 +62,7 @@ public:
                                        lineRole = Qt::UserRole+2,
                                        descriptionRole = Qt::UserRole+3};
 
-    enum notificationTypeEnum {ERROR, WARNING, SUCCESS, FAILING, WAIT, INFO};
+    enum notificationTypeEnum {ERROR, WARNING, SUCCESS, FAILING, WAIT, INFO, COMPILER};
 
     Kuzya(QWidget *parent = 0);
     ~Kuzya();
@@ -166,10 +170,14 @@ private:
         ReplaceDialog* replaceText;
         QShortcut* shortcut;
         QsciLexerCPP *cppLexer;
+        QsciLexerPascal *pascalLexer;
+        QsciLexerFortran *fortranLexer;
+        QsciLexerJava *javaLexer;
         QString translatedFileName;
         Translator *translator;
         QComboBox *languageComboBox;
         QActionGroup *compilerModeGroup;
+        QsciLexer *currentLexer;
 
         QSettings *tlist;
         QVector <QAction*> templlateAct;

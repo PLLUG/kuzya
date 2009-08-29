@@ -145,10 +145,9 @@ void OptionsDialog::writeSettings(void)
 ///-----PROGRAMING--LANGUAGE---------------------------------------------------
         settings->beginGroup("compilation_settings");
         QString val = languageComboBox->currentText()+"/"+compilerComboBox->currentText();
-        QString location = QDir::toNativeSeparators(compilerDirLineEdit->text());
+        QString location = compilerDirLineEdit->text().replace("/", QDir::separator());
         if (!location.isEmpty())
         {
-            location = QDir::cleanPath(location)+QDir::separator();
             compilerDirLineEdit->setText(location);
         }
         settings->setValue(val+"/location", location);
@@ -465,7 +464,7 @@ void OptionsDialog::slotChangeCompilerLocation()
     if((""!=dir)&&(directoryBox->findText(dir)==-1))
     {
         compilerDirLineEdit->clear();
-        compilerDirLineEdit->setText(dir+"/");
+        compilerDirLineEdit->setText(dir.replace("/", QDir::separator()));
     }
 }
 
