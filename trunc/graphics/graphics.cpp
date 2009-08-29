@@ -37,8 +37,8 @@ graphics::graphics(QWidget *parent)
         this->setWindowTitle("GraphicCore");
 	setObjectName("graphics");
 
-	width = 600;
-	height = 400;
+        width = 640;
+        height = 480;
 
 	curentColor = 0;
 	textSize = 12;
