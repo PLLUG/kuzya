@@ -64,7 +64,7 @@ QString Translator::detectCodeLanguage(QString filePath, QString lang)
     QFile code(filePath);
     if(!code.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        return QString::null;
+        return "en";
     }
     QTextStream codeStream(&code);
     QString text = codeStream.readAll();
@@ -80,7 +80,7 @@ QString Translator::detectCodeLanguage(QString filePath, QString lang)
         fileTrans.setFileName(translationsPath+transl+".tr");
         if(!fileTrans.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            return QString::null;
+            return "en";
         }
         trStream.setDevice(&fileTrans);
         trStream.setCodec("UTF-8");

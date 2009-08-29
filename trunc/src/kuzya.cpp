@@ -23,6 +23,8 @@
 #include <Qsci/qsciscintilla.h>
 #include <Qsci/qscilexercpp.h>
 #include <Qsci/qscilexerpascal.h>
+#include <Qsci/qscilexerfortran.h>
+#include <Qsci/qscilexerjava.h>
 #include <QShortcut>
 #include <QVector>
 #include <QSignalMapper>
@@ -104,10 +106,12 @@ Kuzya::Kuzya(QWidget *parent)
         textEditor->setCaretLineBackgroundColor(QColor(215, 215, 250));
         textEditor->setCaretLineVisible(true);
 
-        //QsciLexerCPP *
         cppLexer = new QsciLexerCPP(this);
+        pascalLexer = new QsciLexerPascal(this);
+        fortranLexer = new QsciLexerFortran(this);
+        javaLexer = new QsciLexerJava(this);
        
-        textEditor->setLexer(cppLexer);
+        textEditor->setLexer();
 
         textEditor->setBraceMatching(QsciScintilla::SloppyBraceMatch);
         textEditor->setMatchedBraceBackgroundColor(QColor(200, 100, 100));
@@ -194,7 +198,6 @@ Kuzya::Kuzya(QWidget *parent)
         connect(actionObjectMode, SIGNAL(triggered()), this, SLOT(slotObjectMode()));
         connect(actionStaticLibMode, SIGNAL(triggered()), this, SLOT(slotStaticLibMode()));
         connect(actionDynamicLibMode, SIGNAL(triggered()), this, SLOT(slotDynamicLibMode()));
-
         statusBar()->showMessage(tr("Ready"));
 }
 ///___________________________________________________________________________________________________________________
@@ -586,6 +589,13 @@ void Kuzya::refreshProfileSettings()
    #endif
         unloadTemplates();
         loadTemplates(path+language+"/"+language+".ini");
+
+        if ("pascal" == language) currentLexer = pascalLexer;
+        else if ("c++" == language) currentLexer = cppLexer;
+        else if ("fortran" == language) currentLexer = fortranLexer;
+        else if ("java" == language) currentLexer = javaLexer;
+        else currentLexer = 0;
+        textEditor->setLexer(currentLexer);
     }
     else compiler->loadProfile("","");
 
@@ -750,6 +760,7 @@ void Kuzya::slotCompile(void)
         if (textEditor->isModified()) slotSave();
 
         removeAllNotifications();
+        textEditor->markerDeleteAll(currentMarker);
         if (fileName.isEmpty())
         {
                 addNotification(FAILING, tr("No source to compile"));
@@ -806,16 +817,24 @@ void Kuzya::slotAfterCompile(int status)
 void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
 {
         if (errorList->empty()) return;
+        int errCount = 0;
+        int firstAttached = 0;
         for (int i = 0; i < errorList->size(); ++i)
         {
+            if (0 != errorList->at(i).line)
+            {
                 addNotification(ERROR, errorList->at(i).description, true, errorList->at(i).line);
+                if (0 == firstAttached) firstAttached = i+1;
+                errCount++;
+            }
+            else addNotification(COMPILER, errorList->at(i).description);
         }
 
         QString str;
-        addNotification(INFO, tr("Found errors (%2) in file %1").arg(fileName).arg(errorList->size()));
+        if (0 != errCount) addNotification(INFO, tr("Found errors (%2) in file %1").arg(fileName).arg(errCount));
 
-        textEditor->setCursorPosition(notificationList->item(1)->data(Kuzya::lineRole).toInt(), 0);
-        statusBar()->showMessage(notificationList->item(1)->data(Kuzya::descriptionRole).toString());
+        notificationList->setCurrentItem(notificationList->item(firstAttached));
+        notificationList->setFocus();
 }
 /**
 *******************************************************************************************************
@@ -823,13 +842,17 @@ void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
 void Kuzya::paintWarningMarkers(QList<Compiler::compilerWarning>* warningList)
 {
         if (warningList->empty()) return;
+        int waCount = 0;
         for (int i = 0; i < warningList->size(); ++i)
         {
+            if (0 != warningList->at(i).line)
+            {
                 addNotification(WARNING, warningList->at(i).description, true, warningList->at(i).line);
+                waCount++;
+            }
+            else addNotification(COMPILER, warningList->at(i).description);
         }
-
-        QString str;
-        addNotification(INFO, tr("Found warnings (%2) in file %1").arg(fileName).arg(warningList->size()));
+        if (0 != waCount) addNotification(INFO, tr("Found warnings (%2) in file %1").arg(fileName).arg(waCount));
 }
 
 /**
@@ -1032,8 +1055,8 @@ void Kuzya::addNotification(int type, QString descr, bool attached, int line)
     switch (type) {
         case ERROR:
             str = tr("Compilation error (line ")+QVariant(line).toString()+") "+descr;
-            icon.addFile(":/notifications/error");
             textEditor->markerAdd(line-1, errorMarker);
+            icon.addFile(":/notifications/error");
             break;
         case WARNING:
             str = tr("Compilation warning (line ")+QVariant(line).toString()+") "+descr;
@@ -1055,6 +1078,9 @@ void Kuzya::addNotification(int type, QString descr, bool attached, int line)
             break;
         case INFO:
             icon.addFile(":/notifications/info");
+            break;
+        case COMPILER:
+            icon.addFile(":/notifications/comment");
             break;
     }
 

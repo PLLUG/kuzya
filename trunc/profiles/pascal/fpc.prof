@@ -1,12 +1,15 @@
 [info]
 compiler=fpc
-language=pascal
 comment=Free Pascal Compiler
 
 [compile]
-default=$options$ $source$
-alternative=-n $options$ $source$
+default=-vr $options$ $source$
+object=-vr -Cn $options$ $source$
+static_lib=-vr -Us -Ur $options$ $source$
 
 [errors]
+error_messages_1=1:3:(\\d+):\\s(.*)error:\\s(.*)
+error_messages_1=1:4:(\\d+):\\s(.*)error:\\s(\\d+)(.*)
 
 [warnings]
+warning_messages_1=1:4:(\\d+):\\s(.*)warning:\\s(\\d+)(.*)

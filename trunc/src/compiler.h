@@ -26,6 +26,7 @@
 #include "replacedialog.h"
 
 class QSettings;
+class QTemporaryFile;
 
 class Compiler : public QProcess
 {
@@ -77,10 +78,8 @@ private:
         int compileMode;
         QList<compilerError> errorList;
         QList<compilerWarning> warningList;
-        QString compiler;
+        QString config;
 	QString compilerDir;
-	QString includeDir;
-	QString libDir;
 	QString options;
         QSettings* compilerProfile;
         QStringList parseErrorList;
@@ -90,6 +89,8 @@ private:
         QStringList profileLocations;
         QStringList supportedCompilers;
         QStringList profilesPathList;
+        QString outFile;
+        QTemporaryFile *tempFile;
 };
 
 #endif
