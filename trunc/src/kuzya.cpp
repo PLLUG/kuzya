@@ -560,7 +560,7 @@ void Kuzya::refreshProfileSettings()
     ex = ex.remove(0, ex.lastIndexOf("."));
     ex = ex.toLower();
 
-    QString language;
+    //QString language;
     foreach (QString lang, supportedList)
     {
         if (compiler->getSupportedExtensions(lang).contains(ex))
@@ -1140,40 +1140,65 @@ void Kuzya::slotChangeTranslation(QString translation)
 {
     translator->setTranslation(translation);
     openFile(translator->translatedCodeFile());
+     #ifdef WIN32
+        QString path = QApplication::applicationDirPath();
+        path.truncate(path.lastIndexOf("/", -1));
+        path = path+"/profiles/";
+   #else
+        QString path = "/usr/share/kuzya/profiles/";
+   #endif
+    unloadTemplates();
+    loadTemplates(path+language+"/"+language+".ini");
 }
 ///***********************************************************************************************************///
 void Kuzya::slotPasteTemplate(QString keyStr)
 {
+    QStringList tempStrList;
     tlist->beginGroup("templates");
         tlist->beginReadArray(keyStr.left(keyStr.indexOf("/")));
             tlist->setArrayIndex((keyStr.right(keyStr.length()-keyStr.indexOf("/")-1)).toUInt());
-           textEditor->insert(tlist->value("template").toString());
+            tempStrList<<tlist->value("template").toString();
+            translator->translateList(&tempStrList);
+            textEditor->removeSelectedText();
+            textEditor->insert(tempStrList.at(0));
         tlist->endArray();
     tlist->endGroup();
 }
 ///***********************************************************************************************************///
 void Kuzya::loadTemplates(QString templatesPath)
 {
+    QStringList tempStrList1,tempStrList2;
     tlist=new QSettings(templatesPath,QSettings::IniFormat);
     tlist->beginGroup("templates");
     int size;
     templatesCroupsList=tlist->childGroups();
+    tempStrList1=templatesCroupsList;
+    translator->translateList(&tempStrList1);
     templatesSignalMapper = new QSignalMapper(this);
     QMenu *menu;
     for(int j=0; j<templatesCroupsList.count();++j)
     {
-        menu=menuTemplates->addMenu(QIcon(":/menu/templates_menu"), templatesCroupsList.at(j));
+        menu=menuTemplates->addMenu(QIcon(":/menu/templates_menu"), tempStrList1.at(j));
+        size=tlist->beginReadArray(templatesCroupsList.at(j));
+        for(int i=0;i<size;++i)
+        {
+            tlist->setArrayIndex(i);
+            tempStrList2<<tlist->value("label").toString();
+        }
+        tlist->endArray();
+        translator->translateList(&tempStrList2);
         size=tlist->beginReadArray(templatesCroupsList.at(j));
         for(int i=0;i<size;++i)
         {
 
             tlist->setArrayIndex(i);
-            templlateAct.push_back(new QAction(QIcon(":/menu/template"), tlist->value("label").toString(),this));
+            templlateAct.push_back(new QAction(QIcon(":/menu/template"),tempStrList2.at(i),this));
             menu->addAction(templlateAct[i]);
             connect(templlateAct[i],SIGNAL(triggered()),templatesSignalMapper,SLOT(map()));
             templatesSignalMapper->setMapping(templlateAct[i],templatesCroupsList.at(j)+"/"+QVariant(i).toString());
         }
         tlist->endArray();
+        tempStrList2.clear();
         templlateAct.clear();
     }
     tlist->endGroup();
@@ -1185,6 +1210,20 @@ void Kuzya::unloadTemplates()
 {
     menuTemplates->clear();
     if(templatesSignalMapper==0) disconnect(templatesSignalMapper,SIGNAL(mapped(QString)),this,SLOT(slotPasteTemplate(QString)));
+}
+void Kuzya::dragEnterEvent(QDragEnterEvent *event)
+{
+    if(event->mimeData()->hasFormat("text/uri-list"));
+    event->acceptProposedAction();
+}
+void Kuzya::dropEvent(QDropEvent *event)
+{
+    QList<QUrl> urls = event->mimeData()->urls();
+    if(urls.isEmpty()) return;
+    QString fileName=urls.first().toLocalFile();
 
-
+    textEditor->markerDeleteAll();
+    notificationList->clear();
+    openFile(fileName);
+    refreshProfileSettings();
 }
