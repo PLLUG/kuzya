@@ -746,8 +746,13 @@ void Kuzya::slotRun(void)
 {
     if (fileName.isEmpty())
     {
-        statusBar()->showMessage(tr("No binary to run"), 2000);
+        addNotification(FAILING, tr("No binary to run"));
         return;
+    }
+    if (textEditor->isModified())
+    {
+        slotCompile();
+        compiler->waitForFinished(10000);
     }
     compiler->run();
 }
@@ -792,8 +797,8 @@ void Kuzya::slotAfterCompile(int status)
         notificationList->clear();
         if (Compiler::NOERROR == status)
         {
-                addNotification(SUCCESS, tr("Compiled successfuly!"));
                 paintWarningMarkers(compiler->getLastWarnings());
+                addNotification(SUCCESS, tr("Compiled successfuly!"));
         }
         else
         {
@@ -803,9 +808,9 @@ void Kuzya::slotAfterCompile(int status)
                 }
                 else
                 {
-                    addNotification(FAILING, tr("Compilation failed!"));
                     paintErrorMarkers(compiler->getLastErrors());
                     paintWarningMarkers(compiler->getLastWarnings());
+                    addNotification(FAILING, tr("Compilation failed!"));
                 }
         }
 
@@ -824,7 +829,7 @@ void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
             if (0 != errorList->at(i).line)
             {
                 addNotification(ERROR, errorList->at(i).description, true, errorList->at(i).line);
-                if (0 == firstAttached) firstAttached = i+1;
+                if (0 == firstAttached) firstAttached = i;
                 errCount++;
             }
             else addNotification(COMPILER, errorList->at(i).description);

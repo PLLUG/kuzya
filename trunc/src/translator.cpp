@@ -218,4 +218,28 @@ void Translator::translateCode(QString srcFile, QString destFile, DirectionEnum 
 
 }
 
+void Translator::translateList(QStringList *list)
+{
+    QFile fileTrans(translationsPath+codeTranslation+".tr");
+    if(!fileTrans.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        return;
+    }
+    QTextStream trStream(&fileTrans);
+    trStream.setCodec("UTF-8");
+    QString trLine;
+    QString key;
+    QString translation;
+    while (!trStream.atEnd())
+    {
+        trLine = trStream.readLine();
+        key = trLine;
+        key.truncate(key.lastIndexOf('='));
+        translation = trLine.section('=', 1);
+        list->replaceInStrings(key, translation);
+    }
+    fileTrans.close();
+
+}
+
 

@@ -3,14 +3,17 @@ compiler=g++
 comment=GNU project C and C++ compiler
 
 [compile]
-default=-O2 --static -o $output$ -I /usr/include/kuzya/ $options$ $source$
-object=-O2 -c -o $output$ -I /usr/include/kuzya/ $options$ $source$
+default=-O2 --static -o $output$ -I /usr/include/kuzya/graphics/c $options$ $source$
+object=-O2 -c -o $output$ -I /usr/include/kuzya/graphics/c  $options$ $source$
 static_lib=
 dynamic_lib=
 alternative=
 
 [errors]
+messages_1=0:1:(In\\sfile\\s.*:)
 error_messages_1=1:3:(\\d+):\\s(.*)error:\\s(.*)
 error_messages_2=1:4:(\\d+):(\\d+):\\s(.*)error:\\s(.*)
 
 [warnings]
+messages_1=0:1:(In\\sfile\\s.*:)
+warning_messages_1=1:3:(\\d+):\\s(.*)warning:\\s(.*)

@@ -1,6 +1,6 @@
 [info]
 compiler=bcc
-info=Borland C++ Compiler
+comment=Borland C++ Compiler
 config=nostd
 
 [compile]
@@ -15,4 +15,4 @@ messages_2=0:1:^Error:(.*)
 [warnings]
 warning_messages_1=2:3:Warning\\s(.*)\\s(\\d+):\\s(.*)
 messages_1=0:1:^(.:\\\\.*:)$---turned off
-messages_1=0:1:^(Borland\\s.*\\sInternational)$---turned off
+logo=0:1:^(Borland\\s.*\\sInternational)$---turned off
