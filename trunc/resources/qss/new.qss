@@ -21,11 +21,38 @@ QMenuBar
 	
 	background-color: rgb(213, 213, 213);
 }
+
 QToolButton
 { 
 	border-radius: 5px;
 }
+QToolButton#browseButton
+{
+	background:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #fafafa, stop: 0.4 #f4f4f4,
+                                 stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);
+	padding:2;
+	border: 2px groove grey;
+	border-radius:5;
+	
+}
+QToolButton#browseButton:hover
+{
+	border-bottom-color:black;
+	border-style:inset;
+	color:white;
+	background:qlineargradient(spread:pad, x1:0.484, y1:0, x2:0.443273, y2:1, stop:0 rgba(68, 68, 68, 255), stop:0.960227 rgba(198, 198, 198, 255));
+	padding-left:1px;
+	padding-top:1px;
 
+}
+QToolButton#browseButton:focus
+{
+border-color:orange;
+	border-style:inset;
+	padding-left: 2px;
+    padding-top: 2px;
+}
 QToolButton:pressed
 {
 	border: 1px solid white;
@@ -52,6 +79,11 @@ QToolBar:horizontal
 QToolBar:vertical
 {
 	background-color:qlineargradient(spread:pad, x1:1, y1:0.499955, x2:0, y2:0.516773, stop:0 rgba(173, 173, 173, 255), stop:0.960227 rgba(56, 60, 64, 255));
+}
+QToolBar::handle
+{
+	background-color:qlineargradient(spread:reflect, x1:0.505, y1:0.58, x2:0.506, y2:0.540091, stop:0 rgba(68, 68, 68, 255), stop:0.948864 rgba(154, 162, 192, 255));
+	
 }
 QStatusBar
 {

@@ -137,6 +137,9 @@ private slots:
         void slotStaticLibMode();
         void slotDynamicLibMode();
 protected:
+        //*DRAG AND DROP
+        void dragEnterEvent(QDragEnterEvent *event);
+        void dropEvent(QDropEvent *event);
         void closeEvent(QCloseEvent *event);
 //	void keyPressEvent(QKeyEvent *event);
 private:
@@ -150,6 +153,7 @@ private:
 
 private:
         QFile *file;
+        QString language; //curren programing language
         QsciScintilla* textEditor;
         QListWidget* notificationList;
         QString fileName;
