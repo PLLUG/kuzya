@@ -39,6 +39,7 @@ public:
     QString translatedCodeFile();
     void retranslate();
     void setTranslation(QString transl);
+    void translateList(QStringList *list);
 
 private:
     enum DirectionEnum { fromCode, toCode };

@@ -21,7 +21,6 @@
 
 #include <QSettings>
 #include <QDirIterator>
-#include <QTemporaryFile>
 #include "QDebug"
 
 #include "compiler.h"
@@ -327,6 +326,7 @@ void Compiler::compile(QString sourceFile)
         QString prevDir = QDir::currentPath();
         if (!compilerDir.isEmpty()) QDir::setCurrent(compilerDir);
         start(QString(compiler+" "+param), QIODevice::ReadWrite);
+        qDebug() << QDir::currentPath();
         qDebug() << QString(compiler+" "+param);
         QDir::setCurrent(prevDir);
 }
@@ -334,8 +334,9 @@ void Compiler::compile(QString sourceFile)
 
 void Compiler::run(void)
 {
+    if (programPath.isEmpty()) return;
 #ifdef WIN32
-        startDetached("cmd", QStringList() << "/C" << "(title "+programPath+")&"+programPath+"&pause");
+        startDetached("cmd", QStringList() << "/C"<< "title "+programPath+"&&("+programPath+")&pause");
 #else
         startDetached("xterm", QStringList() << "-e" << "/bin/sh" << "-c"<< programPath);
 #endif
@@ -347,7 +348,7 @@ void Compiler::afterExit(int exitCode, QProcess::ExitStatus exitStatus)
 	if ((0 == exitCode)&&(0 == exitStatus)) endSt = NOERROR;
 	else
 	{
-		programPath = QString::null;
+                programPath = QString::null;
 		endSt = ERROR;
 	}
         if (!outFile.isEmpty()) readStdErr();
@@ -360,6 +361,7 @@ void Compiler::compilerProcessError(QProcess::ProcessError error)
         if (QProcess::FailedToStart == error) endSt = FAILED_TO_START;
         else endSt = CRASHED;
 
+        programPath = QString::null;
         emit compileEnded(endSt);
 }
 
