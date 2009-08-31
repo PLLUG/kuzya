@@ -50,7 +50,11 @@ graphics::graphics(QWidget *parent)
         textDirection = 0;
 
 	pix = QPixmap(width, height);
-	pix.fill(Qt::white);
+        pixBG = QPixmap(width, height);
+        pixBG.fill(Qt::white);
+        pix.fill(Qt::transparent);
+        pix.alphaChannel();
+
 
 
 	resize(width, height);
@@ -81,6 +85,7 @@ void graphics::processCommand(QString  command)
 		height = command.mid(index+1, numberOf-1).toInt(0,10);
 
 		createPixmap(width, height);
+                creatBGPixmap(width, height);
                 update();
 	}
 	QPainterPath myPath;
@@ -190,7 +195,7 @@ void graphics::processCommand(QString  command)
                 p.drawRect(x, y, x1-x, y1-y);
 		update();
 	}
-	if (getMethodName(command) == "bar3D")
+        if (getMethodName(command) == "bar3d")
 	{
 		index = command.indexOf("(",0);
 		indexOfSimbol = command.indexOf(",", index);
@@ -258,7 +263,7 @@ void graphics::processCommand(QString  command)
 	}
 	if(getMethodName(command) == "clearDevice")
 	{
-                pix.fill(Qt::white);
+                pix.fill(Qt::transparent);
 	}
         if(getMethodName(command) == "closegraph")
         {
@@ -417,7 +422,7 @@ void graphics::processCommand(QString  command)
                 numberOf = indexOfSimbol - index;
                 y1 = command.mid(index+1, numberOf-1).toInt(0,10);
         }
-	if (getMethodName(command) == "outText")
+        if (getMethodName(command) == "outtext")
 	{
 		index = command.indexOf("\"", 0);
 		indexOfSimbol = command.indexOf("\"", index+ 1);
@@ -427,7 +432,7 @@ void graphics::processCommand(QString  command)
                 p.drawText(x1, x1, methodText);
 		update();
 	}
-	if (getMethodName(command) == "outTextXY")
+        if (getMethodName(command) == "outtextxy")
 	{
 		QString oneSimbol;
  		p.setFont(QFont(textFont, textSize));
@@ -491,7 +496,7 @@ void graphics::processCommand(QString  command)
                 p.drawPie(x1-r, y1-r, 2*r, 2*r, stAngle, endAngle);
                 update();
 	}
-	if(getMethodName(command) == "putPixel")
+        if(getMethodName(command) == "putpixel")
 	{
 		index = command.indexOf("(",0);
 		indexOfSimbol = command.indexOf(",", index);
@@ -506,14 +511,43 @@ void graphics::processCommand(QString  command)
                 p.drawPoint(x1, y1);
                 update();
 	}
-	if (getMethodName(command) == "setColor")
+        if (getMethodName(command) == "setbgcolor")
+        {
+                index = command.indexOf("(", 0);
+                indexOfSimbol = command.indexOf(")", index+ 1);
+                numberOf = indexOfSimbol - index;
+                curentBGColor = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                switch(curentBGColor)
+                {
+                        case 0: pixBG.fill(Qt::black); 				update();break;
+                        case 1: pixBG.fill(Qt::darkBlue);                       update();break;
+                        case 2: pixBG.fill(Qt::darkGreen);                      update();break;
+                        case 3: pixBG.fill(Qt::darkCyan);       		update();break;
+                        case 4: pixBG.fill(Qt::darkRed);			update();break;
+                        case 5: pixBG.fill(QColor(139, 0, 139));        	update();break;
+                        case 6: pixBG.fill(QColor(165, 42, 42));	 	update();break;
+                        case 7: pixBG.fill(Qt::gray);	 			update();break;
+                        case 8: pixBG.fill(Qt::darkGray);			update();break;
+                        case 9: pixBG.fill(Qt::blue);    			update();break;
+                        case 10:pixBG.fill(Qt::green);  			update();break;
+                        case 11:pixBG.fill(Qt::cyan);   			update();break;
+                        case 12:pixBG.fill(Qt::red); 	 			update();break;
+                        case 13:pixBG.fill(QColor(255, 0, 255));        	update();break;
+                        case 14:pixBG.fill(Qt::yellow);	 			update();break;
+                        case 15:pixBG.fill(Qt::white);   			update();break;
+                }
+
+                update();
+        }
+        if (getMethodName(command) == "setcolor")
 	{
 		index = command.indexOf("(", 0);
 		indexOfSimbol = command.indexOf(")", index+ 1);
 		numberOf = indexOfSimbol - index;
 		curentColor = command.mid(index+1, numberOf-1).toInt(0,10);
 	}
-	if (getMethodName(command) == "setLineStyle")
+        if (getMethodName(command) == "setlinestyle")
 	{
 		index = command.indexOf("(",0);
 		indexOfSimbol = command.indexOf(",", index);
@@ -525,7 +559,7 @@ void graphics::processCommand(QString  command)
 		numberOf = indexOfSimbol - index;
 		lineThickness= command.mid(index+1, numberOf-1).toInt(0,10);
 	}
-	if (getMethodName(command) == "setTextStyle")
+        if (getMethodName(command) == "settextstyle")
 	{
 		index = command.indexOf("(",0);
 		indexOfSimbol = command.indexOf(",", index);
@@ -549,7 +583,8 @@ void graphics::processCommand(QString  command)
 void graphics::paintEvent(QPaintEvent * /*event*/ )
 {
  	QPainter painter(this );
-	painter.drawPixmap( 0 , 0 , pix ) ;
+        painter.drawPixmap(0, 0, pixBG);
+        painter.drawPixmap( 0 , 0 , pix);
         //update();
 }
 
@@ -557,9 +592,15 @@ void graphics::createPixmap(int width, int height)
 {
 	resize(width, height);
 	pix = QPixmap(width, height);
-	pix.fill(Qt::white);
+        pix.fill(Qt::transparent);
 }
 
+void graphics::creatBGPixmap(int width, int height)
+{
+        resize(width, height);
+        pixBG = QPixmap(width, height);
+        pixBG.fill(Qt::white);
+}
 QString graphics::getMethodName(QString command)
 {
 	QString methodName;
