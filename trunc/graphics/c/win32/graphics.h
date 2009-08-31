@@ -5,7 +5,7 @@
 FILE *file;
 char  command[100];
 char text[100];
-int width = 640;
+int width =  640 ;
 int height = 480;
 
 #if !defined(__COLORS)
@@ -56,15 +56,20 @@ void ellipse(int x, int y, int rWidth, int rHeight);
 int getmaxx();
 int getmaxy();
 void initgraph();
+void initgraph(int drv, int drm, char *text);
 void initgraph(int setWidth, int setHeight);
 void pieslice(int x, int y, int stAngle, int endAngle, int radius);
 void putpixel(int x, int y);
+void putpixel(int x, int y, COLORS color);
 void line(int x, int y, int x1, int y1);
 void lineto(int x, int y);
 void moveto(int x, int y);
 void outtext(char *text);
 void outtextxy(int x, int y, char *text);
+void setbkcolor(COLORS color);
+void setbkcolor(int color);
 void setcolor(COLORS color);
+void setcolor(int color);
 void setlinestyle(int linestyle, unsigned upattern, int thickness);
 void settextstyle(char* font, int direction, int size);
 ///********************************************************************
@@ -115,7 +120,7 @@ void closegraph()
 	sprintf(command, "closegraph();");
 	fprintf(file, command);
 	fflush(file);
-	char* command = ".//graphics//kuzyagraph";
+	char* command = ".//kuzyagraph";
 	pclose(file);
 }
 ///******ellipse************************************
@@ -137,8 +142,14 @@ int getmaxy()
 //********initGraph*************************
 void initgraph()
 {
-	static char *command= ".//graphics//kuzyagraph";
+	static char *command= ".//kuzyagraph";
 	file = popen(command, "w");
+
+}
+//********initGraph*************************
+void initgraph(int *drv, int *drm, char *text)
+{
+	initgraph();
 }
 //*********initGraph******************************
 void initgraph(int setWidth, int setHeight)
@@ -158,6 +169,13 @@ void pieslice(int x, int y, int stAngle, int endAngle, int radius)
 //*******putPixel*********************************
 void putpixel(int x, int y)
 {	
+	sprintf(command, "putpixel(%i,%i);\n",x , y);
+	fprintf(file, command);
+}
+//*******putPixel___ With color*********************************
+void putpixel(int x, int y, COLORS color)
+{
+	setcolor(color);
 	sprintf(command, "putpixel(%i,%i);\n",x , y);
 	fprintf(file, command);
 }
@@ -191,8 +209,26 @@ void outtext(char *text)
 	sprintf(command, "outtext(\"%s\");\n", text);
 	fprintf(file, command);	
 }
-//***********setColor************************************
+//***********setBGColor___COLORS************************************
+void setbkcolor(COLORS color)
+{
+	sprintf(command, "setbgcolor(%i);\n", color);
+	fprintf(file, command);	
+}
+//***********setBGColor___NUMBERS************************************
+void setbkcolor(int color)
+{
+	sprintf(command, "setbgcolor(%i);\n", color);
+	fprintf(file, command);	
+}
+//***********setColor___COLORS************************************
 void setcolor(COLORS color)
+{
+	sprintf(command, "setcolor(%i);\n", color);
+	fprintf(file, command);	
+}
+//***********setColor___NUMBERS************************************
+void setcolor(int color)
 {
 	sprintf(command, "setcolor(%i);\n", color);
 	fprintf(file, command);	
