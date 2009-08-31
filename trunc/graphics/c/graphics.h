@@ -56,16 +56,18 @@ void ellipse(int x, int y, int rWidth, int rHeight);
 int getmaxx();
 int getmaxy();
 void initgraph();
+void initgraph(int drv, int drm, char *text);
 void initgraph(int setWidth, int setHeight);
 void pieslice(int x, int y, int stAngle, int endAngle, int radius);
 void putpixel(int x, int y);
+void putpixel(int x, int y, COLORS color);
 void line(int x, int y, int x1, int y1);
 void lineto(int x, int y);
 void moveto(int x, int y);
 void outtext(char *text);
 void outtextxy(int x, int y, char *text);
-void setbgcolor(COLORS color);
-void setbgcolor(int color);
+void setbkcolor(COLORS color);
+void setbkcolor(int color);
 void setcolor(COLORS color);
 void setcolor(int color);
 void setlinestyle(int linestyle, unsigned upattern, int thickness);
@@ -144,6 +146,11 @@ void initgraph()
 	file = popen(command, "w");
 
 }
+//********initGraph*************************
+void initgraph(int *drv, int *drm, char *text)
+{
+	initgraph();
+}
 //*********initGraph******************************
 void initgraph(int setWidth, int setHeight)
 {
@@ -162,6 +169,13 @@ void pieslice(int x, int y, int stAngle, int endAngle, int radius)
 //*******putPixel*********************************
 void putpixel(int x, int y)
 {	
+	sprintf(command, "putpixel(%i,%i);\n",x , y);
+	fprintf(file, command);
+}
+//*******putPixel___ With color*********************************
+void putpixel(int x, int y, COLORS color)
+{
+	setcolor(color);
 	sprintf(command, "putpixel(%i,%i);\n",x , y);
 	fprintf(file, command);
 }
@@ -196,13 +210,13 @@ void outtext(char *text)
 	fprintf(file, command);	
 }
 //***********setBGColor___COLORS************************************
-void setbgcolor(COLORS color)
+void setbkcolor(COLORS color)
 {
 	sprintf(command, "setbgcolor(%i);\n", color);
 	fprintf(file, command);	
 }
 //***********setBGColor___NUMBERS************************************
-void setbgcolor(int color)
+void setbkcolor(int color)
 {
 	sprintf(command, "setbgcolor(%i);\n", color);
 	fprintf(file, command);	

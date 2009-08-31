@@ -51,6 +51,7 @@ Procedure initgraph();
 Procedure initgraph(setWidth, setHeight:longint);
 Procedure pieslice(x, y, stAngle, endAngle, radius:longint);
 Procedure putpixel(x, y:longint);
+Procedure putpixel(x, y:longint; color:COLORS);
 Procedure line(x, y, x1, y1:longint);
 Procedure lineto(x, y:longint);
 Procedure moveto(x, y:longint);
@@ -58,6 +59,8 @@ Procedure outtextxy(x, y:longint; text:string);
 Procedure outtext(text:string);
 Procedure setcolor(color:COLORS);
 Procedure setcolor(color:longint);
+Procedure setbkcolor(color:COLORS);
+Procedure setbkcolor(color:longint);
 Procedure setlinestyle(style:LINESTYLE; upattern, thickness:longint);
 Procedure setlinestyle(style, upattern, thickness:longint);
 Procedure settextstyle(font:string; mydirection:DIRECTION; size:longint);
@@ -154,6 +157,12 @@ Procedure putpixel(x, y:longint);
 Begin	
 	writeln(f, 'putpixel(',x , ',', y, ');');
 End;
+{*******************putPixel__WhithColor************************}
+Procedure putpixel(x, y:longint; color:COLORS)
+Begin	
+	setcolor(color);
+	writeln(f, 'putpixel(',x , ',', y, ');');
+End;
 {********************line***************************************}
 Procedure line(x, y, x1, y1:longint);
 Begin
@@ -198,6 +207,16 @@ End;
 Procedure setcolor(color:longint);
 Begin
 	writeln(f, 'setcolor(',color,');');
+End;
+{***************setColor____colour*************************}
+Procedure setcolor(color:COLORS);
+Begin
+	writeln(f, 'setbkcolor(',ord(color),');');
+End;
+{***************setColor____number*************************}
+Procedure setcolor(color:longint);
+Begin
+	writeln(f, 'setbkcolor(',color,');');
 End;
 {************setLineStyle____style**************************}
 Procedure setlinestyle(style:LINESTYLE; upattern, thickness:longint);

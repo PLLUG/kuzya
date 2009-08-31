@@ -511,7 +511,7 @@ void graphics::processCommand(QString  command)
                 p.drawPoint(x1, y1);
                 update();
 	}
-        if (getMethodName(command) == "setbgcolor")
+        if (getMethodName(command) == "setbkcolor")
         {
                 index = command.indexOf("(", 0);
                 indexOfSimbol = command.indexOf(")", index+ 1);
