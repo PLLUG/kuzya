@@ -5,8 +5,8 @@
 FILE *file;
 char  command[100];
 char text[100];
-int width ;
-int height;
+int width =  640 ;
+int height = 480;
 
 #if !defined(__COLORS)
 #define __COLORS
@@ -139,8 +139,6 @@ void initgraph()
 {
 	static char *command= "/usr/share/kuzya/bin/kuzyagraph";
 	file = popen(command, "w");
-	width = 640;
-	height = 480;
 
 }
 //*********initGraph******************************
@@ -151,8 +149,6 @@ void initgraph(int setWidth, int setHeight)
 	height = setHeight;
 	sprintf(command, "initgraph(%i,%i);\n",width, height);
 	fprintf(file, command);
-	width = 640;
-	height = 480;
 }
 //********piesLice*********************************
 void pieslice(int x, int y, int stAngle, int endAngle, int radius)
