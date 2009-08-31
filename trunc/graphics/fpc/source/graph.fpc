@@ -95,7 +95,7 @@ Begin
 	begin
 		topStr := 'false';
 	end;
-	writeln(f, 'bar3D(', x, ',',y,',',x1,',',y1,',',z,',',topStr, ');');
+	writeln(f, 'bar3d(', x, ',',y,',',x1,',',y1,',',z,',',topStr, ');');
 End;
 {***********circle***************************************************}
 Procedure circle(x, y, radius:longint);
@@ -105,7 +105,7 @@ End;
 {***********clearDevise********************************************}
 Procedure cleardevice();
 Begin
-	writeln(f, 'clearDevice();');
+	writeln(f, 'cleardevice();');
 End;
 {*************closeGraph***************************************}
 Procedure closegraph();
@@ -152,7 +152,7 @@ End;
 {*******************putPixel************************************}
 Procedure putpixel(x, y:longint);
 Begin	
-	writeln(f, 'putPixel(',x , ',', y, ');');
+	writeln(f, 'putpixel(',x , ',', y, ');');
 End;
 {********************line***************************************}
 Procedure line(x, y, x1, y1:longint);
@@ -172,42 +172,52 @@ End;
 {*******************outTextXY*******************************}
 Procedure outtextxy(x, y:longint; text:string);
 Begin
-	writeln(f, 'outTextXY(', x, ',', y,',"',  text, '");');
+	writeln(f, 'outtextxy(', x, ',', y,',"',  text, '");');
 End;
 {********************outText********************************}
 Procedure outtext(text:string);
 Begin
-	writeln(f, 'outText("', text, '");');
+	writeln(f, 'outtext("', text, '");');
+End;
+{***************setBGColor____number*************************}
+Procedure setbgcolor(color:longint);
+Begin
+	writeln(f, 'setbgcolor(',color,');');
+End;
+{***************setColor____colour*************************}
+Procedure setbgcolor(color:COLORS);
+Begin
+	writeln(f, 'setbgcolor(',ord(color),');');
 End;
 {***************setColor____colour*************************}
 Procedure setcolor(color:COLORS);
 Begin
-	writeln(f, 'setColor(',ord(color),');');
+	writeln(f, 'setcolor(',ord(color),');');
 End;
 {***************setColor____number*************************}
 Procedure setcolor(color:longint);
 Begin
-	writeln(f, 'setColor(',color,');');
+	writeln(f, 'setcolor(',color,');');
 End;
 {************setLineStyle____style**************************}
 Procedure setlinestyle(style:LINESTYLE; upattern, thickness:longint);
 Begin
-	writeln(f, 'setLineStyle(', ord(style), ',', thickness, ');');
+	writeln(f, 'setlinestyle(', ord(style), ',', thickness, ');');
 End;
 {************setLineStyle_____number**********************}
 Procedure setlinestyle(style, upattern, thickness:longint);
 Begin
-	writeln(f, 'setLineStyle(', style, ',', thickness, ');');
+	writeln(f, 'setlinestyle(', style, ',', thickness, ');');
 End;
 {*************setTetxtStyle____style************************}
 Procedure settextstyle(font:string; mydirection:DIRECTION; size:longint);
 Begin
-	writeln(f, 'setTextStyle(', font, ',', ord(mydirection), ',',  size, ');');
+	writeln(f, 'settextstyle(', font, ',', ord(mydirection), ',',  size, ');');
 End;
 {*************setTetxtStyle_____number********************}
 Procedure settextstyle(font:string; mydirection, size:longint);
 Begin
-	writeln(f, 'setTextStyle(', font, ',', mydirection, ',',  size, ');');
+	writeln(f, 'settextstyle(', font, ',', mydirection, ',',  size, ');');
 End;
 
 End.

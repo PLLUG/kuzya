@@ -94,7 +94,7 @@ void bar3d(int x, int y, int x1, int y1, int z, bool top)
 	{
 		topStr = "false";
 	}
-	sprintf(command, "bar3D(%i,%i,%i,%i,%i,%s);\n",x , y, x1, y1, z, topStr);
+	sprintf(command, "bar3d(%i,%i,%i,%i,%i,%s);\n",x , y, x1, y1, z, topStr);
 	fprintf(file, command);
 }
 //**********circle**************************************************** 
@@ -106,7 +106,7 @@ void circle(int x, int y, int radius)
 //**********clearDevise********************************************
 void cleardevice()
 {
-	sprintf(command, "clearDevice();\n");
+	sprintf(command, "cleardevice();\n");
 	fprintf(file, command);
 }
 //*********closeGraph***********************
@@ -158,7 +158,7 @@ void pieslice(int x, int y, int stAngle, int endAngle, int radius)
 //*******putPixel*********************************
 void putpixel(int x, int y)
 {	
-	sprintf(command, "putPixel(%i,%i);\n",x , y);
+	sprintf(command, "putpixel(%i,%i);\n",x , y);
 	fprintf(file, command);
 }
 //*******line**************************************
@@ -182,30 +182,30 @@ void moveto(int x, int y)
 //********outTextXY***********************************
 void outtextxy(int x, int y, char *text)
 {
-	sprintf(command, "outTextXY(%i,%i,\"%s\");\n",x , y, text);
+	sprintf(command, "outtextxy(%i,%i,\"%s\");\n",x , y, text);
 	fprintf(file, command);
 }
 //************outText*****************************************
 void outtext(char *text)
 {
-	sprintf(command, "outText(\"%s\");\n", text);
+	sprintf(command, "outtext(\"%s\");\n", text);
 	fprintf(file, command);	
 }
 //***********setColor************************************
 void setcolor(COLORS color)
 {
-	sprintf(command, "setColor(%i);\n", color);
+	sprintf(command, "setcolor(%i);\n", color);
 	fprintf(file, command);	
 }
 //***********setLineStyle**********************************
 void setlinestyle(int linestyle, unsigned upattern, int thickness)
 {
-	sprintf(command, "setLineStyle(%i,%i);\n", linestyle, thickness);
+	sprintf(command, "setlinestyle(%i,%i);\n", linestyle, thickness);
 	fprintf(file, command);	
 }
 //***********setTetxtStyle*******************************
 void settextstyle(char *font, int direction, int size)
 {
-	sprintf(command, "setTextStyle(%s,%i,%i);\n", font, direction, size);
+	sprintf(command, "settextstyle(%s,%i,%i);\n", font, direction, size);
 	fprintf(file, command);	
 }

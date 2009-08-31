@@ -46,6 +46,7 @@ class graphics: public QDialog, private Ui::graphicsForm
 		Ui::graphicsForm ui;
 		void paintEvent(QPaintEvent *event);
 		void createPixmap(int width, int height);
+                void creatBGPixmap(int width, int height);
 		QString getMethodName(QString command);
 
 
@@ -53,6 +54,7 @@ class graphics: public QDialog, private Ui::graphicsForm
 		int step;
 		int index;
 		int curentColor;
+                int curentBGColor;
 		int textSize;
                 int textDirection;
 		int lineThickness;
@@ -74,6 +76,7 @@ class graphics: public QDialog, private Ui::graphicsForm
 	
 	private:
  		QPixmap pix;
+                QPixmap pixBG;
 		QPainter p;
 		QString methodText;
 		QString textFont;
