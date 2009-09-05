@@ -154,7 +154,7 @@ void initgraph(int *drv, int *drm, char *text)
 //*********initGraph******************************
 void initgraph(int setWidth, int setHeight)
 {
-	initgraph();
+	//initgraph();
 	width = setWidth;
 	height = setHeight;
 	sprintf(command, "initgraph(%i,%i);\n",width, height);
