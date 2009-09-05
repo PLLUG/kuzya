@@ -261,7 +261,7 @@ void graphics::processCommand(QString  command)
                 p.drawEllipse(x1-r, y1-r, 2*r, 2*r);
 		update();
 	}
-	if(getMethodName(command) == "clearDevice")
+        if(getMethodName(command) == "cleardevice")
 	{
                 pix.fill(Qt::transparent);
 	}
