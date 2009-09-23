@@ -74,7 +74,7 @@ uses Unix, Crt;
 var    	     
 			f:text;
 	height,width:longint;
-	const kuzyagraph = '/usr/share/kuzya/bin/kuzyagraph';
+	const kuzyagraph = 'kuzyagraph';
 
 {****************ARC********************************************}
 Procedure arc(x, y,stAngle, endAngle, radius:longint);
@@ -158,7 +158,7 @@ Begin
 	writeln(f, 'putpixel(',x , ',', y, ');');
 End;
 {*******************putPixel__WhithColor************************}
-Procedure putpixel(x, y:longint; color:COLORS)
+Procedure putpixel(x, y:longint; color:COLORS);
 Begin	
 	setcolor(color);
 	writeln(f, 'putpixel(',x , ',', y, ');');
@@ -189,12 +189,12 @@ Begin
 	writeln(f, 'outtext("', text, '");');
 End;
 {***************setBGColor____number*************************}
-Procedure setbgcolor(color:longint);
+Procedure setbkcolor(color:longint);
 Begin
 	writeln(f, 'setbgcolor(',color,');');
 End;
 {***************setColor____colour*************************}
-Procedure setbgcolor(color:COLORS);
+Procedure setbkcolor(color:COLORS);
 Begin
 	writeln(f, 'setbgcolor(',ord(color),');');
 End;
@@ -207,16 +207,6 @@ End;
 Procedure setcolor(color:longint);
 Begin
 	writeln(f, 'setcolor(',color,');');
-End;
-{***************setColor____colour*************************}
-Procedure setcolor(color:COLORS);
-Begin
-	writeln(f, 'setbkcolor(',ord(color),');');
-End;
-{***************setColor____number*************************}
-Procedure setcolor(color:longint);
-Begin
-	writeln(f, 'setbkcolor(',color,');');
 End;
 {************setLineStyle____style**************************}
 Procedure setlinestyle(style:LINESTYLE; upattern, thickness:longint);
