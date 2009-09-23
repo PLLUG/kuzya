@@ -88,6 +88,7 @@ Kuzya::Kuzya(QWidget *parent)
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
 
         textEditor = new QsciScintilla(this);
+        textEditor->setEolMode(QsciScintilla::EolUnix);
 
         notificationList = new QListWidget(this);
         notificationList->setVisible(false);
@@ -648,6 +649,7 @@ bool Kuzya::slotSave(void)
             filter = filter+"All Files (*)";
             fileName = QFileDialog::getSaveFileName(this, tr("Save as..."), DefaultDir, filter);
             slotUpdateWindowName(false);
+            refreshProfileSettings();
         }
 
         if (fileName.isEmpty())
@@ -678,6 +680,7 @@ bool Kuzya::slotSave(void)
         statusBar()->showMessage(tr("Saved"), 2000);
         addFileNameToList(file.fileName());
         refreshProfileSettings();
+        //translator->retranslate();
         if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
         return true;
 }
@@ -1138,6 +1141,13 @@ void Kuzya::slotGotoErrorLine(QListWidgetItem * item)
 */
 void Kuzya::slotChangeTranslation(QString translation)
 {
+    if (textEditor->isModified())
+    {
+        slotSave();
+        //int index = languageComboBox->findText(defaultComp);
+        //if (-1 != index) languageComboBox->setCurrentIndex(index);
+
+    }
     translator->setTranslation(translation);
     openFile(translator->translatedCodeFile());
      #ifdef WIN32

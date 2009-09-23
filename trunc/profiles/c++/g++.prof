@@ -3,8 +3,8 @@ compiler=g++
 comment=GNU project C and C++ compiler
 
 [compile]
-default=-O2 --static -o $output$ -I /usr/include/kuzya/graphics/c $options$ $source$
-object=-O2 -c -o $output$ -I /usr/include/kuzya/graphics/c  $options$ $source$
+default=-o $output$ $options$ $source$
+object=-c -o $output$ $options$ $source$
 static_lib=
 dynamic_lib=
 alternative=
