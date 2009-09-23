@@ -7,7 +7,7 @@
 
 Name:      kuzya
 Summary:   Integrated Development Environment for students
-Version:   2.0.0
+Version:   2.1.2
 Source0:   %{name}-%{version}.tar.bz2 
 Group:     Development/Tools
 Release:   2
@@ -47,35 +47,31 @@ make
 
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/usr/share/kuzya/bin/
 mkdir -p $RPM_BUILD_ROOT/usr/bin
 mkdir -p $RPM_BUILD_ROOT/usr/doc/%{name}
-mkdir -p $RPM_BUILD_ROOT/usr/include/%{name}
-cp -f ./graphics/c/graphics.h $RPM_BUILD_ROOT/usr/include/%{name}/
+mkdir -p $RPM_BUILD_ROOT/usr/include
+cp -f ./graphics/c/graphics.h $RPM_BUILD_ROOT/usr/include
 cp -fr ./doc $RPM_BUILD_ROOT/usr/doc/%{name}
 mkdir -p $RPM_BUILD_ROOT/usr/share/%{name}/
 cp -fr ./profiles $RPM_BUILD_ROOT/usr/share/%{name}/
 cp -fr ./resources $RPM_BUILD_ROOT/usr/share/%{name}/
 mkdir -p $RPM_BUILD_ROOT/usr/share/%{name}/resources/translations
 cp -fr ./src/images $RPM_BUILD_ROOT/usr/share/%{name}/src/
-cp -fr ./src/qss $RPM_BUILD_ROOT/usr/share/%{name}/resources/
+cp -fr ./resources/qss $RPM_BUILD_ROOT/usr/share/%{name}/resources
 
-install -Dpm 755 ./bin/%{name}graph $RPM_BUILD_ROOT/usr/share/kuzya/bin/%{name}graph
-install -Dpm 755 ./bin/%{name}      $RPM_BUILD_ROOT/usr/bin/%{name}
-install -Dpm 755 ./src/translations/*.qm $RPM_BUILD_ROOT/usr/share/%{name}/src/translations
+install -Dpm 755 ../bin/%{name}graph $RPM_BUILD_ROOT/usr/bin/%{name}graph
+install -Dpm 755 ../bin/%{name}      $RPM_BUILD_ROOT/usr/bin/%{name}
+install -Dpm 755 ./resources/translations/*.qm $RPM_BUILD_ROOT/usr/share/%{name}/src/translations
 
 %files
 %defattr(-,root,root,0755)
 /usr/bin/
-#/usr/bin/%{name}/graph
 /usr/doc/%{name}
-/usr/include/%{name}
+/usr/include/
 /usr/share/%{name}
-#/usr/share/%{name}/resources
-#/usr/share/%{name}/src/translations
-#/usr/share/%{name}/src/images
-#/usr/share/%{name}/src/qss
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 rm -fr /root/rpmbuild/BUILD/%{name}-%{version}
+rm -fr /root/rpmbuild/BUILD/bin
 
