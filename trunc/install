@@ -39,7 +39,7 @@ else
 fi
 
 echo -en "Instiling kuzya into the system\t\t\t\t"
-if install -Dpm 755 ../bin/kuzyagraph /usr/share/kuzya/bin/kuzyagraph			>/root/ierror	&&
+if install -Dpm 755 ../bin/kuzyagraph /usr/bin/kuzyagraph			>/root/ierror	&&
 install -Dpm 755 ../bin/kuzya      /usr/bin/kuzya					>/root/ierror  &&
 install -Dpm 755 ./resources/translations/*.qm /usr/share/kuzya/src/translations	>/root/ierror; then
 	echo "...ok!"
