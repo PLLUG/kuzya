@@ -120,6 +120,8 @@ void Translator::openFile(QString file, QString lang)
         fileName.truncate(file.lastIndexOf("."));
         QString ex = file;
         ex.remove(0, ex.lastIndexOf("."));
+        fileName.remove("_src");
+        fileName.remove("_"+codeTranslation);
         fileName = fileName+"_src"+ex;
     }
 }
@@ -198,11 +200,11 @@ void Translator::translateCode(QString srcFile, QString destFile, DirectionEnum 
         translation = trLine.section('=', 1);
         if (fromCode == direction)
         {
-            text.replace(key, translation);
+            text.replace(QRegExp("(\\W)("+key+")(\\W)"), "\\1"+translation+"\\3");
         }
         else
         {
-            text.replace(translation, key);
+            text.replace(QRegExp("(\\W)("+translation+")(\\W)"), "\\1"+key+"\\3");
         }
     }
     fileTrans.close();
@@ -239,7 +241,6 @@ void Translator::translateList(QStringList *list)
         list->replaceInStrings(key, translation);
     }
     fileTrans.close();
-
 }
 
 

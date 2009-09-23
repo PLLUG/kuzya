@@ -67,7 +67,9 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 #endif
        slotUpdateSkinsCBox();
        languageComboBox->clear();
-       languageComboBox->addItems(mw->getCurrentCompiler()->getSupportedLanguages());
+       QStringList supportedList = mw->getCurrentCompiler()->getSupportedLanguages();
+       supportedList.sort();
+       languageComboBox->addItems(supportedList);
 
 }
 void OptionsDialog::slotUpdateSkinsCBox(void)
@@ -437,8 +439,12 @@ bool OptionsDialog::ukrIsCheked()
 void OptionsDialog::slotUpdateCompilerCBox(QString lang)
 {
         QStringList compilers = mw->getCurrentCompiler()->getSupportedCompilers(lang);
+        compilers.sort();
         compilerComboBox->clear();
         compilerComboBox->addItems(compilers);
+        QString defaultComp = readDefaultCompiler(lang);
+        int index = compilerComboBox->findText(defaultComp);
+        if (-1 != index) compilerComboBox->setCurrentIndex(index);
 }
 
 void OptionsDialog::slotLoadCompilerOptions(QString comp)

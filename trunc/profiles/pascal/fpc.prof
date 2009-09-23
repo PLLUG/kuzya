@@ -3,13 +3,13 @@ compiler=fpc
 comment=Free Pascal Compiler
 
 [compile]
-default= -vw $options$ $source$
+default=-vr -vw $options$ $source$
 object=-vr -Cn $options$ $source$
 static_lib=-vr -Us -Ur $options$ $source$
 
 [errors]
-error_messages_1=1:3:(\\d+):\\s(.*)error:\\s(.*)
-error_messages_1=1:4:(\\d+):\\s(.*)error:\\s(\\d+)(.*)
+error_messages_1=1:3:(\\d+):\\s(.*)error.\\s(.*)
+error_messages_2=1:4:(\\d+):\\s(.*)error:\\s(\\d+)(.*)
 messages_1=0:1:^error:(.*)
 messages_2=0:1:^Fatal:(.*)
 messages_3=0:1:^(PPU\\s[^L]*)$

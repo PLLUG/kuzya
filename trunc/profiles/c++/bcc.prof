@@ -4,8 +4,8 @@ comment=Borland C++ Compiler
 config=nostd
 
 [compile]
-default=-w $options$ -I.\\..\\INCLUDE -L.\\..\\LIB -e$output$ $source$
-object=-c -w $options$ -I.\\..\\INCLUDE -L.\\..\\LIB -o$output$ $source$
+default=$options$ -I.\\..\\INCLUDE -L.\\..\\LIB -e$output$ $source$ graphics.lib
+object=-c $options$ -I.\\..\\INCLUDE -L.\\..\\LIB -o$output$ $source$
 
 [errors]
 error_messages_1=2:3:Error\\s(.*)\\s(\\d+):\\s(.*)
