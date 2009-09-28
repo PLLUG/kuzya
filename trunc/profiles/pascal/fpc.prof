@@ -6,6 +6,8 @@ comment=Free Pascal Compiler
 default=-vr -vw $options$ $source$
 object=-vr -Cn $options$ $source$
 static_lib=-vr -Us -Ur $options$ $source$
+win32_opt=
+unix_opt=
 
 [errors]
 error_messages_1=1:3:(\\d+):\\s(.*)error.\\s(.*)
