@@ -262,7 +262,7 @@ void Compiler::compile(QString sourceFile)
         config = compilerProfile->value("config", "").toString();
 	compilerProfile->endGroup();
 
-	compilerProfile->beginGroup("compile");
+	compilerProfile->beginGroup("compile");        
 	QString param;
 	switch (compileMode) 
 	{
@@ -284,6 +284,14 @@ void Compiler::compile(QString sourceFile)
                 default:
                         param = "";
         }
+
+        QString opt;
+#ifdef WIN32
+        opt = compilerProfile->value("win32_opt", "").toString();
+#else
+        opt = compilerProfile->value("unix_opt", "").toString();
+#endif
+
 	compilerProfile->endGroup();
 
         if (param.isEmpty() || compiler.isEmpty()) return;
@@ -291,7 +299,7 @@ void Compiler::compile(QString sourceFile)
 	{
                 param.replace(QString("$source$"), sourceFile);
                 param.replace(QString("$output$"), programPath);
-                param.replace(QString("$options$"), options);
+                param.replace(QString("$options$"), options+" "+opt);
                 param.replace(QString("$compilerdir$"), compilerDir);
 	}
 
