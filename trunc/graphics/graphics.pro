@@ -4,5 +4,21 @@ HEADERS += readstdin.h \
 SOURCES += main.cpp \
  readstdin.cpp \
  graphics.cpp
-TARGET =../../bin/kuzyagraph
+
 FORMS += graphics.ui
+
+win32::TARGET =../../bin/kuzyagraph
+
+unix {
+    TARGET =../bin/kuzyagraph
+    target.path = /usr/bin
+
+    kuzya_fpc_graph.path = /usr/include/kuzya/fpc
+    kuzya_fpc_graph.files += ./fpc/unit/*
+ 
+    kuzya_c_graph.path = /usr/include/kuzya/c
+    kuzya_c_graph.files += ./c/graphics.h 
+
+    INSTALLS += target kuzya_fpc_graph kuzya_c_graph
+}
+
