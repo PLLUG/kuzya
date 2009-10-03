@@ -16,7 +16,7 @@ unix {
     kuzya_fpc_graph.path = /usr/include/kuzya/fpc
     kuzya_fpc_graph.files += ./fpc/unit/*
  
-    kuzya_c_graph.path = /usr/include/kuzya/c
+    kuzya_c_graph.path = /usr/include
     kuzya_c_graph.files += ./c/graphics.h 
 
     INSTALLS += target kuzya_fpc_graph kuzya_c_graph
