@@ -212,13 +212,13 @@ void outtext(char *text)
 //***********setBGColor___COLORS************************************
 void setbkcolor(COLORS color)
 {
-	sprintf(command, "setbgcolor(%i);\n", color);
+	sprintf(command, "setbkcolor(%i);\n", color);
 	fprintf(file, command);	
 }
 //***********setBGColor___NUMBERS************************************
 void setbkcolor(int color)
 {
-	sprintf(command, "setbgcolor(%i);\n", color);
+	sprintf(command, "setbkcolor(%i);\n", color);
 	fprintf(file, command);	
 }
 //***********setColor___COLORS************************************
