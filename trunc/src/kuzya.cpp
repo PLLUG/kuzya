@@ -1223,8 +1223,10 @@ void Kuzya::unloadTemplates()
 }
 void Kuzya::dragEnterEvent(QDragEnterEvent *event)
 {
-    if(event->mimeData()->hasFormat("text/uri-list"));
-    event->acceptProposedAction();
+    if(event->mimeData()->hasFormat("text/uri-list"))
+    {
+        event->acceptProposedAction();
+    }
 }
 void Kuzya::dropEvent(QDropEvent *event)
 {
