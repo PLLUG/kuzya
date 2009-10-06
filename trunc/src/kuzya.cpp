@@ -40,6 +40,7 @@
 #include "kuzya.h"
 #include "helpbrowser.h"
 #include "translator.h"
+#include "version.h"
 //#include "helpassistant.h"
 
 
@@ -868,7 +869,7 @@ void Kuzya::paintWarningMarkers(QList<Compiler::compilerWarning>* warningList)
 **/
 void Kuzya::slotAbout(void)
 {
-    QMessageBox *aboutBox= new QMessageBox( QMessageBox::Information,tr("About"),"\t  <big><b><centre> \t    The Kuzya 2.0.1 </centre> </b></big>  "
+    QMessageBox *aboutBox= new QMessageBox( QMessageBox::Information,tr("About"),QString("\t  <big><b><centre> \t    The Kuzya %1 </centre> </b></big>  "
                                               "\n  <p> Free Development Environment</p>\n\n"
                                               "build on Jul 6 2009"
                                               "<p> Kuzya is simple crossplatform IDE for people who study  programming."
@@ -883,7 +884,7 @@ void Kuzya::slotAbout(void)
                                               "\n              \n \t <centre>Victor Sklyar</centre> "
                                               "\n <u>bouyantgrambler@users.sourceforge.net</u>"
                                               "\n              \n \t <centre>Alex Chmykhalo</centre> "
-                                              "\n <u>alexchmykhalo@users.sourceforge.net</u> </pre>",QMessageBox::Ok,this,Qt::Dialog);
+                                              "\n <u>alexchmykhalo@users.sourceforge.net</u> </pre>").arg(KUZYA_VERSION),QMessageBox::Ok,this,Qt::Dialog);
     #ifdef WIN32
         aboutBox->setIconPixmap(QPixmap(QApplication::applicationDirPath()+"/../resources/Kuzya.png"));
     #else
