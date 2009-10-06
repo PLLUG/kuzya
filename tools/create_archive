@@ -1,0 +1,14 @@
+#!/bin/sh
+
+rm -rf kuzya-2.1.6
+mkdir kuzya-2.1.6
+rm -f kuzya-2.1.6.tar.bz2
+
+cp -r ../trunc/*  kuzya-2.1.6/
+tar --exclude=.svn -cjf kuzya-2.1.6.tar.bz2 kuzya-2.1.6
+
+rm -rf kuzya-2.1.6
+
+cp kuzya.spec ~/rpmbuild/SPECS/
+cp kuzya-2.1.6.tar.bz2 ~/rpmbuild/SOURCES
+
