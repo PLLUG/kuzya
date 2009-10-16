@@ -182,6 +182,7 @@ private:
         QComboBox *languageComboBox;
         QActionGroup *compilerModeGroup;
         QsciLexer *currentLexer;
+        QAction *languageComboBoxAction;
 
         QSettings *tlist;
         QVector <QAction*> templlateAct;

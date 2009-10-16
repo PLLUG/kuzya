@@ -435,7 +435,7 @@
    <string>Kuzya</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="images.qrc">
+   <iconset>
     <normaloff>:/menu/images/kuzya.png</normaloff>:/menu/images/kuzya.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget"/>
@@ -579,7 +579,7 @@
   </widget>
   <action name="actionNew">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/filenew.png</normaloff>:/menu/images/filenew.png</iconset>
    </property>
    <property name="text">
@@ -591,7 +591,7 @@
   </action>
   <action name="actionOpen">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/fileopen.png</normaloff>:/menu/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -603,7 +603,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/filesave.png</normaloff>:/menu/images/filesave.png</iconset>
    </property>
    <property name="text">
@@ -615,7 +615,7 @@
   </action>
   <action name="actionSave_as">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/filesaveas.png</normaloff>:/menu/images/filesaveas.png</iconset>
    </property>
    <property name="text">
@@ -627,7 +627,7 @@
   </action>
   <action name="actionExit">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/window_suppressed.png</normaloff>:/menu/images/window_suppressed.png</iconset>
    </property>
    <property name="text">
@@ -639,7 +639,7 @@
   </action>
   <action name="actionUndo">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/undo.png</normaloff>:/menu/images/undo.png</iconset>
    </property>
    <property name="text">
@@ -651,7 +651,7 @@
   </action>
   <action name="actionRedo">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/redo.png</normaloff>:/menu/images/redo.png</iconset>
    </property>
    <property name="text">
@@ -663,7 +663,7 @@
   </action>
   <action name="actionRun">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/player_play.png</normaloff>:/menu/images/player_play.png</iconset>
    </property>
    <property name="text">
@@ -678,7 +678,7 @@
   </action>
   <action name="actionCompile">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/configure.png</normaloff>:/menu/images/configure.png</iconset>
    </property>
    <property name="text">
@@ -693,7 +693,7 @@
   </action>
   <action name="actionAbout">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/metacontact_offline.png</normaloff>:/menu/images/metacontact_offline.png</iconset>
    </property>
    <property name="text">
@@ -705,7 +705,7 @@
   </action>
   <action name="actionCut">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/editcut.png</normaloff>:/menu/images/editcut.png</iconset>
    </property>
    <property name="text">
@@ -714,7 +714,7 @@
   </action>
   <action name="actionCopy">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/editcopy.png</normaloff>:/menu/images/editcopy.png</iconset>
    </property>
    <property name="text">
@@ -723,7 +723,7 @@
   </action>
   <action name="actionPaste">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/editpaste.png</normaloff>:/menu/images/editpaste.png</iconset>
    </property>
    <property name="text">
@@ -786,7 +786,7 @@
   </action>
   <action name="actionFind">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/find.png</normaloff>:/menu/images/find.png</iconset>
    </property>
    <property name="text">
@@ -798,7 +798,7 @@
   </action>
   <action name="actionReplace">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/text_replace.png</normaloff>:/menu/images/text_replace.png</iconset>
    </property>
    <property name="text">
@@ -813,7 +813,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/printer.png</normaloff>:/menu/images/printer.png</iconset>
    </property>
    <property name="text">
@@ -844,7 +844,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/application_view_list.png</normaloff>:/menu/images/application_view_list.png</iconset>
    </property>
    <property name="text">
@@ -861,7 +861,7 @@
   </action>
   <action name="actionDefFontSize">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/default_font_size.png</normaloff>:/menu/images/default_font_size.png</iconset>
    </property>
    <property name="text">
@@ -870,7 +870,7 @@
   </action>
   <action name="actionEnlFont">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/font_enlarge.png</normaloff>:/menu/images/font_enlarge.png</iconset>
    </property>
    <property name="text">
@@ -882,7 +882,7 @@
   </action>
   <action name="actionShrinkFont">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset>
      <normaloff>:/menu/images/font_shrink.png</normaloff>:/menu/images/font_shrink.png</iconset>
    </property>
    <property name="text">
@@ -938,8 +938,6 @@
    </property>
   </action>
  </widget>
- <resources>
-  <include location="images.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
