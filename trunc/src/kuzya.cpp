@@ -68,18 +68,24 @@ Kuzya::Kuzya(QWidget *parent)
         toolBar->addSeparator();
         toolBar->addAction(actionNotificationList);
         toolBar->addSeparator();
-        toolBar->addAction(actionRun);
         toolBar->addAction(actionCompile);
+        toolBar->addAction(actionRun);
         toolBar->addSeparator();
-        toolBar->addWidget(languageComboBox);
+        languageComboBoxAction = toolBar->addWidget(languageComboBox);
+        languageComboBoxAction->setVisible(false);
 
         compilerModeGroup = new QActionGroup(this);
-        compilerModeGroup->setVisible(false);
+//        compilerModeGroup->setVisible(false);
         compilerModeGroup->addAction(actionDefaultMode);
         compilerModeGroup->addAction(actionObjectMode);
         compilerModeGroup->addAction(actionStaticLibMode);
         compilerModeGroup->addAction(actionDynamicLibMode);
         compilerModeGroup->addAction(actionAlternativeMode);
+
+        menuCompilation_Mode->setDisabled(true);
+        menuTemplates->setDisabled(true);
+        actionCompile->setDisabled(true);
+        actionRun->setDisabled(true);
 
         statusLabel = new QLabel(this);
         statusBar()->addPermanentWidget(statusLabel);
@@ -484,7 +490,12 @@ void Kuzya::slotNew(void)
         setWindowTitle("Kuzya");
         statusBar()->showMessage(tr("Created new file"), 2000);
         textEditor->setModified(false);
-        compilerModeGroup->setVisible(false);
+
+        menuCompilation_Mode->setDisabled(true);
+        menuTemplates->setDisabled(true);
+        actionCompile->setDisabled(true);
+        actionRun->setDisabled(true);
+        languageComboBoxAction->setVisible(false);
 }
 
 /**
@@ -555,6 +566,8 @@ void Kuzya::slotDynamicLibMode()
 
 void Kuzya::refreshProfileSettings()
 {
+    languageComboBoxAction->setVisible(false);
+
     if (fileName.isEmpty()) return;
 
     QStringList supportedList = compiler->getSupportedLanguages();    
@@ -562,7 +575,6 @@ void Kuzya::refreshProfileSettings()
     ex = ex.remove(0, ex.lastIndexOf("."));
     ex = ex.toLower();
 
-    //QString language;
     foreach (QString lang, supportedList)
     {
         if (compiler->getSupportedExtensions(lang).contains(ex))
@@ -579,8 +591,11 @@ void Kuzya::refreshProfileSettings()
         compiler->loadProfile(language, comp);
         compiler->setCompilerDir(settings->readCompilerLocation(language, comp));
         compiler->setOptions(settings->readCompilerOptions(language, comp));
+
+        menuCompilation_Mode->setDisabled(false);
         refreshCompileModes();
-        compilerModeGroup->setVisible(true);
+        actionCompile->setDisabled(false);
+        actionRun->setDisabled(false);
 
    #ifdef WIN32
         QString path = QApplication::applicationDirPath();
@@ -615,11 +630,11 @@ void Kuzya::refreshProfileSettings()
     QStringList supportedTranslations = translator->getSupportedTranslations(language);
     if (supportedTranslations.isEmpty())
     {
-        languageComboBox->setVisible(true);
         return;
     }
     else
     {
+        qDebug() << supportedTranslations.at(0);
         disconnect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
         languageComboBox->clear();
         languageComboBox->addItem(QIcon(path+"uk.png"), "en");
@@ -630,6 +645,7 @@ void Kuzya::refreshProfileSettings()
         QString codeTranslation = translator->translation();
         languageComboBox->setCurrentIndex(supportedTranslations.indexOf(codeTranslation)+1);
         connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
+        languageComboBoxAction->setVisible(true);
     }
 }
 
@@ -681,7 +697,6 @@ bool Kuzya::slotSave(void)
         statusBar()->showMessage(tr("Saved"), 2000);
         addFileNameToList(file.fileName());
         refreshProfileSettings();
-        //translator->retranslate();
         if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
         return true;
 }
@@ -703,10 +718,7 @@ void Kuzya::slotSave_as(void)
         newFileName = QFileDialog::getSaveFileName(this, tr("Save as..."),
                                            DefaultDir , filter);
         if (!newFileName.isEmpty()) fileName = newFileName;
-/*=======
-        if (!fileName.isEmpty()) fileName = newFileName;
->>>>>>> .r78
-*/
+
         slotSave();
 }
 /**
@@ -740,7 +752,10 @@ void Kuzya::slotPrint(void)
 void Kuzya::slotExit(void)
 {
         settings->writeSettings();
-//        settings->saveLastProjectName(fileName);
+
+        if (!fileName.isEmpty())
+            settings->saveLastProjectName(fileName);
+
         close();
 }
 /**
@@ -1007,8 +1022,9 @@ void Kuzya :: slotOpenRecentFile(QString FileName)
                 event->ignore();
         }
         settings->writeSettings();
-//        settings->saveLastProjectName(fileName);
 
+        if (!fileName.isEmpty())
+            settings->saveLastProjectName(fileName);
  }
 /**
 *******************************************************************************************************
@@ -1151,13 +1167,13 @@ void Kuzya::slotChangeTranslation(QString translation)
     }
     translator->setTranslation(translation);
     openFile(translator->translatedCodeFile());
-     #ifdef WIN32
+    #ifdef WIN32
         QString path = QApplication::applicationDirPath();
         path.truncate(path.lastIndexOf("/", -1));
         path = path+"/profiles/";
-   #else
+    #else
         QString path = "/usr/share/kuzya/profiles/";
-   #endif
+    #endif
     unloadTemplates();
     loadTemplates(path+language+"/"+language+".ini");
 }
@@ -1184,6 +1200,8 @@ void Kuzya::loadTemplates(QString templatesPath)
     int size;
     templatesCroupsList=tlist->childGroups();
     tempStrList1=templatesCroupsList;
+    if (!templatesCroupsList.isEmpty())
+        menuTemplates->setDisabled(false);
     translator->translateList(&tempStrList1);
     templatesSignalMapper = new QSignalMapper(this);
     QMenu *menu;
@@ -1220,6 +1238,7 @@ void Kuzya::loadTemplates(QString templatesPath)
 void Kuzya::unloadTemplates()
 {
     menuTemplates->clear();
+    menuTemplates->setDisabled(true);
     if(templatesSignalMapper==0) disconnect(templatesSignalMapper,SIGNAL(mapped(QString)),this,SLOT(slotPasteTemplate(QString)));
 }
 void Kuzya::dragEnterEvent(QDragEnterEvent *event)

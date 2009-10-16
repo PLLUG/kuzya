@@ -43,6 +43,7 @@ QStringList Translator::getSupportedTranslations(QString lang)
     QString path = "/usr/share/kuzya/profiles/"+lang;
 #endif
 
+    supportedTranslations.clear();
     QDirIterator fileIt(path, QStringList()<< "*.tr", QDir::NoDotAndDotDot|QDir::Files, QDirIterator::NoIteratorFlags);
     QString translation;
     while (fileIt.hasNext())
