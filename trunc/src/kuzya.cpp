@@ -207,6 +207,14 @@ Kuzya::Kuzya(QWidget *parent)
         connect(actionStaticLibMode, SIGNAL(triggered()), this, SLOT(slotStaticLibMode()));
         connect(actionDynamicLibMode, SIGNAL(triggered()), this, SLOT(slotDynamicLibMode()));
         statusBar()->showMessage(tr("Ready"));
+
+        QShortcut *notificationListShortcut = new QShortcut(textEditor);
+        notificationListShortcut->setKey(Qt::CTRL+Qt::Key_Down);
+        connect(notificationListShortcut, SIGNAL(activated()), notificationList, SLOT(setFocus()));
+
+        QShortcut *textEditorShortcut = new QShortcut(textEditor);
+        textEditorShortcut->setKey(Qt::CTRL+Qt::Key_Up);
+        connect(textEditorShortcut, SIGNAL(activated()), textEditor, SLOT(setFocus()));
 }
 ///___________________________________________________________________________________________________________________
 /**
@@ -343,7 +351,7 @@ void Kuzya::openFile(QString FileName)
         slotUpdateWindowName(false);
 
         addFileNameToList(FileName);
-        settings->saveLastProjectName(fileName);
+//        settings->saveLastProjectName(fileName);
 }
 
 /**
@@ -637,7 +645,7 @@ void Kuzya::refreshProfileSettings()
         qDebug() << supportedTranslations.at(0);
         disconnect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
         languageComboBox->clear();
-        languageComboBox->addItem(QIcon(path+"uk.png"), "en");
+        languageComboBox->addItem(QIcon(path+"english.png"), "english (default)");
         foreach (QString trans, supportedTranslations)
         {
            languageComboBox->addItem(QIcon(path+trans+".png"), trans);
@@ -753,8 +761,8 @@ void Kuzya::slotExit(void)
 {
         settings->writeSettings();
 
-        if (!fileName.isEmpty())
-            settings->saveLastProjectName(fileName);
+//        if (!fileName.isEmpty())
+//            settings->saveLastProjectName(fileName);
 
         close();
 }
@@ -1023,8 +1031,8 @@ void Kuzya :: slotOpenRecentFile(QString FileName)
         }
         settings->writeSettings();
 
-        if (!fileName.isEmpty())
-            settings->saveLastProjectName(fileName);
+//        if (!fileName.isEmpty())
+//            settings->saveLastProjectName(fileName);
  }
 /**
 *******************************************************************************************************
