@@ -27,18 +27,18 @@
 
 Compiler::Compiler(QObject *parent) : QProcess(parent)
 {  
-	connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(afterExit(int, QProcess::ExitStatus)));
-        connect(this, SIGNAL(readyReadStandardOutput()), this, SLOT(readStdErr()));
-        connect(this, SIGNAL(error(QProcess::ProcessError)), this, SLOT(compilerProcessError(QProcess::ProcessError)));
+    connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(afterExit(int, QProcess::ExitStatus)));
+    connect(this, SIGNAL(readyReadStandardOutput()), this, SLOT(readStdErr()));
+    connect(this, SIGNAL(error(QProcess::ProcessError)), this, SLOT(compilerProcessError(QProcess::ProcessError)));
 
-        setProcessChannelMode(MergedChannels);
-        refreshSupported();
-	compilerProfile = NULL;
+    setProcessChannelMode(MergedChannels);
+    compilerProfile = NULL;
+    refreshSupported();
 }
 
 Compiler::~Compiler()
 {
-	if (compilerProfile!=NULL) free(compilerProfile);
+    if (compilerProfile!=NULL) free(compilerProfile);
 }
 
 void Compiler::refreshSupported()
@@ -91,17 +91,24 @@ void Compiler::refreshSupported()
                         if (QSettings::NoError == info.status())
                         {
                             profile.beginGroup("info");
-                            QString str = profile.value("compiler", "").toString()+" ";
+                            QString str = profile.value("compiler", "").toString();
                             profile.endGroup();
 
-                            if (str.isEmpty()) continue;
-                            compilers = compilers + str + " ";
-                            profiles = profiles + fileIt.fileInfo().filePath() + " ";
+                            if (!str.isEmpty())
+                            {
+                                compilers = compilers + str + " ";
+                                profiles = profiles + fileIt.fileInfo().filePath() + " ";
+                            }
+                            else continue;
                         }
                     }
                 }
-                supportedCompilers << compilers;
-                profilesPathList << profiles;
+                if (!compilers.isEmpty())
+                {
+                    supportedCompilers << compilers;
+                    profilesPathList << profiles;
+                }
+                else continue;
             }
         }
     }
@@ -109,24 +116,24 @@ void Compiler::refreshSupported()
 
 QString Compiler::getProfilePath(QString lang, QString profile)
 {
-        QStringList profiles;
-        QStringList locations;
+    QStringList profiles;
+    QStringList locations;
 
-        int index = supportedLanguages.indexOf(lang);
-        if (-1 == index) return QString::Null();
+    int index = supportedLanguages.indexOf(lang);
+    if (-1 == index) return QString::Null();
 
-        QString str = supportedCompilers.at(index);
-        profiles = str.split(" ");
-        profiles.removeAll("");
+    QString str = supportedCompilers.at(index);
+    profiles = str.split(" ");
+    profiles.removeAll("");
 
-        str = profilesPathList.at(index);
-        locations = str.split(" ");
-        locations.removeAll("");
+    str = profilesPathList.at(index);
+    locations = str.split(" ");
+    locations.removeAll("");
 
-        index = profiles.indexOf(profile);
-        if (-1 == index) return QString::Null();
+    index = profiles.indexOf(profile);
+    if (-1 == index) return QString::Null();
 
-        return locations.at(index);
+    return locations.at(index);
 }
 
 QStringList Compiler::getSupportedLanguages()
@@ -163,79 +170,81 @@ QStringList Compiler::getSupportedCompilers(QString lang)
 
 QString Compiler::getCompilerInfo(QString lang, QString profile)
 {
-        if (lang.isEmpty() || profile.isEmpty()) return "";
+    if (lang.isEmpty() || profile.isEmpty()) return "";
 
-        QString profPath = getProfilePath(lang, profile);
-        if (QString::Null() == profPath) return "";
+    QString profPath = getProfilePath(lang, profile);
+    if (QString::Null() == profPath) return "";
 
-        QSettings prof(profPath, QSettings::IniFormat);
-        prof.beginGroup("info");
-        QString info = prof.value("comment", "").toString();
-        prof.endGroup();
+    QSettings prof(profPath, QSettings::IniFormat);
+    prof.beginGroup("info");
+    QString info = prof.value("comment", "").toString();
+    prof.endGroup();
     
-        return info;
+    return info;
 }
 
 void Compiler::loadProfile(QString lang, QString profile)
 {
-        if (NULL!=compilerProfile)
-	{
-		free(compilerProfile);
-	}
+    if (NULL != compilerProfile)
+    {
+        free(compilerProfile);
+    }
 	
-        if (lang.isEmpty() || profile.isEmpty()) return;
+    if (lang.isEmpty() || profile.isEmpty()) return;
 
-        refreshSupported();
-        QString profPath = getProfilePath(lang, profile);
-        if (QString::Null() == profPath) return;
+    refreshSupported();
+    QString profPath = getProfilePath(lang, profile);
+    if (QString::Null() == profPath) return;
 
-        compilerProfile = new QSettings(profPath, QSettings::IniFormat);
-        compileMode = DEFAULT;
+    compilerProfile = new QSettings(profPath, QSettings::IniFormat);
+    compileMode = DEFAULT;
 }
 
 void Compiler::setOptions(QString str)
 {
-	options = str;
+    options = str;
 }
 
 void Compiler::setCompilerDir(QString dir)
 {
-	compilerDir = dir;
+    compilerDir = dir;
 }
 
 bool Compiler::isReady()
 {
-        if (NULL == compilerProfile) return false;
-        if (compilerProfile->status() == QSettings::NoError) return true;
-	else return false;
+    if (NULL == compilerProfile) return false;
+
+    if (compilerProfile->status() == QSettings::NoError) return true;
+    else return false;
 }
 
 bool Compiler::isModeAvailable(int compileMode)
 {
-	compilerProfile->beginGroup("compile");
-	QString param;
-	switch (compileMode) 
-	{
-		case DEFAULT:
-			param = compilerProfile->value("default","").toString();
-			break;
-                case ALTERNATIVE:
-                        param = compilerProfile->value("alternative").toString();
-                        break;
-                case OBJECT:
-                        param = compilerProfile->value("object","").toString();
-                        break;
-                case STATIC_LIB:
-                        param = compilerProfile->value("static_lib","").toString();
-                        break;
-                case DYNAMIC_LIB:
-                        param = compilerProfile->value("dynamic_lib","").toString();
-                        break;
-		default:
-			param = "";
-	}
-	compilerProfile->endGroup();
-	return !param.isEmpty();
+    compilerProfile->beginGroup("compile");
+    QString param;
+    switch (compileMode)
+    {
+        case DEFAULT:
+            param = compilerProfile->value("default","").toString();
+            break;
+        case ALTERNATIVE:
+            param = compilerProfile->value("alternative").toString();
+            break;
+        case OBJECT:
+            param = compilerProfile->value("object","").toString();
+            break;
+        case STATIC_LIB:
+            param = compilerProfile->value("static_lib","").toString();
+            break;
+        case DYNAMIC_LIB:
+            param = compilerProfile->value("dynamic_lib","").toString();
+            break;
+        default:
+            param = "";
+    }
+    compilerProfile->endGroup();
+
+    return !param.isEmpty();
 }
 
 void Compiler::setCompilerMode(int mode)
@@ -245,198 +254,220 @@ void Compiler::setCompilerMode(int mode)
 
 void Compiler::compile(QString sourceFile)
 {
-	if (sourceFile.isEmpty()) return;
-        errorList.clear();
-        warningList.clear();
-        outFile.clear();
+    if (sourceFile.isEmpty()) return;
 
-        sourceFile = sourceFile.replace("/", QDir::separator());
-        programPath = sourceFile.left(sourceFile.lastIndexOf('.'));
-        QString sourcePath = sourceFile.left(sourceFile.lastIndexOf(QDir::separator()));
-        qDebug() << sourceFile;
-        qDebug() << programPath;
-        qDebug() << sourcePath;
+    errorList.clear();
+    warningList.clear();
+    outFile.clear();
 
-	compilerProfile->beginGroup("info");
-        QString compiler = compilerProfile->value("compiler", "").toString();
-        config = compilerProfile->value("config", "").toString();
-	compilerProfile->endGroup();
+    sourceFile = sourceFile.replace("/", QDir::separator());
+    programPath = sourceFile.left(sourceFile.lastIndexOf('.'));
+    QString sourcePath = sourceFile.left(sourceFile.lastIndexOf(QDir::separator()))+QDir::separator();
 
-	compilerProfile->beginGroup("compile");        
-	QString param;
-	switch (compileMode) 
-	{
-                case DEFAULT:
-                        param = compilerProfile->value("default","").toString();
-                        break;
-                case ALTERNATIVE:
-                        param = compilerProfile->value("alternative").toString();
-                        break;
-                case OBJECT:
-                        param = compilerProfile->value("object","").toString();
-                        break;
-                case STATIC_LIB:
-                        param = compilerProfile->value("static_lib","").toString();
-                        break;
-                case DYNAMIC_LIB:
-                        param = compilerProfile->value("dynamic_lib","").toString();
-                        break;
-                default:
-                        param = "";
-        }
+    qDebug() << "\nSOURCE FILE:" << sourceFile;
+    qDebug() <<   "PROGRAM PATH:" << programPath;
+    qDebug() <<   "SOURCE PATH:" << sourcePath;
 
-        QString opt;
+    compilerProfile->beginGroup("info");
+    QString compiler = compilerProfile->value("compiler", "").toString();
+    config = compilerProfile->value("config", "").toString();
+    compilerProfile->endGroup();
+
+    compilerProfile->beginGroup("compile");
+    QString param;
+    switch (compileMode)
+    {
+        case DEFAULT:
+            param = compilerProfile->value("default","").toString();
+            break;
+        case ALTERNATIVE:
+            param = compilerProfile->value("alternative").toString();
+            break;
+        case OBJECT:
+            param = compilerProfile->value("object","").toString();
+            break;
+        case STATIC_LIB:
+            param = compilerProfile->value("static_lib","").toString();
+            break;
+        case DYNAMIC_LIB:
+            param = compilerProfile->value("dynamic_lib","").toString();
+            break;
+        default:
+            param = "";
+    }
+
+    QString opt;
+
 #ifdef WIN32
-        opt = compilerProfile->value("win32_opt", "").toString();
+    opt = compilerProfile->value("win32_opt", "").toString();
 #else
-        opt = compilerProfile->value("unix_opt", "").toString();
+    opt = compilerProfile->value("unix_opt", "").toString();
 #endif
 
-	compilerProfile->endGroup();
+    compilerProfile->endGroup();
 
-        if (param.isEmpty() || compiler.isEmpty()) return;
-	else
-	{
-                param.replace(QString("$source$"), sourceFile);
-                param.replace(QString("$output$"), programPath);
-                param.replace(QString("$options$"), options+" "+opt);
-                param.replace(QString("$compilerdir$"), compilerDir);
-	}
+    if (!param.isEmpty() && !compiler.isEmpty())
+    {
+        param.replace(QString("$source$"), sourceFile);
+        param.replace(QString("$output$"), programPath);
+        param.replace(QString("$options$"), opt+" "+options);
+        param.replace(QString("$compilerdir$"), compilerDir);
+    }
+    else
+    {
+        qDebug() << "FAIL: Could not find compiler or compiler parameters.\n";
+        return;
+    }
 
-        QStringList keyList;
+    QStringList keyList;
 
-        parseErrorList.clear();
-        compilerProfile->beginGroup("errors");
-        keyList = compilerProfile->childKeys();
-        foreach(QString key, keyList)
-                parseErrorList << compilerProfile->value(key,"").toString();
-        compilerProfile->endGroup();
+    parseErrorList.clear();
+    compilerProfile->beginGroup("errors");
+    keyList = compilerProfile->childKeys();
+    foreach(QString key, keyList)
+        parseErrorList << compilerProfile->value(key,"").toString();
+    compilerProfile->endGroup();
+    parseErrorList.removeAll("");
 
-        parseWarningList.clear();
-        compilerProfile->beginGroup("warnings");
-        keyList = compilerProfile->childKeys();
-        foreach(QString key, keyList)
-                parseWarningList << compilerProfile->value(key,"").toString();
-        compilerProfile->endGroup();
-
-        qDebug() << QString(compiler+" "+param);
+    parseWarningList.clear();
+    compilerProfile->beginGroup("warnings");
+    keyList = compilerProfile->childKeys();
+    foreach(QString key, keyList)
+        parseWarningList << compilerProfile->value(key,"").toString();
+    compilerProfile->endGroup();
+    parseErrorList.removeAll("");
 
 #ifdef WIN32
-        if (config.contains("nostd"))
-        {
-            outFile = QApplication::applicationDirPath()+QDir::separator()+"out.txt";
-            outFile.replace("/", QDir::separator());
-            param = param+" > "+outFile;
-        }
+    if (config.contains("nostd"))
+    {
+        outFile = sourcePath+"out.txt";
+        //outFile.replace("/", QDir::separator());
+        param = param+" > "+outFile;
+        qDebug() << "CONFIG:nostd";
+    }
 #endif
 
+    QString prevDir = QApplication::applicationDirPath();
+    if (!compilerDir.isEmpty()) QDir::setCurrent(compilerDir);
 
-        QString prevDir = QDir::currentPath();
-        if (!compilerDir.isEmpty()) QDir::setCurrent(compilerDir);
-        start(QString(compiler+" "+param), QIODevice::ReadWrite);
-        qDebug() << QDir::currentPath();
-        qDebug() << QString(compiler+" "+param);
-        QDir::setCurrent(prevDir);
+    start(QString(compiler+" "+param), QIODevice::ReadWrite);
+
+    qDebug() << "SET PATH:" << QDir::currentPath();
+    qDebug() << "COMPILE:" << compiler << " " << param;
+
+    QDir::setCurrent(prevDir);
 }
 
 
 void Compiler::run(void)
 {
     if (programPath.isEmpty()) return;
+
+    QDir::setCurrent(QApplication::applicationDirPath());
+
 #ifdef WIN32
-        startDetached("cmd", QStringList() << "/C"<< "title "+programPath+"&&("+programPath+")&pause");
+    startDetached("cmd", QStringList() << "/C"<< "title "+programPath+"&&("+programPath+")&pause");
 #else
-        startDetached("xterm", QStringList() << "-e" << "/bin/sh" << "-c"<< programPath);
+    startDetached("xterm", QStringList() << "-e" << "/bin/sh" << "-c"<< programPath);
 #endif
 }
 
 void Compiler::afterExit(int exitCode, QProcess::ExitStatus exitStatus)
 {
-	int endSt;
-	if ((0 == exitCode)&&(0 == exitStatus)) endSt = NOERROR;
-	else
-	{
-                programPath = QString::null;
-		endSt = ERROR;
-	}
-        if (!outFile.isEmpty()) readStdErr();
-        emit compileEnded(endSt);
+    int endSt;
+
+    if ((0 == exitCode)&&(0 == exitStatus)) endSt = NOERROR;
+    else
+    {
+        programPath = QString::null;
+        endSt = ERROR;
+    }
+
+    if (!outFile.isEmpty()) readStdErr();
+
+    emit compileEnded(endSt);
 }
 
 void Compiler::compilerProcessError(QProcess::ProcessError error)
 {
-        int endSt;
-        if (QProcess::FailedToStart == error) endSt = FAILED_TO_START;
-        else endSt = CRASHED;
+    int endSt;
 
-        programPath = QString::null;
-        emit compileEnded(endSt);
+    if (QProcess::FailedToStart == error) endSt = FAILED_TO_START;
+    else endSt = CRASHED;
+
+    programPath = QString::null;
+
+    emit compileEnded(endSt);
 }
 
 QList<Compiler::compilerError>* Compiler::getLastErrors(void)
 {
-        return &errorList;
+    return &errorList;
 }
 
 QList<Compiler::compilerWarning>* Compiler::getLastWarnings(void)
 {
-        return &warningList;
+    return &warningList;
 }
 
 void Compiler::readStdErr(void)
 {
-	Compiler::compilerError ce;
-        Compiler::compilerWarning cw;
+    Compiler::compilerError ce;
+    Compiler::compilerWarning cw;
 
-        QByteArray result;
-        if (outFile.isEmpty()) result = readAllStandardOutput();
-        else
+    QByteArray result;
+    if (outFile.isEmpty()) result = readAllStandardOutput();
+    else
+    {
+        QFile out(outFile);
+        if(!out.open(QIODevice::ReadOnly | QIODevice::Text)) return;
+        result = out.readAll();
+        out.close();
+        QFile::remove(outFile);
+    }
+
+    QTextStream procStream(&result);
+    QString line,pattern;
+    QString parseParam;
+    int ln,desc;
+    QRegExp re;
+    while (!procStream.atEnd())
+    {
+        line = procStream.readLine();
+        qDebug() << "OUT:" << line;
+
+        foreach(parseParam, parseErrorList)
         {
-            QFile out(outFile);
-            if(!out.open(QIODevice::ReadOnly | QIODevice::Text)) return;
-            result = out.readAll();
+            pattern = parseParam.section(":",2);
+            re.setPattern(pattern);
+            if (re.indexIn(line) > -1)
+            {
+                ln = parseParam.section(":",0,0).toInt();
+                if (0 != ln) ce.line = re.cap(ln).toInt();
+                else ce.line = 0;
+                desc = parseParam.section(":",1,1).toInt();
+                ce.description = re.cap(desc);
+                errorList.append(ce);
+                break;
+            }
         }
-        QTextStream procStream(&result);
-	QString line,pattern;
-        QString parseParam;
-	int ln,desc;
-        QRegExp re;
-	while (!procStream.atEnd())
-	{
-		line = procStream.readLine();
-                qDebug() << line;
-                foreach(parseParam, parseErrorList)
-                {
-                        pattern = parseParam.section(":",2);
-                        re.setPattern(pattern);
-                        if (re.indexIn(line) > -1)
-                        {
-                                ln = parseParam.section(":",0,0).toInt();
-                                if (0 != ln) ce.line = re.cap(ln).toInt();
-                                else ce.line = 0;
-                                desc = parseParam.section(":",1,1).toInt();
-                                ce.description = re.cap(desc);
-                                errorList.append(ce);
-                                break;
-                        }
-                }
 
-                foreach(parseParam, parseWarningList)
-                {
-                        pattern = parseParam.section(":",2);
-                        re.setPattern(pattern);
-                        if (re.indexIn(line) > -1)
-                        {
-                                ln = parseParam.section(":",0,0).toInt();
-                                if (0 != ln) cw.line = re.cap(ln).toInt();
-                                else cw.line = 0;
-                                desc = parseParam.section(":",1,1).toInt();
-                                cw.description = re.cap(desc);
-                                warningList.append(cw);
-                                break;
-                        }
-                }
+        foreach(parseParam, parseWarningList)
+        {
+            pattern = parseParam.section(":",2);
+            re.setPattern(pattern);
+            if (re.indexIn(line) > -1)
+            {
+                ln = parseParam.section(":",0,0).toInt();
+                if (0 != ln) cw.line = re.cap(ln).toInt();
+                else cw.line = 0;
+                desc = parseParam.section(":",1,1).toInt();
+                cw.description = re.cap(desc);
+                warningList.append(cw);
+                break;
+            }
         }
+    }
 }
 
 
