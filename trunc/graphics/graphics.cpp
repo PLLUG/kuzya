@@ -269,6 +269,10 @@ void graphics::processCommand(QString  command)
         {
             //rsi->readKomand = false;
         }
+        if(getMethodName(command) == "drawfunc")
+        {
+            qDebug() << command;
+        }
 	if(getMethodName(command) == "drawpoly")
 	{
 /*		int pX, pY;
@@ -462,8 +466,7 @@ void graphics::processCommand(QString  command)
                                         p.drawText(x1, y1, oneSimbol);
 					y += textSize;
 				}
-		}
-// 		p.drawText(x, y, methodText);
+                }
 		update();
 	}
 	if(getMethodName(command) == "pieslice")
@@ -518,26 +521,7 @@ void graphics::processCommand(QString  command)
                 numberOf = indexOfSimbol - index;
                 curentBGColor = command.mid(index+1, numberOf-1).toInt(0,10);
 
-                switch(curentBGColor)
-                {
-                        case 0: pixBG.fill(Qt::black); 				update();break;
-                        case 1: pixBG.fill(Qt::darkBlue);                       update();break;
-                        case 2: pixBG.fill(Qt::darkGreen);                      update();break;
-                        case 3: pixBG.fill(Qt::darkCyan);       		update();break;
-                        case 4: pixBG.fill(Qt::darkRed);			update();break;
-                        case 5: pixBG.fill(QColor(139, 0, 139));        	update();break;
-                        case 6: pixBG.fill(QColor(165, 42, 42));	 	update();break;
-                        case 7: pixBG.fill(Qt::gray);	 			update();break;
-                        case 8: pixBG.fill(Qt::darkGray);			update();break;
-                        case 9: pixBG.fill(Qt::blue);    			update();break;
-                        case 10:pixBG.fill(Qt::green);  			update();break;
-                        case 11:pixBG.fill(Qt::cyan);   			update();break;
-                        case 12:pixBG.fill(Qt::red); 	 			update();break;
-                        case 13:pixBG.fill(QColor(255, 0, 255));        	update();break;
-                        case 14:pixBG.fill(Qt::yellow);	 			update();break;
-                        case 15:pixBG.fill(Qt::white);   			update();break;
-                }
-
+                setCurentBGColor(curentBGColor);
                 update();
         }
         if (getMethodName(command) == "setcolor")
@@ -582,10 +566,9 @@ void graphics::processCommand(QString  command)
 
 void graphics::paintEvent(QPaintEvent * /*event*/ )
 {
- 	QPainter painter(this );
+        QPainter painter(this );
         painter.drawPixmap(0, 0, pixBG);
         painter.drawPixmap( 0 , 0 , pix);
-        //update();
 }
 
 void graphics::createPixmap(int width, int height)
@@ -607,4 +590,27 @@ QString graphics::getMethodName(QString command)
 	index = command.indexOf("(",0);
 	methodName = command.left(index);
 	return methodName;
+}
+void graphics::setCurentBGColor(int curentBGColor)
+{
+
+                switch(curentBGColor)
+                {
+                        case 0: pixBG.fill(Qt::black); 				update();break;
+                        case 1: pixBG.fill(Qt::darkBlue);                       update();break;
+                        case 2: pixBG.fill(Qt::darkGreen);                      update();break;
+                        case 3: pixBG.fill(Qt::darkCyan);       		update();break;
+                        case 4: pixBG.fill(Qt::darkRed);			update();break;
+                        case 5: pixBG.fill(QColor(139, 0, 139));        	update();break;
+                        case 6: pixBG.fill(QColor(165, 42, 42));	 	update();break;
+                        case 7: pixBG.fill(Qt::gray);	 			update();break;
+                        case 8: pixBG.fill(Qt::darkGray);			update();break;
+                        case 9: pixBG.fill(Qt::blue);    			update();break;
+                        case 10:pixBG.fill(Qt::green);  			update();break;
+                        case 11:pixBG.fill(Qt::cyan);   			update();break;
+                        case 12:pixBG.fill(Qt::red); 	 			update();break;
+                        case 13:pixBG.fill(QColor(255, 0, 255));        	update();break;
+                        case 14:pixBG.fill(Qt::yellow);	 			update();break;
+                        case 15:pixBG.fill(Qt::white);   			update();break;
+                }
 }

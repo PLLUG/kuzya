@@ -40,7 +40,8 @@ void ReadStdIn::run()
         do
 	{
             str = in.readLine();
-            emit commandAppeared(str);
+            if (!str.isEmpty())
+                emit commandAppeared(str);
         }
         while ("closegraph();" != str);
 }
