@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2009 by Volodymyr Shevchyk                              *
- *   volder@users.sourceforge.nets                                          *
+ *   volder@users.sourceforge.nets                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,6 +48,7 @@ class graphics: public QDialog, private Ui::graphicsForm
 		void createPixmap(int width, int height);
                 void creatBGPixmap(int width, int height);
 		QString getMethodName(QString command);
+                void setCurentBGColor(int curentBGColor);
 
 
 	private:

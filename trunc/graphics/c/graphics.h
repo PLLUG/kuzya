@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
+
 
 FILE *file;
 char  command[100];
@@ -61,11 +63,12 @@ void initgraph(int setWidth, int setHeight);
 void pieslice(int x, int y, int stAngle, int endAngle, int radius);
 void putpixel(int x, int y);
 void putpixel(int x, int y, COLORS color);
+void putpixel(int x, int y, int color);
 void line(int x, int y, int x1, int y1);
 void lineto(int x, int y);
 void moveto(int x, int y);
-void outtext(char *text);
-void outtextxy(int x, int y, char *text);
+void outtext(const char* text);
+void outtextxy(int x, int y, const char* text);
 void setbkcolor(COLORS color);
 void setbkcolor(int color);
 void setcolor(COLORS color);
@@ -179,6 +182,13 @@ void putpixel(int x, int y, COLORS color)
 	sprintf(command, "putpixel(%i,%i);\n",x , y);
 	fprintf(file, command);
 }
+//********putPixel_with_color_named_by_number******************
+void putpixel(int x, int y, int color)
+{
+  	setcolor(color);
+	sprintf(command, "putpixel(%i,%i);\n",x , y);
+	fprintf(file, command);
+}
 //*******line**************************************
 void line(int x, int y, int x1, int y1)
 {
@@ -198,13 +208,13 @@ void moveto(int x, int y)
 	fprintf(file, command);
 }
 //********outTextXY***********************************
-void outtextxy(int x, int y, char *text)
+void outtextxy(int x, int y, const char* text)
 {
 	sprintf(command, "outtextxy(%i,%i,\"%s\");\n",x , y, text);
 	fprintf(file, command);
 }
 //************outText*****************************************
-void outtext(char *text)
+void outtext(const char* text)
 {
 	sprintf(command, "outtext(\"%s\");\n", text);
 	fprintf(file, command);	
