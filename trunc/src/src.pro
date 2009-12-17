@@ -35,11 +35,14 @@ unix {
     kuzya_doc.files = ../doc/Kuzya_Help/*
     kuzya_resources.path = /usr/share/kuzya/resources
     kuzya_resources.files = ../resources/*
+    kuzya_images.path = /usr/share/kuzya
+    kuzya_images.file = ./images/kuzya.png
     INSTALLS += target \
         translations \
         kuzya_profiles \
         kuzya_doc \
-        kuzya_resources
+        kuzya_resources\
+	kuzya_images
 }
 win32 { 
     TARGET = ../../bin/kuzya
