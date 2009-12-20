@@ -114,10 +114,18 @@ Kuzya::Kuzya(QWidget *parent)
         textEditor->setCaretLineBackgroundColor(QColor(215, 215, 250));
         textEditor->setCaretLineVisible(true);
 
+        QFont font("Courier", 10);
+
+        textEditor->setFont(font);
+
         cppLexer = new QsciLexerCPP(this);
+        cppLexer->setFont(font);
         pascalLexer = new QsciLexerPascal(this);
+        pascalLexer->setFont(font);
         fortranLexer = new QsciLexerFortran(this);
+        fortranLexer->setFont(font);
         javaLexer = new QsciLexerJava(this);
+        javaLexer->setFont(font);
        
         textEditor->setLexer();
 
@@ -126,6 +134,7 @@ Kuzya::Kuzya(QWidget *parent)
 
         textEditor->setSelectionBackgroundColor(QColor(100, 100, 200));
         textEditor->setUtf8(true);
+
 
         warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor));
         errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
@@ -595,7 +604,13 @@ void Kuzya::refreshProfileSettings()
     if (!language.isEmpty())
     {
         QString comp = settings->readDefaultCompiler(language);
-        if (comp.isEmpty()) comp = compiler->getSupportedCompilers(language).at(0);
+        if (comp.isEmpty())
+        {
+            QStringList supportedCompilers = compiler->getSupportedCompilers(language);
+            if (!supportedCompilers.isEmpty())
+                comp = compiler->getSupportedCompilers(language).at(0);
+            else return;
+        }
         compiler->loadProfile(language, comp);
         compiler->setCompilerDir(settings->readCompilerLocation(language, comp));
         compiler->setOptions(settings->readCompilerOptions(language, comp));
@@ -621,6 +636,11 @@ void Kuzya::refreshProfileSettings()
         else if ("java" == language) currentLexer = javaLexer;
         else currentLexer = 0;
         textEditor->setLexer(currentLexer);
+ /*       if (0 != currentLexer)
+        {
+            QFont f("Courier", 10);
+            currentLexer->setFont(f);
+        }*/
     }
     else compiler->loadProfile("","");
 
