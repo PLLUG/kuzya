@@ -70,9 +70,14 @@ void Compiler::refreshSupported()
             if (QSettings::NoError == info.status())
             {
                 info.beginGroup("info");
-                supportedLanguages << info.value("language", "").toString();
-                supportedExtensions << info.value("filter","").toString();
+                QString lang = info.value("language", "").toString();
+                QString ext = info.value("filter","").toString();
                 info.endGroup();
+
+                if (lang.isEmpty()||ext.isEmpty()) continue;
+
+                supportedLanguages << lang;
+                supportedExtensions << ext;
 
                 QString location =  it.fileInfo().filePath();
                 profileLocations << location;
@@ -103,12 +108,12 @@ void Compiler::refreshSupported()
                         }
                     }
                 }
-                if (!compilers.isEmpty())
-                {
+                //if (!compilers.isEmpty())
+                //{
                     supportedCompilers << compilers;
                     profilesPathList << profiles;
-                }
-                else continue;
+                //}
+                //else continue;
             }
         }
     }
@@ -338,12 +343,12 @@ void Compiler::compile(QString sourceFile)
     parseErrorList.removeAll("");
 
 #ifdef WIN32
-    if (config.contains("nostd"))
+    if (config.contains("outfile"))
     {
         outFile = sourcePath+"out.txt";
         //outFile.replace("/", QDir::separator());
         param = param+" > "+outFile;
-        qDebug() << "CONFIG:nostd";
+        qDebug() << "CONFIG:outfile";
     }
 #endif
 

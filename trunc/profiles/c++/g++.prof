@@ -11,9 +11,13 @@ alternative=
 
 [errors]
 messages_1=0:1:(In\\sfile\\s.*:)
-error_messages_1=1:3:(\\d+):\\s(.*)error:\\s(.*)
-error_messages_2=1:4:(\\d+):(\\d+):\\s(.*)error:\\s(.*)
+messages_2=0:1:(.*ld.*:\\s.*:\\s.*)
+messages_3=0:1:(collect2:\\s.*)
+messages_4=0:1:(error:\\sunrecognized\\s.*)
+error_messages_1=1:4:(\\d+):(\\d+):\\s(.*)error:\\s(.*)
+error_messages_2=1:3:(\\d+):\\s(.*)error:\\s(.*)
+error_messages_3=1:3:(\\d+):(\\d+):\\s(.*)
 
 [warnings]
 messages_1=0:1:(In\\sfile\\s.*:)
-warning_messages_1=1:3:(\\d+):\\s(.*)warning:\\s(.*)
+warning_messages_1=1:4:(\\d+):(\\d+):\\s(.*)warning:\\s(.*)
