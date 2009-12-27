@@ -1182,25 +1182,53 @@ void Kuzya::slotGotoErrorLine(QListWidgetItem * item)
 }
 /**
 ******************************************************************************************
-*****************translate program code to English**************************************
+***************** translate program code **************************************
 */
 void Kuzya::slotChangeTranslation(QString translation)
 {
-    /*if (textEditor->isModified())
+    if (textEditor->isModified())
     {
-        slotSave();
-        //int index = languageComboBox->findText(defaultComp);
-        //if (-1 != index) languageComboBox->setCurrentIndex(index);
+        QMessageBox *msgBox= new QMessageBox();
+        msgBox->setIcon(QMessageBox::Question);
+        msgBox->setWindowTitle( tr("The file has been modified"));
+        msgBox->setText(tr("Save your changes before translation?"));
+        QAbstractButton *yesBtn = msgBox->addButton(tr("Yes"),QMessageBox::ActionRole);
+        QAbstractButton *noBtn = msgBox->addButton(tr("No"),QMessageBox::ActionRole);
+        Q_UNUSED(noBtn);
+        QAbstractButton *cancelBtn = msgBox->addButton(tr("Cancel"),QMessageBox::ActionRole);
+        msgBox->setDefaultButton((QPushButton*)cancelBtn);
+        msgBox->exec();
 
-    }*/
+        if (msgBox->clickedButton() == cancelBtn)
+        {
+            disconnect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
+            int index = languageComboBox->findText(translator->translation());
+            if (-1 != index) languageComboBox->setCurrentIndex(index);
+            else languageComboBox->setCurrentIndex(0);
+            connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
+            return;
+        }
+        else if (msgBox->clickedButton() ==yesBtn)
+        {
+            slotSave();
+            disconnect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
+            int index = languageComboBox->findText(translation);
+            if (-1 != index) languageComboBox->setCurrentIndex(index);
+            connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
+        }
+    }
+
     if ("english (default)" == translation)
     {
         translation = "src";
     }
+
     translator->setTranslation(translation);
     qDebug() << "SET TRANSLATION: " << translation;
+
     openFile(translator->translatedCodeFile());
     qDebug() << "TR CODE: " << translator->translatedCodeFile();
+
     #ifdef WIN32
         QString path = QApplication::applicationDirPath();
         path.truncate(path.lastIndexOf("/", -1));
