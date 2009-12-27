@@ -1186,15 +1186,21 @@ void Kuzya::slotGotoErrorLine(QListWidgetItem * item)
 */
 void Kuzya::slotChangeTranslation(QString translation)
 {
-    if (textEditor->isModified())
+    /*if (textEditor->isModified())
     {
         slotSave();
         //int index = languageComboBox->findText(defaultComp);
         //if (-1 != index) languageComboBox->setCurrentIndex(index);
 
+    }*/
+    if ("english (default)" == translation)
+    {
+        translation = "src";
     }
     translator->setTranslation(translation);
+    qDebug() << "SET TRANSLATION: " << translation;
     openFile(translator->translatedCodeFile());
+    qDebug() << "TR CODE: " << translator->translatedCodeFile();
     #ifdef WIN32
         QString path = QApplication::applicationDirPath();
         path.truncate(path.lastIndexOf("/", -1));

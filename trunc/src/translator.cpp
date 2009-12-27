@@ -136,7 +136,7 @@ void Translator::setTranslation(QString transl)
     codeTranslation = transl;
 
     translatedFileName = fileName;
-    if ("en" != transl)
+    if ("src" != transl)
     {
         translatedFileName = fileName;
         translatedFileName.remove("_src");
@@ -151,7 +151,7 @@ void Translator::setTranslation(QString transl)
 
 void Translator::retranslate()
 {
-    if ("en" != codeTranslation)
+    if ("src" != codeTranslation)
     {
         translateCode(translatedFileName, fileName, toCode);
     }
