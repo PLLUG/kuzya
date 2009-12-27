@@ -368,6 +368,7 @@ void Compiler::run(void)
 {
     if (programPath.isEmpty()) return;
 
+
     QDir::setCurrent(QApplication::applicationDirPath());
 
 #ifdef WIN32

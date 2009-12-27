@@ -131,11 +131,13 @@ private slots:
         void slotZoomIn(void);
         void slotZoomOut(void);
 
-        void slotDefaultMode();
-        void slotAlternativeMode();
-        void slotObjectMode();
-        void slotStaticLibMode();
-        void slotDynamicLibMode();
+        void slotDefaultMode(void);
+        void slotAlternativeMode(void);
+        void slotObjectMode(void);
+        void slotStaticLibMode(void);
+        void slotDynamicLibMode(void);
+
+        void slotModificationChanged(bool);
 protected:
         //*DRAG AND DROP
         void dragEnterEvent(QDragEnterEvent *event);
@@ -188,6 +190,8 @@ private:
         QVector <QAction*> templlateAct;
         QSignalMapper *templatesSignalMapper;
         QStringList templatesCroupsList;
+
+        bool srcRecompiled;
 
 };
 
