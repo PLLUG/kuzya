@@ -19,12 +19,12 @@
 <context>
     <name>Kuzya</name>
     <message>
-        <location filename="../../src/kuzya.cpp" line="+198"/>
+        <location filename="../../src/kuzya.cpp" line="+218"/>
         <source>Ready</source>
         <translation>Готово</translation>
     </message>
     <message>
-        <location line="+132"/>
+        <location line="+140"/>
         <source>Opened</source>
         <translation>Відкрито</translation>
     </message>
@@ -34,13 +34,13 @@
         <translation>Створено новий файл</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+26"/>
         <source>Open File</source>
         <translation>Відкрити файл</translation>
     </message>
     <message>
-        <location line="+138"/>
-        <location line="+50"/>
+        <location line="+161"/>
+        <location line="+51"/>
         <source>Save as...</source>
         <translation>Зберегти як...</translation>
     </message>
@@ -55,7 +55,7 @@
         <translation>Відсутня програма для запуску</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+22"/>
         <source>No source to compile</source>
         <translation>Відсутній код для компіляції</translation>
     </message>
@@ -70,12 +70,12 @@
         <translation>Неможливо відкрити конфігураційний файл компілятора</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Compiled successfuly!</source>
         <translation>Успішно скомпільовано!</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+67"/>
         <source>About</source>
         <translation>Про програму</translation>
     </message>
@@ -130,7 +130,7 @@
         <translation>Даний файл не було знайдено</translation>
     </message>
     <message>
-        <location line="+72"/>
+        <location line="+73"/>
         <source>Compilation error (line </source>
         <translation>Помилка компіляції (рядок </translation>
     </message>
@@ -140,7 +140,17 @@
         <translation>Попередження компіляції (рядок </translation>
     </message>
     <message>
-        <location line="-386"/>
+        <location line="+76"/>
+        <source>The file has been modified</source>
+        <translation>Файл було змінено</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Save your changes before translation?</source>
+        <translation>Зберегти зміни перед перекладом?</translation>
+    </message>
+    <message>
+        <location line="-482"/>
         <source>File cannot be saved </source>
         <translation>Файл не може бути збережено</translation>
     </message>
@@ -155,22 +165,22 @@
         <translation>Гаразд</translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="+142"/>
         <source>Unable to start compiler</source>
         <translation>Неможливо запустити компілятор</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Compilation failed!</source>
         <translation>Компіляція зазнала невдачі!</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+26"/>
         <source>Found errors (%2) in file %1</source>
         <translation>Знайдено помилки (%2) у файлі %1</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+21"/>
         <source>Found warnings (%2) in file %1</source>
         <translation>Знайдено попередження (%2) у файлі %1</translation>
     </message>
@@ -183,7 +193,7 @@
         <translation>Налаштування</translation>
     </message>
     <message>
-        <location line="+362"/>
+        <location line="+363"/>
         <source>Set default settings?</source>
         <translation>Встановити стандартні налаштування?</translation>
     </message>
@@ -203,7 +213,7 @@
         <translation>Відкрити теку</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+46"/>
         <source>Show compiler location: (</source>
         <translation>Вкажіть місцезнаходження компілятора: (</translation>
     </message>
@@ -343,6 +353,14 @@
         <location line="-35"/>
         <source>Go To Line</source>
         <translation>Іти до лінії</translation>
+    </message>
+</context>
+<context>
+    <name>graphicsForm</name>
+    <message>
+        <location filename="../../graphics/graphics.ui" line="+17"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -610,7 +628,7 @@
         <translation>Показати повідомлення</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+8"/>
         <source>Toggle All Folds</source>
         <translation>Згорнути дужки</translation>
     </message>
@@ -635,7 +653,7 @@
         <translation>Про Qt</translation>
     </message>
     <message>
-        <location line="-197"/>
+        <location line="-200"/>
         <location line="+3"/>
         <source>About Kuzya</source>
         <translation>Про Кузю</translation>
@@ -651,7 +669,12 @@
         <translation>Режим компіляції</translation>
     </message>
     <message>
-        <location line="+343"/>
+        <location line="+320"/>
+        <source>F10</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location line="+26"/>
         <source>Ctrl++</source>
         <translation></translation>
     </message>
