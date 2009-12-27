@@ -170,6 +170,8 @@ Kuzya::Kuzya(QWidget *parent)
         settings->openLastProject();
         ActOpenRecentFileVector.clear();
 
+        srcRecompiled = false;
+
 ///-------------------------------------------------------------------------------------------------------------------
 
         connect(actionNew,	SIGNAL(triggered()),this,		SLOT(slotNew()));
@@ -215,6 +217,8 @@ Kuzya::Kuzya(QWidget *parent)
         connect(actionObjectMode, SIGNAL(triggered()), this, SLOT(slotObjectMode()));
         connect(actionStaticLibMode, SIGNAL(triggered()), this, SLOT(slotStaticLibMode()));
         connect(actionDynamicLibMode, SIGNAL(triggered()), this, SLOT(slotDynamicLibMode()));
+
+        connect(textEditor,	SIGNAL(modificationChanged(bool)),	 this,	SLOT(slotModificationChanged(bool)));
         statusBar()->showMessage(tr("Ready"));
 
         QShortcut *notificationListShortcut = new QShortcut(textEditor);
@@ -513,6 +517,8 @@ void Kuzya::slotNew(void)
         actionCompile->setDisabled(true);
         actionRun->setDisabled(true);
         languageComboBoxAction->setVisible(false);
+
+        srcRecompiled  = false;
 }
 
 /**
@@ -620,6 +626,8 @@ void Kuzya::refreshProfileSettings()
         actionCompile->setDisabled(false);
         actionRun->setDisabled(false);
 
+        srcRecompiled = false;
+
    #ifdef WIN32
         QString path = QApplication::applicationDirPath();
         path.truncate(path.lastIndexOf("/", -1));
@@ -636,11 +644,6 @@ void Kuzya::refreshProfileSettings()
         else if ("java" == language) currentLexer = javaLexer;
         else currentLexer = 0;
         textEditor->setLexer(currentLexer);
- /*       if (0 != currentLexer)
-        {
-            QFont f("Courier", 10);
-            currentLexer->setFont(f);
-        }*/
     }
     else compiler->loadProfile("","");
 
@@ -796,10 +799,10 @@ void Kuzya::slotRun(void)
         addNotification(FAILING, tr("No binary to run"));
         return;
     }
-    if (textEditor->isModified())
+    if (!srcRecompiled)
     {
         slotCompile();
-        compiler->waitForFinished(10000);
+        compiler->waitForFinished(15000);
     }
     compiler->run();
 }
@@ -826,6 +829,7 @@ void Kuzya::slotCompile(void)
                 textEditor->setReadOnly(true);
                 translator->retranslate();
                 compiler->compile(translator->codeFile());
+                srcRecompiled = true;
         }
         else addNotification(FAILING, tr("Could not open compiler profile"));
 }
@@ -1320,4 +1324,9 @@ void Kuzya::dropEvent(QDropEvent *event)
     notificationList->clear();
     openFile(fileName);
     refreshProfileSettings();
+}
+
+void Kuzya::slotModificationChanged(bool modified)
+{
+    if (modified) srcRecompiled = false;
 }
