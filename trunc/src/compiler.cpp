@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2008 by                                                    *
+ *   Copyright (C) 2010 by                                                    *
  *                     Alex Chmykhalo (alexchmykhalo@users.sourceforge.net)   *
  *                                                                            *
  *                                                                            *
@@ -257,26 +257,36 @@ void Compiler::setCompilerMode(int mode)
     compileMode = mode;
 }
 
-void Compiler::compile(QString sourceFile)
+void Compiler::openFile(QString srcPath)
 {
-    if (sourceFile.isEmpty()) return;
+    if (QFile::exists(srcPath)) sourceFile = srcPath;
+    else sourceFile = "";
+}
 
-    errorList.clear();
-    warningList.clear();
-    outFile.clear();
+QString Compiler::getCompilerName()
+{
+    compilerProfile->beginGroup("info");
+    QString compiler = compilerProfile->value("compiler", "").toString();
+    compilerProfile->endGroup();
 
+    if (compiler.isEmpty())
+    {
+        qDebug() << "FAIL: Could not find compiler.\n";
+        return "";
+    }
+
+    return compiler;
+}
+
+QString Compiler::getCompilerParams()
+{
     sourceFile = sourceFile.replace("/", QDir::separator());
     programPath = sourceFile.left(sourceFile.lastIndexOf('.'));
-    QString sourcePath = sourceFile.left(sourceFile.lastIndexOf(QDir::separator()))+QDir::separator();
+    sourcePath = sourceFile.left(sourceFile.lastIndexOf(QDir::separator()))+QDir::separator();
 
     qDebug() << "\nSOURCE FILE:" << sourceFile;
     qDebug() <<   "PROGRAM PATH:" << programPath;
     qDebug() <<   "SOURCE PATH:" << sourcePath;
-
-    compilerProfile->beginGroup("info");
-    QString compiler = compilerProfile->value("compiler", "").toString();
-    config = compilerProfile->value("config", "").toString();
-    compilerProfile->endGroup();
 
     compilerProfile->beginGroup("compile");
     QString param;
@@ -311,7 +321,7 @@ void Compiler::compile(QString sourceFile)
 
     compilerProfile->endGroup();
 
-    if (!param.isEmpty() && !compiler.isEmpty())
+    if (!param.isEmpty())
     {
         param.replace(QString("$source$"), sourceFile);
         param.replace(QString("$output$"), programPath);
@@ -320,12 +330,24 @@ void Compiler::compile(QString sourceFile)
     }
     else
     {
-        qDebug() << "FAIL: Could not find compiler or compiler parameters.\n";
-        return;
+        qDebug() << "FAIL: Could not find compiler parameters.\n";
+        return "";
     }
 
-    QStringList keyList;
+    return param;
+}
 
+QString Compiler::getConfig()
+{
+    compilerProfile->beginGroup("info");
+    QString config = compilerProfile->value("config", "").toString();
+    compilerProfile->endGroup();
+    return config;
+}
+
+void Compiler::resetParseErrorList()
+{
+    QStringList keyList;
     parseErrorList.clear();
     compilerProfile->beginGroup("errors");
     keyList = compilerProfile->childKeys();
@@ -333,7 +355,11 @@ void Compiler::compile(QString sourceFile)
         parseErrorList << compilerProfile->value(key,"").toString();
     compilerProfile->endGroup();
     parseErrorList.removeAll("");
+}
 
+void Compiler::resetParseWarningList()
+{
+    QStringList keyList;
     parseWarningList.clear();
     compilerProfile->beginGroup("warnings");
     keyList = compilerProfile->childKeys();
@@ -342,11 +368,29 @@ void Compiler::compile(QString sourceFile)
     compilerProfile->endGroup();
     parseErrorList.removeAll("");
 
+}
+
+void Compiler::compile()
+{
+    if (sourceFile.isEmpty()) return;
+
+    errorList.clear();
+    warningList.clear();
+    outFile.clear();
+
+    QString compiler = getCompilerName();
+    QString config = getConfig();
+    QString param = getCompilerParams();
+
+    if (compiler.isEmpty() || param.isEmpty()) return;
+
+    resetParseErrorList();
+    resetParseWarningList();
+
 #ifdef WIN32
     if (config.contains("outfile"))
     {
         outFile = sourcePath+"out.txt";
-        //outFile.replace("/", QDir::separator());
         param = param+" > "+outFile;
         qDebug() << "CONFIG:outfile";
     }
@@ -368,14 +412,18 @@ void Compiler::run(void)
 {
     if (programPath.isEmpty()) return;
 
+    QString prevPath = QDir::currentPath();
+    QDir::setCurrent(sourcePath);
 
-    QDir::setCurrent(QApplication::applicationDirPath());
+    QString pathToKuzyagraph = QDir::toNativeSeparators(QApplication::applicationDirPath());
 
 #ifdef WIN32
-    startDetached("cmd", QStringList() << "/C"<< "title "+programPath+"&&("+programPath+")&pause");
+    startDetached("cmd", QStringList() << "/C"<< "title "+programPath+"&&(set path=%path%;"+pathToKuzyagraph+ ")&&("+programPath+")&pause");
 #else
     startDetached("xterm", QStringList() << "-e" << "/bin/sh" << "-c"<< programPath);
 #endif
+
+    QDir::setCurrent(prevPath);
 }
 
 void Compiler::afterExit(int exitCode, QProcess::ExitStatus exitStatus)

@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2008 by                                                    *
+ *   Copyright (C) 2010 by                                                    *
  *                     Alex Chmykhalo (alexchmykhalo@users.sourceforge.net)   *
  *                                                                            *
  *                                                                            *
@@ -42,7 +42,7 @@ public:
 
         typedef compilerError compilerWarning;
 
-	Compiler(QObject *parent = 0);
+        Compiler(QObject *parent = 0);
         ~Compiler();
 
         QStringList getSupportedLanguages();
@@ -50,13 +50,14 @@ public:
         QStringList getSupportedCompilers(QString lang);
         QString getCompilerInfo(QString lang, QString profile);
         void loadProfile(QString lang, QString profile);
-	void setOptions(QString str);
-	void setCompilerDir(QString dir);
+        void setOptions(QString str);
+        void setCompilerDir(QString dir);
         void setCompilerMode(int mode);
         bool isReady(void);
-	bool isModeAvailable(int compileMode);
-        void compile(QString sourceFile);
-	void run(void);
+        bool isModeAvailable(int compileMode);
+        void openFile(QString srcPath);
+        void compile();
+        void run(void);
         QList<compilerError>* getLastErrors(void);
         QList<compilerWarning>* getLastWarnings(void);
 
@@ -64,22 +65,29 @@ signals:
         void compileEnded(int status);
 
 private slots:
-	void afterExit(int exitCode, QProcess::ExitStatus exitStatus);
+        void afterExit(int exitCode, QProcess::ExitStatus exitStatus);
         void compilerProcessError(QProcess::ProcessError error);
-	void readStdErr(void);
+        void readStdErr(void);
 
 private:
         void refreshSupported();
         QString getProfilePath(QString lang, QString profile);
+        void resetParseErrorList();
+        void resetParseWarningList();
+        QString getCompilerName();
+        QString getCompilerParams();
+        QString getConfig();
 
+        QString sourceFile;
+        QString sourcePath;
         QString programPath;
-	int runStatus;
+        int runStatus;
         int compileMode;
         QList<compilerError> errorList;
         QList<compilerWarning> warningList;
-        QString config;
-	QString compilerDir;
-	QString options;
+        //QString config;
+        QString compilerDir;
+        QString options;
         QSettings* compilerProfile;
         QStringList parseErrorList;
         QStringList parseWarningList;
