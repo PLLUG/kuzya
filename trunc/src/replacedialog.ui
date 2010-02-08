@@ -472,7 +472,7 @@
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout">
+       <layout class="QVBoxLayout" name="findBoxLayout">
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
@@ -546,7 +546,7 @@
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout">
+       <layout class="QVBoxLayout" name="replaceBoxLayout">
         <item>
          <widget class="QLabel" name="label_2">
           <property name="text">
@@ -620,7 +620,7 @@
        </widget>
       </item>
       <item>
-       <layout class="QGridLayout">
+       <layout class="QGridLayout" name="replaceDialogGridLayout">
         <item row="0" column="0">
          <widget class="QCheckBox" name="caseSensCB">
           <property name="text">

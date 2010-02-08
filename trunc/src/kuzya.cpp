@@ -75,7 +75,6 @@ Kuzya::Kuzya(QWidget *parent)
         languageComboBoxAction->setVisible(false);
 
         compilerModeGroup = new QActionGroup(this);
-//        compilerModeGroup->setVisible(false);
         compilerModeGroup->addAction(actionDefaultMode);
         compilerModeGroup->addAction(actionObjectMode);
         compilerModeGroup->addAction(actionStaticLibMode);
@@ -657,6 +656,7 @@ void Kuzya::refreshProfileSettings()
 #endif
 
     translator->openFile(fileName, language);
+    compiler->openFile(translator->codeFile());
 
     QStringList supportedTranslations = translator->getSupportedTranslations(language);
     if (supportedTranslations.isEmpty())
@@ -828,7 +828,7 @@ void Kuzya::slotCompile(void)
                 addNotification(WAIT, tr("Compilling..."));
                 textEditor->setReadOnly(true);
                 translator->retranslate();
-                compiler->compile(translator->codeFile());
+                compiler->compile();
                 srcRecompiled = true;
         }
         else addNotification(FAILING, tr("Could not open compiler profile"));
