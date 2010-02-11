@@ -52,7 +52,7 @@
     <message>
         <location line="+71"/>
         <source>No binary to run</source>
-        <translation>Відсутня програма для запуску</translation>
+        <translation>Відсутня виконувана програма для запуску</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -117,7 +117,7 @@
     <message>
         <location line="+1"/>
         <source>Cancel</source>
-        <translation>Відмінити</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location line="+44"/>
@@ -127,7 +127,7 @@
     <message>
         <location line="+1"/>
         <source>This file wasn&apos;t founded</source>
-        <translation>Даний файл не було знайдено</translation>
+        <translation>Файл не знайдено</translation>
     </message>
     <message>
         <location line="+73"/>
@@ -347,12 +347,12 @@
     <message>
         <location filename="../../src/gotolinedialog.ui" line="+54"/>
         <source>Go</source>
-        <translation>Іти</translation>
+        <translation>Перейти</translation>
     </message>
     <message>
         <location line="-35"/>
         <source>Go To Line</source>
-        <translation>Іти до лінії</translation>
+        <translation>Перейти до рядка</translation>
     </message>
 </context>
 <context>
@@ -373,7 +373,7 @@
     <message>
         <location line="+4"/>
         <source>Recent Files</source>
-        <translation>Останні файли</translation>
+        <translation>Попередні файли</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -393,7 +393,7 @@
     <message>
         <location line="+8"/>
         <source>Templates</source>
-        <translation>Вставки</translation>
+        <translation>Шаблони</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -489,7 +489,7 @@
         <location line="+9"/>
         <location line="+3"/>
         <source>Compile</source>
-        <translation>Скомпілити</translation>
+        <translation>Скомпілювати</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -744,7 +744,7 @@
     <message>
         <location line="+12"/>
         <source>Load last project on startup</source>
-        <translation>Завантажити останній файл при запуску</translation>
+        <translation>Завантажити останній файл під час запуску</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -779,7 +779,7 @@
     <message>
         <location line="+19"/>
         <source>Default projects directory</source>
-        <translation>Станартна тека проекту</translation>
+        <translation>Стандартна тека проекту</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -1011,7 +1011,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location line="+10"/>
         <source>With prompt</source>
-        <translation>Із попередженням</translation>
+        <translation>З командного рядка</translation>
     </message>
     <message>
         <location line="+12"/>

@@ -37,13 +37,17 @@ graphics::graphics(QWidget *parent)
         this->setWindowTitle("GraphicCore");
 	setObjectName("graphics");
 
+
+
         width = 640;
         height = 480;
 
 	curentColor = 0;
+        curentFillColor = 0;
 	textSize = 12;
 	textFont = "Arial";
 	textDirection = 0;
+        fillPatern = 0;
 	lineThickness = 1;
 	lineStyle = 0;
 
@@ -55,7 +59,7 @@ graphics::graphics(QWidget *parent)
         pix.fill(Qt::transparent);
         pix.alphaChannel();
 
-
+        fillBrush = new QBrush();
 
 	resize(width, height);
 
@@ -89,9 +93,11 @@ void graphics::processCommand(QString  command)
                 update();
 	}
 	QPainterPath myPath;
-	
+        setCurentFillColor(curentFillColor);
+
 	p.begin(&pix);
 	pen.setWidth(lineThickness);
+        //pen.setBrush(fillBrush);
 	switch(curentColor)
 		{
 			case 0: pen.setColor(Qt::black); 
@@ -170,7 +176,7 @@ void graphics::processCommand(QString  command)
                 p.drawArc(x1-r, y1-r, 2*r, 2*r, stAngle, endAngle);
                 update();
 	}
-	if (getMethodName(command) == "bar")
+        if (getMethodName(command) == "bar")
 	{
 		index = command.indexOf("(",0);
 		indexOfSimbol = command.indexOf(",", index);
@@ -192,7 +198,11 @@ void graphics::processCommand(QString  command)
 		numberOf = indexOfSimbol - index;
 		y1 = command.mid(index+1, numberOf-1).toInt(0,10);
 
-                p.drawRect(x, y, x1-x, y1-y);
+                QBrush myBrush;
+                myBrush.setColor(fillBrush->color());
+                myBrush.setStyle(fillBrush->style());
+
+                p.fillRect(x, y, x1-x, y1-y, myBrush);
 		update();
 	}
         if (getMethodName(command) == "bar3d")
@@ -218,27 +228,21 @@ void graphics::processCommand(QString  command)
 		y1 = command.mid(index+1, numberOf-1).toInt(0,10);
 
 		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
+                indexOfSimbol = command.indexOf(")", index+1);
 		numberOf = indexOfSimbol - index;
-		z = command.mid(index+1, numberOf-1).toInt(0,10);	
+                z = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(")", index+1);
-		numberOf = indexOfSimbol - index;
-		methodText = command.mid(index+1, numberOf-1);
-	
-		p.drawRect(x, y, x1-x, y1-y);
-		if(methodText == "true")
-		{
-			int a, c;
-			c = z;
-                        a = (int) fabs(c / sqrt(2)); //Modified to avoid warning: passing `double' for converting 1 of `int abs(int)'
- 			p.drawLine(x, y, x+a, y-a); 
-			p.drawLine(x+a, y-a, x1+a, y-a);
-			p.drawLine(x1+a, y-a, x1+a, y1-a);
-			p.drawLine(x1, y, x1+a, y-a);
-			p.drawLine(x1, y1, x1+a, y1-a);
-		}
+
+                p.drawRect(x, y, x1-x, y1-y);
+                int a, c;
+                c = z;
+                a = (int) fabs(c / sqrt(2)); //Modified to avoid warning: passing `double' for converting 1 of `int abs(int)'
+                p.drawLine(x, y, x+a, y-a);
+                p.drawLine(x+a, y-a, x1+a, y-a);
+                p.drawLine(x1+a, y-a, x1+a, y1-a);
+                p.drawLine(x1, y, x1+a, y-a);
+                p.drawLine(x1, y1, x1+a, y1-a);
+
 		update();
 	}
 	if(getMethodName(command) == "circle")
@@ -273,54 +277,50 @@ void graphics::processCommand(QString  command)
         {
             qDebug() << command;
         }
-	if(getMethodName(command) == "drawpoly")
+        if(getMethodName(command) == "drawpoly")
 	{
-/*		int pX, pY;
-		if(step == 1)
-		{
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
+                numOfPoints = command.mid(index+1, numberOf-1).toInt(0,10);
 
-			index = command.indexOf("(",0);
-			indexOfSimbol = command.indexOf(",", index+1);
-			numberOf = indexOfSimbol - index;
-			x1 = command.mid(index+1, numberOf-1).toInt(0,10);
+                QPolygon polygon;
 
-			index = indexOfSimbol;
-			indexOfSimbol = command.indexOf(")", index+1);
-			numberOf = indexOfSimbol - index;
-			y1 = command.mid(index+1, numberOf-1).toInt(0,10);
-			
-			pX = x1;
-			pY = y1;
-			myPath.moveTo(x1, y1);
-			ui.label->setText(command);
-		}
-		index = command.indexOf("(",0);
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		x = command.mid(index+1, numberOf-1).toInt(0,10);
+                double **arrayXY = new double *[2];
+                for (int i = 0; i < 2; ++i )
+                    arrayXY[i] = new double [numOfPoints];
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(")", index+1);
-		numberOf = indexOfSimbol - index;
-		y = command.mid(index+1, numberOf-1).toInt(0,10);
+                for (int i = 0; i <= numOfPoints / 2 - 2; ++i )
+                {
+                    index = indexOfSimbol;
+                    indexOfSimbol = command.indexOf(",", index+1);
+                    numberOf = indexOfSimbol - index;
+                    arrayXY[0][i] = command.mid(index+1, numberOf-1).toDouble();
 
-		
-        polygon[step - 1] = QPointF(x, y);
-		myPath.moveTo(pX, pY);
-		myPath.lineTo(x, y);
-	
-		pX = x;
-		pY = y;
-		step += 1;	
 
-		if(step > numOfPoints)
-		{
-			myPath.addPolygon(polygon);
-			ui.label->setText(command);
-			p.drawPath(myPath);
-			update();
-		}
-*/	}
+                    index = indexOfSimbol;
+                    indexOfSimbol = command.indexOf(",", index+1);
+                    numberOf = indexOfSimbol - index;
+                    arrayXY[1][i] = command.mid(index+1, numberOf-1).toDouble();
+
+                    polygon << QPoint(arrayXY[0][i], arrayXY[1][i]);
+                 }
+
+                 index = indexOfSimbol;
+                 indexOfSimbol = command.indexOf(",", index+1);
+                 numberOf = indexOfSimbol - index;
+                 arrayXY[0][numOfPoints - 1] = command.mid(index+1, numberOf-1).toDouble();
+
+                 index = indexOfSimbol;
+                 indexOfSimbol = command.indexOf(")", index+1);
+                 numberOf = indexOfSimbol - index;
+                 arrayXY[1][numOfPoints - 1] = command.mid(index+1, numberOf-1).toDouble();
+                
+                 polygon << QPoint(arrayXY[0][numOfPoints - 1], arrayXY[1][numOfPoints - 1]);
+
+                 p.drawPolyline(polygon);
+                 update();
+	}
 	if(getMethodName(command) == "ellipse")
 	{
 		index = command.indexOf("(",0);
@@ -371,7 +371,28 @@ void graphics::processCommand(QString  command)
 		myPath.addEllipse(x-x1, y-y1, 2*x1, 2*y1);
 		p.drawPath(myPath);
 		update();
-	}
+	} 
+        if (getMethodName(command) == "image")
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
+                x1 = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                y1 = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                index = command.indexOf("\"", 0);
+                indexOfSimbol = command.indexOf("\"", index+ 1);
+                numberOf = indexOfSimbol - index;
+                methodText = command.mid(index+1, numberOf-1);
+
+                QImage image(methodText);
+                p.drawImage(x1, y1, image);
+                update();
+        }
 	if(getMethodName(command) == "line")
 	{
 		index = command.indexOf("(",0);
@@ -514,6 +535,31 @@ void graphics::processCommand(QString  command)
                 p.drawPoint(x1, y1);
                 update();
 	}
+        if (getMethodName(command) == "rectangle")
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
+                x = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                y = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                x1 = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(")", index+1);
+                numberOf = indexOfSimbol - index;
+                y1 = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                p.drawRect(x, y, x1-x, y1-y);
+                update();
+        }
         if (getMethodName(command) == "setbkcolor")
         {
                 index = command.indexOf("(", 0);
@@ -531,6 +577,26 @@ void graphics::processCommand(QString  command)
 		numberOf = indexOfSimbol - index;
 		curentColor = command.mid(index+1, numberOf-1).toInt(0,10);
 	}
+        if (getMethodName(command) == "setfillcolor")
+        {
+                index = command.indexOf("(", 0);
+                indexOfSimbol = command.indexOf(")", index+ 1);
+                numberOf = indexOfSimbol - index;
+                curentFillColor = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                setCurentFillColor(curentFillColor);
+                update();
+        }
+        if (getMethodName(command) == "setfillstyle")
+        {
+                index = command.indexOf("(", 0);
+                indexOfSimbol = command.indexOf(")", index+ 1);
+                numberOf = indexOfSimbol - index;
+                fillPatern = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                setFillPatern(fillPatern);
+                update();
+        }
         if (getMethodName(command) == "setlinestyle")
 	{
 		index = command.indexOf("(",0);
@@ -613,4 +679,51 @@ void graphics::setCurentBGColor(int curentBGColor)
                         case 14:pixBG.fill(Qt::yellow);	 			update();break;
                         case 15:pixBG.fill(Qt::white);   			update();break;
                 }
+}
+///*******************seting fill color**********************************************
+void graphics::setCurentFillColor(int curentFillColor)
+{
+    switch(curentFillColor)
+                {
+                        case 0: fillBrush->setColor(Qt::black);                  update();break;
+                        case 1: fillBrush->setColor(Qt::darkBlue);		update();break;
+                        case 2: fillBrush->setColor(Qt::darkGreen);		update();break;
+                        case 3: fillBrush->setColor(Qt::darkCyan);		update();break;
+                        case 4: fillBrush->setColor(Qt::darkRed);                update();break;
+                        case 5: fillBrush->setColor(QColor(139, 0, 139));        update();break;
+                        case 6: fillBrush->setColor(QColor(165, 42, 42)); 	update();break;
+                        case 7: fillBrush->setColor(Qt::gray);           	update();break;
+                        case 8: fillBrush->setColor(Qt::darkGray);		update();break;
+                        case 9: fillBrush->setColor(Qt::blue);   		update();break;
+                        case 10:fillBrush->setColor(Qt::green);  		update();break;
+                        case 11:fillBrush->setColor(Qt::cyan);   		update();break;
+                        case 12:fillBrush->setColor(Qt::red);    		update();break;
+                        case 13:fillBrush->setColor(QColor(255, 0, 255));	update();break;
+                        case 14:fillBrush->setColor(Qt::yellow);         	update();break;
+                        case 15:fillBrush->setColor(Qt::white);  		update();break;
+                }
+}
+///**********************seting fill patern***********************************************
+void graphics::setFillPatern(int patern)
+{
+    switch(patern)
+                {
+                        case 0: fillBrush->setStyle(Qt::NoBrush);               update();break;
+                        case 1: fillBrush->setStyle(Qt::SolidPattern);		update();break;
+                        case 2: fillBrush->setStyle(Qt::HorPattern);		update();break;
+                        case 3: fillBrush->setStyle(Qt::BDiagPattern);		update();break;
+                        case 4: fillBrush->setStyle(Qt::BDiagPattern);          update();break;
+                        case 5: fillBrush->setStyle(Qt::FDiagPattern);          update();break;
+                        case 6: fillBrush->setStyle(Qt::FDiagPattern);  	update();break;
+                        case 7: fillBrush->setStyle(Qt::Dense5Pattern);        	update();break;
+                        case 8: fillBrush->setStyle(Qt::Dense4Pattern);		update();break;
+                        case 9: fillBrush->setStyle(Qt::VerPattern);   		update();break;
+                        case 10:fillBrush->setStyle(Qt::Dense1Pattern); 	update();break;
+                        case 11:fillBrush->setStyle(Qt::Dense2Pattern); 	update();break;
+                        case 12:fillBrush->setStyle(Qt::CrossPattern);  	update();break;
+                        case 13:fillBrush->setStyle(Qt::LinearGradientPattern);	update();break;
+                        case 14:fillBrush->setStyle(Qt::RadialGradientPattern); update();break;
+                        case 15:fillBrush->setStyle(Qt::ConicalGradientPattern);update();break;
+                }
+
 }
