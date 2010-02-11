@@ -24,6 +24,7 @@
 #include "QDebug"
 
 #include "compiler.h"
+#include "compilersettings.h"
 
 Compiler::Compiler(QObject *parent) : QProcess(parent)
 {  
@@ -33,6 +34,10 @@ Compiler::Compiler(QObject *parent) : QProcess(parent)
 
     setProcessChannelMode(MergedChannels);
     compilerProfile = NULL;
+
+    /*-=-=-=-*/
+    settings = new CompilerSettings(this);
+    /*=-=-=-=*/
     refreshSupported();
 }
 
@@ -203,6 +208,9 @@ void Compiler::loadProfile(QString lang, QString profile)
 
     compilerProfile = new QSettings(profPath, QSettings::IniFormat);
     compileMode = DEFAULT;
+
+    //=-=-=-=-=-=-=-
+    settings->load(profPath);
 }
 
 void Compiler::setOptions(QString str)
