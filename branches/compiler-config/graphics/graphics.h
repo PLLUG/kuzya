@@ -49,6 +49,8 @@ class graphics: public QDialog, private Ui::graphicsForm
                 void creatBGPixmap(int width, int height);
 		QString getMethodName(QString command);
                 void setCurentBGColor(int curentBGColor);
+                void setCurentFillColor(int curentFillColor);
+                void setFillPatern(int patern);
 
 
 	private:
@@ -56,6 +58,7 @@ class graphics: public QDialog, private Ui::graphicsForm
 		int index;
 		int curentColor;
                 int curentBGColor;
+                int curentFillColor;
 		int textSize;
                 int textDirection;
 		int lineThickness;
@@ -74,6 +77,7 @@ class graphics: public QDialog, private Ui::graphicsForm
 		int indexOfSimbol;
 		int numberOf;
                 bool readKomands;
+                int fillPatern;
 	
 	private:
  		QPixmap pix;
@@ -83,6 +87,7 @@ class graphics: public QDialog, private Ui::graphicsForm
 		QString textFont;
 		QPen pen;
                 ReadStdIn* rsi;
+                QBrush *fillBrush;
 };
 
 #endif
