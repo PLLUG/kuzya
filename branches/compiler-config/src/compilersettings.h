@@ -22,16 +22,27 @@
 #define COMPILERSETTINGS_H
 
 #include <QObject>
+#include <QPointer>
+
+class QSettings;
 
 class CompilerSettings : public QObject
 {
 Q_OBJECT
 public:
     explicit CompilerSettings(QObject *parent = 0);
+    ~CompilerSettings();
+
+    void load(QString filePath);
 
 signals:
 
 public slots:
+
+private:
+    bool areValid();
+
+    QPointer<QSettings> settingsFile;
 
 };
 

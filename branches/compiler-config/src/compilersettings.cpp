@@ -18,9 +18,45 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>     *
  ******************************************************************************/
 
+#include <QPointer>
+#include <QSettings>
+
+#include <QDebug>
+
 #include "compilersettings.h"
 
 CompilerSettings::CompilerSettings(QObject *parent) :
     QObject(parent)
 {
+
+}
+
+CompilerSettings::~CompilerSettings()
+{
+    if (!settingsFile.isNull())
+    {
+        free(settingsFile);
+    }
+}
+
+bool CompilerSettings::areValid()
+{
+    if (!settingsFile.isNull())
+    {
+        if (QSettings::NoError == settingsFile->status())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void CompilerSettings::load(QString filePath)
+{
+    if (!settingsFile.isNull())
+    {
+        free(settingsFile);
+    }
+
+    settingsFile = new QSettings(filePath, QSettings::IniFormat);
 }

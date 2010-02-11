@@ -26,6 +26,7 @@
 #include "replacedialog.h"
 
 class QSettings;
+class CompilerSettings;
 
 class Compiler : public QProcess
 {
@@ -97,6 +98,8 @@ private:
         QStringList supportedCompilers;
         QStringList profilesPathList;
         QString outFile;
+
+        CompilerSettings *settings;
 };
 
 #endif
