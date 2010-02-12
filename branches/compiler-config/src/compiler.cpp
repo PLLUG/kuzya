@@ -211,6 +211,11 @@ void Compiler::loadProfile(QString lang, QString profile)
 
     //=-=-=-=-=-=-=-
     settings->load(profPath);
+    qDebug() << "++++++" <<settings->getName();
+    qDebug() << "++++++" <<settings->getComment();
+    qDebug() << "++++++" <<settings->getLinkerName();
+    qDebug() << "++++++" <<settings->getLinkerComment();
+    //-=-=-=-=-=-=-=-
 }
 
 void Compiler::setOptions(QString str)
