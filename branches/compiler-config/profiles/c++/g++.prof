@@ -1,3 +1,7 @@
+[main]
+compiler/name=g++
+compiler/comment=GNU project C and C++ compiler
+
 [info]
 compiler=g++
 comment=GNU project C and C++ compiler

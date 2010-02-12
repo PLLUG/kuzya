@@ -34,15 +34,21 @@ public:
     ~CompilerSettings();
 
     void load(QString filePath);
+    QString getName();
+    QString getComment();
+    QString getLinkerName();
+    QString getLinkerComment();
 
 signals:
 
 public slots:
 
 private:
-    bool areValid();
+    bool settingsAreValid();
 
     QPointer<QSettings> settingsFile;
+
+
 
 };
 
