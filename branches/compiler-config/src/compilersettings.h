@@ -38,6 +38,8 @@ public:
     QString getComment();
     QString getLinkerName();
     QString getLinkerComment();
+    bool isPlatformSupport();
+    bool redirectMsgEnabled();
 
 signals:
 

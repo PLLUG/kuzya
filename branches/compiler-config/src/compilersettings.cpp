@@ -30,9 +30,8 @@
 #define COMPILER_COMMENT_KEY "compiler/comment"
 #define LINKER_NAME_KEY "linker/name"
 #define LINKER_COMMENT_KEY "linker/comment"
-#define CONFIG_WIN32_KEY "config/win32"
-#define CONFIG_UNIX_KEY "config/unix"
-#define CONFIG_MSGFILE_KEY "config/msgfile"
+#define CONFIG_WIN32_ONLY_KEY "config/win32_only"
+#define CONFIG_REDIRECT_MSG_KEY "config/redirect_msg"
 
 #define COMPILATION_GROUP "compile"
 #define MODE_NAME_KEY "name"
@@ -85,6 +84,7 @@ void CompilerSettings::load(QString filePath)
         free(settingsFile);
     }
 
+    qDebug() << "LOAD COMPILER SETTINGS:" << filePath;
     settingsFile = new QSettings(filePath, QSettings::IniFormat);
 }
 
@@ -96,10 +96,11 @@ QString CompilerSettings::getName()
     {
         settingsFile->beginGroup(MAIN_GROUP);
         value = settingsFile->value(COMPILER_NAME_KEY, "").toString();
-        settingsFile->endGroup(); //MAIN_SETTINGS_GROUP
+        settingsFile->endGroup(); //MAIN_GROUP
     }
     else value = "";
 
+    qDebug() << "COMPILER NAME:" << value;
     return value;
 }
 
@@ -111,10 +112,11 @@ QString CompilerSettings::getComment()
     {
         settingsFile->beginGroup(MAIN_GROUP);
         value = settingsFile->value(COMPILER_COMMENT_KEY, "").toString();
-        settingsFile->endGroup(); //MAIN_SETTINGS_GROUP
+        settingsFile->endGroup(); //MAIN_GROUP
     }
     else value = "";
 
+    qDebug() << "COMPILER COMMENT:" << value;
     return value;
 }
 
@@ -126,10 +128,11 @@ QString CompilerSettings::getLinkerName()
     {
         settingsFile->beginGroup(MAIN_GROUP);
         value = settingsFile->value(LINKER_NAME_KEY, "").toString();
-        settingsFile->endGroup(); //MAIN_SETTINGS_GROUP
+        settingsFile->endGroup(); //MAIN_GROUP
     }
     else value = "";
 
+    qDebug() << "LINKER NAME:" << value;
     return value;
 }
 
@@ -141,9 +144,40 @@ QString CompilerSettings::getLinkerComment()
     {
         settingsFile->beginGroup(MAIN_GROUP);
         value = settingsFile->value(LINKER_COMMENT_KEY, "").toString();
-        settingsFile->endGroup(); //MAIN_SETTINGS_GROUP
+        settingsFile->endGroup(); //MAIN_GROUP
     }
     else value = "";
+
+    qDebug() << "LINKER COMMENT:" << value;
+    return value;
+}
+
+bool CompilerSettings::isPlatformSupport()
+{
+    bool value = true;
+
+    if (settingsAreValid())
+    {
+        #ifndef WIN32
+            settingsFile->beginGroup(MAIN_GROUP);
+            value = !settingsFile->value(CONFIG_WIN32_ONLY_KEY, true).toBool();
+            settingsFile->endGroup(); //MAIN_GROUP
+        #endif
+    }
+
+    return value;
+}
+
+bool CompilerSettings::redirectMsgEnabled()
+{
+    bool value = false;
+
+    if (settingsAreValid())
+    {
+            settingsFile->beginGroup(MAIN_GROUP);
+            value = settingsFile->value(CONFIG_REDIRECT_MSG_KEY, false).toBool();
+            settingsFile->endGroup(); //MAIN_GROUP
+    }
 
     return value;
 }
