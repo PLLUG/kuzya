@@ -1,3 +1,13 @@
+[main]
+compiler/name=fpc
+compiler/comment=Free Pascal Compiler
+
+#linker/name=
+#linker/comment=
+
+#config/win32_only=false
+#config/redirect_msg=false
+
 [info]
 compiler=fpc
 comment=Free Pascal Compiler
