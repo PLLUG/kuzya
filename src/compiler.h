@@ -75,9 +75,7 @@ private:
         QString getProfilePath(QString lang, QString profile);
         void resetParseErrorList();
         void resetParseWarningList();
-        QString getCompilerName();
         QString getCompilerParams();
-        QString getConfig();
 
         QString sourceFile;
         QString sourcePath;
@@ -86,7 +84,6 @@ private:
         int compileMode;
         QList<compilerError> errorList;
         QList<compilerWarning> warningList;
-        //QString config;
         QString compilerDir;
         QString options;
         QSettings* compilerProfile;
