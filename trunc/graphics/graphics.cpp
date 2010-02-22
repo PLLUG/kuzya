@@ -236,7 +236,7 @@ void graphics::processCommand(QString  command)
                 p.drawRect(x, y, x1-x, y1-y);
                 int a, c;
                 c = z;
-                a = (int) fabs(c / sqrt(2)); //Modified to avoid warning: passing `double' for converting 1 of `int abs(int)'
+                a = (int) fabs(c / sqrt(2.0)); //Modified to avoid warning: passing `double' for converting 1 of `int abs(int)'
                 p.drawLine(x, y, x+a, y-a);
                 p.drawLine(x+a, y-a, x1+a, y-a);
                 p.drawLine(x1+a, y-a, x1+a, y1-a);
