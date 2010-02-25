@@ -29,7 +29,7 @@
 #include "readstdin.h"
 #include "ui_graphics.h"
 
-class graphics: public QDialog, private Ui::graphicsForm
+class graphics: public QMainWindow, private Ui::graphicsForm
 {
 	Q_OBJECT
 

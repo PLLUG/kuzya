@@ -83,6 +83,7 @@ void bar(int x, int y, int x1, int y1, int color);
 void bar3d(int x, int y, int x1, int y1, int z, bool top);
 void circle(int x, int y, int radius);
 void cleardevice();
+void close();
 void closegraph();
 void drawpoly(int numOfPoints, int* array);
 void drawpoly(int numOfPoints, int* arrayX, int* arrayY);
@@ -107,6 +108,7 @@ void outtextxy(int x, int y, const char* text);
 void rectangle(int x, int y,int x1,int  y1);
 void rectangle(int x, int y,int x1,int y1, COLORS color);
 void rectangle(int x, int y,int x1,int y1, int color);
+void save(const char* path);
 void setbkcolor(COLORS color);
 void setbkcolor(int color);
 void setcolor(COLORS color);
@@ -193,6 +195,12 @@ void circle(int x, int y, int radius)
 void cleardevice()
 {
 	sprintf(KGNS::command, "cleardevice();\n");
+	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
+}
+///**************this function close kuzyagraph window**************
+void close()
+{
+  	sprintf(KGNS::command, "close();\n");
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 }
 //*********closeGraph***********************
@@ -298,7 +306,7 @@ int getmaxy()
 	return height;
 }
 ///********* draw image ******************************
-void image(int x, int y, char* path)
+void image(int x, int y, const char* path)
 {
 	sprintf(KGNS::command, "image(%i,%i,\"%s\");\n",x , y, path);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
@@ -484,7 +492,12 @@ void rectangle(int x, int y,int x1,int y1, int color)
 	  setcolor(KGNS::curentIntColor);
 	}
 }
-
+///*******************save image in the given path with given name*****
+void save(const char* path)
+{
+  	sprintf(KGNS::command, "save(\"%s\");\n", path);
+	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	
+}
 //***********setBGColor___COLORS************************************
 void setbkcolor(COLORS color)
 {
