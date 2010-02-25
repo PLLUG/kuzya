@@ -31,7 +31,7 @@
 #include "graphics.h"
 
 graphics::graphics(QWidget *parent)
-	: QDialog(parent)
+        : QMainWindow(parent)
 {
 	ui.setupUi(this);
         this->setWindowTitle("GraphicCore");
@@ -41,6 +41,9 @@ graphics::graphics(QWidget *parent)
 
         width = 640;
         height = 480;
+
+        ui.centralwidget->setMinimumHeight(height);
+        ui.centralwidget->setMinimumWidth(width);
 
 	curentColor = 0;
         curentFillColor = 0;
@@ -52,6 +55,7 @@ graphics::graphics(QWidget *parent)
 	lineStyle = 0;
 
         textDirection = 0;
+
 
 	pix = QPixmap(width, height);
         pixBG = QPixmap(width, height);
@@ -68,6 +72,7 @@ graphics::graphics(QWidget *parent)
 	connect(rsi, SIGNAL(commandAppeared(QString)), this, SLOT(processCommand(QString)));
         rsi->start();
 
+        //connect(ui.actionSave, SIGNAL(triggered()), this, SLOT(processCommand()));
 }
 
 graphics::~graphics()
@@ -269,6 +274,10 @@ void graphics::processCommand(QString  command)
 	{
                 pix.fill(Qt::transparent);
 	}
+        if (getMethodName(command) == "close")
+        {
+            close();
+        }
         if(getMethodName(command) == "closegraph")
         {
             //rsi->readKomand = false;
@@ -560,6 +569,26 @@ void graphics::processCommand(QString  command)
                 p.drawRect(x, y, x1-x, y1-y);
                 update();
         }
+        if (getMethodName(command) == "save")
+        {
+            QByteArray bytes;
+            QPixmap bufferPix;
+            QBuffer buffer(&bytes);
+            buffer.open(QIODevice::ReadWrite);
+            pix.save(&buffer, "PNG");
+
+            bufferPix.loadFromData(bytes);
+            p.drawPixmap(0, 0, pixBG);
+            p.drawPixmap(0, 0, bufferPix);
+            update();
+
+            index = command.indexOf("\"", 0);
+            indexOfSimbol = command.indexOf("\"", index+ 1);
+            numberOf = indexOfSimbol - index;
+            methodText = command.mid(index+1, numberOf-1);
+
+            pix.save(methodText, "PNG", 100);
+        }
         if (getMethodName(command) == "setbkcolor")
         {
                 index = command.indexOf("(", 0);
@@ -642,6 +671,9 @@ void graphics::createPixmap(int width, int height)
 	resize(width, height);
 	pix = QPixmap(width, height);
         pix.fill(Qt::transparent);
+
+        ui.centralwidget->setMinimumHeight(height);
+        ui.centralwidget->setMinimumWidth(width);
 }
 
 void graphics::creatBGPixmap(int width, int height)
