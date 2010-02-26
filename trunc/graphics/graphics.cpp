@@ -95,7 +95,7 @@ void graphics::processCommand(QString  command)
 
 		createPixmap(width, height);
                 creatBGPixmap(width, height);
-                update();
+                return;
 	}
 	QPainterPath myPath;
         setCurentFillColor(curentFillColor);
@@ -151,6 +151,7 @@ void graphics::processCommand(QString  command)
 			case 4: pen.setStyle(Qt::CustomDashLine);
 					p.setPen(pen);				update();break;
 	}
+        ///***************all kuzygraphfunctions are heree************************
 	if(getMethodName(command) == "arc")
 	{
 		index = command.indexOf("(",0);
@@ -180,6 +181,8 @@ void graphics::processCommand(QString  command)
 
                 p.drawArc(x1-r, y1-r, 2*r, 2*r, stAngle, endAngle);
                 update();
+                p.end();
+                return;
 	}
         if (getMethodName(command) == "bar")
 	{
@@ -209,6 +212,8 @@ void graphics::processCommand(QString  command)
 
                 p.fillRect(x, y, x1-x, y1-y, myBrush);
 		update();
+                p.end();
+                return;
 	}
         if (getMethodName(command) == "bar3d")
 	{
@@ -249,6 +254,8 @@ void graphics::processCommand(QString  command)
                 p.drawLine(x1, y1, x1+a, y1-a);
 
 		update();
+                p.end();
+                return;
 	}
 	if(getMethodName(command) == "circle")
 	{
@@ -269,22 +276,32 @@ void graphics::processCommand(QString  command)
 
                 p.drawEllipse(x1-r, y1-r, 2*r, 2*r);
 		update();
+                p.end();
+                return;
 	}
         if(getMethodName(command) == "cleardevice")
 	{
                 pix.fill(Qt::transparent);
+                p.end();
+                return;
 	}
         if (getMethodName(command) == "close")
         {
             close();
+            p.end();
+            return;
         }
         if(getMethodName(command) == "closegraph")
         {
-            //rsi->readKomand = false;
+            qDebug() << "KuzyaGraph was successfuly stoped";
+            p.end();
+            return;
         }
         if(getMethodName(command) == "drawfunc")
         {
             qDebug() << command;
+            p.end();
+            return;
         }
         if(getMethodName(command) == "drawpoly")
 	{
@@ -329,6 +346,8 @@ void graphics::processCommand(QString  command)
 
                  p.drawPolyline(polygon);
                  update();
+                 p.end();
+                 return;
 	}
 	if(getMethodName(command) == "ellipse")
 	{
@@ -354,6 +373,8 @@ void graphics::processCommand(QString  command)
 
 		p.drawEllipse(x-x1, y-y1, 2*x1, 2*y1);
 		update();
+                p.end();
+                return;
 	}
 	if(getMethodName(command) == "fillellipse")
 	{
@@ -380,6 +401,8 @@ void graphics::processCommand(QString  command)
 		myPath.addEllipse(x-x1, y-y1, 2*x1, 2*y1);
 		p.drawPath(myPath);
 		update();
+                p.end();
+                return;
 	} 
         if (getMethodName(command) == "image")
         {
@@ -401,6 +424,8 @@ void graphics::processCommand(QString  command)
                 QImage image(methodText);
                 p.drawImage(x1, y1, image);
                 update();
+                p.end();
+                return;
         }
 	if(getMethodName(command) == "line")
 	{
@@ -426,6 +451,8 @@ void graphics::processCommand(QString  command)
 
 		p.drawLine(x, y, x1,y1);
 		update();
+                p.end();
+                return;
 	}
         if(getMethodName(command) == "lineto")
         {
@@ -443,6 +470,8 @@ void graphics::processCommand(QString  command)
                 update();
                 x1 = x;
                 y1 = y;
+                p.end();
+                return;
         }
          if(getMethodName(command) == "moveto")
         {
@@ -455,6 +484,8 @@ void graphics::processCommand(QString  command)
                 indexOfSimbol = command.indexOf(")", index+1);
                 numberOf = indexOfSimbol - index;
                 y1 = command.mid(index+1, numberOf-1).toInt(0,10);
+                p.end();
+                return;
         }
         if (getMethodName(command) == "outtext")
 	{
@@ -465,6 +496,8 @@ void graphics::processCommand(QString  command)
 
                 p.drawText(x1, x1, methodText);
 		update();
+                p.end();
+                return;
 	}
         if (getMethodName(command) == "outtextxy")
 	{
@@ -498,6 +531,8 @@ void graphics::processCommand(QString  command)
 				}
                 }
 		update();
+                p.end();
+                return;
 	}
 	if(getMethodName(command) == "pieslice")
 	{
@@ -528,6 +563,8 @@ void graphics::processCommand(QString  command)
 
                 p.drawPie(x1-r, y1-r, 2*r, 2*r, stAngle, endAngle);
                 update();
+                p.end();
+                return;
 	}
         if(getMethodName(command) == "putpixel")
 	{
@@ -543,6 +580,8 @@ void graphics::processCommand(QString  command)
 
                 p.drawPoint(x1, y1);
                 update();
+                p.end();
+                return;
 	}
         if (getMethodName(command) == "rectangle")
         {
@@ -568,26 +607,36 @@ void graphics::processCommand(QString  command)
 
                 p.drawRect(x, y, x1-x, y1-y);
                 update();
+                p.end();
+                return;
         }
         if (getMethodName(command) == "save")
-        {
+        {/*
             QByteArray bytes;
-            QPixmap bufferPix;
             QBuffer buffer(&bytes);
             buffer.open(QIODevice::ReadWrite);
             pix.save(&buffer, "PNG");
 
+
             bufferPix.loadFromData(bytes);
-            p.drawPixmap(0, 0, pixBG);
-            p.drawPixmap(0, 0, bufferPix);
-            update();
+           */
+
+            QPixmap bufferPix = QPixmap(width, height);
+            QPainter myPainter;
+            myPainter.begin(&bufferPix);
+            myPainter.drawPixmap(0, 0, pixBG);
+            myPainter.drawPixmap(0, 0, pix);
+            //update();
 
             index = command.indexOf("\"", 0);
             indexOfSimbol = command.indexOf("\"", index+ 1);
             numberOf = indexOfSimbol - index;
             methodText = command.mid(index+1, numberOf-1);
 
-            pix.save(methodText, "PNG", 100);
+            bufferPix.save(methodText, "PNG", 100);
+            myPainter.end();
+            p.end();
+            return;
         }
         if (getMethodName(command) == "setbkcolor")
         {
@@ -598,6 +647,8 @@ void graphics::processCommand(QString  command)
 
                 setCurentBGColor(curentBGColor);
                 update();
+                p.end();
+                return;
         }
         if (getMethodName(command) == "setcolor")
 	{
@@ -605,6 +656,8 @@ void graphics::processCommand(QString  command)
 		indexOfSimbol = command.indexOf(")", index+ 1);
 		numberOf = indexOfSimbol - index;
 		curentColor = command.mid(index+1, numberOf-1).toInt(0,10);
+                p.end();
+                return;
 	}
         if (getMethodName(command) == "setfillcolor")
         {
@@ -615,6 +668,8 @@ void graphics::processCommand(QString  command)
 
                 setCurentFillColor(curentFillColor);
                 update();
+                p.end();
+                return;
         }
         if (getMethodName(command) == "setfillstyle")
         {
@@ -625,6 +680,8 @@ void graphics::processCommand(QString  command)
 
                 setFillPatern(fillPatern);
                 update();
+                p.end();
+                return;
         }
         if (getMethodName(command) == "setlinestyle")
 	{
@@ -637,6 +694,8 @@ void graphics::processCommand(QString  command)
 		indexOfSimbol = command.indexOf(")", index+1);
 		numberOf = indexOfSimbol - index;
 		lineThickness= command.mid(index+1, numberOf-1).toInt(0,10);
+                p.end();
+                return;
 	}
         if (getMethodName(command) == "settextstyle")
 	{
@@ -654,9 +713,9 @@ void graphics::processCommand(QString  command)
 		indexOfSimbol = command.indexOf(")", index);
 		numberOf = indexOfSimbol - index;
 		textSize = command.mid(index+1, numberOf-1).toInt(0,10);
+                p.end();
+                return;
 	}
-	p.end();
-        update();
 }
 
 void graphics::paintEvent(QPaintEvent * /*event*/ )
@@ -671,9 +730,6 @@ void graphics::createPixmap(int width, int height)
 	resize(width, height);
 	pix = QPixmap(width, height);
         pix.fill(Qt::transparent);
-
-        ui.centralwidget->setMinimumHeight(height);
-        ui.centralwidget->setMinimumWidth(width);
 }
 
 void graphics::creatBGPixmap(int width, int height)
@@ -689,6 +745,8 @@ QString graphics::getMethodName(QString command)
 	methodName = command.left(index);
 	return methodName;
 }
+
+///**************set current BG color***************************************************
 void graphics::setCurentBGColor(int curentBGColor)
 {
 

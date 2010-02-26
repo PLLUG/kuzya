@@ -82,6 +82,7 @@ class graphics: public QMainWindow, private Ui::graphicsForm
 	private:
  		QPixmap pix;
                 QPixmap pixBG;
+                QPixmap FGPix;
 		QPainter p;
 		QString methodText;
 		QString textFont;
