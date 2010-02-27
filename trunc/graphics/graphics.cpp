@@ -626,7 +626,6 @@ void graphics::processCommand(QString  command)
             myPainter.begin(&bufferPix);
             myPainter.drawPixmap(0, 0, pixBG);
             myPainter.drawPixmap(0, 0, pix);
-            //update();
 
             index = command.indexOf("\"", 0);
             indexOfSimbol = command.indexOf("\"", index+ 1);
