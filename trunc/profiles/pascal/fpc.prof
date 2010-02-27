@@ -5,7 +5,7 @@ comment=Free Pascal Compiler
 [compile]
 default=-vr -vw $options$ $source$
 object=-vr -Cn $options$ $source$
-static_lib=-vr -Us -Ur $options$ $source$
+static_lib=-vr -Ur $options$ $source$
 win32_opt=
 unix_opt=-Fu/usr/include/kuzya/fpc/
 
