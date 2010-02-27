@@ -529,6 +529,7 @@ void Kuzya::slotOpen(void)
 
         QString filter;
         QStringList supportedList = compiler->getSupportedLanguages();
+        supportedList.sort();
         foreach (QString lang, supportedList)
         {
             filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
@@ -536,7 +537,11 @@ void Kuzya::slotOpen(void)
 
         filter = filter+"All Files (*)";
 
-        QString openedFileName = QFileDialog::getOpenFileName(this, tr("Open File"), DefaultDir, filter);
+        QString currentFilter;
+        if (!language.isEmpty()) currentFilter = language + " ("+compiler->getSupportedExtensions(language)+")";
+        else currentFilter = "All Files (*)";
+
+        QString openedFileName = QFileDialog::getOpenFileName(this, tr("Open File"), DefaultDir, filter, &currentFilter);
 
         if ("" != openedFileName)
         {
@@ -689,13 +694,19 @@ bool Kuzya::slotSave(void)
         {
             QString filter;
             QStringList supportedList = compiler->getSupportedLanguages();
+            supportedList.sort();
             foreach (QString lang, supportedList)
             {
                 filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
             }
 
             filter = filter+"All Files (*)";
-            fileName = QFileDialog::getSaveFileName(this, tr("Save as..."), DefaultDir, filter);
+
+            QString currentFilter;
+            if (!language.isEmpty()) currentFilter = language + " ("+compiler->getSupportedExtensions(language)+")";
+            else currentFilter = "";
+
+            fileName = QFileDialog::getSaveFileName(this, tr("Save as..."), DefaultDir, filter, &currentFilter);
             slotUpdateWindowName(false);
             refreshProfileSettings();
         }
@@ -740,14 +751,20 @@ void Kuzya::slotSave_as(void)
         //QFileDialog::setDirectory(DefaultDir);
         QString filter;
         QStringList supportedList = compiler->getSupportedLanguages();
+        supportedList.sort();
         foreach (QString lang, supportedList)
         {
             filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
         }
 
         filter = filter+"All Files (*)";
+
+        QString currentFilter;
+        if (!language.isEmpty()) currentFilter = language + " ("+compiler->getSupportedExtensions(language)+")";
+        else currentFilter = "";
+
         newFileName = QFileDialog::getSaveFileName(this, tr("Save as..."),
-                                           DefaultDir , filter);
+                                           DefaultDir , filter, &currentFilter);
         if (!newFileName.isEmpty()) fileName = newFileName;
 
         slotSave();
