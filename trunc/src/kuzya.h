@@ -163,7 +163,6 @@ private:
         QsciScintilla* textEditor;
         QListWidget* notificationList;
         QString fileName;
-        QString newFileName;
         QString DefaultDir;
         //QString CurrentDir;
         GoToLineDialog* goToLine;

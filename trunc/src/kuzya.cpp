@@ -706,7 +706,6 @@ void Kuzya::refreshProfileSettings()
     }
     else
     {
-        qDebug() << supportedTranslations.at(0);
         disconnect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
         languageComboBox->clear();
         languageComboBox->addItem(QIcon(path+"english.png"), "english (default)");
@@ -726,6 +725,7 @@ void Kuzya::refreshProfileSettings()
 **/
 bool Kuzya::slotSave(void)
 {
+        QString newFileName;
         if (fileName.isEmpty())
         {
 
@@ -736,11 +736,13 @@ bool Kuzya::slotSave(void)
 
             if (fileDialog->exec())
                 newFileName = fileDialog->selectedFiles().at(0);
+
+            if (newFileName.isEmpty()) return false;
+            else fileName = newFileName;
         }
 
-        if (newFileName.isEmpty()) return false;
 
-        QFile file(newFileName);
+        QFile file(fileName);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
                 QMessageBox *msgBox= new QMessageBox();
@@ -756,7 +758,6 @@ bool Kuzya::slotSave(void)
                 delete msgBox;
                 return false ;
         }
-        fileName = newFileName;
         QTextStream stream(&file);
         stream << textEditor->text();
         textEditor->setModified(false);
@@ -774,6 +775,8 @@ bool Kuzya::slotSave(void)
 **/
 void Kuzya::slotSave_as(void)
 {
+        QString oldFileName(fileName);
+        QString newFileName;
 //        newFileName = fileDialog->getSaveFileName(this, tr("Save as..."),
 //                                           DefaultDir , filter, &currentFilter);
 
@@ -784,9 +787,10 @@ void Kuzya::slotSave_as(void)
         if (fileDialog->exec())
             newFileName = fileDialog->selectedFiles().at(0);
 
-        if (!newFileName.isEmpty()) fileName = newFileName;
+        if (newFileName.isEmpty()) return;
 
-        slotSave();
+        fileName = newFileName;
+        if (!slotSave()) fileName = oldFileName;
 }
 /**
 *******************************************************************************************************
