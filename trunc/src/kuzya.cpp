@@ -971,7 +971,9 @@ void Kuzya::slotAbout(void)
                                               "\n              \n \t <centre>Victor Sklyar</centre> "
                                               "\n <u>bouyantgrambler@users.sourceforge.net</u>"
                                               "\n              \n \t <centre>Alex Chmykhalo</centre> "
-                                              "\n <u>alexchmykhalo@users.sourceforge.net</u> </pre>").arg(KUZYA_VERSION),QMessageBox::Ok,this,Qt::Dialog);
+                                              "\n <u>alexchmykhalo@users.sourceforge.net</u>"
+                                              "\n\n <b>Design:</b>      \n \t <centre>Oksana Rondyak</centre> "
+                                              "\n <u>relax777@users.sourceforge.net</u> </pre>").arg(KUZYA_VERSION),QMessageBox::Ok,this,Qt::Dialog);
     #ifdef WIN32
         aboutBox->setIconPixmap(QPixmap(QApplication::applicationDirPath()+"/../resources/Kuzya.png"));
     #else
