@@ -78,6 +78,7 @@ class graphics: public QMainWindow, private Ui::graphicsForm
 		int numberOf;
                 bool readKomands;
                 int fillPatern;
+                bool BGColorWasChanged;
 	
 	private:
  		QPixmap pix;
