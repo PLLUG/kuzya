@@ -961,12 +961,13 @@ void Kuzya::slotAbout(void)
                                               "build on Jul 6 2009"
                                               "<p> Kuzya is simple crossplatform IDE for people who study  programming."
                                               "Main idea of it is to concentrate attention  of the users only on learning the programming \n"
-                                              "\t language  but not on usage of IDE\n\n </p>"
+                                              "\t language  but not on usage of IDE. For more information visit our oficial web site "
+                                              "<a href= http://kuzya.sourceforge.net> www.kuzya.sourceforge.net</a> \n\n </p>"
                                               "<pre> <b>Idea:</b> \n \t <centre>Grygoriy Zlobin</centre>"
                                               "\n <u>zlobin@electronics.wups.lviv.ua</u> "
                                               "\n\n <b>Team leader:</b> \n \t <centre>Andriy Shevchyk</centre> "
                                               "\n <u>shevchyk@users.sourceforge.net</u> "
-                                              "\n\n <b>Authors:</b>      \n \t <centre>Volodymyr Shevchyk</centre> "
+                                              "\n\n <b>Developers:</b>      \n \t <centre>Volodymyr Shevchyk</centre> "
                                               "\n <u>volder@users.sourceforge.net</u>"
                                               "\n              \n \t <centre>Victor Sklyar</centre> "
                                               "\n <u>bouyantgrambler@users.sourceforge.net</u>"
@@ -979,6 +980,7 @@ void Kuzya::slotAbout(void)
     #else
         aboutBox->setIconPixmap(QPixmap("/usr/share/kuzya/resources/Kuzya.png"));
     #endif
+
         aboutBox->exec();
     delete aboutBox;
 }
