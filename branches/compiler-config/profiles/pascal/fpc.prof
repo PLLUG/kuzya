@@ -15,7 +15,7 @@ comment=Free Pascal Compiler
 [compile]
 default=-vr -vw $options$ $source$
 object=-vr -Cn $options$ $source$
-static_lib=-vr -Us -Ur $options$ $source$
+static_lib=-vr -Ur $options$ $source$
 win32_opt=
 unix_opt=-Fu/usr/include/kuzya/fpc/
 
@@ -25,6 +25,7 @@ error_messages_2=1:4:(\\d+):\\s(.*)error:\\s(\\d+)(.*)
 messages_1=0:1:^error:(.*)
 messages_2=0:1:^Fatal:(.*)
 messages_3=0:1:^(PPU\\s[^L]*)$
+messages=_4=0:1:ld:(.*)
 
 [warnings]
 warning_messages_1=1:4:(\\d+):\\s(.*)warning:\\s(\\d+)(.*)

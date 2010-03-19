@@ -377,15 +377,19 @@ void Compiler::compile()
     }
     else qDebug() << "REDIRECT MSG:disabled";
 
+#ifdef WIN32
     QString prevDir = QApplication::applicationDirPath();
     if (!compilerDir.isEmpty()) QDir::setCurrent(compilerDir);
+#endif
 
     start(QString(compiler+" "+param), QIODevice::ReadWrite);
 
     qDebug() << "SET PATH:" << QDir::currentPath();
     qDebug() << "COMPILE:" << compiler << " " << param;
 
+#ifdef WIN32
     QDir::setCurrent(prevDir);
+#endif
 }
 
 
