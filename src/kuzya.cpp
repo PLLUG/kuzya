@@ -171,6 +171,11 @@ Kuzya::Kuzya(QWidget *parent)
 
         srcRecompiled = false;
 
+        fileDialog = new QFileDialog(this);
+        QList<QUrl> list = fileDialog->sidebarUrls();
+        list << QUrl::fromLocalFile(DefaultDir);
+        fileDialog->setSidebarUrls(list);
+
 ///-------------------------------------------------------------------------------------------------------------------
 
         connect(actionNew,	SIGNAL(triggered()),this,		SLOT(slotNew()));
@@ -218,6 +223,9 @@ Kuzya::Kuzya(QWidget *parent)
         connect(actionDynamicLibMode, SIGNAL(triggered()), this, SLOT(slotDynamicLibMode()));
 
         connect(textEditor,	SIGNAL(modificationChanged(bool)),	 this,	SLOT(slotModificationChanged(bool)));
+
+        connect(fileDialog, SIGNAL(filterSelected(QString)), this, SLOT(slotSetFileSuffix(QString)));
+
         statusBar()->showMessage(tr("Ready"));
 
         QShortcut *notificationListShortcut = new QShortcut(textEditor);
@@ -527,16 +535,14 @@ void Kuzya::slotOpen(void)
 {
         if(slotSaveChangesNotifier()==false) return;
 
-        QString filter;
-        QStringList supportedList = compiler->getSupportedLanguages();
-        foreach (QString lang, supportedList)
-        {
-            filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
-        }
+        //QString openedFileName = fileDialog->getOpenFileName(this, tr("Open File"), DefaultDir, filter, &currentFilter);
+        refreshDialogSettings();
+        fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
+        fileDialog->setFileMode(QFileDialog::ExistingFile);
 
-        filter = filter+"All Files (*)";
-
-        QString openedFileName = QFileDialog::getOpenFileName(this, tr("Open File"), DefaultDir, filter);
+        QString openedFileName;
+        if (fileDialog->exec())
+            openedFileName = fileDialog->selectedFiles().at(0);
 
         if ("" != openedFileName)
         {
@@ -584,6 +590,41 @@ void Kuzya::slotStaticLibMode()
 void Kuzya::slotDynamicLibMode()
 {
     compiler->setCompilerMode(Compiler::DYNAMIC_LIB);
+}
+
+void Kuzya::slotSetFileSuffix(QString filter)
+{
+    QString suffix(filter);
+    suffix.remove(0, 3+suffix.lastIndexOf("("));
+    suffix.truncate(suffix.indexOf(" "));
+    fileDialog->setDefaultSuffix(suffix);
+}
+
+void Kuzya::refreshDialogSettings()
+{
+    QString filter;
+    QStringList supportedList = compiler->getSupportedLanguages();
+    supportedList.sort();
+    foreach (QString lang, supportedList)
+    {
+        filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
+    }
+
+    filter = filter+"All Files (*)";
+
+    fileDialog->setNameFilter(filter);
+
+    QList<QUrl> list = fileDialog->sidebarUrls();
+    list.removeLast();
+    list << QUrl::fromLocalFile(DefaultDir);
+    fileDialog->setSidebarUrls(list);
+
+    QString currentFilter;
+    if (!language.isEmpty()) currentFilter = language + " ("+compiler->getSupportedExtensions(language)+")";
+    else currentFilter = "";
+
+    fileDialog->selectFilter(currentFilter);
+    slotSetFileSuffix(fileDialog->selectedFilter());
 }
 
 void Kuzya::refreshProfileSettings()
@@ -665,7 +706,6 @@ void Kuzya::refreshProfileSettings()
     }
     else
     {
-        qDebug() << supportedTranslations.at(0);
         disconnect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
         languageComboBox->clear();
         languageComboBox->addItem(QIcon(path+"english.png"), "english (default)");
@@ -685,25 +725,22 @@ void Kuzya::refreshProfileSettings()
 **/
 bool Kuzya::slotSave(void)
 {
+        QString newFileName;
         if (fileName.isEmpty())
         {
-            QString filter;
-            QStringList supportedList = compiler->getSupportedLanguages();
-            foreach (QString lang, supportedList)
-            {
-                filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
-            }
 
-            filter = filter+"All Files (*)";
-            fileName = QFileDialog::getSaveFileName(this, tr("Save as..."), DefaultDir, filter);
-            slotUpdateWindowName(false);
-            refreshProfileSettings();
+           // fileName = fileDialog->getSaveFileName(this, tr("Save as..."), DefaultDir, filter, &currentFilter);
+            refreshDialogSettings();
+            fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+            fileDialog->setFileMode(QFileDialog::AnyFile);
+
+            if (fileDialog->exec())
+                newFileName = fileDialog->selectedFiles().at(0);
+
+            if (newFileName.isEmpty()) return false;
+            else fileName = newFileName;
         }
 
-        if (fileName.isEmpty())
-        {
-                return false;
-        }
 
         QFile file(fileName);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -728,6 +765,7 @@ bool Kuzya::slotSave(void)
         statusBar()->showMessage(tr("Saved"), 2000);
         addFileNameToList(file.fileName());
         refreshProfileSettings();
+        slotUpdateWindowName(false);
         if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
         return true;
 }
@@ -737,20 +775,22 @@ bool Kuzya::slotSave(void)
 **/
 void Kuzya::slotSave_as(void)
 {
-        //QFileDialog::setDirectory(DefaultDir);
-        QString filter;
-        QStringList supportedList = compiler->getSupportedLanguages();
-        foreach (QString lang, supportedList)
-        {
-            filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
-        }
+        QString oldFileName(fileName);
+        QString newFileName;
+//        newFileName = fileDialog->getSaveFileName(this, tr("Save as..."),
+//                                           DefaultDir , filter, &currentFilter);
 
-        filter = filter+"All Files (*)";
-        newFileName = QFileDialog::getSaveFileName(this, tr("Save as..."),
-                                           DefaultDir , filter);
-        if (!newFileName.isEmpty()) fileName = newFileName;
+        refreshDialogSettings();
+        fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+        fileDialog->setFileMode(QFileDialog::AnyFile);
 
-        slotSave();
+        if (fileDialog->exec())
+            newFileName = fileDialog->selectedFiles().at(0);
+
+        if (newFileName.isEmpty()) return;
+
+        fileName = newFileName;
+        if (!slotSave()) fileName = oldFileName;
 }
 /**
 *******************************************************************************************************
@@ -921,22 +961,26 @@ void Kuzya::slotAbout(void)
                                               "build on Jul 6 2009"
                                               "<p> Kuzya is simple crossplatform IDE for people who study  programming."
                                               "Main idea of it is to concentrate attention  of the users only on learning the programming \n"
-                                              "\t language  but not on usage of IDE\n\n </p>"
+                                              "\t language  but not on usage of IDE. For more information visit our oficial web site "
+                                              "<a href= http://kuzya.sourceforge.net> www.kuzya.sourceforge.net</a> \n\n </p>"
                                               "<pre> <b>Idea:</b> \n \t <centre>Grygoriy Zlobin</centre>"
                                               "\n <u>zlobin@electronics.wups.lviv.ua</u> "
                                               "\n\n <b>Team leader:</b> \n \t <centre>Andriy Shevchyk</centre> "
                                               "\n <u>shevchyk@users.sourceforge.net</u> "
-                                              "\n\n <b>Authors:</b>      \n \t <centre>Volodymyr Shevchyk</centre> "
+                                              "\n\n <b>Developers:</b>      \n \t <centre>Volodymyr Shevchyk</centre> "
                                               "\n <u>volder@users.sourceforge.net</u>"
                                               "\n              \n \t <centre>Victor Sklyar</centre> "
                                               "\n <u>bouyantgrambler@users.sourceforge.net</u>"
                                               "\n              \n \t <centre>Alex Chmykhalo</centre> "
-                                              "\n <u>alexchmykhalo@users.sourceforge.net</u> </pre>").arg(KUZYA_VERSION),QMessageBox::Ok,this,Qt::Dialog);
+                                              "\n <u>alexchmykhalo@users.sourceforge.net</u>"
+                                              "\n\n <b>Design:</b>      \n \t <centre>Oksana Rondyak</centre> "
+                                              "\n <u>relax777@users.sourceforge.net</u> </pre>").arg(KUZYA_VERSION),QMessageBox::Ok,this,Qt::Dialog);
     #ifdef WIN32
         aboutBox->setIconPixmap(QPixmap(QApplication::applicationDirPath()+"/../resources/Kuzya.png"));
     #else
         aboutBox->setIconPixmap(QPixmap("/usr/share/kuzya/resources/Kuzya.png"));
     #endif
+
         aboutBox->exec();
     delete aboutBox;
 }

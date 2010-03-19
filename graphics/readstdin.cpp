@@ -43,5 +43,5 @@ void ReadStdIn::run()
             if (!str.isEmpty())
                 emit commandAppeared(str);
         }
-        while ("closegraph();" != str);
+        while (("closegraph();" != str) || ("close();" != str));
 }

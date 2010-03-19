@@ -51,6 +51,7 @@ template <typename T> class QVector;
 template <typename T> class QList;
 class Translator;
 class QsciLexer;
+class QFileDialog;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -138,6 +139,8 @@ private slots:
         void slotDynamicLibMode(void);
 
         void slotModificationChanged(bool);
+
+        void slotSetFileSuffix(QString);
 protected:
         //*DRAG AND DROP
         void dragEnterEvent(QDragEnterEvent *event);
@@ -152,6 +155,7 @@ private:
         void loadTemplates(QString);
         void unloadTemplates();
         void refreshCompileModes();
+        void refreshDialogSettings();
 
 private:
         QFile *file;
@@ -159,7 +163,6 @@ private:
         QsciScintilla* textEditor;
         QListWidget* notificationList;
         QString fileName;
-        QString newFileName;
         QString DefaultDir;
         //QString CurrentDir;
         GoToLineDialog* goToLine;
@@ -192,7 +195,7 @@ private:
         QStringList templatesCroupsList;
 
         bool srcRecompiled;
-
+        QFileDialog *fileDialog;
 };
 
 #endif

@@ -1,29 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>graphicsForm</class>
- <widget class="QDialog" name="graphicsForm">
-  <property name="windowModality">
-   <enum>Qt::NonModal</enum>
-  </property>
+ <widget class="QMainWindow" name="graphicsForm">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>500</height>
+    <width>482</width>
+    <height>311</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>MainWindow</string>
   </property>
-  <property name="windowIcon">
-   <iconset>
-    <normaloff>:/menu/images/kuzya.png</normaloff>:/menu/images/kuzya.png</iconset>
-  </property>
-  <property name="modal">
-   <bool>false</bool>
-  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>482</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionExit">
+   <property name="icon">
+    <iconset resource="../src/images.qrc">
+     <normaloff>:/menu/images/window_suppressed.png</normaloff>:/menu/images/window_suppressed.png</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../src/images.qrc"/>
+ </resources>
  <connections/>
 </ui>
