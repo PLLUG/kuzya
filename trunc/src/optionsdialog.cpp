@@ -26,7 +26,7 @@
 #include <QFileDialog>
 #include <QDebug>
 #include "optionsdialog.h"
- #include <QPalette>
+
 OptionsDialog::OptionsDialog(QWidget *parent)
  : QDialog(parent)
 {
@@ -55,31 +55,21 @@ OptionsDialog::OptionsDialog(QWidget *parent)
         connect(browseButton, SIGNAL(clicked()), this, SLOT(slotChangeCompilerLocation()));
         connect(defaultUsePushButton, SIGNAL(clicked()), this, SLOT(slotDefaultCompiler()));
         connect(compilerResetPushButton, SIGNAL(clicked()) ,this, SLOT(slotResetCompilerOptions()));
-        connect(fgColorPanelBtn,SIGNAL(clicked()),this,SLOT(slotChangeFgColor()));
-        connect(bgColorPanelBtn,SIGNAL(clicked()),this,SLOT(slotChangeBgColor()));
-        connect(cleanBgColorBtn,SIGNAL(clicked()),this,SLOT(slotCleanBgColor()));
-        connect(tEColorShemeCBox,SIGNAL(currentIndexChanged(int)),this,SLOT(slotChangeColorScheme(int)));
-        connect(lexerLanguageCBox,SIGNAL(currentIndexChanged(int)),this,SLOT(slotChangeLexerLenguage(int)));
-        connect(tEStylesList,SIGNAL(itemSelectionChanged()),this,SLOT(slotLoadCurrentStyleItemProperties()));
+
 ///-----------------------------Fonts and Colors-------------------------------------------------------
        styleCBox->addItems(QStyleFactory::keys());
        filters<<"*.qss";
        stylesDir.setNameFilters(filters);
 #ifdef WIN32
         stylesDir=QDir(QApplication::applicationDirPath()+"/../resources/qss/");
-        colorSchemesDir=(QDir(QApplication::applicationDirPath()+"/../resources/ColorSchemes/");
 #else
         stylesDir=QDir("/usr/share/kuzya/resources/qss/");
-        //colorSchemesDir=QDir("/usr/share/kuzya/resources/ColorSchemes/");
-        colorSchemesDir=QDir("./../resources/ColorSchemes/");
 #endif
        slotUpdateSkinsCBox();
        languageComboBox->clear();
        QStringList supportedList = mw->getCurrentCompiler()->getSupportedLanguages();
        supportedList.sort();
        languageComboBox->addItems(supportedList);
-       slotUpdateColorSchemesBox();
-       //slotUpdateLexerLanguageBox();
 
 }
 void OptionsDialog::slotUpdateSkinsCBox(void)
@@ -526,134 +516,4 @@ void OptionsDialog::slotResetCompilerOptions()
        settings->endGroup();
        compilerDirLineEdit->setText(location);
        compilerOptionsEdit->setPlainText(options);
-}
-void OptionsDialog::slotChangeFgColor()
-{
-    QColor color = QColorDialog::getColor();
-    /*QPalette palette = fgColorPanelBtn->palette();
-    palette .setColor( QPalette::Active, QPalette::Button,color);
-    fgColorPanelBtn->setPalette(palette);
-    fgColorPanelBtn->setAutoFillBackground( true );*/
-    //fgColorPanelBtn->setStyleSheet("* { background-color: rgb(255,125,100) }");
-    fgColorPanelBtn->setStyleSheet("* { background-color: "+color.name() +"}");
-    tEStylesList->currentItem()->setForeground(color);
-
-}
-void OptionsDialog::slotChangeBgColor()
-{
-    QColor color = QColorDialog::getColor();
-    bgColorPanelBtn->setStyleSheet("* { background-color: "+color.name() +"}");
-    tEStylesList->currentItem()->setBackgroundColor(color);
-}
-void OptionsDialog::slotCleanBgColor()
-{
-    bgColorPanelBtn->setStyleSheet("* { background-color: #FFFFFF }");
-}
-void OptionsDialog::slotUpdate_tEStylesList(QString fileName, bool reloadLexerLanguagesList)
-{
-    tEStylesList->clear();
-    QDomDocument domDoc;
-    QFile file(colorSchemesDir.absolutePath()+"/"+fileName);      //file with lexer's preferences
-    if (!file.open(QIODevice::ReadOnly))
-    {
-         QMessageBox msgBox;
-         msgBox.setIcon(QMessageBox::Warning);
-         msgBox.setText("<b>Error</b>");
-         msgBox.setInformativeText("File langs.xml is mising.\nPlease reinstall application!");
-         msgBox.setStandardButtons(QMessageBox::Ok);
-         msgBox.setDefaultButton(QMessageBox::Ok);
-         msgBox.exec();
-         return;
-    }
-    if (!domDoc.setContent(&file))  //sets file as the content of the document
-    {
-         QMessageBox msgBox;
-         msgBox.setIcon(QMessageBox::Warning);
-         msgBox.setText("<b>Error</b>");
-         msgBox.setInformativeText("File langs.xml is corrupted.\nPlease reinstall application!");
-         msgBox.setStandardButtons(QMessageBox::Ok);
-         msgBox.setDefaultButton(QMessageBox::Ok);
-         msgBox.exec();
-         file.close();
-         return;
-     }
-     file.close();
-
-     QDomElement domElement = domDoc.documentElement();
-     QDomNode domNode = domElement.firstChild();
-     domNode=domNode.nextSibling();
-     domNode=domNode.firstChild();
-     //qDebug()<<domNode.toElement().tagName();
-     //qDebug()<<domNode.toElement().attribute("name","");
-     //qDebug()<<"**********"<<languageNameStr;
-     if (true==reloadLexerLanguagesList)
-     {
-        disconnect(lexerLanguageCBox,SIGNAL(currentIndexChanged(int)),this,SLOT(slotChangeLexerLenguage(int)));
-        lexerLanguageCBox->clear();
-        while(!domNode.isNull())
-        {
-           lexerLanguageCBox->addItem(domNode.toElement().attribute("name",""));
-           domNode=domNode.nextSibling();
-        }
-        connect(lexerLanguageCBox,SIGNAL(currentIndexChanged(int)),this,SLOT(slotChangeLexerLenguage(int)));
-     }
-     domNode = domElement.firstChild();
-     domNode=domNode.nextSibling();
-     domNode=domNode.firstChild();
-     while((lexerLanguageCBox->currentText()!=domNode.toElement().attribute("name",""))&&(!domNode.isNull()))
-     {
-         //qDebug()<<domNode.toElement().attribute("name","");
-         domNode=domNode.nextSibling();
-     }
-     if(lexerLanguageCBox->currentText()!=domNode.toElement().attribute("name",""))
-     {
-         QMessageBox msgBox;
-         msgBox.setIcon(QMessageBox::Warning);
-         msgBox.setText("<b>Error</b>");
-         msgBox.setInformativeText("File langs.xml is corrupted.\nPlease reinstall application!");
-         msgBox.setStandardButtons(QMessageBox::Ok);
-         msgBox.setDefaultButton(QMessageBox::Ok);
-         msgBox.exec();
-         file.close();
-         return;
-     }
-     QDomNode styleNode = domNode.namedItem("LexerStyle");
-     QDomElement wordStyleDomElement = styleNode.firstChildElement();
-
-     while(!wordStyleDomElement.isNull())
-     {
-         QListWidgetItem *item = new QListWidgetItem;
-         item->setText(wordStyleDomElement.attribute("name",""));
-         item->setForeground(QColor("#"+wordStyleDomElement.attribute("fgColor","808080")));
-         item->setBackgroundColor(QColor("#"+wordStyleDomElement.attribute("bgColor","FFFFFF")));
-         tEStylesList->addItem(item);
-         wordStyleDomElement=wordStyleDomElement.nextSiblingElement();
-         //qDebug()<<wordStyleDomElement.attribute("name","");
-     }
-
-
-}
-void OptionsDialog::slotUpdateColorSchemesBox()
-{
-    tEColorShemeCBox->clear();
-    tEColorShemeCBox->addItems(colorSchemesDir.entryList(colorSchemesDir.nameFilters(),QDir::Files,QDir::Name));
-    slotUpdate_tEStylesList(tEColorShemeCBox->currentText(),true);
-
-}
-void OptionsDialog::slotChangeColorScheme(int index)
-{
-    slotUpdate_tEStylesList(tEColorShemeCBox->itemText(index),true);
-}
-void OptionsDialog::slotUpdateLexerLanguageBox()
-{
-    slotUpdate_tEStylesList(tEColorShemeCBox->currentText(),true);
-}
-void OptionsDialog::slotChangeLexerLenguage(int index)
-{
-    slotUpdate_tEStylesList(tEColorShemeCBox->currentText(),false);
-}
-void OptionsDialog::slotLoadCurrentStyleItemProperties()
-{
-    bgColorPanelBtn->setStyleSheet("* { background-color: "+tEStylesList->currentItem()->backgroundColor().name()+"}");
-    fgColorPanelBtn->setStyleSheet("* { background-color: "+tEStylesList->currentItem()->foreground().color().name()+"}");
 }

@@ -26,7 +26,6 @@
 #include <QMainWindow>
 #include <QProcess>
 
-#include "lexerloader.h"
 #include "optionsdialog.h"
 #include "ui_kuzya.h"
 #include "compiler.h"
@@ -53,7 +52,6 @@ template <typename T> class QList;
 class Translator;
 class QsciLexer;
 class QFileDialog;
-
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -184,13 +182,11 @@ private:
         QsciLexerPascal *pascalLexer;
         QsciLexerFortran *fortranLexer;
         QsciLexerJava *javaLexer;
-
         QString translatedFileName;
         Translator *translator;
         QComboBox *languageComboBox;
         QActionGroup *compilerModeGroup;
-        //QsciLexer *currentLexer;
-        LexerLoader *currentLexer;
+        QsciLexer *currentLexer;
         QAction *languageComboBoxAction;
 
         QSettings *tlist;

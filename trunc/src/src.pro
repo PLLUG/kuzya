@@ -1,5 +1,4 @@
 TEMPLATE = app
-QT       += xml
 FORMS += kuzya.ui \
     gotolinedialog.ui \
     optionsdialog.ui \
@@ -13,8 +12,7 @@ HEADERS += kuzya.h \
     replacedialog.h \
     helpbrowser.h \
     translator.h \
-    version.h \
-    lexerloader.h
+    version.h
 SOURCES += kuzya.cpp \
     main.cpp \
     gotolinedialog.cpp \
@@ -22,8 +20,7 @@ SOURCES += kuzya.cpp \
     optionsdialog.cpp \
     finddialog.cpp \
     replacedialog.cpp \
-    translator.cpp \
-    lexerloader.cpp
+    translator.cpp
 RESOURCES = images.qrc
 TRANSLATIONS = ../resources/translations/kuzya_ua.ts
 LIBS += -lqscintilla2
@@ -44,8 +41,8 @@ unix {
         translations \
         kuzya_profiles \
         kuzya_doc \
-        kuzya_resources \
-        kuzya_images
+        kuzya_resources\
+	kuzya_images
 }
 win32 { 
     TARGET = ../../bin/kuzya
