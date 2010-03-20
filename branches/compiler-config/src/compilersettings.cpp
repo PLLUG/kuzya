@@ -26,6 +26,7 @@
 #include "compilersettings.h"
 
 #define MAIN_GROUP "main"
+#define LANGUAGE_NAME_KEY "language/name"
 #define COMPILER_NAME_KEY "compiler/name"
 #define COMPILER_COMMENT_KEY "compiler/comment"
 #define LINKER_NAME_KEY "linker/name"
@@ -102,6 +103,23 @@ QString CompilerSettings::getName()
 
     qDebug() << "COMPILER NAME:" << value;
     return value;
+}
+
+QString CompilerSettings::getLanguage()
+{
+      QString value;
+
+
+      if (settingsAreValid())
+      {
+          settingsFile->beginGroup(MAIN_GROUP);
+          value = settingsFile->value(LANGUAGE_NAME_KEY, "").toString();
+          settingsFile->endGroup(); //MAIN_GROUP
+      }
+      else value = "";
+
+      qDebug() << "LANGUAGE NAME:" << value;
+      return value;
 }
 
 QString CompilerSettings::getComment()

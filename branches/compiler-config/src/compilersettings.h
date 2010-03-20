@@ -35,6 +35,7 @@ public:
 
     void load(QString filePath);
     QString getName();
+    QString getLanguage();
     QString getComment();
     QString getLinkerName();
     QString getLinkerComment();
