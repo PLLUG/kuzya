@@ -74,7 +74,15 @@ private slots:
         void slotChangeCompilerLocation();
         void slotDefaultCompiler();
         void slotResetCompilerOptions();
-
+        void slotChangeFgColor();
+        void slotChangeBgColor();
+        void slotCleanBgColor();
+        void slotUpdate_tEStylesList(QString,bool);
+        void slotUpdateColorSchemesBox();
+        void slotUpdateLexerLanguageBox();
+        void slotChangeColorScheme(int);
+        void slotChangeLexerLenguage(int);
+        void slotLoadCurrentStyleItemProperties();
 private:
 	QTranslator* trans_ua;
 	QTranslator* trans_en;
@@ -85,6 +93,7 @@ private:
 	QTranslator translator;
 	QFont font;
         QDir stylesDir;
+        QDir colorSchemesDir;
         QStringList filters;
 public:	
     bool isLineMarginVisible;
