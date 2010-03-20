@@ -25,8 +25,6 @@
 #include <Qsci/qscilexerpascal.h>
 #include <Qsci/qscilexerfortran.h>
 #include <Qsci/qscilexerjava.h>
-
-
 #include <QShortcut>
 #include <QVector>
 #include <QSignalMapper>
@@ -35,7 +33,6 @@
 #include <QPrintDialog>
 #include <QColor>
 
-#include "lexerloader.h"
 #include "gotolinedialog.h"
 #include "finddialog.h"
 #include "replacedialog.h"
@@ -128,12 +125,8 @@ Kuzya::Kuzya(QWidget *parent)
         fortranLexer->setFont(font);
         javaLexer = new QsciLexerJava(this);
         javaLexer->setFont(font);
-
-        currentLexer = new LexerLoader(this,"normal");
-
-
+       
         textEditor->setLexer();
-
 
         textEditor->setBraceMatching(QsciScintilla::SloppyBraceMatch);
         textEditor->setMatchedBraceBackgroundColor(QColor(200, 100, 100));
@@ -276,6 +269,13 @@ void Kuzya::setAutoCompletionEnabled(bool b)
 
 
 ///***********************************************************************************************************///
+
+void Kuzya::loadPascalLexer(void)
+{
+        QsciLexerPascal *pascalLexer = new QsciLexerPascal(this);
+        textEditor->setLexer(pascalLexer);
+}
+///***********************************************************************************************************///
 void Kuzya::toggleFoldsActionEnabled(bool b)
 {
        actionToggleFolds->setEnabled(b);
@@ -284,6 +284,12 @@ void Kuzya::toggleFoldsActionEnabled(bool b)
 QsciScintilla* Kuzya::getTextEditorPointer(void)
 {
         return textEditor;
+}
+///***********************************************************************************************************///
+void Kuzya::loadCPPLexer(void)
+{
+        cppLexer = new QsciLexerCPP(this);
+        textEditor->setLexer(cppLexer);
 }
 ///***********************************************************************************************************///
 void Kuzya::setEditorFont(QFont font)
@@ -671,16 +677,13 @@ void Kuzya::refreshProfileSettings()
    #endif
         unloadTemplates();
         loadTemplates(path+language+"/"+language+".ini");
-        textEditor->setLexer(0);
-        delete currentLexer;
-        currentLexer=new LexerLoader(this,false,language);
-        currentLexer->setStylingFileName("../profiles/langs1.xml");
 
-        //currentLexer=new LexerLoader(this,false,"cpp");
+        if ("pascal" == language) currentLexer = pascalLexer;
+        else if ("c++" == language) currentLexer = cppLexer;
+        else if ("fortran" == language) currentLexer = fortranLexer;
+        else if ("java" == language) currentLexer = javaLexer;
+        else currentLexer = 0;
         textEditor->setLexer(currentLexer);
-        //currentLexer->setStylingFileName("../profiles/langs2.xml");
-
-
     }
     else compiler->loadProfile("","");
 
