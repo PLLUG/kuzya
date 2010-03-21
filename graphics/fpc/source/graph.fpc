@@ -1,0 +1,519 @@
+Unit Graph;
+
+interface
+
+type COLORS = 
+(
+	BLACK,			{dark colours}
+	BLUE ,
+	GREEN,
+	CYAN,
+	RED,
+	MAGENTA,
+	BROWN,
+	LIGHTGRAY,
+	DARKGRAY,			{light colours}
+	LIGHTBLUE,
+	LIGHTGREEN,
+	LIGHTCYAN,
+	LIGHTRED,
+	LIGHTMAGENTA,
+	YELLOW,
+	WHITE
+);
+
+type PATERN =
+(
+  EMPTY_FILL,      	{  0   Background color}
+  SOLID_FILL,      	{  1   Solid fill}
+  LINE_FILL,       	{  2   ---}
+  LTSLASH_FILL,    	{  3   ///}
+  SLASH_FILL,      	{  4   ///, thick lines}
+  BKSLASH_FILL,    	{  5   \\\, thick lines}
+  LTBKSLASH_FILL,  	{  6   \\\/}
+  HATCH_FILL,      	{  7   Light hatch}
+  XHATCH_FILL,     	{  8   Heavy crosshatch}
+  INTERLEAVE_FILL, 	{  9   Interleaving lines}
+  WIDE_DOT_FILL,   	{ 10   Widely spaced dots}
+  CLOSE_DOT_FILL,  	{ 11   Closely spaced dots}
+  USER_FILL       	{ 12   User-defined fill pattern}
+);
+	
+type DIRECTION =
+(
+	HORIZ_DIR,			{left to right }
+	VERT_DIR 			{bottom to top}
+);
+
+type LINESTYLE =
+(
+	SOLID_LINE,
+	DOTTED_LINE,
+	CENTER_LINE,
+	DASHED_LINE,
+	USERBIT_LINE
+);
+
+{*************All_procedures_and_Functions******************}
+Procedure arc(x, y,stAngle, endAngle, radius:integer);
+Procedure arc(x, y,stAngle, endAngle, radius:integer; color:COLORS);
+Procedure arc(x, y,stAngle, endAngle, radius, color:integer);
+Procedure bar( x, y, x1, y1:integer);
+Procedure bar(x, y, x1, y1, color : integer);
+Procedure bar(x, y, x1, y1:integer; color:COLORS);
+Procedure bar3d(x, y,  x1,  y1, z:integer;  top:boolean);
+Procedure circle(x, y, radius:integer);
+Procedure circle(x, y, radius :integer; color :COLORS);
+Procedure circle(x, y, radius, color :integer);
+Procedure close();
+Procedure cleardevice();
+Procedure closegraph();
+Procedure ellipse(x, y, rWidth, rHeight:integer);
+Procedure ellipse(x, y, rWidth, rHeight:integer; color:integer);
+Procedure ellipse(x, y, rWidth, rHeight:integer; color:COLORS);
+Procedure fillellipse(x, y, rWidth, rHeight:integer);
+Procedure fillellipse(x, y, rWidth, rHeight, color:integer);
+Procedure fillellipse(x, y, rWidth, rHeight:integer; color:COLORS);
+Function getmaxx():integer;
+Function getmaxy():integer;
+Procedure image(x, y :integer; path:string);
+Procedure initgraph();
+Procedure initgraph(setWidth, setHeight:integer);
+Procedure initgraph(drv, drm:integer; text:string);
+Procedure line(x, y, x1, y1:integer);
+Procedure line(x, y, x1, y1:integer; color :COLORS);
+Procedure line(x, y, x1, y1:integer; color :integer);
+Procedure lineto(x, y:integer);
+Procedure lineto(x, y, color:integer);
+Procedure lineto(x, y:integer; color:COLORS);
+Procedure moveto(x, y:integer);
+Procedure outtext(text:string);
+Procedure outtext(text:string; color:integer);
+Procedure outtext(text:string; color:COLORS);
+Procedure outtextxy(x, y:integer; text:string);
+Procedure outtextxy(x, y:integer; text:string; color:integer);
+Procedure outtextxy(x, y:integer; text:string; color:COLORS);
+Procedure pieslice(x, y, stAngle, endAngle, radius:integer);
+Procedure pieslice(x, y, stAngle, endAngle, radius, color:integer);
+Procedure pieslice(x, y, stAngle, endAngle, radius:integer; color:COLORS);
+Procedure putpixel(x, y:integer);
+Procedure putpixel(x, y:integer; color:COLORS);
+Procedure putpixel(x, y:integer; color:integer);
+Procedure rectangle(x, y, x1, y1 :integer);
+Procedure rectangle(x, y, x1, y1 :integer; color :COLORS);
+Procedure rectangle(x, y, x1, y1 :integer; color :integer);
+Procedure save(path: string);
+Procedure setbkcolor(color:COLORS);
+Procedure setbkcolor(color:integer);
+Procedure setcolor(color:COLORS);
+Procedure setcolor(color:integer);
+Procedure setfillcolor(color:COLORS);
+Procedure setfillcolor(color:integer);
+Procedure setfillstyle(patern:PATERN; color:COLORS);
+Procedure setfillstyle(patern:integer; color:COLORS);
+Procedure setfillstyle(patern:PATERN; color:integer);
+Procedure setfillstyle(patern:integer; color:integer);
+Procedure setlinestyle(style:LINESTYLE; upattern, thickness:integer);
+Procedure setlinestyle(style, upattern, thickness:integer);
+Procedure settextstyle(font:string; mydirection:DIRECTION; size:integer);
+Procedure settextstyle(font:string; mydirection, size:integer);
+{*************All_procedures_and_Functions******************}
+
+implementation
+
+uses Unix, Crt;
+
+var    	     
+			   f:text;
+		height,width:integer;
+curentcolor, curentFillColor:integer;
+	
+	const kuzyagraph = 'kuzyagraph';
+
+{****************ARC********************************************}
+Procedure arc(x, y,stAngle, endAngle, radius:integer);
+begin	
+	writeln(f, 'arc(', x, ',', y, ',', stAngle, ',', endAngle, ',', radius, ');');	
+end;
+{****************ARC__color********************************************}
+Procedure arc(x, y,stAngle, endAngle, radius:integer; color:COLORS);
+begin
+	writeln(f, 'setcolor(',ord(color),');');
+	writeln(f, 'arc(', x, ',', y, ',', stAngle, ',', endAngle, ',', radius, ');');	
+	setcolor(curentcolor);
+end;
+{****************ARC__number********************************************}
+Procedure arc(x, y,stAngle, endAngle, radius, color:integer);
+begin
+	writeln(f, 'setcolor(',color,');');
+	writeln(f, 'arc(', x, ',', y, ',', stAngle, ',', endAngle, ',', radius, ');');	
+	setcolor(curentcolor);
+end;
+{****************Draw_bar**************************************}
+Procedure bar( x, y, x1, y1:integer);
+Begin
+	writeln(f, 'bar(', x, ',',  y, ',', x1,',' ,y1, ');');
+End;
+{*************************************************************}
+Procedure bar( x, y, x1, y1, color:integer);
+Begin
+	writeln(f, 'setcolor(',color,');');
+	writeln(f, 'bar(', x, ',',  y, ',', x1,',' ,y1, ');');
+	setcolor(curentcolor);
+End;
+{*************************************************************}
+Procedure bar( x, y, x1, y1:integer; color:COLORS);
+Begin
+	writeln(f, 'setcolor(',ord(color),');');
+	writeln(f, 'bar(', x, ',',  y, ',', x1,',' ,y1, ');');
+	setcolor(curentcolor);
+End;
+{****************3 demention rectangle************************}
+Procedure bar3d(x, y,  x1,  y1, z:integer;  top:boolean);
+Var topStr:string;
+Begin
+	if true = top then
+	begin
+		topStr := 'true';
+	end
+	else
+	begin
+		topStr := 'false';
+	end;
+	writeln(f, 'bar3d(', x, ',',y,',',x1,',',y1,',',z,',',topStr, ');');
+End;
+{***********circle***************************************************}
+Procedure circle(x, y, radius:integer);
+Begin
+	writeln(f, 'circle(', x,',', y,',', radius, ');');
+End;
+{***********Circle___color***************************************************}
+Procedure circle(x, y, radius:integer; color:COLORS);
+Begin
+	writeln(f, 'setcolor(',ord(color),');');
+	writeln(f, 'circle(', x,',', y,',', radius, ');');
+	setcolor(curentcolor);
+End;
+{***********Circle___number***************************************************}
+Procedure circle(x, y, radius, color:integer);
+Begin
+	writeln(f, 'setcolor(',color,');');
+	writeln(f, 'circle(', x,',', y,',', radius, ');');
+	setcolor(curentcolor);
+End;
+{*************close***************************************}
+Procedure close();
+Begin
+	writeln(f, 'close();');
+End;
+{***********clearDevise********************************************}
+Procedure cleardevice();
+Begin
+	writeln(f, 'cleardevice();');
+End;
+{*************closeGraph***************************************}
+Procedure closegraph();
+Begin
+	writeln(f, 'closegraph();');
+	flush(f);
+	pclose(f);
+End;
+{******************ellipse***************************************}
+Procedure ellipse(x, y, rWidth, rHeight:integer);
+Begin
+	writeln(f, 'ellipse(', x,',', y,',', rWidth,',', rHeight , ');');
+End;
+{******************ellipse with int color*******************************}
+Procedure ellipse(x, y, rWidth, rHeight:integer; color:integer);
+Begin
+	writeln(f, 'setcolor(',color,');');
+	writeln(f, 'ellipse(', x,',', y,',', rWidth,',', rHeight , ');');
+	setcolor(curentcolor);
+End;
+{******************ellipse with COLORS color****************************}
+Procedure ellipse(x, y, rWidth, rHeight:integer; color:COLORS);
+Begin
+	writeln(f, 'setcolor(',ord(color),');');
+	writeln(f, 'ellipse(', x,',', y,',', rWidth,',', rHeight , ');');
+	setcolor(curentcolor);
+End;
+{******************fillEllipse with defoult fillcolor********************}
+Procedure fillellipse(x, y, rWidth, rHeight:integer);
+Begin
+	writeln(f, 'fillellipse(', x,',', y,',', rWidth,',', rHeight , ');');
+End;
+{******************fillEllipse___number***************************************}
+Procedure fillellipse(x, y, rWidth, rHeight, color:integer);
+Begin
+	writeln(f, 'setfillcolor(', color, ');');
+	writeln(f, 'fillellipse(', x,',', y,',', rWidth,',', rHeight , ');');
+	setfillcolor(curentFillColor);
+End;
+{******************fillEllipse___color***************************************}
+Procedure fillellipse(x, y, rWidth, rHeight:integer; color:COLORS);
+Begin
+	writeln(f, 'setfillcolor(', ord(color), ');');
+	writeln(f, 'fillellipse(', x,',', y,',', rWidth,',', rHeight , ');');
+	setfillcolor(curentFillColor);
+End;
+{*****************getMaxX*************************************}
+Function getmaxx():integer;
+Begin
+	getmaxx := width;
+End;
+{******************getMaxY*************************************}
+Function getmaxy():integer;
+Begin
+	getmaxy := height;
+End;
+{***********************drawImage**********************************}
+Procedure image(x, y :integer; path:string);
+Begin
+	writeln(f, 'image(', x, ',', y, ',', path);
+End;
+{*******************initGraph************************************}
+Procedure initgraph();
+Begin
+	popen(f,kuzyagraph,'W') ;
+	width := 640;
+	height := 480;
+End;
+{*****************initGraph___WithHeightAndWidth*******************}
+Procedure initgraph(setWidth, setHeight:integer);
+Begin
+	initgraph();
+	width := setWidth;
+	height := setHeight;
+	writeln(f, 'initgraph(', width, ',', height, ');');
+End;
+{*********************initGraph**********************************}
+Procedure initgraph(drv, drm:integer; text:string);
+Begin
+	initgraph();
+End;
+{**********************line***************************************}
+Procedure line(x, y, x1, y1:integer);
+Begin
+	writeln(f, 'line(',x , ',', y, ',',x1, ',', y1, ');');
+End;
+{**********************line__color******************************}
+Procedure line(x, y, x1, y1:integer; color :COLORS);
+Begin
+	writeln(f, 'setcolor(',ord(color),');');
+	writeln(f, 'line(',x , ',', y, ',',x1, ',', y1, ');');
+	setcolor(curentcolor);
+End;
+{**********************line__number******************************}
+Procedure line(x, y, x1, y1:integer; color :integer);
+Begin
+	writeln(f, 'setcolor(',color,');');
+	writeln(f, 'line(',x , ',', y, ',',x1, ',', y1, ');');
+	setcolor(curentcolor);
+End;
+{*****************lineto**************************************}
+Procedure lineto(x, y:integer);
+Begin
+  	writeln(f, 'lineto(', x, ',', y, ');');
+End;
+{*****************lineto with int color*******************************}
+Procedure lineto(x, y, color:integer);
+Begin
+	writeln(f, 'setcolor(',color,');');
+	writeln(f, 'lineto(', x, ',', y, ');');
+	setcolor(curentcolor);
+End;
+{*****************lineto with COLORS color****************************}
+Procedure lineto(x, y:integer; color:COLORS);
+Begin
+	writeln(f, 'setcolor(',ord(color),');');
+	writeln(f, 'lineto(', x, ',', y, ');');
+	setcolor(curentcolor);
+End;
+{*******************moveto**********************************}
+Procedure moveto(x, y:integer);
+Begin
+  	writeln(f, 'moveto(', x, ',', y, ');');
+End;
+{********************outText********************************}
+Procedure outtext(text:string);
+Begin
+	writeln(f, 'outtext("', text, '");');
+End;
+{********************outText with int color*****************************}
+Procedure outtext(text:string; color:integer);
+Begin
+	writeln(f, 'setcolor(',ord(color),');');
+	writeln(f, 'outtext("', text, '");');
+	setcolor(curentcolor);
+End;
+{********************outText with COLORS color***************************}
+Procedure outtext(text:string; color:COLORS);
+Begin
+	writeln(f, 'setcolor(',ord(color),');');
+	writeln(f, 'outtext("', text, '");');
+	setcolor(curentcolor);
+End;
+{*******************outTextXY*******************************}
+Procedure outtextxy(x, y:integer; text:string);
+Begin
+	writeln(f, 'outtextxy(', x, ',', y,',"',  text, '");');
+End;
+{*******************outTextXY with int color*****************************}
+Procedure outtextxy(x, y:integer; text:string; color:integer);
+Begin
+	writeln(f, 'setcolor(',color,');');
+	writeln(f, 'outtextxy(', x, ',', y,',"',  text, '");');
+	setcolor(curentcolor);
+End;
+{*******************outTextXY with COLORS color**************************}
+Procedure outtextxy(x, y:integer; text:string; color:COLORS);
+Begin
+	writeln(f, 'setcolor(',ord(color),');');
+	writeln(f, 'outtextxy(', x, ',', y,',"',  text, '");');
+	setcolor(curentcolor);
+End;
+{**********************piesLice*********************************}
+Procedure pieslice(x, y, stAngle, endAngle, radius:integer);
+Begin
+	writeln(f, 'pieslice(',x, ',', y,',', stAngle,',', endAngle,',', radius, ');');
+End;
+{**********************piesLice with int color***************************}
+Procedure pieslice(x, y, stAngle, endAngle, radius, color:integer);
+Begin
+	writeln(f, 'setcolor(',color,');');
+	writeln(f, 'pieslice(',x, ',', y,',', stAngle,',', endAngle,',', radius, ');');
+	setcolor(curentcolor);
+End;
+{**********************piesLice with COLORS color************************}
+Procedure pieslice(x, y, stAngle, endAngle, radius:integer; color:COLORS);
+Begin
+	writeln(f, 'setcolor(',ord(color),');');
+	writeln(f, 'pieslice(',x, ',', y,',', stAngle,',', endAngle,',', radius, ');');
+	setcolor(curentcolor);
+End;
+{*******************putPixel************************************}
+Procedure putpixel(x, y:integer);
+Begin	
+	writeln(f, 'putpixel(',x , ',', y, ');');
+End;
+{*******************putPixel__WhithColor************************}
+Procedure putpixel(x, y:integer; color:COLORS);
+Begin	
+	writeln(f, 'setcolor(',ord(color),');');
+	writeln(f, 'putpixel(',x , ',', y, ');');
+	setcolor(curentcolor);
+End;
+{*******************putPixel__WhithNumber************************}
+Procedure putpixel(x, y:integer; color:integer);
+Begin	
+	writeln(f, 'setcolor(',color,');');
+	writeln(f, 'putpixel(',x , ',', y, ');');
+	setcolor(curentcolor);
+End;
+{********************rectangle******************************}
+Procedure rectangle(x, y, x1, y1 :integer);
+Begin
+	writeln(f, 'rectangle(', x, ',', y, ',', x1, ',', y1, ');');
+End;
+{********************rectangle____color******************************}
+Procedure rectangle(x, y, x1, y1 :integer; color :COLORS);
+Begin
+	writeln(f, 'setcolor(',ord(color),');');
+	writeln(f, 'rectangle(', x, ',', y, ',', x1, ',', y1, ');');
+	setcolor(curentcolor);
+End;
+{********************rectangle____number******************************}
+Procedure rectangle(x, y, x1, y1 :integer; color :integer);
+Begin
+	writeln(f, 'setcolor(',color,');');
+	writeln(f, 'rectangle(', x, ',', y, ',', x1, ',', y1, ');');
+	setcolor(curentcolor);
+End;
+{***********************save*********************************}
+Procedure save(path: string);
+Begin
+	writeln(f, 'save(',path,');');
+End;
+{***************setBGColor____number*************************}
+Procedure setbkcolor(color:integer);
+Begin
+	writeln(f, 'setbgcolor(',color,');');
+End;
+{***************setBGColor____colour*************************}
+Procedure setbkcolor(color:COLORS);
+Begin
+	writeln(f, 'setbgcolor(',ord(color),');');
+End;
+{***************setColor____colour*************************}
+Procedure setcolor(color:COLORS);
+Begin
+	curentcolor := ord(color); 
+	writeln(f, 'setcolor(',ord(color),');');
+End;
+{***************setColor____number*************************}
+Procedure setcolor(color:integer);
+Begin
+	curentcolor := color;
+	writeln(f, 'setcolor(',color,');');
+End;
+{***************setFillColor____colour*************************}
+Procedure setfillcolor(color:integer);
+Begin
+	curentFillColor := color;
+	writeln(f, 'setfillcolor(',color,');');
+end;
+{****************setFillColor____color*********************}
+Procedure setFillColor(color:COLORS);
+Begin
+	curentFillColor := ord(color);
+	writeln(f, 'setfillcolor(', ord(color), ');');
+End;
+{****************setFillStyle____patern___color*************************}
+Procedure setFillStyle(patern:PATERN; color:COLORS);
+Begin
+	writeln(f, 'setfillcolor(',ord(color),');');
+	writeln(f, 'setfillstyle(', ord(patern), ');');
+	setfillcolor(curentFillColor);
+End;
+{****************setFillStyle____number___color*************************}
+Procedure setFillStyle(patern:integer; color:COLORS);
+Begin
+	writeln(f, 'setfillcolor(',ord(color),');');
+	writeln(f, 'setfillstyle(', patern, ');');	
+	setfillcolor(curentFillColor);
+End;
+{****************setFillStyle____patern___number*************************}
+Procedure setFillStyle(patern:PATERN; color:integer);
+Begin
+	writeln(f, 'setfillcolor(',color,');');
+	writeln(f, 'setfillstyle(', ord(patern), ');');
+	setfillcolor(curentFillColor);
+End;
+{****************setFillStyle____number___number*************************}
+Procedure setFillStyle(patern:integer; color:integer);
+Begin
+	
+	writeln(f, 'setfillstyle(', patern, ');');
+End;
+{************setLineStyle____style**************************}
+Procedure setlinestyle(style:LINESTYLE; upattern, thickness:integer);
+Begin
+	writeln(f, 'setlinestyle(', ord(style), ',', thickness, ');');
+End;
+{************setLineStyle_____number**********************}
+Procedure setlinestyle(style, upattern, thickness:integer);
+Begin
+	writeln(f, 'setlinestyle(', style, ',', thickness, ');');
+End;
+{*************setTetxtStyle____style************************}
+Procedure settextstyle(font:string; mydirection:DIRECTION; size:integer);
+Begin
+	writeln(f, 'settextstyle(', font, ',', ord(mydirection), ',',  size, ');');
+End;
+{*************setTetxtStyle_____number********************}
+Procedure settextstyle(font:string; mydirection, size:integer);
+Begin
+	writeln(f, 'settextstyle(', font, ',', mydirection, ',',  size, ');');
+End;
+
+End.
