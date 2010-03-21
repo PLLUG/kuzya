@@ -49,8 +49,11 @@ class graphics: public QMainWindow, private Ui::graphicsForm
                 void creatBGPixmap(int width, int height);
 		QString getMethodName(QString command);
                 void setCurentBGColor(int curentBGColor);
+                void setCurentColor(int curentColor);
                 void setCurentFillColor(int curentFillColor);
                 void setFillPatern(int patern);
+                void drawFunc(int numOfPoints, double **arrayXY);
+                void setLineStyle(int lineStyle);
 
 
 	private:
@@ -79,6 +82,7 @@ class graphics: public QMainWindow, private Ui::graphicsForm
                 bool readKomands;
                 int fillPatern;
                 bool BGColorWasChanged;
+                double grid;
 	
 	private:
  		QPixmap pix;
