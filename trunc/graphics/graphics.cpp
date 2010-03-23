@@ -37,7 +37,7 @@ graphics::graphics(QWidget *parent)
 	ui.setupUi(this);
         this->setWindowTitle("GraphicCore");
 	setObjectName("graphics");
-        this->
+        this->setWindowModified(false);
 
         width = 640;
         height = 480;
@@ -482,7 +482,6 @@ void graphics::processCommand(QString  command)
 			case 1:
 				for(int i = 0; i <= methodText.length(); i++)
 				{
-                                        qDebug() << "1";
 					oneSimbol = methodText.mid(i, 1);
                                         p.drawText(x1, y1, oneSimbol);
                                         y1 += textSize;
