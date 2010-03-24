@@ -834,14 +834,14 @@ void graphics::drawFunc(int numOfPoints, double **arrayXY)
     while ((OX - i * step) >= l)
     {
         Y = OX - i * step;
-        p.drawLine(l, Y, ceil(width - l), Y);
+        p.drawLine(l, Y, ceil((double)(width - l)), Y);
         i++;
     }
     i = 0;
     while ((OX + i * step) <= (height - l))
     {
         Y = OX + i * step;
-        p.drawLine(l, Y, ceil(width - l), Y);
+        p.drawLine(l, Y, ceil((double)(width - l)), Y);
         i++;
     }
 /***********************OY****************************/
@@ -851,14 +851,14 @@ void graphics::drawFunc(int numOfPoints, double **arrayXY)
     while ((OY - i * step) >= l)
     {
         X = OY - i * step;
-        p.drawLine(X ,l, X, ceil(height - l));
+        p.drawLine(X ,l, X, ceil((double)(height - l)));
         i++;
     }
     i = 0;
     while ((OY + i * step) <= (width - l))
     {
         X = OY + i * step;
-        p.drawLine(X ,l, X, ceil(height - l));
+        p.drawLine(X ,l, X, ceil((double)(height - l)));
         i++;
     }
 
@@ -928,8 +928,8 @@ void graphics::drawFunc(int numOfPoints, double **arrayXY)
     p.setPen(pen);
 
 
-    p.drawLine(l, ceil(multiplierY * ordinate + mirrorY), ceil(width - l), ceil(multiplierY * ordinate + mirrorY));
-    p.drawLine(ceil(multiplierX * abscissa + mirrorX),l, ceil(multiplierX * abscissa + mirrorX), ceil(height - l));
+    p.drawLine(l, ceil(multiplierY * ordinate + mirrorY), ceil((double)(width - l)), ceil(multiplierY * ordinate + mirrorY));
+    p.drawLine(ceil(multiplierX * abscissa + mirrorX),l, ceil(multiplierX * abscissa + mirrorX), ceil((double)(height - l)));
 
 /**************************DrawFunction********************************/
     setCurentColor(curentColor);
