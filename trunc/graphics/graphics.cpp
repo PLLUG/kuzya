@@ -37,7 +37,6 @@ graphics::graphics(QWidget *parent)
 	ui.setupUi(this);
         this->setWindowTitle("GraphicCore");
 	setObjectName("graphics");
-        this->setWindowModified(false);
 
         width = 640;
         height = 480;
@@ -99,6 +98,11 @@ void graphics::processCommand(QString  command)
 		numberOf = indexOfSimbol - index;
 		height = command.mid(index+1, numberOf-1).toInt(0,10);
 
+                this->resize(width, height);
+                this->setMinimumHeight(height);
+                this->setMinimumWidth(width);
+                this->setMaximumHeight(height);
+                this->setMaximumWidth(width);
 		createPixmap(width, height);
                 creatBGPixmap(width, height);
                 return;
@@ -666,20 +670,23 @@ void graphics::processCommand(QString  command)
 void graphics::paintEvent(QPaintEvent * /*event*/)
 {
         QPainter painter(this);
-        painter.drawPixmap(0, 0, pixBG);
+        if (BGColorWasChanged)
+            painter.drawPixmap(0, 0, pixBG);
+        else
+            BGColorWasChanged = false;
         painter.drawPixmap( 0 , 0 , pix);
 }
 
 void graphics::createPixmap(int width, int height)
 {
-	resize(width, height);
-	pix = QPixmap(width, height);
+        p.end();
+        pix = QPixmap(width, height);
         pix.fill(Qt::transparent);
+        p.begin(&pix);
 }
 
 void graphics::creatBGPixmap(int width, int height)
 {
-        resize(width, height);
         pixBG = QPixmap(width, height);
         pixBG.fill(Qt::white);
         BGColorWasChanged = true;

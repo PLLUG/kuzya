@@ -13,6 +13,12 @@
     <height>311</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>1</width>
+    <height>1</height>
+   </size>
+  </property>
   <property name="cursor">
    <cursorShape>CrossCursor</cursorShape>
   </property>
