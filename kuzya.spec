@@ -7,10 +7,10 @@
 
 Name:      kuzya
 Summary:   Integrated Development Environment for students
-Version:   2.1.2
+Version:   2.1.8
 Source0:   %{name}-%{version}.tar.bz2 
 Group:     Development/Tools
-Release:   2
+Release:   fc12
 License:   GPL
 Packager:  Volodymyr Shevchyk <volder@users.sourceforge.net>
 Vendor:    PLLUG
@@ -30,7 +30,7 @@ Team leader:
 --------
   Andriy Shevchyk <shevchyk@users.sourceforge.net>>
 
-Authors:
+Developers:
 --------
   Volodymyr Shevchyk <volder@users.sourceforge.net>
   Viktor Sklyar <bouyantgrambler@users.sourceforge.net>>
@@ -47,31 +47,36 @@ make
 
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/usr/bin
-mkdir -p $RPM_BUILD_ROOT/usr/doc/%{name}
+
+mkdir -p $RPM_BUILD_ROOT/usr/share/%{name}/doc/
 mkdir -p $RPM_BUILD_ROOT/usr/include
-cp -f ./graphics/c/graphics.h $RPM_BUILD_ROOT/usr/include
-cp -fr ./doc $RPM_BUILD_ROOT/usr/doc/%{name}
 mkdir -p $RPM_BUILD_ROOT/usr/share/%{name}/
+mkdir -p $RPM_BUILD_ROOT/usr/share/%{name}/resources/translations
+mkdir -p $RPM_BUILD_ROOT/usr/lib64/fpc/2.2.4/units/x86_64-linux/graph/
+mkdir -p $RPM_BUILD_ROOT/usr/bin
+
+cp -fr ./doc/Kuzya_Help/* $RPM_BUILD_ROOT/usr/share/%{name}/doc/
+cp -f ./graphics/c/graphics.h $RPM_BUILD_ROOT/usr/include
 cp -fr ./profiles $RPM_BUILD_ROOT/usr/share/%{name}/
 cp -fr ./resources $RPM_BUILD_ROOT/usr/share/%{name}/
-mkdir -p $RPM_BUILD_ROOT/usr/share/%{name}/resources/translations
 cp -fr ./src/images $RPM_BUILD_ROOT/usr/share/%{name}/src/
-cp -fr ./resources/qss $RPM_BUILD_ROOT/usr/share/%{name}/resources
+cp -fr ./resources/qss $RPM_BUILD_ROOT/usr/share/%{name}/resources/
+cp -fr ./src/images/kuzya.png $RPM_BUILD_ROOT/usr/share/%{name}/
+cp -f ./graphics/fpc/unit/graph.o		$RPM_BUILD_ROOT/usr/bin
+cp -f ./graphics/fpc/unit/graph.ppu 	$RPM_BUILD_ROOT/usr/bin
 
-install -Dpm 755 ../bin/%{name}graph $RPM_BUILD_ROOT/usr/bin/%{name}graph
-install -Dpm 755 ../bin/%{name}      $RPM_BUILD_ROOT/usr/bin/%{name}
+install -Dpm 755 ./bin/%{name}graph $RPM_BUILD_ROOT/usr/bin/%{name}graph
+install -Dpm 755 ./bin/%{name}      $RPM_BUILD_ROOT/usr/bin/%{name}
 install -Dpm 755 ./resources/translations/*.qm $RPM_BUILD_ROOT/usr/share/%{name}/src/translations
 
 %files
 %defattr(-,root,root,0755)
 /usr/bin/
-/usr/doc/%{name}
+/usr/share/%{name}/doc/
 /usr/include/
 /usr/share/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
-rm -fr /root/rpmbuild/BUILD/%{name}-%{version}
-rm -fr /root/rpmbuild/BUILD/bin
+rm -fr /root/rpmbuild/BUILD/%{name}
 
