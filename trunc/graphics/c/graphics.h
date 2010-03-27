@@ -65,7 +65,7 @@ namespace KGNS{
   
   COLORS curentColor = WHITE;
   int isCOLOR = 1;        ///0 colors 1 int 2 nothing for color
-  int curentIntColor = 15;
+  int curentIntColor = 0;
   
   COLORS curentFillColor  = BLACK;
   int isFillCOLOR = 1;        ///0 colors 1 int 2 nothing for fill color
@@ -513,6 +513,8 @@ void initgraph()
 {
 	static char *command= "kuzyagraph";
 	KGNS::kuzyaGraphFile = popen(command, "w");
+	sprintf(KGNS::command, "initgraph(%i,%i);\n",width, height);
+	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 
 }
 //********initGraph*************************
@@ -523,11 +525,9 @@ void initgraph(int *drv, int *drm, char *text)
 //*********initGraph******************************
 void initgraph(int setWidth, int setHeight)
 {
-	initgraph();
 	width = setWidth;
 	height = setHeight;
-	sprintf(KGNS::command, "initgraph(%i,%i);\n",width, height);
-	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
+	initgraph();
 }
 ///*******line**************************************
 void line(int x, int y, int x1, int y1)
