@@ -37,6 +37,7 @@ unix {
     kuzya_resources.files = ../resources/*
     kuzya_images.path = /usr/share/kuzya
     kuzya_images.file = ./images/kuzya.png
+    kuzya_images.path = /usr/share/kuzya
     INSTALLS += target \
         translations \
         kuzya_profiles \
