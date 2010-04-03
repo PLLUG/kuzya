@@ -36,6 +36,7 @@
 #include "gotolinedialog.h"
 #include "finddialog.h"
 #include "replacedialog.h"
+#include "compilersettings.h"
 #include "compiler.h"
 #include "kuzya.h"
 #include "helpbrowser.h"
@@ -603,11 +604,11 @@ void Kuzya::slotSetFileSuffix(QString filter)
 void Kuzya::refreshDialogSettings()
 {
     QString filter;
-    QStringList supportedList = compiler->getSupportedLanguages();
+    QStringList supportedList = CompilerSettings::supportedLanguages();
     supportedList.sort();
     foreach (QString lang, supportedList)
     {
-        filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
+        filter = filter+lang+" ("+CompilerSettings::filter(lang)+");;";
     }
 
     filter = filter+"All Files (*)";
@@ -633,14 +634,14 @@ void Kuzya::refreshProfileSettings()
 
     if (fileName.isEmpty()) return;
 
-    QStringList supportedList = compiler->getSupportedLanguages();    
-    QString ex(fileName);
+    QStringList supportedList = CompilerSettings::supportedLanguages();
+    /*QString ex(fileName);
     ex = ex.remove(0, ex.lastIndexOf("."));
-    ex = ex.toLower();
+    ex = ex.toLower();*/
 
     foreach (QString lang, supportedList)
     {
-        if (compiler->getSupportedExtensions(lang).contains(ex))
+        if (QDir::match(CompilerSettings::filter(lang), QFileInfo(fileName).fileName()))
         {
             language = lang;
             break;
@@ -652,9 +653,9 @@ void Kuzya::refreshProfileSettings()
         QString comp = settings->readDefaultCompiler(language);
         if (comp.isEmpty())
         {
-            QStringList supportedCompilers = compiler->getSupportedCompilers(language);
+            QStringList supportedCompilers = CompilerSettings::supportedCompilers(language);
             if (!supportedCompilers.isEmpty())
-                comp = compiler->getSupportedCompilers(language).at(0);
+                comp = supportedCompilers.at(0);
             else return;
         }
         compiler->loadProfile(language, comp);

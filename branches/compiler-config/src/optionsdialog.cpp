@@ -26,6 +26,7 @@
 #include <QFileDialog>
 #include <QDebug>
 #include "optionsdialog.h"
+#include "compilersettings.h"
 
 OptionsDialog::OptionsDialog(QWidget *parent)
  : QDialog(parent)
@@ -67,10 +68,19 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 #endif
        slotUpdateSkinsCBox();
        languageComboBox->clear();
-       QStringList supportedList = mw->getCurrentCompiler()->getSupportedLanguages();
+
+#ifdef WIN32
+     QString path = QApplication::applicationDirPath();
+     path.truncate(path.lastIndexOf("/", -1));
+     path = path+"/profiles/";
+#else
+     QString path = "/usr/share/kuzya/profiles/";
+#endif
+
+       CompilerSettings::setLocation(path);
+       QStringList supportedList = CompilerSettings::supportedLanguages();
        supportedList.sort();
        languageComboBox->addItems(supportedList);
-
 }
 void OptionsDialog::slotUpdateSkinsCBox(void)
 {
@@ -438,7 +448,7 @@ bool OptionsDialog::ukrIsCheked()
 */
 void OptionsDialog::slotUpdateCompilerCBox(QString lang)
 {
-        QStringList compilers = mw->getCurrentCompiler()->getSupportedCompilers(lang);
+        QStringList compilers = CompilerSettings::supportedCompilers(lang);
         compilers.sort();
         compilerComboBox->clear();
         compilerComboBox->addItems(compilers);
@@ -450,7 +460,7 @@ void OptionsDialog::slotUpdateCompilerCBox(QString lang)
 void OptionsDialog::slotLoadCompilerOptions(QString comp)
 {
        QString lang = languageComboBox->currentText();
-       QString info = mw->getCurrentCompiler()->getCompilerInfo(lang, comp);
+       QString info = CompilerSettings::comment(comp);
        compilerInfo->setText(info);
        settings->beginGroup("compilation_settings");
        QString val = languageComboBox->currentText()+"/"+compilerComboBox->currentText();
