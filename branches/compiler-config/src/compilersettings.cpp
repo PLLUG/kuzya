@@ -56,6 +56,7 @@
 CompilerSettings::CompilerSettings(QObject *parent) :
     QObject(parent)
 {
+
 }
 
 CompilerSettings::~CompilerSettings()
@@ -92,7 +93,7 @@ void CompilerSettings::load(QString filePath)
     settingsFile = new QSettings(filePath, QSettings::IniFormat);
 }
 
-QString CompilerSettings::getName()
+QString CompilerSettings::name()
 {
     QString value;
 
@@ -108,7 +109,7 @@ QString CompilerSettings::getName()
     return value;
 }
 
-QString CompilerSettings::getLanguage()
+QString CompilerSettings::language()
 {
       QString value;
 
@@ -125,7 +126,7 @@ QString CompilerSettings::getLanguage()
       return value;
 }
 
-QString CompilerSettings::getComment()
+QString CompilerSettings::comment()
 {
     QString value;
 
@@ -141,7 +142,7 @@ QString CompilerSettings::getComment()
     return value;
 }
 
-QString CompilerSettings::getLinkerName()
+QString CompilerSettings::linkerName()
 {
     QString value;
 
@@ -157,7 +158,7 @@ QString CompilerSettings::getLinkerName()
     return value;
 }
 
-QString CompilerSettings::getLinkerComment()
+QString CompilerSettings::linkerComment()
 {
     QString value;
 
@@ -278,4 +279,59 @@ void CompilerSettings::setLocation(QString path)
 QString CompilerSettings::location()
 {
     return settingsLocation;
+}
+
+QStringList CompilerSettings::supportedLanguages()
+{
+    QStringList languages = languagesList;
+    languages.removeDuplicates();
+    return languages;
+}
+
+QStringList CompilerSettings::supportedCompilers(QString lang)
+{
+    QStringList compilers;
+    int index = 0;
+    for (int i = 0; i < languagesList.count(lang); i++)
+    {
+        index = languagesList.indexOf(lang, index);
+        if (-1 != index)
+        {
+            compilers << compilersList.at(index);
+            index++;
+        }
+        else break;
+    }
+    return compilers;
+}
+
+QString CompilerSettings::filter(QString lang)
+{
+    QStringList extensions;
+    QString filter;
+    int index = 0;
+    for (int i = 0; i < languagesList.count(lang); i++)
+    {
+        index = languagesList.indexOf(lang, index);
+        if (-1 != index)
+        {
+            filter = filtersList.at(index);
+            extensions << filter.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+            index++;
+        }
+        else break;
+    }
+    extensions.removeDuplicates();
+    return extensions.join(" ");
+}
+
+QString CompilerSettings::comment(QString name)
+{
+    QString compilerComment;
+    int index = 0;
+    index = languagesList.indexOf(name);
+    if (-1 != index) compilerComment = commentsList.at(index);
+    else compilerComment = "";
+
+    return compilerComment;
 }

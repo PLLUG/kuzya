@@ -184,7 +184,7 @@ QString Compiler::getCompilerInfo(QString lang, QString profile)
     //-=-=-=-=-=-=-=-
     CompilerSettings settingsFile;
     settingsFile.load(profPath);
-    QString info = settingsFile.getComment();
+    QString info = settingsFile.comment();
     //=-=-=-=-=-==-=-=
     
     return info;
@@ -361,7 +361,7 @@ void Compiler::compile()
     warningList.clear();
     outFile.clear();
 
-    QString compiler = settings->getName();
+    QString compiler = settings->name();
     QString param = getCompilerParams();
 
     if (compiler.isEmpty() || param.isEmpty()) return;
