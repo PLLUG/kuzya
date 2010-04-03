@@ -20,6 +20,8 @@
 
 #include <QPointer>
 #include <QSettings>
+#include <QStringList>
+#include <QDirIterator>
 
 #include <QDebug>
 
@@ -28,6 +30,7 @@
 #define MAIN_GROUP "main"
 #define LANGUAGE_NAME_KEY "language/name"
 #define COMPILER_NAME_KEY "compiler/name"
+#define COMPILER_FILTER_KEY "compiler/filter"
 #define COMPILER_COMMENT_KEY "compiler/comment"
 #define LINKER_NAME_KEY "linker/name"
 #define LINKER_COMMENT_KEY "linker/comment"
@@ -96,7 +99,7 @@ QString CompilerSettings::getName()
     if (settingsAreValid())
     {
         settingsFile->beginGroup(MAIN_GROUP);
-        value = settingsFile->value(COMPILER_NAME_KEY, "").toString();
+        value = settingsFile->value(COMPILER_NAME_KEY, QVariant("")).toString();
         settingsFile->endGroup(); //MAIN_GROUP
     }
     else value = "";
@@ -113,7 +116,7 @@ QString CompilerSettings::getLanguage()
       if (settingsAreValid())
       {
           settingsFile->beginGroup(MAIN_GROUP);
-          value = settingsFile->value(LANGUAGE_NAME_KEY, "").toString();
+          value = settingsFile->value(LANGUAGE_NAME_KEY, QVariant("")).toString();
           settingsFile->endGroup(); //MAIN_GROUP
       }
       else value = "";
@@ -129,7 +132,7 @@ QString CompilerSettings::getComment()
     if (settingsAreValid())
     {
         settingsFile->beginGroup(MAIN_GROUP);
-        value = settingsFile->value(COMPILER_COMMENT_KEY, "").toString();
+        value = settingsFile->value(COMPILER_COMMENT_KEY, QVariant("")).toString();
         settingsFile->endGroup(); //MAIN_GROUP
     }
     else value = "";
@@ -145,7 +148,7 @@ QString CompilerSettings::getLinkerName()
     if (settingsAreValid())
     {
         settingsFile->beginGroup(MAIN_GROUP);
-        value = settingsFile->value(LINKER_NAME_KEY, "").toString();
+        value = settingsFile->value(LINKER_NAME_KEY, QVariant("")).toString();
         settingsFile->endGroup(); //MAIN_GROUP
     }
     else value = "";
@@ -161,7 +164,7 @@ QString CompilerSettings::getLinkerComment()
     if (settingsAreValid())
     {
         settingsFile->beginGroup(MAIN_GROUP);
-        value = settingsFile->value(LINKER_COMMENT_KEY, "").toString();
+        value = settingsFile->value(LINKER_COMMENT_KEY, QVariant("")).toString();
         settingsFile->endGroup(); //MAIN_GROUP
     }
     else value = "";
@@ -178,7 +181,7 @@ bool CompilerSettings::isPlatformSupport()
     {
         #ifndef WIN32
             settingsFile->beginGroup(MAIN_GROUP);
-            value = !settingsFile->value(CONFIG_WIN32_ONLY_KEY, true).toBool();
+            value = !settingsFile->value(CONFIG_WIN32_ONLY_KEY, QVariant(true)).toBool();
             settingsFile->endGroup(); //MAIN_GROUP
         #endif
     }
@@ -193,9 +196,86 @@ bool CompilerSettings::redirectMsgEnabled()
     if (settingsAreValid())
     {
             settingsFile->beginGroup(MAIN_GROUP);
-            value = settingsFile->value(CONFIG_REDIRECT_MSG_KEY, false).toBool();
+            value = settingsFile->value(CONFIG_REDIRECT_MSG_KEY, QVariant(false)).toBool();
             settingsFile->endGroup(); //MAIN_GROUP
     }
 
     return value;
+}
+
+//================STATIC MEMBERS=====================
+
+QString CompilerSettings::settingsLocation;
+QStringList CompilerSettings::settingsFilesList;
+QStringList CompilerSettings::filtersList;
+QStringList CompilerSettings::languagesList;
+QStringList CompilerSettings::compilersList;
+QStringList CompilerSettings::commentsList;
+
+void CompilerSettings::setLocation(QString path)
+{
+    settingsLocation = path;
+
+    if (!QDir(path).exists()) return;
+
+    settingsFilesList.clear();
+    filtersList.clear();
+    languagesList.clear();
+    compilersList.clear();
+    commentsList.clear();
+
+    QDirIterator fileIt(path, QStringList()<< "*.ini",
+                        QDir::NoDotAndDotDot|QDir::Files,
+                        QDirIterator::NoIteratorFlags);
+
+    QString filePath;
+    QString filter;
+    QString language;
+    QString compiler;
+    QString comment;
+
+    while(fileIt.hasNext())
+    {
+        fileIt.next();
+        if (fileIt.fileInfo().isReadable())
+        {
+            filePath = fileIt.fileInfo().filePath();
+            qDebug() << "FOUND COMPILER SETTINGS:" << filePath;
+
+            QSettings settings(filePath, QSettings::IniFormat);
+            settings.beginGroup(MAIN_GROUP);
+#ifndef WIN32
+            bool platformSupported = !settingsFile->value(CONFIG_WIN32_ONLY_KEY, QVariant(true)).toBool();
+            if (!platformSupported)
+            {
+                qDebug() << "   SKIPPED: WIN32_ONLY";
+                continue;
+            }
+#endif
+            language = settings.value(LANGUAGE_NAME_KEY, QVariant("")).toString();
+            compiler = settings.value(COMPILER_NAME_KEY, QVariant("")).toString();
+            filter = settings.value(COMPILER_FILTER_KEY, QVariant("")).toString();
+            comment = settings.value(COMPILER_COMMENT_KEY, QVariant("")).toString();
+            settings.endGroup(); //MAIN_GROUP
+
+            if ((QSettings::NoError == settings.status()) &&
+                !language.isEmpty() &&
+                !compiler.isEmpty() &&
+                !filter.isEmpty())
+            {
+                settingsFilesList << filePath;
+                filtersList << filter;
+                languagesList << language;
+                compilersList << compiler;
+                commentsList << comment;
+
+                qDebug() << "    LANG:" << language << ";COMP:" << compiler << ";FILT:" << filter;
+            }
+        }
+    }
+}
+
+QString CompilerSettings::location()
+{
+    return settingsLocation;
 }
