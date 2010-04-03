@@ -34,16 +34,20 @@ public:
     ~CompilerSettings();
 
     void load(QString filePath);
-    QString getName();
-    QString getLanguage();
-    QString getComment();
-    QString getLinkerName();
-    QString getLinkerComment();
+    QString name();
+    QString language();
+    QString comment();
+    QString linkerName();
+    QString linkerComment();
     bool isPlatformSupport();
     bool redirectMsgEnabled();
 
     static QString location();
     static void setLocation(QString path);
+    static QStringList supportedLanguages();
+    static QStringList supportedCompilers(QString lang);
+    static QString filter(QString lang);
+    static QString comment(QString name);
 
 signals:
 
