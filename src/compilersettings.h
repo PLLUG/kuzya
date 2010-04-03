@@ -42,12 +42,23 @@ public:
     bool isPlatformSupport();
     bool redirectMsgEnabled();
 
+    static QString location();
+    static void setLocation(QString path);
+
 signals:
 
 public slots:
 
 private:
     bool settingsAreValid();
+
+    static QString settingsLocation;
+    static QStringList settingsFilesList;
+    static QStringList filtersList;
+    static QStringList languagesList;
+    static QStringList compilersList;
+    static QStringList commentsList;
+
 
     QPointer<QSettings> settingsFile;
 
