@@ -3,9 +3,9 @@
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
 	<TITLE>Елементі програмування мовою PASCAL</TITLE>
-	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Unix)">
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.1  (Unix)">
 	<META NAME="CREATED" CONTENT="0;0">
-	<META NAME="CHANGED" CONTENT="20090322;13453300">
+	<META NAME="CHANGED" CONTENT="20100324;211200">
 	<META NAME="Originator" CONTENT="Microsoft Word 11">
 	<META NAME="ProgId" CONTENT="Word.Document">
 	<!--[if !mso]>
@@ -173,6 +173,9 @@ table.MsoTableGrid
 		TD P { color: #000000 }
 		H1 { color: #000000 }
 		H2 { color: #000000 }
+		H2.western { font-family: "Albany", sans-serif; font-size: 14pt; font-style: italic }
+		H2.cjk { font-family: "HG Mincho Light J"; font-size: 14pt; font-style: italic }
+		H2.ctl { font-family: "Arial Unicode MS"; font-size: 14pt; font-style: italic }
 		A:link { color: #0000ff }
 		A:visited { color: #800080 }
 	-->
@@ -220,9 +223,12 @@ table.MsoTableGrid
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in"><FONT FACE="Symbol"><FONT SIZE=4><SPAN LANG="en-US">·</SPAN></FONT></FONT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <A HREF="#процедуриіфункції"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4>Процедури
 і функції</FONT></FONT></A></P>
-<P STYLE="margin-left: 0.5in; text-indent: -0.25in"><FONT FACE="Symbol"><FONT SIZE=4><SPAN LANG="en-US">·</SPAN></FONT></FONT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<A HREF="#стандартніпроцедуриіфункції"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4>Стандартні
-процедури і функції</FONT></FONT></A></P>
+<P STYLE="margin-left: 0.5in; text-indent: -0.25in"><FONT FACE="Symbol"><FONT SIZE=4><SPAN LANG="en-US"><FONT FACE="Symbol"><FONT SIZE=4><SPAN LANG="en-US">·</SPAN></FONT></FONT></SPAN></FONT></FONT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<A HREF="#стандартніпроцедуриіфункції"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4>Стандартні
+процедури і функції</FONT></FONT></FONT></FONT></A></P>
+<P STYLE="margin-left: 0.5in; text-indent: -0.25in"><A HREF="#graph" NAME="Процедури і функції роботи із графікою"><FONT COLOR="#000000"><FONT FACE="Symbol"><FONT SIZE=4><SPAN LANG="en-US"><SPAN STYLE="text-decoration: none">·</SPAN></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4><SPAN STYLE="text-decoration: none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4><U>Процедури
+і функції роботи із графікою</U></FONT></FONT></FONT></A></P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in"><FONT FACE="Symbol"><FONT SIZE=4><SPAN LANG="en-US">·</SPAN></FONT></FONT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <A HREF="#класи"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4>Класи
 і об’єкти</FONT></FONT></A></P>
@@ -233,7 +239,7 @@ table.MsoTableGrid
 <P>&nbsp;</P>
 <P><TABLE DIR="LTR" ALIGN=LEFT CELLPADDING=0 CELLSPACING=0>
 	<TR>
-		<TD WIDTH=32 HEIGHT=4>
+		<TD WIDTH=32 HEIGHT=5>
 			<P><!--[if gte vml 1]><v:line
  id="_x0000_s1026" style='position:absolute;z-index:1' from="24.75pt,2.25pt"
  to="630pt,2.25pt"/><![endif]--><BR>
@@ -648,7 +654,7 @@ uses</FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>, </B></FONT></FONT><FONT
 <FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>&lt;</FONT></FONT> <FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>&lt;&gt;</FONT></FONT>
 <FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>&lt;=</FONT></FONT> <FONT FACE="MS Shell Dlg 2">і
 </FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>&gt;=</FONT></FONT><FONT FACE="MS Shell Dlg 2">.</FONT></P>
-<H2 STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Арифметичні
+<H2 CLASS="western" STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Арифметичні
 операції</FONT></FONT></H2>
 <P><FONT FACE="MS Shell Dlg 2">До </FONT><FONT FACE="MS Shell Dlg 2"><I>арифметичних
 </I></FONT><FONT FACE="MS Shell Dlg 2">відносяться бінарні
@@ -679,7 +685,7 @@ uses</FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>, </B></FONT></FONT><FONT
 а </FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>2.0+b </FONT></FONT><FONT FACE="MS Shell Dlg 2">і
 </FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>1/2 </FONT></FONT><FONT FACE="MS Shell Dlg 2">-
 тип </FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>real</FONT></FONT><FONT FACE="MS Shell Dlg 2">.</FONT></P>
-<H2 STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Логічні
+<H2 CLASS="western" STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Логічні
 операції</FONT></FONT></H2>
 <P><FONT FACE="MS Shell Dlg 2">До </FONT><FONT FACE="MS Shell Dlg 2"><I>логічних
 </I></FONT><FONT FACE="MS Shell Dlg 2">відносяться бінарні
@@ -694,7 +700,7 @@ uses</FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>, </B></FONT></FONT><FONT
 називається </FONT><FONT FACE="MS Shell Dlg 2"><I>логічним</I></FONT><FONT FACE="MS Shell Dlg 2">.
 </FONT>
 </P>
-<H2 STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Операції
+<H2 CLASS="western" STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Операції
 відношення</FONT></FONT></H2>
 <P>&nbsp;<FONT FACE="MS Shell Dlg 2">Операції </FONT><FONT FACE="MS Shell Dlg 2"><I>відношення</I></FONT>
 <FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>&lt;</FONT></FONT> <FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>&gt;</FONT></FONT>
@@ -713,7 +719,7 @@ uses</FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>, </B></FONT></FONT><FONT
 константи </FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>nil</FONT></FONT><FONT FACE="MS Shell Dlg 2">.
 При порівнянні символу і рядка символ
 перетвориться в рядок довжини 1.</FONT></P>
-<H2 STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Побітові
+<H2 CLASS="western" STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Побітові
 операції</FONT></FONT></H2>
 <P><FONT FACE="MS Shell Dlg 2"><I>Побітові </I></FONT><FONT FACE="MS Shell Dlg 2">операції
 </FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>and</B></FONT></FONT><FONT FACE="MS Shell Dlg 2">,
@@ -733,7 +739,7 @@ uses</FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>, </B></FONT></FONT><FONT
 то </FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>b </FONT></FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>shl
 </B></FONT></FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>10=1024</FONT></FONT><FONT FACE="MS Shell Dlg 2">,
 а </FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>not </B></FONT></FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>b=254</FONT></FONT><FONT FACE="MS Shell Dlg 2">.</FONT></P>
-<H2 STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Рядкові
+<H2 CLASS="western" STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Рядкові
 операції</FONT></FONT></H2>
 <P><FONT FACE="MS Shell Dlg 2">Крім операцій відношення
 </FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>&lt;</FONT></FONT> <FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>&gt;</FONT></FONT>
@@ -751,12 +757,12 @@ uses</FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>, </B></FONT></FONT><FONT
 <P><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2 STYLE="font-size: 9pt"><B>»
 Помилка: відбулося переповнювання рядка
 при виконанні операції &quot;+&quot;.</B></FONT></FONT></P>
-<H2><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt"><SPAN STYLE="font-weight: normal">Операція</SPAN></FONT></FONT>
+<H2 CLASS="western"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt"><SPAN STYLE="font-weight: normal">Операція</SPAN></FONT></FONT>
 <FONT FACE="MS Shell Dlg 2">@</FONT></H2>
 <P><FONT FACE="MS Shell Dlg 2">Операція </FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>@</FONT></FONT>
 <FONT FACE="MS Shell Dlg 2">застосовується до змінної
 і повертає її адресу.</FONT></P>
-<H2 STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Операції
+<H2 CLASS="western" STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Операції
 з покажчиками</FONT></FONT></H2>
 <P><FONT FACE="MS Shell Dlg 2">До покажчиків, що
 типізуються, застосовна операція
@@ -806,7 +812,7 @@ to 10 do&nbsp;&nbsp; </FONT></FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>b
 &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p:=p+1</FONT></FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>;<BR>&nbsp;
 </B></FONT></FONT>&nbsp;<FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>end;</B></FONT></FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><BR>&nbsp;&nbsp;
 ...</FONT></FONT></P>
-<H2 STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Операції
+<H2 CLASS="western" STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Операції
 з множинами</FONT></FONT></H2>
 <P>&nbsp;<FONT FACE="MS Shell Dlg 2">До множин застосовні
 операції </FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>+</FONT></FONT>
@@ -875,7 +881,7 @@ to 10 do&nbsp;&nbsp; </FONT></FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>b
 <FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>[2..5] // False</FONT></FONT><FONT FACE="MS Shell Dlg 2"><BR></FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>3
 </FONT></FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>in</B></FONT></FONT>
 <FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>[2..5] // True</FONT></FONT></P>
-<H2 STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Пріоритет
+<H2 CLASS="western" STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=4 STYLE="font-size: 16pt">Пріоритет
 операцій</FONT></FONT></H2>
 <P><FONT FACE="MS Shell Dlg 2">Пріоритет визначає
 порядок виконання операцій у виразі.
@@ -1526,8 +1532,8 @@ write(2);</FONT></FONT></CODE><FONT FACE="Courier New"><FONT SIZE=2><BR></FONT><
 </SPAN><FONT FACE="MS Shell Dlg 2">Зміна змінної-параметра
 циклу усередині циклу є логічною
 помилкою. Наприклад, наступний фрагмент
-з вкладеним оператором </FONT><FONT FACE="MS Shell Dlg 2"><B>for</B></FONT><FONT FACE="MS Shell Dlg 2">
-є помилковим:</FONT> 
+з вкладеним оператором </FONT><FONT FACE="MS Shell Dlg 2"><B>for</B></FONT>
+<FONT FACE="MS Shell Dlg 2">є помилковим:</FONT> 
 </P>
 <P><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>for </B></FONT></FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>i:=1
 </FONT></FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2><B>to </B></FONT></FONT><FONT FACE="MS Shell Dlg 2"><FONT SIZE=2>10
@@ -4803,6 +4809,134 @@ var-параметри </B></FONT></FONT><FONT FACE="MS Shell Dlg 2">одног�
 	</TR>
 </TABLE>
 <P>&nbsp;</P>
+<P STYLE="margin-left: 0.5in; text-indent: -0.25in"><BR><BR>
+</P>
+<P><A NAME="graph"></A><FONT FACE="MS Shell Dlg 2"><FONT SIZE=5 STYLE="font-size: 21pt"><B>Процедури
+та функції робои із графікою</B></FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+arc(x, y,stAngle, endAngle, radius:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+arc(x, y,stAngle, endAngle, radius:integer; color:COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+arc(x, y,stAngle, endAngle, radius, color:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+bar( x, y, x1, y1:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+bar(x, y, x1, y1, color : integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+bar(x, y, x1, y1:integer; color:COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+bar3d(x, y,  x1,  y1, z:integer;  top:boolean);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+circle(x, y, radius:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+circle(x, y, radius :integer; color :COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+circle(x, y, radius, color :integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+close();</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+cleardevice();</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+closegraph();</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+ellipse(x, y, rWidth, rHeight:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+ellipse(x, y, rWidth, rHeight:integer; color:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+ellipse(x, y, rWidth, rHeight:integer; color:COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+fillellipse(x, y, rWidth, rHeight:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+fillellipse(x, y, rWidth, rHeight, color:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+fillellipse(x, y, rWidth, rHeight:integer; color:COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Function
+getmaxx():integer;</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Function
+getmaxy():integer;</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+image(x, y :integer; path:string);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+initgraph();</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+initgraph(setWidth, setHeight:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+initgraph(drv, drm:integer; text:string);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+line(x, y, x1, y1:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+line(x, y, x1, y1:integer; color :COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+line(x, y, x1, y1:integer; color :integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+lineto(x, y:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+lineto(x, y, color:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+lineto(x, y:integer; color:COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+moveto(x, y:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+outtext(text:string);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+outtext(text:string; color:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+outtext(text:string; color:COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+outtextxy(x, y:integer; text:string);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+outtextxy(x, y:integer; text:string; color:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+outtextxy(x, y:integer; text:string; color:COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+pieslice(x, y, stAngle, endAngle, radius:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+pieslice(x, y, stAngle, endAngle, radius, color:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+pieslice(x, y, stAngle, endAngle, radius:integer; color:COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+putpixel(x, y:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+putpixel(x, y:integer; color:COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+putpixel(x, y:integer; color:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+rectangle(x, y, x1, y1 :integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+rectangle(x, y, x1, y1 :integer; color :COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+rectangle(x, y, x1, y1 :integer; color :integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+save(path: string);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+setbkcolor(color:COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+setbkcolor(color:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+setcolor(color:COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+setcolor(color:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+setfillcolor(color:COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+setfillcolor(color:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+setfillstyle(patern:PATERN; color:COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+setfillstyle(patern:integer; color:COLORS);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+setfillstyle(patern:PATERN; color:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+setfillstyle(patern:integer; color:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+setlinestyle(style:LINESTYLE; upattern, thickness:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+setlinestyle(style, upattern, thickness:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+settextstyle(font:string; mydirection:DIRECTION; size:integer);</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="MS Shell Dlg 2"><FONT SIZE=3>Procedure
+settextstyle(font:string; mydirection, size:integer);</FONT></FONT></P>
 <P><A NAME="класи"></A><FONT FACE="MS Shell Dlg 2"><FONT SIZE=5 STYLE="font-size: 21pt"><B>Класи
 і об’єкти</B></FONT></FONT></P>
 <P>&nbsp;</P>
