@@ -33,7 +33,7 @@ public:
     explicit CompilerSettings(QObject *parent = 0);
     ~CompilerSettings();
 
-    void load(QString filePath);
+    void load(QString compiler);
     QString name();
     QString language();
     QString comment();
@@ -55,6 +55,7 @@ public slots:
 
 private:
     bool settingsAreValid();
+    QString settingsFilePath(QString compiler);
 
     static void scanSettingsLocation();
 
