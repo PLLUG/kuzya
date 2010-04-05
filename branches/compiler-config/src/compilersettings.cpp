@@ -85,7 +85,7 @@ QString CompilerSettings::settingsFilePath(QString compiler)
 {
     QString filePath;
     int index = compilersList.indexOf(compiler);
-    if (-1 == index)
+    if (-1 != index)
     {
         filePath = settingsFilesList.at(index);
     }
