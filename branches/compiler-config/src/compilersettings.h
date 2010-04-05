@@ -56,6 +56,8 @@ public slots:
 private:
     bool settingsAreValid();
 
+    static void scanSettingsLocation();
+
     static QString settingsLocation;
     static QStringList settingsFilesList;
     static QStringList filtersList;

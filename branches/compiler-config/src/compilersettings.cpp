@@ -113,7 +113,6 @@ QString CompilerSettings::language()
 {
       QString value;
 
-
       if (settingsAreValid())
       {
           settingsFile->beginGroup(MAIN_GROUP);
@@ -213,19 +212,15 @@ QStringList CompilerSettings::languagesList;
 QStringList CompilerSettings::compilersList;
 QStringList CompilerSettings::commentsList;
 
-void CompilerSettings::setLocation(QString path)
+void CompilerSettings::scanSettingsLocation()
 {
-    settingsLocation = path;
-
-    if (!QDir(path).exists()) return;
-
     settingsFilesList.clear();
     filtersList.clear();
     languagesList.clear();
     compilersList.clear();
     commentsList.clear();
 
-    QDirIterator fileIt(path, QStringList()<< "*.ini",
+    QDirIterator fileIt(settingsLocation, QStringList()<< "*.ini",
                         QDir::NoDotAndDotDot|QDir::Files,
                         QDirIterator::NoIteratorFlags);
 
@@ -274,6 +269,15 @@ void CompilerSettings::setLocation(QString path)
             }
         }
     }
+
+}
+
+void CompilerSettings::setLocation(QString path)
+{
+    if (!QDir(path).exists()) return;
+
+    settingsLocation = path;
+    scanSettingsLocation();
 }
 
 QString CompilerSettings::location()
