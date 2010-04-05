@@ -81,14 +81,26 @@ bool CompilerSettings::settingsAreValid()
     return false;
 }
 
+QString CompilerSettings::settingsFilePath(QString compiler)
+{
+    QString filePath;
+    int index = compilersList.indexOf(compiler);
+    if (-1 == index)
+    {
+        filePath = settingsFilesList.at(index);
+    }
+    return filePath;
+}
+
 //==================PUBLIC===========================
-void CompilerSettings::load(QString filePath)
+void CompilerSettings::load(QString compiler)
 {
     if (!settingsFile.isNull())
     {
         free(settingsFile);
     }
 
+    QString filePath = settingsFilePath(compiler);
     qDebug() << "LOAD COMPILER SETTINGS:" << filePath;
     settingsFile = new QSettings(filePath, QSettings::IniFormat);
 }

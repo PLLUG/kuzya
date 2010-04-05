@@ -190,24 +190,24 @@ QString Compiler::getCompilerInfo(QString lang, QString profile)
     return info;
 }
 
-void Compiler::loadProfile(QString lang, QString profile)
+void Compiler::loadProfile(QString lang, QString compiler)
 {
     if (NULL != compilerProfile)
     {
         free(compilerProfile);
     }
 	
-    if (lang.isEmpty() || profile.isEmpty()) return;
+    if (lang.isEmpty() || compiler.isEmpty()) return;
 
     refreshSupported();
-    QString profPath = getProfilePath(lang, profile);
+    QString profPath = getProfilePath(lang, compiler);
     if (QString::Null() == profPath) return;
 
     compilerProfile = new QSettings(profPath, QSettings::IniFormat);
     compileMode = DEFAULT;
 
     //=-=-=-=-=-=-=-
-    settings->load(profPath);
+    settings->load(compiler);
     //-=-=-=-=-=-=-=-
 }
 
