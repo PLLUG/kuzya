@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/menu" >
+    <qresource prefix="/menu">
         <file>images/kuzya.png</file>
         <file>images/configure.png</file>
         <file>images/editcopy.png</file>
@@ -22,27 +22,28 @@
         <file>images/find.png</file>
         <file>images/text_replace.png</file>
         <file>images/printer.png</file>
-        <file alias="template" >images/brick.png</file>
-        <file alias="templates_menu" >images/bricks.png</file>
+        <file alias="template">images/brick.png</file>
+        <file alias="templates_menu">images/bricks.png</file>
         <file>images/help.png</file>
+        <file>images/kuzya.ico</file>
     </qresource>
-    <qresource prefix="/notifications" >
-        <file alias="success" >images/accept.png</file>
-        <file alias="failing" >images/exclamation.png</file>
-        <file alias="error" >images/bug_error.png</file>
-        <file alias="warning" >images/lightbulb.png</file>
-        <file alias="wait" >images/time.png</file>
-        <file alias="info" >images/information.png</file>
-        <file alias="incorrect" >images/cross.png</file>
-        <file alias="correct" >images/tick.png</file>
-        <file alias="comment" >images/comment.png</file>
+    <qresource prefix="/notifications">
+        <file alias="success">images/accept.png</file>
+        <file alias="failing">images/exclamation.png</file>
+        <file alias="error">images/bug_error.png</file>
+        <file alias="warning">images/lightbulb.png</file>
+        <file alias="wait">images/time.png</file>
+        <file alias="info">images/information.png</file>
+        <file alias="incorrect">images/cross.png</file>
+        <file alias="correct">images/tick.png</file>
+        <file alias="comment">images/comment.png</file>
     </qresource>
-    <qresource prefix="/markers" >
-        <file alias="bug_line" >images/bullet_red.png</file>
-        <file alias="warning_line" >images/bullet_orange.png</file>
-        <file alias="current_line" >images/arrow.png</file>
+    <qresource prefix="/markers">
+        <file alias="bug_line">images/bullet_red.png</file>
+        <file alias="warning_line">images/bullet_orange.png</file>
+        <file alias="current_line">images/arrow.png</file>
     </qresource>
-    <qresource prefix="/" >
+    <qresource prefix="/">
         <file>images/pagefold/sizegrip.png</file>
         <file>images/pagefold/checkbox_unchecked.png</file>
         <file>images/pagefold/checkbox_unchecked_hover.png</file>
@@ -73,6 +74,5 @@
         <file>images/pagefold/radiobutton_unchecked_pressed.png</file>
         <file>images/pagefold/radiobutton_checked_pressed.png</file>
         <file>images/pagefold/pagefold.png</file>
-        <file>images/icon.png</file>
     </qresource>
 </RCC>

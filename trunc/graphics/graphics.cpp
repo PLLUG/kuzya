@@ -601,7 +601,16 @@ void graphics::processCommand(QString  command)
                 indexOfSimbol = command.indexOf(")", index+ 1);
                 numberOf = indexOfSimbol - index;
                 curentBGColor = command.mid(index+1, numberOf-1).toInt(0,10);
-
+/*
+                while (15 <= curentBGColor)
+                {
+                    curentBGColor -= 16;
+                }
+                while (0 >= curentBGColor)
+                {
+                    curentColor -= 16;
+                }
+*/
                 setCurentBGColor(curentBGColor);
                 BGColorWasChanged = true;
         }
