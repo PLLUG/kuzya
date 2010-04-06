@@ -70,8 +70,7 @@ namespace KGNS{
   COLORS curentFillColor  = BLACK;
   int isFillCOLOR = 1;        ///0 colors 1 int 2 nothing for fill color
   int curentFillIntColor = 0;
-  
-}
+ }
 
 int width =  640;
 int height = 480;
