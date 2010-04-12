@@ -3,7 +3,7 @@
  <class>findForm</class>
  <widget class="QDialog" name="findForm">
   <property name="windowModality">
-   <enum>Qt::ApplicationModal</enum>
+   <enum>Qt::NonModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -46,9 +46,9 @@
      <colorrole role="Button">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>211</red>
-        <green>206</green>
-        <blue>197</blue>
+        <red>224</red>
+        <green>223</green>
+        <blue>223</blue>
        </color>
       </brush>
      </colorrole>
@@ -64,27 +64,27 @@
      <colorrole role="Midlight">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>233</red>
-        <green>230</green>
-        <blue>226</blue>
+        <red>239</red>
+        <green>239</green>
+        <blue>239</blue>
        </color>
       </brush>
      </colorrole>
      <colorrole role="Dark">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>105</red>
-        <green>103</green>
-        <blue>98</blue>
+        <red>112</red>
+        <green>111</green>
+        <blue>111</blue>
        </color>
       </brush>
      </colorrole>
      <colorrole role="Mid">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>141</red>
-        <green>137</green>
-        <blue>131</blue>
+        <red>149</red>
+        <green>149</green>
+        <blue>149</blue>
        </color>
       </brush>
      </colorrole>
@@ -127,9 +127,9 @@
      <colorrole role="Window">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>211</red>
-        <green>206</green>
-        <blue>197</blue>
+        <red>224</red>
+        <green>223</green>
+        <blue>223</blue>
        </color>
       </brush>
      </colorrole>
@@ -145,9 +145,9 @@
      <colorrole role="AlternateBase">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>233</red>
-        <green>230</green>
-        <blue>226</blue>
+        <red>239</red>
+        <green>239</green>
+        <blue>239</blue>
        </color>
       </brush>
      </colorrole>
@@ -183,9 +183,9 @@
      <colorrole role="Button">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>211</red>
-        <green>206</green>
-        <blue>197</blue>
+        <red>224</red>
+        <green>223</green>
+        <blue>223</blue>
        </color>
       </brush>
      </colorrole>
@@ -201,27 +201,27 @@
      <colorrole role="Midlight">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>233</red>
-        <green>230</green>
-        <blue>226</blue>
+        <red>239</red>
+        <green>239</green>
+        <blue>239</blue>
        </color>
       </brush>
      </colorrole>
      <colorrole role="Dark">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>105</red>
-        <green>103</green>
-        <blue>98</blue>
+        <red>112</red>
+        <green>111</green>
+        <blue>111</blue>
        </color>
       </brush>
      </colorrole>
      <colorrole role="Mid">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>141</red>
-        <green>137</green>
-        <blue>131</blue>
+        <red>149</red>
+        <green>149</green>
+        <blue>149</blue>
        </color>
       </brush>
      </colorrole>
@@ -264,9 +264,9 @@
      <colorrole role="Window">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>211</red>
-        <green>206</green>
-        <blue>197</blue>
+        <red>224</red>
+        <green>223</green>
+        <blue>223</blue>
        </color>
       </brush>
      </colorrole>
@@ -282,9 +282,9 @@
      <colorrole role="AlternateBase">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>233</red>
-        <green>230</green>
-        <blue>226</blue>
+        <red>239</red>
+        <green>239</green>
+        <blue>239</blue>
        </color>
       </brush>
      </colorrole>
@@ -311,18 +311,18 @@
      <colorrole role="WindowText">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>105</red>
-        <green>103</green>
-        <blue>98</blue>
+        <red>112</red>
+        <green>111</green>
+        <blue>111</blue>
        </color>
       </brush>
      </colorrole>
      <colorrole role="Button">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>211</red>
-        <green>206</green>
-        <blue>197</blue>
+        <red>224</red>
+        <green>223</green>
+        <blue>223</blue>
        </color>
       </brush>
      </colorrole>
@@ -338,36 +338,36 @@
      <colorrole role="Midlight">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>233</red>
-        <green>230</green>
-        <blue>226</blue>
+        <red>239</red>
+        <green>239</green>
+        <blue>239</blue>
        </color>
       </brush>
      </colorrole>
      <colorrole role="Dark">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>105</red>
-        <green>103</green>
-        <blue>98</blue>
+        <red>112</red>
+        <green>111</green>
+        <blue>111</blue>
        </color>
       </brush>
      </colorrole>
      <colorrole role="Mid">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>141</red>
-        <green>137</green>
-        <blue>131</blue>
+        <red>149</red>
+        <green>149</green>
+        <blue>149</blue>
        </color>
       </brush>
      </colorrole>
      <colorrole role="Text">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>105</red>
-        <green>103</green>
-        <blue>98</blue>
+        <red>112</red>
+        <green>111</green>
+        <blue>111</blue>
        </color>
       </brush>
      </colorrole>
@@ -383,27 +383,27 @@
      <colorrole role="ButtonText">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>105</red>
-        <green>103</green>
-        <blue>98</blue>
+        <red>112</red>
+        <green>111</green>
+        <blue>111</blue>
        </color>
       </brush>
      </colorrole>
      <colorrole role="Base">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>211</red>
-        <green>206</green>
-        <blue>197</blue>
+        <red>224</red>
+        <green>223</green>
+        <blue>223</blue>
        </color>
       </brush>
      </colorrole>
      <colorrole role="Window">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>211</red>
-        <green>206</green>
-        <blue>197</blue>
+        <red>224</red>
+        <green>223</green>
+        <blue>223</blue>
        </color>
       </brush>
      </colorrole>
@@ -419,9 +419,9 @@
      <colorrole role="AlternateBase">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>211</red>
-        <green>206</green>
-        <blue>197</blue>
+        <red>224</red>
+        <green>223</green>
+        <blue>223</blue>
        </color>
       </brush>
      </colorrole>
@@ -448,6 +448,9 @@
   </property>
   <property name="windowTitle">
    <string>Find Text</string>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0">

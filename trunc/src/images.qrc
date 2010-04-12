@@ -25,7 +25,6 @@
         <file alias="template">images/brick.png</file>
         <file alias="templates_menu">images/bricks.png</file>
         <file>images/help.png</file>
-        <file>images/kuzya.ico</file>
     </qresource>
     <qresource prefix="/notifications">
         <file alias="success">images/accept.png</file>

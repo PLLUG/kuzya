@@ -61,7 +61,6 @@ private slots:
 	void slotClose(void);
 	void slotApply(void);
 	void slotOk(void);
-        void slotChangeFont(void);
 	void slotDefaultAll(void);
 	void slotChangeFormColor(void);
 	void slotChangeDefDir(int);
