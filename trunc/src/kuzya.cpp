@@ -371,7 +371,7 @@ void Kuzya::openFile(QString FileName)
         slotUpdateWindowName(false);
 
         addFileNameToList(FileName);
-//        settings->saveLastProjectName(fileName);
+        settings->saveLastProjectName(fileName);
 }
 
 /**

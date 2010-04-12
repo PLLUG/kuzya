@@ -156,16 +156,6 @@ void OptionsDialog::writeSettings(void)
                         settings->setValue("FileName",mw->getRFileListAt(i));
 		}	
         settings->endArray();
-///-----EDITOR--------------------------------------------------------------------------------	
-    /*    settings->beginGroup("Settings/TextEditor");
-                settings->beginGroup("Font");
-                settings->setValue("FontName",font.toString());
-                settings->setValue("FontSize",font.pointSize());
-                settings->setValue("FontItalic",font.italic());
-                settings->setValue("FontBold",font.bold());
-                settings->endGroup();
-        settings->endGroup();*/
-
 ///***************************TEXT_EDITOR************************************************************************
         settings->beginGroup("/Settings/TextEditor");
                 settings->setValue("ShowLineNumber",lineNumbCHB->isChecked());
@@ -244,20 +234,6 @@ void OptionsDialog::readODWSettings()
 		mw->resizeRFileList(0);
 	}
         settings->endArray();
-///-----EDITOR--------------------------------------------------------------------------------	
-/*        settings->beginGroup("Settings/TextEditor");
-                settings->beginGroup("Font");
-                        font=QFont(settings->value("FontName","Arial Cyr").toString());
-                        QString s=(settings->value("FontName",qApp->font()).toString());
-                        fontLable_5->setText(s.remove(s.indexOf(","),s.count()-s.indexOf(",")));
-                        font.setPointSize(settings->value("FontSize",10).toInt());
-                        font.setItalic(settings->value("FontItalic",false).toBool());
-                        font.setBold(settings->value("FontBold",false).toBool());
-			//mw->setEditorFont(font);
-			qApp->setFont(font);
-                settings->endGroup();
-        settings->endGroup();
-*/
 ///***************************TEXT_EDITOR************************************************************************
         settings->beginGroup("/Settings/TextEditor");
 
@@ -350,12 +326,17 @@ void OptionsDialog::openLastProject()
 {
 	mw->markerDeleteAll();
         //if(!settings->value("/StartupPro").toBool()) return;
+
 	if(checkBox->isChecked())
 	{
             settings->beginGroup("Settings/MainWindow/");
                 QString fileName =settings->value("LastProjectName").toString();
             settings->endGroup();
+            textEditor->markerDeleteAll();
             mw->openFile(fileName);
+            mw->refreshProfileSettings();
+
+
 	}
 }
 ///***********************************
