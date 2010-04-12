@@ -45,8 +45,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 	connect(closeBtn,SIGNAL(clicked()), this,SLOT(slotClose(void)));
 	connect(applyBtn,SIGNAL(clicked()), this,SLOT(slotApply(void)));
 	connect(okBtn,	 SIGNAL(clicked()), this,SLOT(slotOk(void)));
-        connect(fontBtn_5, SIGNAL(clicked()), this,SLOT(slotChangeFont(void)));
-	connect(defaultBtn,SIGNAL(clicked()),this,SLOT(slotDefaultAll(void)));
+        connect(defaultBtn,SIGNAL(clicked()),this,SLOT(slotDefaultAll(void)));
         connect(directoryBox,SIGNAL(activated(int)),this,SLOT(slotChangeDefDir(int)));
         connect(styleCBox, SIGNAL(activated(int)), this ,SLOT(slotChangeStyle(int)));
         connect(skinCBox, SIGNAL(activated(QString)), this, SLOT(slotChangeSkin(QString)));
@@ -86,15 +85,6 @@ void OptionsDialog::retranslate(void)
 	retranslateUi(this);
 }
 
-void OptionsDialog::slotChangeFont()
-{
-	bool ok;
-	font=QFontDialog::getFont( &ok, font, this);
-	QString s=font.toString();
-        fontLable_5->setText(s.remove(s.indexOf(","),s.count()-s.indexOf(",")));
-	//mw->setEditorFont(font);
-	qApp->setFont(font);
-}
 void OptionsDialog::slotChangeStyle(int)
 {
     qApp->setStyle(styleCBox->currentText());
@@ -167,14 +157,14 @@ void OptionsDialog::writeSettings(void)
 		}	
         settings->endArray();
 ///-----EDITOR--------------------------------------------------------------------------------	
-        settings->beginGroup("Settings/TextEditor");
+    /*    settings->beginGroup("Settings/TextEditor");
                 settings->beginGroup("Font");
                 settings->setValue("FontName",font.toString());
                 settings->setValue("FontSize",font.pointSize());
                 settings->setValue("FontItalic",font.italic());
                 settings->setValue("FontBold",font.bold());
                 settings->endGroup();
-        settings->endGroup();
+        settings->endGroup();*/
 
 ///***************************TEXT_EDITOR************************************************************************
         settings->beginGroup("/Settings/TextEditor");
@@ -255,7 +245,7 @@ void OptionsDialog::readODWSettings()
 	}
         settings->endArray();
 ///-----EDITOR--------------------------------------------------------------------------------	
-        settings->beginGroup("Settings/TextEditor");
+/*        settings->beginGroup("Settings/TextEditor");
                 settings->beginGroup("Font");
                         font=QFont(settings->value("FontName","Arial Cyr").toString());
                         QString s=(settings->value("FontName",qApp->font()).toString());
@@ -267,7 +257,7 @@ void OptionsDialog::readODWSettings()
 			qApp->setFont(font);
                 settings->endGroup();
         settings->endGroup();
-
+*/
 ///***************************TEXT_EDITOR************************************************************************
         settings->beginGroup("/Settings/TextEditor");
 
