@@ -22,12 +22,14 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include <QDialog>
-#include <QPainter>
-
-
 #include "readstdin.h"
 #include "ui_graphics.h"
+
+#include <QMouseEvent>
+#include <QDialog>
+#include <QPainter>
+#include <QLabel>
+
 
 class graphics: public QMainWindow, private Ui::graphicsForm
 {
@@ -38,9 +40,11 @@ class graphics: public QMainWindow, private Ui::graphicsForm
 		~graphics();
 
 	protected:
+                void mouseMoveEvent(QMouseEvent*);
 
 	private slots:
                 void processCommand(QString  command);
+
 
 	private:
 		Ui::graphicsForm ui;
@@ -94,6 +98,8 @@ class graphics: public QMainWindow, private Ui::graphicsForm
 		QPen pen;
                 ReadStdIn* rsi;
                 QBrush *fillBrush;
+               //QMouseEvent *mouse;
+                QLabel *mouseCoordinatsLabel;
 };
 
 #endif

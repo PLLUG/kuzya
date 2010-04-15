@@ -35,20 +35,47 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuImage">
+    <property name="title">
+     <string>Image</string>
+    </property>
+    <addaction name="actionExit_2"/>
+   </widget>
+   <addaction name="menuImage"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
    <property name="icon">
-    <iconset resource="../src/images.qrc">
+    <iconset>
      <normaloff>:/menu/images/window_suppressed.png</normaloff>:/menu/images/window_suppressed.png</iconset>
    </property>
    <property name="text">
     <string>Exit</string>
    </property>
   </action>
+  <action name="actionExit_2">
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </action>
  </widget>
- <resources>
-  <include location="../src/images.qrc"/>
- </resources>
- <connections/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionExit_2</sender>
+   <signal>triggered()</signal>
+   <receiver>graphicsForm</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>240</x>
+     <y>155</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

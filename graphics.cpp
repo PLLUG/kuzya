@@ -19,13 +19,13 @@
  ***************************************************************************/
 
 
-#include <QtGui>
+#include <QtGui/QtGui>
 #include <QTextStream>
 #include <QPainterPath>
 #include <QPoint>
-#include <math.h>
 #include <QDebug>
 #include <QShortcut>
+
 
 #include "graphics.h"
 
@@ -37,6 +37,18 @@ graphics::graphics(QWidget *parent)
 	ui.setupUi(this);
         this->setWindowTitle("GraphicCore");
 	setObjectName("graphics");
+
+        //mouse = new QMouseEvent(QEvent::MouseMove,QPoint(0,0),Qt::NoButton,0,0);
+        setMouseTracking(true);
+        centralWidget()->setMouseTracking(true);
+        //painterLabel->setMouseTracking(true);
+
+        mouseCoordinatsLabel = new QLabel(this);
+
+        ui.statusBar->show();
+        ui.statusBar->addPermanentWidget(mouseCoordinatsLabel);
+
+        mouseCoordinatsLabel->setText(QVariant(QCursor::pos().x()).toString());
 
         width = 640;
         height = 480;
@@ -1059,4 +1071,9 @@ void graphics::setLineStyle(int lineStyle)
                     case 4: pen.setStyle(Qt::CustomDashLine);
                                     p.setPen(pen);				update();break;
     }
+}
+//***************************************
+void graphics::mouseMoveEvent(QMouseEvent *mouse)
+{
+    mouseCoordinatsLabel->setText("x : " + QVariant(mouse->x()).toString() + "\t" + "y : " + QVariant(mouse->y()).toString());
 }
