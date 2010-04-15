@@ -32,8 +32,6 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 {
 	setupUi(this);
 	setWindowTitle(tr("Settings"));
-	trans_ua = new QTranslator();
-	trans_en = new QTranslator();
         mw =(Kuzya*)parent;
         textEditor=mw->getTextEditorPointer();
 #ifdef WIN32
@@ -54,28 +52,41 @@ OptionsDialog::OptionsDialog(QWidget *parent)
         connect(browseButton, SIGNAL(clicked()), this, SLOT(slotChangeCompilerLocation()));
         connect(defaultUsePushButton, SIGNAL(clicked()), this, SLOT(slotDefaultCompiler()));
         connect(compilerResetPushButton, SIGNAL(clicked()) ,this, SLOT(slotResetCompilerOptions()));
+        connect(localizationLanguageCBox,SIGNAL(activated(QString)),this,SLOT(slotChangsLocalizationLanguage(QString)));
 
 ///-----------------------------Fonts and Colors-------------------------------------------------------
        styleCBox->addItems(QStyleFactory::keys());
-       filters<<"*.qss";
-       stylesDir.setNameFilters(filters);
+
+
 #ifdef WIN32
         stylesDir=QDir(QApplication::applicationDirPath()+"/../resources/qss/");
+        localizationLanguageDir=QDir(QApplication::applicationDirPath()+"/../resources/translations/");
 #else
         stylesDir=QDir("/usr/share/kuzya/resources/qss/");
+        localizationLanguageDir=QDir(QApplication::applicationDirPath()+"/../resources/translations/");
 #endif
-       slotUpdateSkinsCBox();
+
        languageComboBox->clear();
        QStringList supportedList = mw->getCurrentCompiler()->getSupportedLanguages();
        supportedList.sort();
        languageComboBox->addItems(supportedList);
 
-}
+       styleFilters<<"*.qss";
+       localizationLanguageFilters<<"*.qm";
+       stylesDir.setNameFilters(styleFilters);
+       localizationLanguageDir.setNameFilters(localizationLanguageFilters);
+
+       slotUpdateSkinsCBox();
+       slotUpdatelocalizationLanguageCBox();
+   }
 void OptionsDialog::slotUpdateSkinsCBox(void)
 {
      skinCBox->addItems(stylesDir.entryList(stylesDir.nameFilters(),QDir::Files,QDir::Name));
 }
-
+void OptionsDialog::slotUpdatelocalizationLanguageCBox()
+{
+    localizationLanguageCBox->addItems(localizationLanguageDir.entryList(localizationLanguageDir.nameFilters(),QDir::Files,QDir::Name));
+}
 
 OptionsDialog::~OptionsDialog()
 {
@@ -123,15 +134,7 @@ void OptionsDialog::writeSettings(void)
                 settings->setValue("DefaultDir",directoryBox->currentText());
 
 ///-----LANGUAGE-------------------------------------------------------------------------------------
-		if (ukrRBtn->isChecked())
-		{
-                        settings->setValue("Language","ukr");
-			
-		}
-		else
-		{
-                        settings->setValue("Language","eng");
-		}
+                settings->setValue("Language",localizationLanguageCBox->currentText());
 		///-------------------------------------------------------------------------------------------
         settings->endGroup();
 ///-----PROGRAMING--LANGUAGE---------------------------------------------------
@@ -188,26 +191,19 @@ void OptionsDialog::readODWSettings()
                     slotChangeSkin(settings->value("Skin","default.qss").toString());
                 settings->endGroup();
 ///-----LANGUAGE-------------------------------------------------------------------------
-                if(settings->value("Language","eng").toString()=="ukr")
-		{
-			ukrRBtn->setChecked(true);
+
+
 #ifdef WIN32
-                        translator.load(QApplication::applicationDirPath()+"/../resources/translations/kuzya_ua");
+                        translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+settings->value("Language","eng").toString());
 
 #else
-                        translator.load("/usr/share/kuzya/resources/translations/kuzya_ua");    //QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua"
+                        translator.load("/usr/share/kuzya/resources/translations/"+settings->value("Language","eng").toString()'');    //QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua"
 
 #endif
-			///translator.load("./src/translations/kuzya_ua");
+
 			qApp->installTranslator(&translator);
 			mw->retranslateAll();			
-		}
-		else
-		{
-			engRBtn->setChecked(true);
-			qApp->removeTranslator(&translator);
-			mw->retranslateAll();			
-		}
+
 ///-----DefaultDirectory-------------------------------------------------------------------------
                 if(directoryBox->findText(settings->value("DefaultDir",QDir::homePath()).toString())==-1)
 		{
@@ -487,4 +483,17 @@ void OptionsDialog::slotResetCompilerOptions()
        settings->endGroup();
        compilerDirLineEdit->setText(location);
        compilerOptionsEdit->setPlainText(options);
+}
+void OptionsDialog::slotChangsLocalizationLanguage(QString langName)
+{
+#ifdef WIN32
+                        translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+langName);
+
+#else
+                        translator.load("/usr/share/kuzya/resources/translations/"+langName);    //QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua"
+
+#endif
+                        ///translator.load("./src/translations/kuzya_ua");
+                        qApp->installTranslator(&translator);
+                        mw->retranslateAll();
 }

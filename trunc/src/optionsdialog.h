@@ -68,11 +68,13 @@ private slots:
         void slotChangeSkin(QString);
       //  void slotLoadCompilerSettings(void);
         void slotUpdateSkinsCBox(void);
+        void slotUpdatelocalizationLanguageCBox();
         void slotUpdateCompilerCBox(QString);
         void slotLoadCompilerOptions(QString);
         void slotChangeCompilerLocation();
         void slotDefaultCompiler();
         void slotResetCompilerOptions();
+        void slotChangsLocalizationLanguage(QString);
 
 private:
 	QTranslator* trans_ua;
@@ -84,7 +86,9 @@ private:
 	QTranslator translator;
 	QFont font;
         QDir stylesDir;
-        QStringList filters;
+        QDir localizationLanguageDir;
+        QStringList styleFilters;
+        QStringList localizationLanguageFilters;
 public:	
     bool isLineMarginVisible;
 	
