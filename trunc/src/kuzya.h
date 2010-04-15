@@ -41,7 +41,6 @@ class OptionsDialog;
 class QLabel;
 class QShortcut;
 class QListWidgetItem;
-//class QPrinter;
 class QsciPrinter;
 class QsciLexerCPP;
 class QsciLexerPascal;
