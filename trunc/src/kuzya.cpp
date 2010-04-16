@@ -509,6 +509,7 @@ void Kuzya::slotNew(void)
         textEditor->markerDeleteAll();
         notificationList->clear();
         languageComboBox->clear();
+        textEditor->setLexer(0);
 
         fileName = QString::null;
         translatedFileName = QString::null;
