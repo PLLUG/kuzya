@@ -294,6 +294,8 @@ void close()
 {
   	sprintf(KGNS::command, "close();\n");
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
+	fflush(KGNS::kuzyaGraphFile);
+	pclose(KGNS::kuzyaGraphFile);
 }
 ///*********closeGraph***********************
 void closegraph()

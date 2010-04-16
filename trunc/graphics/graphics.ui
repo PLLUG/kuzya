@@ -37,18 +37,7 @@
    </property>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionExit">
-   <property name="icon">
-    <iconset resource="../src/images.qrc">
-     <normaloff>:/menu/images/window_suppressed.png</normaloff>:/menu/images/window_suppressed.png</iconset>
-   </property>
-   <property name="text">
-    <string>Exit</string>
-   </property>
-  </action>
  </widget>
- <resources>
-  <include location="../src/images.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

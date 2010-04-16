@@ -196,15 +196,15 @@ Kuzya::Kuzya(QWidget *parent)
         connect(actionRun, 	SIGNAL(triggered()),this,		SLOT(slotRun()));
         connect(actionCommon,	SIGNAL(triggered()), settings, 		SLOT(slotCommOptions()));
         connect(actionAbout, 	SIGNAL(triggered()),this,		SLOT(slotAbout()));
-        connect(actionKuzya_Help,	SIGNAL(triggered()),this,		SLOT(slotHelpKuzya()));
+        connect(actionKuzya_Help,	SIGNAL(triggered()),this,	SLOT(slotHelpKuzya()));
         connect(actionFind,	SIGNAL(triggered()),findText,		SLOT(slotFindDialog()));
         connect(actionReplace,	SIGNAL(triggered()),replaceText,	SLOT(slotReplaceDialog()));
         connect(textEditor,	SIGNAL(cursorPositionChanged (int, int)),this,	SLOT(slotUpdateStatusLabel(int, int)));
-        connect(textEditor,	SIGNAL(modificationChanged(bool)),	 this,	SLOT(slotUpdateWindowName(bool)));
+        connect(textEditor,	SIGNAL(modificationChanged(bool)),this,	SLOT(slotUpdateWindowName(bool)));
         connect(textEditor,	SIGNAL(marginClicked (int, int, Qt::KeyboardModifiers)), this, SLOT(slotMarginClicked(int, int, Qt::KeyboardModifiers)));
-        connect(compiler,	SIGNAL(compileEnded(int)),		 this,	SLOT(slotAfterCompile(int)));
+        connect(compiler,	SIGNAL(compileEnded(int)),	this,	SLOT(slotAfterCompile(int)));
 
-        connect(actionNotificationList, SIGNAL(toggled(bool)), this, SLOT(slotShowNotificationList(bool)));
+        connect(actionNotificationList, SIGNAL(toggled(bool)), this,    SLOT(slotShowNotificationList(bool)));
         connect(notificationList, SIGNAL(itemSelectionChanged()), this, SLOT(slotShowErrorFromList()));
         connect(notificationList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotGotoErrorLine(QListWidgetItem*)));
 
@@ -216,15 +216,15 @@ Kuzya::Kuzya(QWidget *parent)
         connect	(actionToggleFolds,	SIGNAL(triggered()),	this,	SLOT (slotToggleFolds()));
         connect ( actionAbout_Qt,	SIGNAL ( triggered() ),	qApp,	SLOT ( aboutQt() ) );
 
-        connect(actionDefaultMode, SIGNAL(triggered()), this, SLOT(slotDefaultMode()));
-        connect(actionAlternativeMode, SIGNAL(triggered()), this, SLOT(slotAlternativeMode()));
-        connect(actionObjectMode, SIGNAL(triggered()), this, SLOT(slotObjectMode()));
-        connect(actionStaticLibMode, SIGNAL(triggered()), this, SLOT(slotStaticLibMode()));
-        connect(actionDynamicLibMode, SIGNAL(triggered()), this, SLOT(slotDynamicLibMode()));
+        connect(actionDefaultMode, SIGNAL(triggered()), this,           SLOT(slotDefaultMode()));
+        connect(actionAlternativeMode, SIGNAL(triggered()), this,       SLOT(slotAlternativeMode()));
+        connect(actionObjectMode, SIGNAL(triggered()), this,            SLOT(slotObjectMode()));
+        connect(actionStaticLibMode, SIGNAL(triggered()), this,         SLOT(slotStaticLibMode()));
+        connect(actionDynamicLibMode, SIGNAL(triggered()), this,        SLOT(slotDynamicLibMode()));
 
-        connect(textEditor,	SIGNAL(modificationChanged(bool)),	 this,	SLOT(slotModificationChanged(bool)));
+        connect(textEditor,	SIGNAL(modificationChanged(bool)), this,SLOT(slotModificationChanged(bool)));
 
-        connect(fileDialog, SIGNAL(filterSelected(QString)), this, SLOT(slotSetFileSuffix(QString)));
+        connect(fileDialog, SIGNAL(filterSelected(QString)), this,      SLOT(slotSetFileSuffix(QString)));
 
         statusBar()->showMessage(tr("Ready"));
 
@@ -974,7 +974,7 @@ void Kuzya::slotAbout(void)
                                               "\n <u>bouyantgrambler@users.sourceforge.net</u>"
                                               "\n              \n \t <centre>Alex Chmykhalo</centre> "
                                               "\n <u>alexchmykhalo@users.sourceforge.net</u>"
-                                              "\n\n <b>Design:</b>      \n \t <centre>Oksana Rondyak</centre> "
+                                              "\n\n <b>Splashscreen Design:</b>      \n \t <centre>Oksana Rondyak</centre> "
                                               "\n <u>relax777@users.sourceforge.net</u> </pre>").arg(KUZYA_VERSION),QMessageBox::Ok,this,Qt::Dialog);
     #ifdef WIN32
         aboutBox->setIconPixmap(QPixmap(QApplication::applicationDirPath()+"/../resources/Kuzya.png"));
