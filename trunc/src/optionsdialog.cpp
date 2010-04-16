@@ -63,7 +63,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
         localizationLanguageDir=QDir(QApplication::applicationDirPath()+"/../resources/translations/");
 #else
         stylesDir=QDir("/usr/share/kuzya/resources/qss/");
-        localizationLanguageDir=stylesDir=QDir("/usr/share/kuzya/resources/translations/");
+        localizationLanguageDir=QDir("/usr/share/kuzya/resources/translations/");
 #endif
 
        languageComboBox->clear();
