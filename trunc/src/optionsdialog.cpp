@@ -197,7 +197,7 @@ void OptionsDialog::readODWSettings()
                 translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+settings->value("Language","eng").toString());
 
 #else
-                translator.load("/usr/share/kuzya/resources/translations/"+settings->value("Language","eng").toString()'');    //QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua"
+                        translator.load("/usr/share/kuzya/resources/translations/" + settings->value("Language","eng").toString());    //QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua"
 
 #endif
 
