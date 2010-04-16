@@ -63,7 +63,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
         localizationLanguageDir=QDir(QApplication::applicationDirPath()+"/../resources/translations/");
 #else
         stylesDir=QDir("/usr/share/kuzya/resources/qss/");
-        localizationLanguageDir=QDir(QApplication::applicationDirPath()+"/../resources/translations/");
+        localizationLanguageDir=stylesDir=QDir("/usr/share/kuzya/resources/translations/");
 #endif
 
        languageComboBox->clear();
@@ -194,16 +194,17 @@ void OptionsDialog::readODWSettings()
 
 
 #ifdef WIN32
-                        translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+settings->value("Language","eng").toString());
+                translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+settings->value("Language","eng").toString());
 
 #else
-                        translator.load("/usr/share/kuzya/resources/translations/"+settings->value("Language","eng").toString()'');    //QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua"
+                translator.load("/usr/share/kuzya/resources/translations/"+settings->value("Language","eng").toString()'');    //QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua"
 
 #endif
 
-			qApp->installTranslator(&translator);
-			mw->retranslateAll();			
+                qApp->installTranslator(&translator);
+                mw->retranslateAll();
 
+                localizationLanguageCBox->setCurrentIndex(localizationLanguageCBox->findText(settings->value("Language","English.qm").toString()));
 ///-----DefaultDirectory-------------------------------------------------------------------------
                 if(directoryBox->findText(settings->value("DefaultDir",QDir::homePath()).toString())==-1)
 		{
@@ -397,12 +398,6 @@ void OptionsDialog::slotChangeDefDir(int index)
 	
 	}
 }
-/*
-bool OptionsDialog::ukrIsCheked()
-{
-    return ukrRBtn_2->isChecked();
-}
-*/
 void OptionsDialog::slotUpdateCompilerCBox(QString lang)
 {
         QStringList compilers = mw->getCurrentCompiler()->getSupportedCompilers(lang);

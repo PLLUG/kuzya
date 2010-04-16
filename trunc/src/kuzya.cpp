@@ -166,7 +166,7 @@ Kuzya::Kuzya(QWidget *parent)
         
         settings->readODWSettings();
         settings->openLastProject();
-        settings->openLastProject();
+
         ActOpenRecentFileVector.clear();
 
         srcRecompiled = false;
