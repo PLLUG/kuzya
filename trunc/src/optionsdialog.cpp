@@ -45,6 +45,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 	connect(okBtn,	 SIGNAL(clicked()), this,SLOT(slotOk(void)));
         connect(defaultBtn,SIGNAL(clicked()),this,SLOT(slotDefaultAll(void)));
         connect(directoryBox,SIGNAL(activated(int)),this,SLOT(slotChangeDefDir(int)));
+        connect(directoryBox,SIGNAL(editTextChanged(QString)),this,SLOT(slotChangeDefDir(QString)));
         connect(styleCBox, SIGNAL(activated(int)), this ,SLOT(slotChangeStyle(int)));
         connect(skinCBox, SIGNAL(activated(QString)), this, SLOT(slotChangeSkin(QString)));
         connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotUpdateCompilerCBox(QString)));
@@ -78,6 +79,9 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 
        slotUpdateSkinsCBox();
        slotUpdatelocalizationLanguageCBox();
+       errorInformLabel->hide();
+
+
    }
 void OptionsDialog::slotUpdateSkinsCBox(void)
 {
@@ -206,14 +210,16 @@ void OptionsDialog::readODWSettings()
 
                 localizationLanguageCBox->setCurrentIndex(localizationLanguageCBox->findText(settings->value("Language","English.qm").toString()));
 ///-----DefaultDirectory-------------------------------------------------------------------------
+                directoryBox->setCurrentIndex(0);
                 if(directoryBox->findText(settings->value("DefaultDir",QDir::homePath()).toString())==-1)
-		{
-			directoryBox->removeItem(0);
+                {
                         directoryBox->insertItem(0,settings->value("DefaultDir",QDir::homePath()).toString());
+                        directoryBox->removeItem(1);
 			directoryBox->setCurrentIndex(0);	
 		}
 		mw->setDefaultDir(directoryBox->currentText());
-		///------------------------------------------------------------------------------
+
+///------------------------------------------------------------------------------
         settings->endGroup();
 ///-----PROGRAMING--LANGUAGE---------------------------------------------------
          slotLoadCompilerOptions(compilerComboBox->currentText());
@@ -302,6 +308,7 @@ void OptionsDialog::readODWSettings()
 ///*******showForm***********************************************************************************************
 void OptionsDialog::slotCommOptions(void)
 {
+        readODWSettings();
 	show();
 
 }
@@ -398,6 +405,27 @@ void OptionsDialog::slotChangeDefDir(int index)
 	
 	}
 }
+void OptionsDialog::slotChangeDefDir(QString dirName)
+{
+
+    if (QDir(dirName).exists())
+    {
+          errorInformLabel->setStyleSheet("");
+          errorInformLabel->hide();
+          applyBtn->setEnabled(true);
+          okBtn->setEnabled(true);
+    }
+    else
+    {
+         errorInformLabel->setText(tr("The path:")+dirName+tr(" not exists"));
+         errorInformLabel->setStyleSheet("background-color:red;");
+         errorInformLabel->show();
+         applyBtn->setEnabled(false);
+         okBtn->setEnabled(false);
+
+    }
+}
+
 void OptionsDialog::slotUpdateCompilerCBox(QString lang)
 {
         QStringList compilers = mw->getCurrentCompiler()->getSupportedCompilers(lang);
@@ -485,10 +513,9 @@ void OptionsDialog::slotChangsLocalizationLanguage(QString langName)
                         translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+langName);
 
 #else
-                        translator.load("/usr/share/kuzya/resources/translations/"+langName);    //QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua"
+                        translator.load("/usr/share/kuzya/resources/translations/"+langName);
 
 #endif
-                        ///translator.load("./src/translations/kuzya_ua");
                         qApp->installTranslator(&translator);
                         mw->retranslateAll();
 }

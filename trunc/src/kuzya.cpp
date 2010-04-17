@@ -540,7 +540,7 @@ void Kuzya::slotOpen(void)
         refreshDialogSettings();
         fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
         fileDialog->setFileMode(QFileDialog::ExistingFile);
-
+        fileDialog->setDirectory(DefaultDir);
         QString openedFileName;
         if (fileDialog->exec())
             openedFileName = fileDialog->selectedFiles().at(0);
