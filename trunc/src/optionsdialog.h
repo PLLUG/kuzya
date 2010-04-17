@@ -64,6 +64,7 @@ private slots:
 	void slotDefaultAll(void);
 	void slotChangeFormColor(void);
 	void slotChangeDefDir(int);
+        void slotChangeDefDir(QString);
         void slotChangeStyle(int);
         void slotChangeSkin(QString);
       //  void slotLoadCompilerSettings(void);

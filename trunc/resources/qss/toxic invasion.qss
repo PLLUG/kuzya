@@ -325,9 +325,7 @@ QPushButton
 	padding:3;
 	border: 2px groove grey;
 	border-radius:2;
-	min-width:30px;
-	
-	}
+}
 QPushButton:hover
 {
 	border-bottom-color:black;

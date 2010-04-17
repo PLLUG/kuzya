@@ -445,7 +445,7 @@
      <x>0</x>
      <y>0</y>
      <width>773</width>
-     <height>20</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -493,8 +493,8 @@
      <rect>
       <x>802</x>
       <y>104</y>
-      <width>165</width>
-      <height>78</height>
+      <width>135</width>
+      <height>98</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -628,7 +628,7 @@
   <action name="actionExit">
    <property name="icon">
     <iconset resource="images.qrc">
-     <normaloff>:/menu/images/window_suppressed.png</normaloff>:/menu/images/window_suppressed.png</iconset>
+     <normaloff>:/menu/images/escape.png</normaloff>:/menu/images/escape.png</iconset>
    </property>
    <property name="text">
     <string>Exit</string>
