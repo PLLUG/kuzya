@@ -28,13 +28,6 @@
 
 #include "kuzya.h"
 
-
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <getopt.h>
-
 int main(int argc, char ** argv)
 {
     Q_INIT_RESOURCE(images);
