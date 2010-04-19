@@ -99,9 +99,8 @@ void OptionsDialog::slotUpdatelocalizationLanguageCBox()
     for(int i=0;i<localizationLanguageList.count();i++)
     {
         localizationLanguageList[i]=localizationLanguageList.at(i).left(localizationLanguageList.at(i).lastIndexOf("."));
+        localizationLanguageCBox->addItem(QIcon(":flags/images/flags/"+localizationLanguageList[i]+".png"),localizationLanguageList[i]);
     }
-    localizationLanguageCBox->addItems(localizationLanguageList);
-    //localizationLanguageCBox->addItems(localizationLanguageDir.entryList(localizationLanguageDir.nameFilters(),QDir::Files,QDir::Name));
 }
 
 OptionsDialog::~OptionsDialog()
