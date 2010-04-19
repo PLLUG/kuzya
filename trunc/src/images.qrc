@@ -84,4 +84,9 @@
         <file>images/styles/separator_v.png</file>
         <file>images/styles/dot.png</file>
     </qresource>
+    <qresource prefix="/flags">
+        <file>images/flags/Belarusian.png</file>
+        <file>images/flags/English.png</file>
+        <file>images/flags/Ukrainian.png</file>
+    </qresource>
 </RCC>
