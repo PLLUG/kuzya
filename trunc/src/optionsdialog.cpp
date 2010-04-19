@@ -85,11 +85,23 @@ OptionsDialog::OptionsDialog(QWidget *parent)
    }
 void OptionsDialog::slotUpdateSkinsCBox(void)
 {
-     skinCBox->addItems(stylesDir.entryList(stylesDir.nameFilters(),QDir::Files,QDir::Name));
+    QStringList skinsNameList = stylesDir.entryList(stylesDir.nameFilters(),QDir::Files,QDir::Name);
+    for(int i = 0;i<skinsNameList.count();i++)
+    {
+        skinsNameList[i]=skinsNameList.at(i).left(skinsNameList.at(i).lastIndexOf("."));
+    }
+    skinCBox->addItems(skinsNameList);
+    //skinCBox->addItems(stylesDir.entryList(stylesDir.nameFilters(),QDir::Files,QDir::Name));
 }
 void OptionsDialog::slotUpdatelocalizationLanguageCBox()
 {
-    localizationLanguageCBox->addItems(localizationLanguageDir.entryList(localizationLanguageDir.nameFilters(),QDir::Files,QDir::Name));
+    QStringList localizationLanguageList = localizationLanguageDir.entryList(localizationLanguageDir.nameFilters(),QDir::Files,QDir::Name);
+    for(int i=0;i<localizationLanguageList.count();i++)
+    {
+        localizationLanguageList[i]=localizationLanguageList.at(i).left(localizationLanguageList.at(i).lastIndexOf("."));
+    }
+    localizationLanguageCBox->addItems(localizationLanguageList);
+    //localizationLanguageCBox->addItems(localizationLanguageDir.entryList(localizationLanguageDir.nameFilters(),QDir::Files,QDir::Name));
 }
 
 OptionsDialog::~OptionsDialog()
@@ -107,9 +119,9 @@ void OptionsDialog::slotChangeStyle(int)
 void OptionsDialog::slotChangeSkin(QString sheetName)
 {
 #ifdef WIN32
-    QFile file(QApplication::applicationDirPath()+"/../resources/qss/"+sheetName.toLower());
+    QFile file(QApplication::applicationDirPath()+"/../resources/qss/"+sheetName.toLower()+".qss");
 #else
-    QFile file("/usr/share/kuzya/resources/qss/"+sheetName.toLower());
+    QFile file("/usr/share/kuzya/resources/qss/"+sheetName.toLower()+".qss");
 #endif
     file.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(file.readAll());
@@ -177,9 +189,13 @@ void OptionsDialog::writeSettings(void)
                 settings->endGroup();
         settings->endGroup();
 }
+
+
 ///****
 ///************************************
 ///*******readOptionDialogWindowSettings***************************************************************************
+
+
 void OptionsDialog::readODWSettings()
 {	
         settings->beginGroup("Settings/MainWindow");
@@ -191,17 +207,17 @@ void OptionsDialog::readODWSettings()
                 settings->beginGroup("Interface");
                     styleCBox->setCurrentIndex(styleCBox->findText(settings->value("Style","Cleanlooks").toString()));
                     qApp->setStyle(settings->value("Style","Cleanlooks").toString());
-                    skinCBox->setCurrentIndex(skinCBox->findText(settings->value("Skin","default.qss").toString()));
-                    slotChangeSkin(settings->value("Skin","default.qss").toString());
+                    skinCBox->setCurrentIndex(skinCBox->findText(settings->value("Skin","creation").toString()));
+                    slotChangeSkin(settings->value("Skin","creation").toString());
                 settings->endGroup();
 ///-----LANGUAGE-------------------------------------------------------------------------
 
 
 #ifdef WIN32
-                translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+settings->value("Language","eng").toString());
+                translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+settings->value("Language","English").toString()+".qm");
 
 #else
-                        translator.load("/usr/share/kuzya/resources/translations/" + settings->value("Language","eng").toString());    //QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua"
+                        translator.load("/usr/share/kuzya/resources/translations/" + settings->value("Language","English").toString()+".qm");    //QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua"
 
 #endif
 
