@@ -959,7 +959,7 @@ void Kuzya::slotAbout(void)
 {
     QMessageBox *aboutBox= new QMessageBox( QMessageBox::Information,tr("About"),QString("\t  <big><b><centre> \t    The Kuzya %1 </centre> </b></big>  "
                                               "\n  <p> Free Development Environment</p>\n\n"
-                                              "build on Jul 6 2009"
+                                              "build on April 19 2010"
                                               "<p> Kuzya is simple crossplatform IDE for people who study  programming."
                                               "Main idea of it is to concentrate attention  of the users only on learning the programming \n"
                                               "\t language  but not on usage of IDE. For more information visit our official web site "
