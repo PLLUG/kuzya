@@ -67,7 +67,7 @@ cp -f ./graphics/fpc/unit/graph.ppu 	$RPM_BUILD_ROOT/usr/bin
 
 install -Dpm 755 ./bin/%{name}graph $RPM_BUILD_ROOT/usr/bin/%{name}graph
 install -Dpm 755 ./bin/%{name}      $RPM_BUILD_ROOT/usr/bin/%{name}
-install -Dpm 755 ./resources/translations/*.qm $RPM_BUILD_ROOT/usr/share/%{name}/src/translations
+install -Dpm 755 ./resources/translations/*.qm $RPM_BUILD_ROOT/usr/share/%{name}/resources/translations
 
 %files
 %defattr(-,root,root,0755)
