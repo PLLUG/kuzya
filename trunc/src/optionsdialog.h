@@ -45,7 +45,9 @@ public:
     OptionsDialog(QWidget *parent = 0);
 	~OptionsDialog();
 	void writeSettings(void);
-	void readODWSettings();	
+        void readODWSettings();
+        void writeMainWindowState();
+        void readMainWindowState();
 	void openLastProject();
 	void saveLastProjectName(QString);
 	void retranslate(void);

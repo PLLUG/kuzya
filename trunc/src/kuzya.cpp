@@ -32,7 +32,7 @@
 #include <Qsci/qsciprinter.h>
 #include <QPrintDialog>
 #include <QColor>
-
+#include <QDebug>
 #include "gotolinedialog.h"
 #include "finddialog.h"
 #include "replacedialog.h"
@@ -166,7 +166,7 @@ Kuzya::Kuzya(QWidget *parent)
         
         settings->readODWSettings();
         settings->openLastProject();
-
+        settings->readMainWindowState();
         ActOpenRecentFileVector.clear();
 
         srcRecompiled = false;
@@ -824,6 +824,8 @@ void Kuzya::slotPrint(void)
 void Kuzya::slotExit(void)
 {
         settings->writeSettings();
+        settings->writeMainWindowState();
+
 
 //        if (!fileName.isEmpty())
 //            settings->saveLastProjectName(fileName);
@@ -1094,11 +1096,14 @@ void Kuzya :: slotOpenRecentFile(QString FileName)
 **/
  void Kuzya::closeEvent(QCloseEvent *event)
  {
+
+        settings->writeSettings();
+        settings->writeMainWindowState();
         if(slotSaveChangesNotifier()==false)
         {
                 event->ignore();
         }
-        settings->writeSettings();
+
 
 //        if (!fileName.isEmpty())
 //            settings->saveLastProjectName(fileName);

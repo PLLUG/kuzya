@@ -136,6 +136,7 @@ void OptionsDialog::writeSettings(void)
 ///--------------------MainWindow--------------------------------------------	
         settings->beginGroup("Settings/MainWindow");
                 settings->setValue("StartupPro", checkBox->isChecked());
+
 ///------------------------------------------------------------------------------------------
 		mw->setMaxCount_RFileList(sB_LOFCount->value());
 		mw->resizeRFileList(mw->getMaxCount_RFileList());
@@ -187,6 +188,7 @@ void OptionsDialog::writeSettings(void)
                         settings->setValue("UseBackspaceIndent",BkspaceIndentCHB->isChecked());
                 settings->endGroup();
         settings->endGroup();
+        settings->sync();
 }
 
 
@@ -199,7 +201,7 @@ void OptionsDialog::readODWSettings()
 {	
         settings->beginGroup("Settings/MainWindow");
                 checkBox->setChecked(settings->value("StartupPro",false).toBool());
-		///-----------------------------------------------------------------------------
+                ///-----------------------------------------------------------------------------
                 sB_LOFCount->setValue(settings->value("LOFCount",5).toInt());
 		mw->setMaxCount_RFileList(sB_LOFCount->value());
 ///-----Style&Skins----------------------------------------------------------------------
@@ -336,6 +338,7 @@ void OptionsDialog::saveLastProjectName(QString fileName)
         settings->beginGroup("Settings/MainWindow/");
         settings->setValue("LastProjectName",fileName);
         settings->endGroup();
+        settings->sync();
 	
 }
 ///
@@ -521,6 +524,20 @@ void OptionsDialog::slotResetCompilerOptions()
        settings->endGroup();
        compilerDirLineEdit->setText(location);
        compilerOptionsEdit->setPlainText(options);
+}
+void OptionsDialog::writeMainWindowState()
+{
+    settings->beginGroup("Settings/MainWindow");
+        settings->setValue("MainWindowState",mw->saveState());        
+    settings->endGroup();
+    settings->sync();
+}
+void OptionsDialog::readMainWindowState()
+{
+    settings->beginGroup("Settings/MainWindow");
+        //mw->restoreMainWindowState(settings->value("MainWindowState","0").toByteArray());
+        mw->restoreState(settings->value("MainWindowState","0").toByteArray());
+    settings->endGroup();
 }
 void OptionsDialog::slotChangsLocalizationLanguage(QString langName)
 {

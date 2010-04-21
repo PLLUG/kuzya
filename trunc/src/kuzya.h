@@ -100,6 +100,7 @@ public:
 
         void refreshProfileSettings();
         void LoadTemplates(QString);
+
 protected:
 
 private slots:
