@@ -35,13 +35,6 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuImage">
-    <property name="title">
-     <string>Image</string>
-    </property>
-    <addaction name="actionExit_2"/>
-   </widget>
-   <addaction name="menuImage"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
