@@ -30,6 +30,8 @@
 #include <QPainter>
 #include <QLabel>
 
+class QPoint;
+
 
 class graphics: public QMainWindow, private Ui::graphicsForm
 {
@@ -40,7 +42,7 @@ class graphics: public QMainWindow, private Ui::graphicsForm
 		~graphics();
 
 	protected:
-                void mouseMoveEvent(QMouseEvent*);
+       //         void mouseMoveEvent(QMouseEvent*);
 
 	private slots:
                 void processCommand(QString  command);
@@ -87,19 +89,22 @@ class graphics: public QMainWindow, private Ui::graphicsForm
                 int fillPatern;
                 bool BGColorWasChanged;
                 double grid;
+                bool isTurtleGrpahics;
+                bool isTurtlePaint;
+                int turtleRotateAngle;
 	
 	private:
  		QPixmap pix;
                 QPixmap pixBG;
-                QPixmap FGPix;
+                QPixmap turtlePix;
 		QPainter p;
 		QString methodText;
 		QString textFont;
 		QPen pen;
                 ReadStdIn* rsi;
                 QBrush *fillBrush;
-               //QMouseEvent *mouse;
                 QLabel *mouseCoordinatsLabel;
+                QPoint *turtlePosition;
 };
 
 #endif

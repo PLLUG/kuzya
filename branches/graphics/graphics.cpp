@@ -26,6 +26,8 @@
 #include <QDebug>
 #include <QShortcut>
 
+#include <math.h>
+
 
 #include "graphics.h"
 
@@ -34,36 +36,42 @@
 graphics::graphics(QWidget *parent)
         : QMainWindow(parent)
 {
-	ui.setupUi(this);
+        ui.setupUi(this);
         this->setWindowTitle("GraphicCore");
-	setObjectName("graphics");
+        setObjectName("graphics");
 
-        //mouse = new QMouseEvent(QEvent::MouseMove,QPoint(0,0),Qt::NoButton,0,0);
-        setMouseTracking(true);
-        centralWidget()->setMouseTracking(true);
-        //painterLabel->setMouseTracking(true);
+        /////////mouse = new QMouseEvent(QEvent::MouseMove,QPoint(0,0),Qt::NoButton,0,0);
+        //setMouseTracking(true);
+        //centralWidget()->setMouseTracking(true);
+        ///////////////////painterLabel->setMouseTracking(true);
 
-        mouseCoordinatsLabel = new QLabel(this);
+        //mouseCoordinatsLabel = new QLabel(this);
+        //mouseCoordinatsLabel->setText("x : 0\ty : 0" );
 
-        ui.statusBar->show();
-        ui.statusBar->addPermanentWidget(mouseCoordinatsLabel);
+        //ui.statusBar->show();
+        //ui.statusBar->addPermanentWidget(mouseCoordinatsLabel);
 
-        mouseCoordinatsLabel->setText(QVariant(QCursor::pos().x()).toString());
+        //mouseCoordinatsLabel->setText(QVariant(QCursor::pos().x()).toString());
 
         width = 640;
         height = 480;
 
+        isTurtleGrpahics =  false;
+        isTurtlePaint =     false;
+        turtlePosition = new QPoint(this->width/2, this->height/2);
+        turtleRotateAngle = 0;
+
         ui.centralwidget->setMinimumHeight(height);
         ui.centralwidget->setMinimumWidth(width);
 
-	curentColor = 0;
+        curentColor = 0;
         curentFillColor = 0;
-	textSize = 12;
-	textFont = "Arial";
-	textDirection = 0;
+        textSize = 12;
+        textFont = "Arial";
+        textDirection = 0;
         fillPatern = 1;
-	lineThickness = 1;
-	lineStyle = 0;
+        lineThickness = 1;
+        lineStyle = 0;
         curentBGColor = 15;
 
         pix = QPixmap(width, height);
@@ -81,11 +89,11 @@ graphics::graphics(QWidget *parent)
         setCurentColor(curentColor);
         setCurentBGColor(curentBGColor);
 
-	resize(width, height);
+        resize(width, height);
 
         rsi = new ReadStdIn(this);
         new QShortcut(Qt::Key_Return, this, SLOT(close()));
-	connect(rsi, SIGNAL(commandAppeared(QString)), this, SLOT(processCommand(QString)));
+        connect(rsi, SIGNAL(commandAppeared(QString)), this, SLOT(processCommand(QString)));
         rsi->start();
 
         //connect(ui.actionSave, SIGNAL(triggered()), this, SLOT(processCommand()));
@@ -98,82 +106,82 @@ graphics::~graphics()
 void graphics::processCommand(QString  command)
 {
         ///***************all kuzygraphfunctions are heree************************
-	if(getMethodName(command) == "initgraph")
-	{
-		index = command.indexOf("(",0);
-		indexOfSimbol = command.indexOf(",", index);
-		numberOf = indexOfSimbol - index;
-		width = command.mid(index+1, numberOf-1).toInt(0,10);
-		
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(")", index+1);
-		numberOf = indexOfSimbol - index;
-		height = command.mid(index+1, numberOf-1).toInt(0,10);
+        if(getMethodName(command) == "initgraph")
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
+                width = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(")", index+1);
+                numberOf = indexOfSimbol - index;
+                height = command.mid(index+1, numberOf-1).toInt(0,10);
 
                 this->resize(width, height);
                 this->setMinimumHeight(height);
                 this->setMinimumWidth(width);
                 this->setMaximumHeight(height);
                 this->setMaximumWidth(width);
-		createPixmap(width, height);
+                createPixmap(width, height);
                 creatBGPixmap(width, height);
                 return;
-	}
+        }
         //setCurentFillColor(curentFillColor);
         //setFillPatern(fillPatern);
         //pen.setBrush(fillBrush);
         //setCurentColor(curentColor);
         else if(getMethodName(command) == "arc")
-	{
-		index = command.indexOf("(",0);
-		indexOfSimbol = command.indexOf(",", index);
-		numberOf = indexOfSimbol - index;
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
                 x1 = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
                 y1 = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		stAngle = command.mid(index+1, numberOf-1).toInt(0,10) / 2;
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                stAngle = command.mid(index+1, numberOf-1).toInt(0,10) / 2;
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		endAngle = command.mid(index+1, numberOf-1).toInt(0,10);
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                endAngle = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(")", index+1);
-		numberOf = indexOfSimbol - index;
-		r = command.mid(index+1, numberOf-1).toInt(0,10);
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(")", index+1);
+                numberOf = indexOfSimbol - index;
+                r = command.mid(index+1, numberOf-1).toInt(0,10);
 
                 p.drawArc(x1-r, y1-r, 2*r, 2*r, stAngle * 16, endAngle * 16);
 
-	}
-        else if (getMethodName(command) == "bar")
-	{
-		index = command.indexOf("(",0);
-		indexOfSimbol = command.indexOf(",", index);
-		numberOf = indexOfSimbol - index;
-		x = command.mid(index+1, numberOf-1).toInt(0,10);
-		
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		y = command.mid(index+1, numberOf-1).toInt(0,10);
-		
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		x1 = command.mid(index+1, numberOf-1).toInt(0,10);
-	
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(")", index+1);
-		numberOf = indexOfSimbol - index;
-		y1 = command.mid(index+1, numberOf-1).toInt(0,10);
+        }
+        else if(getMethodName(command) == "bar")
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
+                x = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                y = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                x1 = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(")", index+1);
+                numberOf = indexOfSimbol - index;
+                y1 = command.mid(index+1, numberOf-1).toInt(0,10);
 
                 QBrush myBrush;
                 myBrush.setColor(fillBrush->color());
@@ -181,32 +189,32 @@ void graphics::processCommand(QString  command)
 
                 p.fillRect(x, y, x1-x, y1-y, myBrush);
 
-	}
-        else if (getMethodName(command) == "bar3d")
-	{
-		index = command.indexOf("(",0);
-		indexOfSimbol = command.indexOf(",", index);
-		numberOf = indexOfSimbol - index;
-		x = command.mid(index+1, numberOf-1).toInt(0,10);
-		
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		y = command.mid(index+1, numberOf-1).toInt(0,10);
-		
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		x1 = command.mid(index+1, numberOf-1).toInt(0,10);
+        }
+        else if(getMethodName(command) == "bar3d")
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
+                x = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		y1 = command.mid(index+1, numberOf-1).toInt(0,10);
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                y = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                x1 = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                y1 = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                index = indexOfSimbol;
                 indexOfSimbol = command.indexOf(")", index+1);
-		numberOf = indexOfSimbol - index;
+                numberOf = indexOfSimbol - index;
                 z = command.mid(index+1, numberOf-1).toInt(0,10);
 
 
@@ -220,32 +228,32 @@ void graphics::processCommand(QString  command)
                 p.drawLine(x1, y, x1+a, y-a);
                 p.drawLine(x1, y1, x1+a, y1-a);
 
-	}
+        }
         else if(getMethodName(command) == "circle")
-	{
-		index = command.indexOf("(",0);
-		indexOfSimbol = command.indexOf(",", index);
-		numberOf = indexOfSimbol - index;
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
                 x1 = command.mid(index+1, numberOf-1).toInt(0,10);
-		
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
                 y1 = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(")", index+1);
-		numberOf = indexOfSimbol - index;
-		r = command.mid(index+1, numberOf-1).toInt(0,10);
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(")", index+1);
+                numberOf = indexOfSimbol - index;
+                r = command.mid(index+1, numberOf-1).toInt(0,10);
 
                 p.drawEllipse(x1-r, y1-r, 2*r, 2*r);
 
-	}
+        }
         else if(getMethodName(command) == "cleardevice")
-	{
+        {
                 pix.fill(Qt::transparent);
-	}
-        else if (getMethodName(command) == "close")
+        }
+        else if(getMethodName(command) == "close")
         {
             p.end();
             close();
@@ -295,7 +303,7 @@ void graphics::processCommand(QString  command)
             update();
         }
         else if(getMethodName(command) == "drawpoly")
-	{
+        {
                 index = command.indexOf("(",0);
                 indexOfSimbol = command.indexOf(",", index);
                 numberOf = indexOfSimbol - index;
@@ -332,65 +340,65 @@ void graphics::processCommand(QString  command)
                  indexOfSimbol = command.indexOf(")", index+1);
                  numberOf = indexOfSimbol - index;
                  arrayXY[1][numOfPoints - 1] = command.mid(index+1, numberOf-1).toDouble();
-                
+
                  polygon << QPoint(arrayXY[0][numOfPoints - 1], arrayXY[1][numOfPoints - 1]);
 
                  p.drawPolyline(polygon);
-	}
+        }
         else if(getMethodName(command) == "ellipse")
-	{
-		index = command.indexOf("(",0);
-		indexOfSimbol = command.indexOf(",", index);
-		numberOf = indexOfSimbol - index;
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
                 x1 = command.mid(index+1, numberOf-1).toInt(0,10);
-		
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
                 y1 = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
                 int eWidth = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(")", index+1);
-		numberOf = indexOfSimbol - index;
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(")", index+1);
+                numberOf = indexOfSimbol - index;
                 int eHeight = command.mid(index+1, numberOf-1).toInt(0,10);
 
                 p.drawEllipse(x1 - eWidth, y1 - eHeight, 2*eWidth, 2*eHeight);
-	}
+        }
         else if(getMethodName(command) == "fillellipse")
-	{
-		index = command.indexOf("(",0);
-		indexOfSimbol = command.indexOf(",", index);
-		numberOf = indexOfSimbol - index;
-		x = command.mid(index+1, numberOf-1).toInt(0,10);
-		
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		y = command.mid(index+1, numberOf-1).toInt(0,10);
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
+                x = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		x1 = command.mid(index+1, numberOf-1).toInt(0,10);
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                y = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(")", index+1);
-		numberOf = indexOfSimbol - index;
-		y1 = command.mid(index+1, numberOf-1).toInt(0,10);
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                x1 = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(")", index+1);
+                numberOf = indexOfSimbol - index;
+                y1 = command.mid(index+1, numberOf-1).toInt(0,10);
 
                 QPainterPath myPath;
-		myPath.addEllipse(x-x1, y-y1, 2*x1, 2*y1);
+                myPath.addEllipse(x-x1, y-y1, 2*x1, 2*y1);
                 QBrush brush;
                 brush.setColor(fillBrush->color());
                 brush.setStyle(fillBrush->style());
                 p.fillPath(myPath, brush);
-	} 
-        else if (getMethodName(command) == "image")
+        }
+        else if(getMethodName(command) == "image")
         {
                 index = command.indexOf("(",0);
                 indexOfSimbol = command.indexOf(",", index);
@@ -411,29 +419,29 @@ void graphics::processCommand(QString  command)
                 p.drawImage(x1, y1, image);
         }
         else if(getMethodName(command) == "line")
-	{
-		index = command.indexOf("(",0);
-		indexOfSimbol = command.indexOf(",", index);
-		numberOf = indexOfSimbol - index;
-		x = command.mid(index+1, numberOf-1).toInt(0,10);
-		
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		y = command.mid(index+1, numberOf-1).toInt(0,10);
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
+                x = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		x1 = command.mid(index+1, numberOf-1).toInt(0,10);
-	
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(")", index+1);
-		numberOf = indexOfSimbol - index;
-		y1 = command.mid(index+1, numberOf-1).toInt(0,10);
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                y = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		p.drawLine(x, y, x1,y1);
-	}
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                x1 = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(")", index+1);
+                numberOf = indexOfSimbol - index;
+                y1 = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                p.drawLine(x, y, x1,y1);
+        }
         else if(getMethodName(command) == "lineto")
         {
                 index = command.indexOf("(",0);
@@ -451,7 +459,7 @@ void graphics::processCommand(QString  command)
                 x1 = x;
                 y1 = y;
         }
-        else  if(getMethodName(command) == "moveto")
+        else if(getMethodName(command) == "moveto")
         {
                 index = command.indexOf("(",0);
                 indexOfSimbol = command.indexOf(",", index);
@@ -463,73 +471,73 @@ void graphics::processCommand(QString  command)
                 numberOf = indexOfSimbol - index;
                 y1 = command.mid(index+1, numberOf-1).toInt(0,10);
         }
-        else if (getMethodName(command) == "outtext")
-	{
-		index = command.indexOf("\"", 0);
-		indexOfSimbol = command.indexOf("\"", index+ 1);
-		numberOf = indexOfSimbol - index;
-		methodText = command.mid(index+1, numberOf-1);
+        else if(getMethodName(command) == "outtext")
+        {
+                index = command.indexOf("\"", 0);
+                indexOfSimbol = command.indexOf("\"", index+ 1);
+                numberOf = indexOfSimbol - index;
+                methodText = command.mid(index+1, numberOf-1);
 
                 p.drawText(x1, y1, methodText);
-	}
-        else if (getMethodName(command) == "outtextxy")
-	{
-		QString oneSimbol;
- 		p.setFont(QFont(textFont, textSize));
+        }
+        else if(getMethodName(command) == "outtextxy")
+        {
+                QString oneSimbol;
+                p.setFont(QFont(textFont, textSize));
 
-		index = command.indexOf("(",0);
-		indexOfSimbol = command.indexOf(",", index);
-		numberOf = indexOfSimbol - index;
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
                 x1 = command.mid(index+1, numberOf-1).toInt(0,10);
-		
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
                 y1 = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = command.indexOf("\"", 0);
-		indexOfSimbol = command.indexOf("\"", index+ 1);
-		numberOf = indexOfSimbol - index;
-		methodText = command.mid(index+1, numberOf-1);
+                index = command.indexOf("\"", 0);
+                indexOfSimbol = command.indexOf("\"", index+ 1);
+                numberOf = indexOfSimbol - index;
+                methodText = command.mid(index+1, numberOf-1);
 
-		switch(textDirection)
-		{
+                switch(textDirection)
+                {
                         case 0: p.drawText(x1, y1, methodText); break;
-			case 1:
-				for(int i = 0; i <= methodText.length(); i++)
-				{
-					oneSimbol = methodText.mid(i, 1);
+                        case 1:
+                                for(int i = 0; i <= methodText.length(); i++)
+                                {
+                                        oneSimbol = methodText.mid(i, 1);
                                         p.drawText(x1, y1, oneSimbol);
                                         y1 += textSize;
-				}
+                                }
                 }
-	}
+        }
         else if(getMethodName(command) == "pieslice")
-	{
-		index = command.indexOf("(",0);
-		indexOfSimbol = command.indexOf(",", index);
-		numberOf = indexOfSimbol - index;
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
                 x1 = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
                 y1 = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		stAngle = command.mid(index+1, numberOf-1).toInt(0,10) / 2;
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                stAngle = command.mid(index+1, numberOf-1).toInt(0,10) / 2;
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		endAngle = command.mid(index+1, numberOf-1).toInt(0,10);
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                endAngle = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(")", index+1);
-		numberOf = indexOfSimbol - index;
-		r = command.mid(index+1, numberOf-1).toInt(0,10);
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(")", index+1);
+                numberOf = indexOfSimbol - index;
+                r = command.mid(index+1, numberOf-1).toInt(0,10);
 
 
                 QPainterPath myPath;
@@ -543,22 +551,22 @@ void graphics::processCommand(QString  command)
                 brush.setColor(fillBrush->color());
                 brush.setStyle(fillBrush->style());
                 p.fillPath(myPath, brush);
-	}
+        }
         else if(getMethodName(command) == "putpixel")
-	{
-		index = command.indexOf("(",0);
-		indexOfSimbol = command.indexOf(",", index);
-		numberOf = indexOfSimbol - index;
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
                 x1 = command.mid(index+1, numberOf-1).toInt(0,10);
-		
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(")", index);
-		numberOf = indexOfSimbol - index;
+
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(")", index);
+                numberOf = indexOfSimbol - index;
                 y1 = command.mid(index+1, numberOf-1).toInt(0,10);
 
                 p.drawPoint(x1, y1);
-	}
-        else if (getMethodName(command) == "rectangle")
+        }
+        else if(getMethodName(command) == "rectangle")
         {
                 index = command.indexOf("(",0);
                 indexOfSimbol = command.indexOf(",", index);
@@ -582,7 +590,7 @@ void graphics::processCommand(QString  command)
 
                 p.drawRect(x, y, x1-x, y1-y);
         }
-        else if (getMethodName(command) == "save")
+        else if(getMethodName(command) == "save")
         {/*
             QByteArray bytes;
             QBuffer buffer(&bytes);
@@ -598,6 +606,10 @@ void graphics::processCommand(QString  command)
             myPainter.begin(&bufferPix);
             myPainter.drawPixmap(0, 0, pixBG);
             myPainter.drawPixmap(0, 0, pix);
+            if (isTurtleGrpahics)
+            {
+                myPainter.drawPixmap(*turtlePosition, turtlePix);
+            }
 
             index = command.indexOf("\"", 0);
             indexOfSimbol = command.indexOf("\"", index+ 1);
@@ -607,7 +619,7 @@ void graphics::processCommand(QString  command)
             bufferPix.save(methodText, "PNG", 100);
             myPainter.end();
         }
-        else if (getMethodName(command) == "setbkcolor")
+        else if(getMethodName(command) == "setbkcolor")
         {
                 index = command.indexOf("(", 0);
                 indexOfSimbol = command.indexOf(")", index+ 1);
@@ -626,16 +638,16 @@ void graphics::processCommand(QString  command)
                 setCurentBGColor(curentBGColor);
                 BGColorWasChanged = true;
         }
-        else if (getMethodName(command) == "setcolor")
-	{
-		index = command.indexOf("(", 0);
-		indexOfSimbol = command.indexOf(")", index+ 1);
-		numberOf = indexOfSimbol - index;
-		curentColor = command.mid(index+1, numberOf-1).toInt(0,10);
+        else if(getMethodName(command) == "setcolor")
+        {
+                index = command.indexOf("(", 0);
+                indexOfSimbol = command.indexOf(")", index+ 1);
+                numberOf = indexOfSimbol - index;
+                curentColor = command.mid(index+1, numberOf-1).toInt(0,10);
 
                 setCurentColor(curentColor);
         }
-        else if (getMethodName(command) == "setfillcolor")
+        else if(getMethodName(command) == "setfillcolor")
         {
                 index = command.indexOf("(", 0);
                 indexOfSimbol = command.indexOf(")", index+ 1);
@@ -644,7 +656,7 @@ void graphics::processCommand(QString  command)
 
                 setCurentFillColor(curentFillColor);
         }
-        else if (getMethodName(command) == "setfillstyle")
+        else if(getMethodName(command) == "setfillstyle")
         {
                 index = command.indexOf("(", 0);
                 indexOfSimbol = command.indexOf(")", index+ 1);
@@ -653,49 +665,189 @@ void graphics::processCommand(QString  command)
 
                 setFillPatern(fillPatern);
         }
-        else if (getMethodName(command) == "setlinestyle")
-	{
-		index = command.indexOf("(",0);
-		indexOfSimbol = command.indexOf(",", index);
-		numberOf = indexOfSimbol - index;
-		lineStyle = command.mid(index+1, numberOf-1).toInt(0,10);
+        else if(getMethodName(command) == "setlinestyle")
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
+                lineStyle = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(")", index+1);
-		numberOf = indexOfSimbol - index;
-		lineThickness= command.mid(index+1, numberOf-1).toInt(0,10);
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(")", index+1);
+                numberOf = indexOfSimbol - index;
+                lineThickness= command.mid(index+1, numberOf-1).toInt(0,10);
 
                 pen.setWidth(lineThickness);
                 setLineStyle(lineStyle);
-	}
-        else if (getMethodName(command) == "settextstyle")
-	{
-		index = command.indexOf("(",0);
-		indexOfSimbol = command.indexOf(",", index);
-		numberOf = indexOfSimbol - index;
-		textFont = command.mid(index+1, numberOf-1);
+        }
+        else if(getMethodName(command) == "settextstyle")
+        {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(",", index);
+                numberOf = indexOfSimbol - index;
+                textFont = command.mid(index+1, numberOf-1);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(",", index+1);
-		numberOf = indexOfSimbol - index;
-		textDirection = command.mid(index+1, numberOf-1).toInt(0,10);
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(",", index+1);
+                numberOf = indexOfSimbol - index;
+                textDirection = command.mid(index+1, numberOf-1).toInt(0,10);
 
-		index = indexOfSimbol;
-		indexOfSimbol = command.indexOf(")", index);
-		numberOf = indexOfSimbol - index;
-		textSize = command.mid(index+1, numberOf-1).toInt(0,10);
-	}
-        update();
+                index = indexOfSimbol;
+                indexOfSimbol = command.indexOf(")", index);
+                numberOf = indexOfSimbol - index;
+                textSize = command.mid(index+1, numberOf-1).toInt(0,10);
+        }
+        //***********-Turtle graphics-********************************
+        else if(getMethodName(command) == "hidetourtle")
+        {
+            turtlePix.fill(Qt::transparent);
+            isTurtleGrpahics = false;
+        }
+        else if(getMethodName(command) == "showtourtle")
+        {
+            isTurtleGrpahics = true;
+            QImage turtleImage(":/images/turtleMini");
+            turtlePix = QPixmap(turtleImage.size());
+            turtlePix.fill(Qt::transparent);
+            QPainter painter;
+            painter.begin(&turtlePix);
+            painter.drawImage(0, 0, turtleImage);
+            painter.end();
+        }
+        else if(getMethodName(command) == "turtlepaint")
+        {
+            isTurtlePaint = true;
+
+            x1 = turtlePosition->x();
+            y1 = turtlePosition->y();
+        }
+        else if(getMethodName(command) == "turtlepaintnot")
+        {
+            isTurtlePaint = false;
+        }
+        else if(getMethodName(command) == "turtlegoforward")
+        {
+            int stepLenhgt = 0;
+
+            index = command.indexOf("(",0);
+            indexOfSimbol = command.indexOf(")", index);
+            numberOf = indexOfSimbol - index;
+            stepLenhgt = command.mid(index+1, numberOf-1).toInt(0,10);
+
+
+            x = x1 + (int)(stepLenhgt * sin(PI * turtleRotateAngle / 180));
+            y = y1 - (int)(stepLenhgt * cos(PI * turtleRotateAngle / 180));
+            //turtleRotateAngle = 0;
+
+            qDebug() << QVariant(x).toString();
+            qDebug() << QVariant(y).toString();
+            qDebug() << QVariant(turtleRotateAngle).toString();
+
+            if (isTurtleGrpahics)
+            {
+                turtlePosition->setX(x);
+                turtlePosition->setY(y);
+                if(isTurtlePaint)
+                {
+                    p.drawLine(x1, y1, x, y);
+
+                    x1 = x;
+                    y1 = y;
+                }
+            }
+        }
+        else if(getMethodName(command) == "turtlegoback")
+        {
+            int stepLenhgt = 0;
+
+            index = command.indexOf("(",0);
+            indexOfSimbol = command.indexOf(")", index);
+            numberOf = indexOfSimbol - index;
+            stepLenhgt = command.mid(index+1, numberOf-1).toInt(0,10);
+
+            x = x1 + (int)(stepLenhgt * sin(PI * turtleRotateAngle / 180));
+            y = y1 - (int)(stepLenhgt * cos(PI * turtleRotateAngle / 180));
+            //turtleRotateAngle = 0;
+
+            qDebug() << QVariant(x).toString();
+            qDebug() << QVariant(y).toString();
+
+            if (isTurtleGrpahics)
+            {
+                turtlePosition->setX(x1 - x);
+                turtlePosition->setY(y1 - y);
+                if(isTurtlePaint)
+                {
+                    p.drawLine(x1, y1, x, y);
+
+                    x1 = x;
+                    y1 = y;
+                }
+            }
+        }
+        else if(getMethodName(command) == "turtleright")
+        {
+            if (isTurtleGrpahics)
+            {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(")", index);
+                numberOf = indexOfSimbol - index;
+                turtleRotateAngle += command.mid(index+1, numberOf-1).toInt(0,10);
+
+
+                QPainter p(&turtlePix);
+                QSize size = turtlePix.size();
+                p.translate(size.height()/2,size.height()/2);
+                // Rotate the painter 90 degrees
+                p.rotate(turtleRotateAngle);
+                // Set origo back to upper left corner
+                p.translate(-size.height()/2,-size.height()/2);
+                // Draw your original pixmap on it
+                p.drawPixmap(0, 0, turtlePix);
+            }
+        }
+        else if(getMethodName(command) == "turtleleft")
+        {
+            if (isTurtleGrpahics)
+            {
+                index = command.indexOf("(",0);
+                indexOfSimbol = command.indexOf(")", index);
+                numberOf = indexOfSimbol - index;
+                turtleRotateAngle += -command.mid(index+1, numberOf-1).toInt(0,10);
+
+                //turtlePix.fill(Qt::transparent);
+                QPainter p(&turtlePix);
+                QSize size = turtlePix.size();
+                p.translate(size.height()/2,size.height()/2);
+                // Rotate the painter 90 degrees
+                p.rotate(turtleRotateAngle);
+                // Set origo back to upper left corner
+                p.translate(-size.height()/2,-size.height()/2);
+                // Draw your original pixmap on it
+                p.drawPixmap(0, 0, turtlePix);
+            }
+        }
+    update();
 }
 
 void graphics::paintEvent(QPaintEvent * /*event*/)
 {
         QPainter painter(this);
+
         if (BGColorWasChanged)
+        {
             painter.drawPixmap(0, 0, pixBG);
+        }
         else
+        {
             BGColorWasChanged = false;
+        }
         painter.drawPixmap( 0 , 0 , pix);
+        if (isTurtleGrpahics)
+        {
+            painter.drawPixmap(turtlePosition->x() - turtlePix.size().width() / 2, turtlePosition->y() - turtlePix.height() / 2, turtlePix);
+            qDebug() << "turtle";
+        }
 }
 
 void graphics::createPixmap(int width, int height)
@@ -714,10 +866,10 @@ void graphics::creatBGPixmap(int width, int height)
 }
 QString graphics::getMethodName(QString command)
 {
-	QString methodName;
-	index = command.indexOf("(",0);
-	methodName = command.left(index);
-	return methodName;
+        QString methodName;
+        index = command.indexOf("(",0);
+        methodName = command.left(index);
+        return methodName;
 }
 
 ///**************set current BG color***************************************************
@@ -1072,8 +1224,12 @@ void graphics::setLineStyle(int lineStyle)
                                     p.setPen(pen);				update();break;
     }
 }
-//***************************************
+/***************************************
 void graphics::mouseMoveEvent(QMouseEvent *mouse)
 {
-    mouseCoordinatsLabel->setText("x : " + QVariant(mouse->x()).toString() + "\t" + "y : " + QVariant(mouse->y()).toString());
+    if (0 <= mouse->x() && (this->width >= mouse->x()) && ((0 <= mouse->y()) && (this->height >= mouse->y())))
+    {
+        mouseCoordinatsLabel->setText("x : " + QVariant(mouse->x()).toString() + "\t" + "y : " + QVariant(mouse->y()).toString());
+    }
 }
+*/

@@ -25,6 +25,7 @@
 int main(int argc, char ** argv) 
 {
 	QApplication a(argc, argv);
+        Q_INIT_RESOURCE(images);
 	graphics * mw = new graphics();
 	mw->show();
 	a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
