@@ -698,14 +698,16 @@ void graphics::processCommand(QString  command)
                 textSize = command.mid(index+1, numberOf-1).toInt(0,10);
         }
         //***********-Turtle graphics-********************************
-        else if(getMethodName(command) == "hidetourtle")
+        else if(getMethodName(command) == "hideturtle")
         {
             turtlePix.fill(Qt::transparent);
             isTurtleGrpahics = false;
+
         }
-        else if(getMethodName(command) == "showtourtle")
+        else if(getMethodName(command) == "showturtle")
         {
             isTurtleGrpahics = true;
+
             QImage turtleImage(":/images/turtleMini");
             turtlePix = QPixmap(turtleImage.size());
             turtlePix.fill(Qt::transparent);
@@ -713,6 +715,10 @@ void graphics::processCommand(QString  command)
             painter.begin(&turtlePix);
             painter.drawImage(0, 0, turtleImage);
             painter.end();
+
+            x1 = turtlePosition->x();
+            y1 = turtlePosition->y();
+            turtleRotateAngle = 0;
         }
         else if(getMethodName(command) == "turtlepaint")
         {
@@ -750,10 +756,9 @@ void graphics::processCommand(QString  command)
                 if(isTurtlePaint)
                 {
                     p.drawLine(x1, y1, x, y);
-
-                    x1 = x;
-                    y1 = y;
                 }
+                x1 = x;
+                y1 = y;
             }
         }
         else if(getMethodName(command) == "turtlegoback")
@@ -765,8 +770,8 @@ void graphics::processCommand(QString  command)
             numberOf = indexOfSimbol - index;
             stepLenhgt = command.mid(index+1, numberOf-1).toInt(0,10);
 
-            x = x1 + (int)(stepLenhgt * sin(PI * turtleRotateAngle / 180));
-            y = y1 - (int)(stepLenhgt * cos(PI * turtleRotateAngle / 180));
+            x = x1 - (int)(stepLenhgt * sin(PI * turtleRotateAngle / 180));
+            y = y1 + (int)(stepLenhgt * cos(PI * turtleRotateAngle / 180));
             //turtleRotateAngle = 0;
 
             qDebug() << QVariant(x).toString();
@@ -774,57 +779,68 @@ void graphics::processCommand(QString  command)
 
             if (isTurtleGrpahics)
             {
-                turtlePosition->setX(x1 - x);
-                turtlePosition->setY(y1 - y);
+                turtlePosition->setX(/*x1 - */x);
+                turtlePosition->setY(/*y1 - */y);
                 if(isTurtlePaint)
                 {
                     p.drawLine(x1, y1, x, y);
 
-                    x1 = x;
-                    y1 = y;
                 }
+                x1 = x;
+                y1 = y;
             }
         }
         else if(getMethodName(command) == "turtleright")
         {
             if (isTurtleGrpahics)
             {
+                int angle;
                 index = command.indexOf("(",0);
                 indexOfSimbol = command.indexOf(")", index);
                 numberOf = indexOfSimbol - index;
-                turtleRotateAngle += command.mid(index+1, numberOf-1).toInt(0,10);
+                angle = command.mid(index+1, numberOf-1).toInt(0,10);
 
-
-                QPainter p(&turtlePix);
+                QPixmap tmpPix(turtlePix.width(), turtlePix.height());
+                tmpPix.fill(Qt::transparent);
+                QPainter p(&tmpPix);
                 QSize size = turtlePix.size();
                 p.translate(size.height()/2,size.height()/2);
                 // Rotate the painter 90 degrees
-                p.rotate(turtleRotateAngle);
+                p.rotate(angle);
                 // Set origo back to upper left corner
                 p.translate(-size.height()/2,-size.height()/2);
                 // Draw your original pixmap on it
                 p.drawPixmap(0, 0, turtlePix);
+                turtlePix = tmpPix;
+
+                turtleRotateAngle += angle;
             }
         }
         else if(getMethodName(command) == "turtleleft")
         {
             if (isTurtleGrpahics)
             {
+                int angle;
+
                 index = command.indexOf("(",0);
                 indexOfSimbol = command.indexOf(")", index);
                 numberOf = indexOfSimbol - index;
-                turtleRotateAngle += -command.mid(index+1, numberOf-1).toInt(0,10);
+                angle = command.mid(index+1, numberOf-1).toInt(0,10);
 
-                //turtlePix.fill(Qt::transparent);
-                QPainter p(&turtlePix);
+                QPixmap tmpPix(turtlePix.width(), turtlePix.height());
+                tmpPix.fill(Qt::transparent);
+                QPainter p(&tmpPix);
                 QSize size = turtlePix.size();
                 p.translate(size.height()/2,size.height()/2);
                 // Rotate the painter 90 degrees
-                p.rotate(turtleRotateAngle);
+                p.rotate(-angle);
                 // Set origo back to upper left corner
                 p.translate(-size.height()/2,-size.height()/2);
                 // Draw your original pixmap on it
                 p.drawPixmap(0, 0, turtlePix);
+                turtlePix = tmpPix;
+
+                turtleRotateAngle -= angle;
             }
         }
     update();
