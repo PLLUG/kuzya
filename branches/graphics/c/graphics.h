@@ -141,8 +141,15 @@ void setfillstyle(int patern, int color);
 void setlinestyle(int linestyle, unsigned upattern, int thickness);
 void setlinestyle(LINESTYLE linestyle, unsigned upattern, int thickness);
 void settextstyle(char* font, int direction, int size);
-///********************************************************************
-
+///****************-Turtle graphics functions-******************************************
+void hideturtle(void);
+void showturtle(void);
+void turtlepaint(void);
+void turtlepaintnot(void);
+void turtlegoforward(int step);
+void turtlegoback(int step);
+void turtleright(int angle);
+void turtleleft(int angle);
 //*********************************************************************
 ///***************arc********************************
 void arc(int x, int y, int stAngel, int endAngle, int radius)
@@ -931,4 +938,52 @@ void settextstyle(char *font, int direction, int size)
 {
 	sprintf(KGNS::command, "settextstyle(%s,%i,%i);\n", font, direction, size);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	
+}
+///************-This function hide turtle-******************
+void hideturtle(void)
+{
+	sprintf(KGNS::command, "hideturtle();\n");
+	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  
+}
+///************-This function show turtle-******************
+void showturtle(void)
+{
+	sprintf(KGNS::command, "showturtle();\n");
+	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  
+}
+///************-This function move turtle back for seted steps-******************
+void turtlegoback(int step)
+{
+	sprintf(KGNS::command, "turtlegoback(%i);\n", step);
+	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  
+}
+///************-This function move turtle forward for seted steps-******************
+void turtlegoforward(int step)
+{
+	sprintf(KGNS::command, "turtlegoforward(%i);\n", step);
+	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  
+}
+///************-This function turn turtle left for seted angle-******************
+void turtleleft(int angle)
+{
+	sprintf(KGNS::command, "turtleleft(%i);\n", angle);
+	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  
+}
+///************-This function let your turtle paint-******************
+void turtlepaint(void)
+{
+	sprintf(KGNS::command, "turtlepaint();\n");
+	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  
+}
+///************-This function let your turtle paint not-******************
+void turtlepaintnot(void)
+{
+	sprintf(KGNS::command, "turtlepaintnot();\n");
+	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  
+}
+///************-This function turn turtle right for seted angle-******************
+void turtleright(int angle)
+{
+	sprintf(KGNS::command, "turtleright(%i);\n", angle);
+	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  
 }
