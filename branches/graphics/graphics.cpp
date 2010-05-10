@@ -743,12 +743,12 @@ void graphics::processCommand(QString  command)
 
             x = x1 + (int)(stepLenhgt * sin(PI * turtleRotateAngle / 180));
             y = y1 - (int)(stepLenhgt * cos(PI * turtleRotateAngle / 180));
-            //turtleRotateAngle = 0;
+            /*turtleRotateAngle = 0;
 
             qDebug() << QVariant(x).toString();
             qDebug() << QVariant(y).toString();
             qDebug() << QVariant(turtleRotateAngle).toString();
-
+            */
             if (isTurtleGrpahics)
             {
                 turtlePosition->setX(x);
@@ -772,11 +772,11 @@ void graphics::processCommand(QString  command)
 
             x = x1 - (int)(stepLenhgt * sin(PI * turtleRotateAngle / 180));
             y = y1 + (int)(stepLenhgt * cos(PI * turtleRotateAngle / 180));
-            //turtleRotateAngle = 0;
+            /*turtleRotateAngle = 0;
 
             qDebug() << QVariant(x).toString();
             qDebug() << QVariant(y).toString();
-
+            */
             if (isTurtleGrpahics)
             {
                 turtlePosition->setX(/*x1 - */x);
@@ -862,7 +862,7 @@ void graphics::paintEvent(QPaintEvent * /*event*/)
         if (isTurtleGrpahics)
         {
             painter.drawPixmap(turtlePosition->x() - turtlePix.size().width() / 2, turtlePosition->y() - turtlePix.height() / 2, turtlePix);
-            qDebug() << "turtle";
+            //qDebug() << "turtle";
         }
 }
 
