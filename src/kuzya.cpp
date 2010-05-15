@@ -33,6 +33,7 @@
 #include <QPrintDialog>
 #include <QColor>
 
+#include "lexerloader.h"
 #include "gotolinedialog.h"
 #include "finddialog.h"
 #include "replacedialog.h"
@@ -115,6 +116,8 @@ Kuzya::Kuzya(QWidget *parent)
 
         QFont font("Courier", 10);
 
+		cppLexer = new QsciLexerCPP(this);
+/*
         textEditor->setFont(font);
 
         cppLexer = new QsciLexerCPP(this);
@@ -125,8 +128,10 @@ Kuzya::Kuzya(QWidget *parent)
         fortranLexer->setFont(font);
         javaLexer = new QsciLexerJava(this);
         javaLexer->setFont(font);
+*/
+currentLexer = new LexerLoader(this,"normal");
        
-        textEditor->setLexer();
+        textEditor->setLexer(currentLexer);
 
         textEditor->setBraceMatching(QsciScintilla::SloppyBraceMatch);
         textEditor->setMatchedBraceBackgroundColor(QColor(200, 100, 100));
@@ -269,12 +274,12 @@ void Kuzya::setAutoCompletionEnabled(bool b)
 
 
 ///***********************************************************************************************************///
-
+/*
 void Kuzya::loadPascalLexer(void)
 {
         QsciLexerPascal *pascalLexer = new QsciLexerPascal(this);
         textEditor->setLexer(pascalLexer);
-}
+}*/
 ///***********************************************************************************************************///
 void Kuzya::toggleFoldsActionEnabled(bool b)
 {
@@ -286,11 +291,11 @@ QsciScintilla* Kuzya::getTextEditorPointer(void)
         return textEditor;
 }
 ///***********************************************************************************************************///
-void Kuzya::loadCPPLexer(void)
+/*void Kuzya::loadCPPLexer(void)
 {
         cppLexer = new QsciLexerCPP(this);
         textEditor->setLexer(cppLexer);
-}
+}*/
 ///***********************************************************************************************************///
 void Kuzya::setEditorFont(QFont font)
 {
@@ -677,13 +682,15 @@ void Kuzya::refreshProfileSettings()
    #endif
         unloadTemplates();
         loadTemplates(path+language+"/"+language+".ini");
-
+		textEditor->setLexer(0);
+setHighlighting(language,settings->currentLexerColorSchemeFileName());
+/*
         if ("pascal" == language) currentLexer = pascalLexer;
         else if ("c++" == language) currentLexer = cppLexer;
         else if ("fortran" == language) currentLexer = fortranLexer;
         else if ("java" == language) currentLexer = javaLexer;
         else currentLexer = 0;
-        textEditor->setLexer(currentLexer);
+        textEditor->setLexer(currentLexer);*/
     }
     else compiler->loadProfile("","");
 
@@ -1373,4 +1380,31 @@ void Kuzya::dropEvent(QDropEvent *event)
 void Kuzya::slotModificationChanged(bool modified)
 {
     if (modified) srcRecompiled = false;
+}
+void Kuzya::setHighlighting(QString language,QString fileName)
+{
+    if (0!=currentLexer)
+    {
+         delete currentLexer;
+    }
+// temporary!!!
+    QString temp;
+    if(language=="c++") temp="cpp";
+    else temp=language;
+    currentLexer=new LexerLoader(this,false,temp);
+    //currentLexer=new LexerLoader(this,false,language);
+
+    //currentLexer=new LexerLoader(this,false,"cpp");
+    currentLexer->setStylingFileName(fileName);
+    textEditor->setLexer(currentLexer);
+//  temporary!!!
+}
+QString Kuzya::currentProgramingLanguage(void)
+{
+  // temporary!!!
+    QString temp;
+    if(language=="c++") temp="cpp";
+    else temp=language;
+  // temporary!!!
+    return temp;//language;
 }
