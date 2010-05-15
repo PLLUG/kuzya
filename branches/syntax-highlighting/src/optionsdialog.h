@@ -54,6 +54,7 @@ public:
         QString readCompilerLocation(QString lang, QString comp);
         QString readCompilerOptions(QString lang, QString comp);
 
+		QString currentLexerColorSchemeFileName();
 public slots:
 	void slotCommOptions(void);
 private slots:
@@ -75,22 +76,39 @@ private slots:
         void slotDefaultCompiler();
         void slotResetCompilerOptions();
 
+        void slotChangeFgColor();
+        void slotChangeBgColor();
+        void slotCleanBgColor();
+        void slotUpdate_tEStylesList(QString,bool);
+        void slotUpdateColorSchemesBox();
+        void slotUpdateLexerLanguageBox();
+        void slotChangeColorScheme(int);
+        void slotChangeLexerLenguage(int);
+        void slotLoadCurrentStyleItemProperties();
+        void slotSetDefaultBgColor();
+        void slotSetBoldStyle(bool);
+        void slotSetItalicStyle(bool);
+        void slotSetFontSize(QString);
+        void slotSetFontName(QFont);
 private:
 	QTranslator* trans_ua;
 	QTranslator* trans_en;
-        Kuzya* mw;
+    Kuzya* mw;
 	QFile file;
-        QSettings *settings;
+    QSettings *settings;
 	QsciScintilla* textEditor;
 	QTranslator translator;
 	QFont font;
-        QDir stylesDir;
-        QStringList filters;
+    QDir stylesDir;
+	QDir colorSchemesDir;
+    QStringList filters;
 public:	
     bool isLineMarginVisible;
+
 	
 private:
 	
+        void saveColorSchemeProperties();
 public: 
 	
 	
