@@ -27,6 +27,7 @@
 #include <QDebug>
 #include "optionsdialog.h"
 
+ #include <QPalette>
 OptionsDialog::OptionsDialog(QWidget *parent)
  : QDialog(parent)
 {
@@ -56,20 +57,38 @@ OptionsDialog::OptionsDialog(QWidget *parent)
         connect(defaultUsePushButton, SIGNAL(clicked()), this, SLOT(slotDefaultCompiler()));
         connect(compilerResetPushButton, SIGNAL(clicked()) ,this, SLOT(slotResetCompilerOptions()));
 
+        connect(fgColorPanelBtn,SIGNAL(clicked()),this,SLOT(slotChangeFgColor()));
+        connect(bgColorPanelBtn,SIGNAL(clicked()),this,SLOT(slotChangeBgColor()));
+        connect(cleanBgColorBtn,SIGNAL(clicked()),this,SLOT(slotCleanBgColor()));
+        connect(tEColorShemeCBox,SIGNAL(currentIndexChanged(int)),this,SLOT(slotChangeColorScheme(int)));
+        connect(lexerLanguageCBox,SIGNAL(currentIndexChanged(int)),this,SLOT(slotChangeLexerLenguage(int)));
+        connect(tEStylesList,SIGNAL(itemSelectionChanged()),this,SLOT(slotLoadCurrentStyleItemProperties()));
+        connect(cleanBgColorBtn,SIGNAL(clicked()),this,SLOT(slotSetDefaultBgColor()));
+        /*connect(teFontStyle_BoldCheckBox,SIGNAL(clicked(bool)),this,SLOT(slotSetBoldStyle(bool)));
+        connect(teFontStyle_ItalicCheckBox,SIGNAL(clicked(bool)),this,SLOT(slotSetItalicStyle(bool)));*/
+        connect(teFontStyle_BoldCheckBox,SIGNAL(toggled(bool)),this,SLOT(slotSetBoldStyle(bool)));
+        connect(teFontStyle_ItalicCheckBox,SIGNAL(toggled(bool)),this,SLOT(slotSetItalicStyle(bool)));
+        //connect(tEFontSizeCBox,SIGNAL(currentIndexChanged(QString)),this,SLOT(slotSetFontSize(QString)));
+        connect(tEFontNameFCBox,SIGNAL(currentFontChanged(QFont)),this,SLOT(slotSetFontName(QFont)));
 ///-----------------------------Fonts and Colors-------------------------------------------------------
        styleCBox->addItems(QStyleFactory::keys());
        filters<<"*.qss";
        stylesDir.setNameFilters(filters);
 #ifdef WIN32
         stylesDir=QDir(QApplication::applicationDirPath()+"/../resources/qss/");
+		colorSchemesDir=(QDir(QApplication::applicationDirPath()+"/../resources/ColorSchemes/"));
 #else
         stylesDir=QDir("/usr/share/kuzya/resources/qss/");
+        //colorSchemesDir=QDir("/usr/share/kuzya/resources/ColorSchemes/");
+        colorSchemesDir=QDir("./../resources/ColorSchemes/");
 #endif
        slotUpdateSkinsCBox();
        languageComboBox->clear();
        QStringList supportedList = mw->getCurrentCompiler()->getSupportedLanguages();
        supportedList.sort();
        languageComboBox->addItems(supportedList);
+       slotUpdateColorSchemesBox();
+       //slotUpdateLexerLanguageBox();
 
 }
 void OptionsDialog::slotUpdateSkinsCBox(void)
@@ -187,6 +206,9 @@ void OptionsDialog::writeSettings(void)
                         settings->setValue("ShowIndentLine",indentLineCHB->isChecked());
                         settings->setValue("UseTabIndent",tabKeyindentCHB->isChecked());
                         settings->setValue("UseBackspaceIndent",BkspaceIndentCHB->isChecked());
+                settings->endGroup();
+                settings->beginGroup("/LexerStyle");
+                        settings->setValue("ColorSchemeFile",tEColorShemeCBox->currentText());
                 settings->endGroup();
         settings->endGroup();
 }
@@ -329,6 +351,12 @@ void OptionsDialog::readODWSettings()
                         BkspaceIndentCHB->setChecked(settings->value("UseBackspaceIndent",false).toBool());
                         textEditor->setBackspaceUnindents(BkspaceIndentCHB->isChecked());
                 settings->endGroup();
+                settings->beginGroup("/LexerStyle");
+                        if(settings->value("ColorSchemeFile","none").toString()!="none")
+                        {
+                            tEColorShemeCBox->setCurrentIndex(tEColorShemeCBox->findText(settings->value("ColorSchemeFile","none").toString()));
+                        }
+                settings->endGroup();
        settings->endGroup();
 
  ///-------------------------------------------------------------------------------------
@@ -339,6 +367,8 @@ void OptionsDialog::readODWSettings()
 ///*******showForm***********************************************************************************************
 void OptionsDialog::slotCommOptions(void)
 {
+        lexerLanguageCBox->setCurrentIndex(lexerLanguageCBox->findText(mw->currentProgramingLanguage()));
+        tEStylesList->setCurrentRow(0);
 	show();
 
 }
@@ -383,12 +413,15 @@ void OptionsDialog::slotApply(void)
 	writeSettings();
         readODWSettings();
         mw->refreshProfileSettings();
+        saveColorSchemeProperties();
+        mw->setHighlighting(mw->currentProgramingLanguage(),colorSchemesDir.absolutePath()+"/"+tEColorShemeCBox->currentText());
 }
 void OptionsDialog::slotOk(void)
 {
 	writeSettings();
 	readODWSettings();
         mw->refreshProfileSettings();
+        mw->setHighlighting(mw->currentProgramingLanguage(),colorSchemesDir.absolutePath()+"/"+tEColorShemeCBox->currentText());
         close();
 }
 void OptionsDialog::slotDefaultAll(void)
@@ -516,4 +549,358 @@ void OptionsDialog::slotResetCompilerOptions()
        settings->endGroup();
        compilerDirLineEdit->setText(location);
        compilerOptionsEdit->setPlainText(options);
+}
+void OptionsDialog::slotChangeFgColor()
+{
+    QColor color = QColorDialog::getColor();
+    /*QPalette palette = fgColorPanelBtn->palette();
+    palette .setColor( QPalette::Active, QPalette::Button,color);
+    fgColorPanelBtn->setPalette(palette);
+    fgColorPanelBtn->setAutoFillBackground( true );*/
+    //fgColorPanelBtn->setStyleSheet("* { background-color: rgb(255,125,100) }");
+    if (color.isValid()&&((tEStylesList->currentRow()!=(-1))))
+    {
+        fgColorPanelBtn->setStyleSheet("* { background-color: "+color.name() +"}");
+        tEStylesList->currentItem()->setForeground(color);
+    }
+
+}
+void OptionsDialog::slotChangeBgColor()
+{
+    QColor color = QColorDialog::getColor();
+    if (color.isValid()&&(tEStylesList->currentRow()!=(-1)))
+    {
+        bgColorPanelBtn->setStyleSheet("* { background-color: "+color.name() +"}");
+        tEStylesList->currentItem()->setBackgroundColor(color);
+    }
+
+}
+void OptionsDialog::slotCleanBgColor()
+{
+    
+    bgColorPanelBtn->setStyleSheet("* { background-color: #FFFFFF }");
+}
+void OptionsDialog::slotUpdate_tEStylesList(QString fileName, bool reloadLexerLanguagesList)
+{
+    tEStylesList->clear();
+    QDomDocument domDoc;
+    QFile file(colorSchemesDir.absolutePath()+"/"+fileName);      //file with lexer's preferences
+    if (!file.open(QIODevice::ReadOnly))
+    {
+         QMessageBox msgBox;
+         msgBox.setIcon(QMessageBox::Warning);
+         msgBox.setText("<b>Error</b>");
+         msgBox.setInformativeText("File"+ fileName + "is mising.\nPlease reinstall application!");
+         msgBox.setStandardButtons(QMessageBox::Ok);
+         msgBox.setDefaultButton(QMessageBox::Ok);
+         msgBox.exec();
+         return;
+    }
+    if (!domDoc.setContent(&file))  //sets file as the content of the document
+    {
+         QMessageBox msgBox;
+         msgBox.setIcon(QMessageBox::Warning);
+         msgBox.setText("<b>Error</b>");
+         msgBox.setInformativeText("File "+fileName+" is corrupted.\nPlease reinstall application!");
+         msgBox.setStandardButtons(QMessageBox::Ok);
+         msgBox.setDefaultButton(QMessageBox::Ok);
+         msgBox.exec();
+         file.close();
+         return;
+     }
+     file.close();
+
+     QDomElement domElement = domDoc.documentElement();
+     QDomNode domNode = domElement.firstChild();
+     domNode=domNode.nextSibling();
+     domNode=domNode.firstChild();
+     //qDebug()<<domNode.toElement().tagName();
+     //qDebug()<<domNode.toElement().attribute("name","");
+     //qDebug()<<"**********"<<languageNameStr;
+     if (true==reloadLexerLanguagesList)
+     {
+        disconnect(lexerLanguageCBox,SIGNAL(currentIndexChanged(int)),this,SLOT(slotChangeLexerLenguage(int)));
+        lexerLanguageCBox->clear();
+        while(!domNode.isNull())
+        {
+           lexerLanguageCBox->addItem(domNode.toElement().attribute("name",""));
+           domNode=domNode.nextSibling();
+        }
+
+        connect(lexerLanguageCBox,SIGNAL(currentIndexChanged(int)),this,SLOT(slotChangeLexerLenguage(int)));
+     }
+     domNode = domElement.firstChild();
+     domNode=domNode.nextSibling();
+     domNode=domNode.firstChild();
+     while((lexerLanguageCBox->currentText()!=domNode.toElement().attribute("name",""))&&(!domNode.isNull()))
+     {
+         //qDebug()<<domNode.toElement().attribute("name","");
+         domNode=domNode.nextSibling();
+     }
+     if(lexerLanguageCBox->currentText()!=domNode.toElement().attribute("name",""))
+     {
+         QMessageBox msgBox;
+         msgBox.setIcon(QMessageBox::Warning);
+         msgBox.setText("<b>Error</b>");
+         msgBox.setInformativeText("File "+fileName+"is corrupted.\nPlease reinstall application!");
+         msgBox.setStandardButtons(QMessageBox::Ok);
+         msgBox.setDefaultButton(QMessageBox::Ok);
+         msgBox.exec();
+         file.close();
+         return;
+     }
+     QDomNode styleNode = domNode.namedItem("LexerStyle");
+     QDomElement wordStyleDomElement = styleNode.firstChildElement();
+
+ //    tEFontSizeCBox->setCurrentIndex(tEFontSizeCBox->findText(styleNode.toElement().attribute("defaultFontSize","9")));
+
+     tEFontNameFCBox->setCurrentFont(QFont(styleNode.toElement().attribute("defaultFontName","")));
+     while(!wordStyleDomElement.isNull())
+     {
+         QListWidgetItem *item = new QListWidgetItem;
+         QFont font;
+         QFontDatabase fontDataBase;
+         item->setText(wordStyleDomElement.attribute("name",""));
+
+         if(fontDataBase.families().contains(wordStyleDomElement.attribute("fontName","no")))
+         {
+             font=QFont(wordStyleDomElement.attribute("fontName","Monospace"));
+         }
+         else
+         {
+             font=QFont(styleNode.toElement().attribute("defaultFontName","Monospace"));
+             font.setPointSize(styleNode.toElement().attribute("defaultFontSize","9").toInt());
+         }
+         if (""!=wordStyleDomElement.attribute("fontSize",styleNode.toElement().attribute("defaultFontSize","9")))
+         {
+             font.setPointSize(wordStyleDomElement.attribute("fontSize",styleNode.toElement().attribute("defaultFontSize","9")).toInt());
+         }
+         else
+         {
+              font.setPointSize(styleNode.toElement().attribute("defaultFontSize","9").toInt());
+         }
+         if (1==wordStyleDomElement.attribute("fontStyle","-1").toInt())
+         {
+             //= item->font();
+             font.setBold(true);
+             item->setFont(font);
+         }
+         if (2==wordStyleDomElement.attribute("fontStyle","-1").toInt())
+         {
+             //item->font();
+             font.setItalic(true);
+             item->setFont(font);
+         }
+         item->setForeground(QColor(wordStyleDomElement.attribute("fgColor","#808080")));
+         item->setBackgroundColor(QColor(wordStyleDomElement.attribute("bgColor","#FFFFFF")));
+         tEStylesList->addItem(item);
+         wordStyleDomElement=wordStyleDomElement.nextSiblingElement();
+         //qDebug()<<wordStyleDomElement.attribute("name","");
+     }
+
+
+}
+void OptionsDialog::slotUpdateColorSchemesBox()
+{
+    tEColorShemeCBox->clear();
+    tEColorShemeCBox->addItems(colorSchemesDir.entryList(colorSchemesDir.nameFilters(),QDir::Files,QDir::Name));
+    slotUpdate_tEStylesList(tEColorShemeCBox->currentText(),true);
+
+}
+void OptionsDialog::slotChangeColorScheme(int index)
+{
+
+    slotUpdate_tEStylesList(tEColorShemeCBox->itemText(index),true);
+    lexerLanguageCBox->setCurrentIndex(lexerLanguageCBox->findText(mw->currentProgramingLanguage()));
+
+    if(tEStylesList->count()!=0)
+    {
+        teFontStyle_BoldCheckBox->setEnabled(true);
+        teFontStyle_ItalicCheckBox->setEnabled(true);
+        fgColorPanelBtn->setEnabled(true);
+        bgColorPanelBtn->setEnabled(true);
+        tEStylesList->setCurrentRow(0);
+    }
+    else
+    {
+        teFontStyle_BoldCheckBox->setEnabled(false);
+        teFontStyle_ItalicCheckBox->setEnabled(false);
+        fgColorPanelBtn->setEnabled(false);
+        bgColorPanelBtn->setEnabled(false);
+    }
+}
+void OptionsDialog::slotUpdateLexerLanguageBox()
+{
+    slotUpdate_tEStylesList(tEColorShemeCBox->currentText(),true);
+    if(tEStylesList->count()!=0)
+    {        
+        tEStylesList->setCurrentRow(0);
+    }
+
+}
+void OptionsDialog::slotChangeLexerLenguage(int index)
+{
+    slotUpdate_tEStylesList(tEColorShemeCBox->currentText(),false);
+    if(tEStylesList->count()!=0)
+    {
+        teFontStyle_BoldCheckBox->setEnabled(true);
+        teFontStyle_ItalicCheckBox->setEnabled(true);
+        fgColorPanelBtn->setEnabled(true);
+        bgColorPanelBtn->setEnabled(true);
+        tEStylesList->setCurrentRow(0);
+    }
+    else
+    {
+        teFontStyle_BoldCheckBox->setEnabled(false);
+        teFontStyle_ItalicCheckBox->setEnabled(false);
+        fgColorPanelBtn->setEnabled(false);
+        bgColorPanelBtn->setEnabled(false);
+    }
+}
+void OptionsDialog::slotLoadCurrentStyleItemProperties()
+{
+    bgColorPanelBtn->setStyleSheet("* { background-color: "+tEStylesList->currentItem()->backgroundColor().name()+"}");
+    fgColorPanelBtn->setStyleSheet("* { background-color: "+tEStylesList->currentItem()->foreground().color().name()+"}");
+    disconnect(teFontStyle_BoldCheckBox,SIGNAL(toggled(bool)),this,SLOT(slotSetBoldStyle(bool)));
+    disconnect(teFontStyle_ItalicCheckBox,SIGNAL(toggled(bool)),this,SLOT(slotSetItalicStyle(bool)));
+  //  disconnect(tEFontSizeCBox,SIGNAL(currentIndexChanged(QString)),this,SLOT(slotSetFontSize(QString)));
+    teFontStyle_BoldCheckBox->setChecked(tEStylesList->currentItem()->font().bold());
+    teFontStyle_ItalicCheckBox->setChecked(tEStylesList->currentItem()->font().italic());
+   // tEFontSizeCBox->setCurrentIndex(tEFontSizeCBox->findText("20"));
+    connect(teFontStyle_BoldCheckBox,SIGNAL(toggled(bool)),this,SLOT(slotSetBoldStyle(bool)));
+    connect(teFontStyle_ItalicCheckBox,SIGNAL(toggled(bool)),this,SLOT(slotSetItalicStyle(bool)));
+  //  connect(tEFontSizeCBox,SIGNAL(currentIndexChanged(QString)),this,SLOT(slotSetFontSize(QString)));
+
+
+}
+QString OptionsDialog::currentLexerColorSchemeFileName()
+{
+    return (colorSchemesDir.absolutePath()+"/"+ tEColorShemeCBox->currentText());
+}
+void OptionsDialog::saveColorSchemeProperties()
+{
+    QDomDocument domDoc;
+    QFile file(colorSchemesDir.absolutePath()+"/"+tEColorShemeCBox->currentText());      //file with lexer's preferences
+    if (!file.open(QIODevice::ReadOnly))
+    {
+         QMessageBox msgBox;
+         msgBox.setIcon(QMessageBox::Warning);
+         msgBox.setText("<b>Error</b>");
+         msgBox.setInformativeText("File"+ tEColorShemeCBox->currentText() + "is mising.\nPlease reinstall application!");
+         msgBox.setStandardButtons(QMessageBox::Ok);
+         msgBox.setDefaultButton(QMessageBox::Ok);
+         msgBox.exec();
+         return;
+    }
+    if (!domDoc.setContent(&file))  //sets file as the content of the document
+    {
+         QMessageBox msgBox;
+         msgBox.setIcon(QMessageBox::Warning);
+         msgBox.setText("<b>Error</b>");
+         msgBox.setInformativeText("File "+tEColorShemeCBox->currentText()+" is corrupted.\nPlease reinstall application!");
+         msgBox.setStandardButtons(QMessageBox::Ok);
+         msgBox.setDefaultButton(QMessageBox::Ok);
+         msgBox.exec();
+         file.close();
+         return;
+     }
+     file.close();
+
+     QDomElement domElement = domDoc.documentElement();
+     QDomNode domNode = domElement.firstChild();
+     domNode=domNode.nextSibling();
+     domNode=domNode.firstChild();
+     while((lexerLanguageCBox->currentText()!=domNode.toElement().attribute("name",""))&&(!domNode.isNull()))
+     {
+         //qDebug()<<domNode.toElement().attribute("name","");
+         domNode=domNode.nextSibling();
+     }
+     if(lexerLanguageCBox->currentText()!=domNode.toElement().attribute("name",""))
+     {
+         QMessageBox msgBox;
+         msgBox.setIcon(QMessageBox::Warning);
+         msgBox.setText("<b>Error</b>");
+         msgBox.setInformativeText("File "+tEColorShemeCBox->currentText()+"is corrupted.\nPlease reinstall application!");
+         msgBox.setStandardButtons(QMessageBox::Ok);
+         msgBox.setDefaultButton(QMessageBox::Ok);
+         msgBox.exec();
+         file.close();
+         return;
+     }
+     QDomNode styleNode = domNode.namedItem("LexerStyle");
+     styleNode.toElement().setAttribute("defaultFontName",tEFontNameFCBox->currentFont().family());
+     //styleNode.toElement().setAttribute("defaultFontSize",tEFontSizeCBox->currentText());
+     QDomElement wordStyleDomElement = styleNode.firstChildElement();
+     int i = 0;
+     while(!wordStyleDomElement.isNull())
+     {
+        wordStyleDomElement.setAttribute("fgColor",tEStylesList->item(i)->foreground().color().name());
+        wordStyleDomElement.setAttribute("bgColor",tEStylesList->item(i)->backgroundColor().name());
+        wordStyleDomElement.setAttribute("fontStyle",0) ;
+        if ((tEStylesList->item(i)->font().bold()) && (tEStylesList->item(i)->font().italic())) wordStyleDomElement.setAttribute("fontStyle",3);
+        else
+        {
+            if (tEStylesList->item(i)->font().bold())  wordStyleDomElement.setAttribute("fontStyle",1);
+            if (tEStylesList->item(i)->font().italic()) wordStyleDomElement.setAttribute("fontStyle",2);
+        }
+        wordStyleDomElement=wordStyleDomElement.nextSiblingElement();
+         i++;
+     }
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("<b>Error</b>");
+        msgBox.setInformativeText("Cannot save changes into"+ tEColorShemeCBox->currentText() );
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
+        return;
+    }
+    QTextStream out(&file);
+    out << domDoc.toString();
+    return;
+}
+void OptionsDialog::slotSetDefaultBgColor()
+{
+    tEStylesList->currentItem()->setBackgroundColor(tEStylesList->item(0)->backgroundColor());
+    bgColorPanelBtn->setStyleSheet("* { background-color: "+tEStylesList->item(0)->backgroundColor().name() +"}");
+}
+void OptionsDialog::slotSetBoldStyle(bool b)
+{
+    if(tEStylesList->currentRow()!=-1)
+    {
+        QFont font = tEStylesList->currentItem()->font();
+        font.setBold(b);
+        tEStylesList->currentItem()->setFont(font);
+    }
+}
+void OptionsDialog::slotSetItalicStyle(bool b)
+{
+    if(tEStylesList->currentRow()!=-1)
+    {
+        QFont font = tEStylesList->currentItem()->font();
+        font.setItalic(b);
+        tEStylesList->currentItem()->setFont(font);
+    }
+}
+void OptionsDialog::slotSetFontSize(QString size)
+{
+    QFont font ;
+    for(int i=0;i<tEStylesList->count();i++)
+    {
+     /*  font = tEStylesList->item(i)->font();
+        font.setPointSize(size.toInt());
+        tEStylesList->item(i)->setFont(font);*/
+
+    }qDebug()<<size;
+
+
+}
+void OptionsDialog::slotSetFontName(QFont font)
+{
+    for(int i=0;i<tEStylesList->count();i++)
+    {
+        tEStylesList->item(i)->setFont(font);
+    }
 }

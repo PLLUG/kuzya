@@ -26,6 +26,7 @@
 #include <QMainWindow>
 #include <QProcess>
 
+#include "lexerloader.h"
 #include "optionsdialog.h"
 #include "ui_kuzya.h"
 #include "compiler.h"
@@ -101,6 +102,8 @@ public:
 
         void refreshProfileSettings();
         void LoadTemplates(QString);
+        void setHighlighting(QString,QString);
+        QString currentProgramingLanguage(void);
 protected:
 
 private slots:
@@ -186,7 +189,8 @@ private:
         Translator *translator;
         QComboBox *languageComboBox;
         QActionGroup *compilerModeGroup;
-        QsciLexer *currentLexer;
+        //QsciLexer *currentLexer;
+		LexerLoader *currentLexer;
         QAction *languageComboBoxAction;
 
         QSettings *tlist;

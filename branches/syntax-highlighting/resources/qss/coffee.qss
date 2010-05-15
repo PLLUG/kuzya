@@ -11,13 +11,11 @@ QLineEdit[echoMode="2"] {
    so that they look elegant regardless of the width of the text. */
 QPushButton {
     background-color: palegoldenrod;
-    border-width: 2px;
+    border-width: 1px;
     border-color: darkkhaki;
     border-style: solid;
-    border-radius: 5;
+    border-radius: 3;
     padding: 3px;
-    min-width: 9ex;
-    min-height: 2.5ex;
 }
 
 QPushButton:hover {
@@ -31,11 +29,11 @@ QPushButton:pressed {
     padding-top: 5px;
     background-color: #d0d67c;
 }
-
+/*
 QLabel, QAbstractButton {
     font: bold;
 }
-
+*/
 /* Mark mandatory fields with a brownish color. */
 .mandatory {
     color: brown;
