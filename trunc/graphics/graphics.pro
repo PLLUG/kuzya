@@ -16,3 +16,4 @@ unix {
         kuzya_fpc_graph \
         kuzya_c_graph
 }
+RESOURCES += images.qrc
