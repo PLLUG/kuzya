@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/images">
-        <file alias="turtle">resources/images/turtle.png</file>
-        <file alias="turtleMini">resources/images/turtleTiniMini.png</file>
+        <file alias="turtleMini">images/turtle.png</file>
     </qresource>
 </RCC>
