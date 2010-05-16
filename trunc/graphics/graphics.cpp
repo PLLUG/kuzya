@@ -30,6 +30,7 @@
 
 
 #include "graphics.h"
+#include "sleep.h"
 
 #define PI (3.141592653589793)
 
@@ -625,16 +626,12 @@ void graphics::processCommand(QString  command)
                 indexOfSimbol = command.indexOf(")", index+ 1);
                 numberOf = indexOfSimbol - index;
                 curentBGColor = command.mid(index+1, numberOf-1).toInt(0,10);
-/*
-                while (15 <= curentBGColor)
+
+                while (15 < abs(curentBGColor))
                 {
-                    curentBGColor -= 16;
+                    curentBGColor = abs(curentBGColor) % 15;
                 }
-                while (0 >= curentBGColor)
-                {
-                    curentColor -= 16;
-                }
-*/
+
                 setCurentBGColor(curentBGColor);
                 BGColorWasChanged = true;
         }
@@ -644,6 +641,11 @@ void graphics::processCommand(QString  command)
                 indexOfSimbol = command.indexOf(")", index+ 1);
                 numberOf = indexOfSimbol - index;
                 curentColor = command.mid(index+1, numberOf-1).toInt(0,10);
+
+                while (15 < abs(curentColor))
+                {
+                    curentColor = abs(curentColor) % 15;
+                }
 
                 setCurentColor(curentColor);
         }
