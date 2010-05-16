@@ -146,10 +146,10 @@ void hideturtle(void);
 void showturtle(void);
 void turtlepaint(void);
 void turtlepaintnot(void);
-void turtlegoforward(int step);
-void turtlegoback(int step);
-void turtleright(int angle);
-void turtleleft(int angle);
+void goforward(int step);
+void goback(int step);
+void eright(int angle);
+void left(int angle);
 //*********************************************************************
 ///***************arc********************************
 void arc(int x, int y, int stAngel, int endAngle, int radius)
@@ -952,19 +952,19 @@ void showturtle(void)
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  
 }
 ///************-This function move turtle back for seted steps-******************
-void turtlegoback(int step)
+void goback(int step)
 {
 	sprintf(KGNS::command, "turtlegoback(%i);\n", step);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  
 }
 ///************-This function move turtle forward for seted steps-******************
-void turtlegoforward(int step)
+void goforward(int step)
 {
 	sprintf(KGNS::command, "turtlegoforward(%i);\n", step);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  
 }
 ///************-This function turn turtle left for seted angle-******************
-void turtleleft(int angle)
+void left(int angle)
 {
 	sprintf(KGNS::command, "turtleleft(%i);\n", angle);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  
@@ -982,7 +982,7 @@ void turtlepaintnot(void)
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  
 }
 ///************-This function turn turtle right for seted angle-******************
-void turtleright(int angle)
+void right(int angle)
 {
 	sprintf(KGNS::command, "turtleright(%i);\n", angle);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  

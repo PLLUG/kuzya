@@ -1,5 +1,6 @@
 HEADERS += readstdin.h \
-    graphics.h
+    graphics.h \
+    sleep.h
 SOURCES += main.cpp \
     readstdin.cpp \
     graphics.cpp
