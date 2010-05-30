@@ -12,7 +12,8 @@ HEADERS += kuzya.h \
     replacedialog.h \
     helpbrowser.h \
     translator.h \
-    version.h
+    version.h \
+    compilersettings.h
 SOURCES += kuzya.cpp \
     main.cpp \
     gotolinedialog.cpp \
@@ -20,7 +21,8 @@ SOURCES += kuzya.cpp \
     optionsdialog.cpp \
     finddialog.cpp \
     replacedialog.cpp \
-    translator.cpp
+    translator.cpp \
+    compilersettings.cpp
 RESOURCES = images.qrc
 TRANSLATIONS = ../resources/translations/kuzya_ua.ts
 LIBS += -lqscintilla2
