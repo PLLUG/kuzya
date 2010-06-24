@@ -35,15 +35,17 @@ unix {
     kuzya_doc.files = ../doc/Kuzya_Help/*
     kuzya_resources.path = /usr/share/kuzya/resources
     kuzya_resources.files = ../resources/*
-    kuzya_images.path = /usr/share/kuzya
-    kuzya_images.file = ./images/kuzya.png
-    kuzya_images.path = /usr/share/kuzya
+    kuzya_icon.path = /usr/share/icons
+    kuzya_icon.files = ../resources/icon/*
+    kuzya_app_desktop.path = /usr/share/applications
+    kuzya_app_desktop.files = ../resources/linux/*
     INSTALLS += target \
         translations \
         kuzya_profiles \
         kuzya_doc \
         kuzya_resources\
-	kuzya_images
+	kuzya_icon\
+	kuzya_app_desktop
 }
 win32 { 
     TARGET = ../../bin/kuzya
