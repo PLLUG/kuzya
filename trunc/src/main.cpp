@@ -26,11 +26,15 @@
 #include <QString>
 #include <QFileInfo>
 
+#include <QDebug>
+
 #include "kuzya.h"
 
 int main(int argc, char ** argv)
 {
     Q_INIT_RESOURCE(images);
+
+    qDebug() << QVariant(QLocale::system().name()).toString();
 
     QApplication a(argc, argv);
 

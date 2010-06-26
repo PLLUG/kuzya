@@ -41,19 +41,6 @@ graphics::graphics(QWidget *parent)
         this->setWindowTitle("GraphicCore");
         setObjectName("graphics");
 
-        /////////mouse = new QMouseEvent(QEvent::MouseMove,QPoint(0,0),Qt::NoButton,0,0);
-        //setMouseTracking(true);
-        //centralWidget()->setMouseTracking(true);
-        ///////////////////painterLabel->setMouseTracking(true);
-
-        //mouseCoordinatsLabel = new QLabel(this);
-        //mouseCoordinatsLabel->setText("x : 0\ty : 0" );
-
-        //ui.statusBar->show();
-        //ui.statusBar->addPermanentWidget(mouseCoordinatsLabel);
-
-        //mouseCoordinatsLabel->setText(QVariant(QCursor::pos().x()).toString());
-
         width = 640;
         height = 480;
 
@@ -96,8 +83,6 @@ graphics::graphics(QWidget *parent)
         new QShortcut(Qt::Key_Return, this, SLOT(close()));
         connect(rsi, SIGNAL(commandAppeared(QString)), this, SLOT(processCommand(QString)));
         rsi->start();
-
-        //connect(ui.actionSave, SIGNAL(triggered()), this, SLOT(processCommand()));
 }
 
 graphics::~graphics()
@@ -635,6 +620,27 @@ void graphics::processCommand(QString  command)
                 setCurentBGColor(curentBGColor);
                 BGColorWasChanged = true;
         }
+        else if(getMethodName(command) == "setbkrgbcolor")
+        {
+            int r, g, b;
+
+            index = command.indexOf("(",0);
+            indexOfSimbol = command.indexOf(",", index);
+            numberOf = indexOfSimbol - index;
+            r = command.mid(index+1, numberOf-1).toInt(0, 10);
+
+            index = indexOfSimbol;
+            indexOfSimbol = command.indexOf(",", index+1);
+            numberOf = indexOfSimbol - index;
+            g = command.mid(index+1, numberOf-1).toInt(0,10);
+
+            index = indexOfSimbol;
+            indexOfSimbol = command.indexOf(")", index);
+            numberOf = indexOfSimbol - index;
+            b = command.mid(index+1, numberOf-1).toInt(0,10);
+
+             pixBG.fill(QColor(r, g, b));
+        }
         else if(getMethodName(command) == "setcolor")
         {
                 index = command.indexOf("(", 0);
@@ -649,6 +655,28 @@ void graphics::processCommand(QString  command)
 
                 setCurentColor(curentColor);
         }
+        else if(getMethodName(command) == "setrgbcolor")
+        {
+            int r, g, b;
+
+            index = command.indexOf("(",0);
+            indexOfSimbol = command.indexOf(",", index);
+            numberOf = indexOfSimbol - index;
+            r = command.mid(index+1, numberOf-1).toInt(0, 10);
+
+            index = indexOfSimbol;
+            indexOfSimbol = command.indexOf(",", index+1);
+            numberOf = indexOfSimbol - index;
+            g = command.mid(index+1, numberOf-1).toInt(0,10);
+
+            index = indexOfSimbol;
+            indexOfSimbol = command.indexOf(")", index);
+            numberOf = indexOfSimbol - index;
+            b = command.mid(index+1, numberOf-1).toInt(0,10);
+
+            pen.setColor(QColor(r, g, b));
+            p.setPen(pen);
+        }
         else if(getMethodName(command) == "setfillcolor")
         {
                 index = command.indexOf("(", 0);
@@ -657,6 +685,27 @@ void graphics::processCommand(QString  command)
                 curentFillColor = command.mid(index+1, numberOf-1).toInt(0,10);
 
                 setCurentFillColor(curentFillColor);
+        }
+        else if(getMethodName(command) == "setfillrgbcolor")
+        {
+            int r, g, b;
+
+            index = command.indexOf("(",0);
+            indexOfSimbol = command.indexOf(",", index);
+            numberOf = indexOfSimbol - index;
+            r = command.mid(index+1, numberOf-1).toInt(0, 10);
+
+            index = indexOfSimbol;
+            indexOfSimbol = command.indexOf(",", index+1);
+            numberOf = indexOfSimbol - index;
+            g = command.mid(index+1, numberOf-1).toInt(0,10);
+
+            index = indexOfSimbol;
+            indexOfSimbol = command.indexOf(")", index);
+            numberOf = indexOfSimbol - index;
+            b = command.mid(index+1, numberOf-1).toInt(0,10);
+
+            fillBrush->setColor(QColor(r, g, b));
         }
         else if(getMethodName(command) == "setfillstyle")
         {
@@ -745,12 +794,7 @@ void graphics::processCommand(QString  command)
 
             x = x1 + (int)(stepLenhgt * sin(PI * turtleRotateAngle / 180));
             y = y1 - (int)(stepLenhgt * cos(PI * turtleRotateAngle / 180));
-            /*turtleRotateAngle = 0;
 
-            qDebug() << QVariant(x).toString();
-            qDebug() << QVariant(y).toString();
-            qDebug() << QVariant(turtleRotateAngle).toString();
-            */
             if (isTurtleGrpahics)
             {
                 turtlePosition->setX(x);
@@ -774,11 +818,7 @@ void graphics::processCommand(QString  command)
 
             x = x1 - (int)(stepLenhgt * sin(PI * turtleRotateAngle / 180));
             y = y1 + (int)(stepLenhgt * cos(PI * turtleRotateAngle / 180));
-            /*turtleRotateAngle = 0;
 
-            qDebug() << QVariant(x).toString();
-            qDebug() << QVariant(y).toString();
-            */
             if (isTurtleGrpahics)
             {
                 turtlePosition->setX(/*x1 - */x);
@@ -864,7 +904,6 @@ void graphics::paintEvent(QPaintEvent * /*event*/)
         if (isTurtleGrpahics)
         {
             painter.drawPixmap(turtlePosition->x() - turtlePix.size().width() / 2, turtlePosition->y() - turtlePix.height() / 2, turtlePix);
-            //qDebug() << "turtle";
         }
 }
 
@@ -1242,12 +1281,3 @@ void graphics::setLineStyle(int lineStyle)
                                     p.setPen(pen);				update();break;
     }
 }
-/***************************************
-void graphics::mouseMoveEvent(QMouseEvent *mouse)
-{
-    if (0 <= mouse->x() && (this->width >= mouse->x()) && ((0 <= mouse->y()) && (this->height >= mouse->y())))
-    {
-        mouseCoordinatsLabel->setText("x : " + QVariant(mouse->x()).toString() + "\t" + "y : " + QVariant(mouse->y()).toString());
-    }
-}
-*/

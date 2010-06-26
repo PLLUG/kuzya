@@ -83,7 +83,7 @@ Kuzya::Kuzya(QWidget *parent)
 
         menuCompilation_Mode->setDisabled(true);
         menuTemplates->setDisabled(true);
-        actionCompile->setDisabled(true);
+        actionCompile->setDisabled(false);
         actionRun->setDisabled(true);
 
         statusLabel = new QLabel(this);
@@ -522,8 +522,8 @@ void Kuzya::slotNew(void)
 
         menuCompilation_Mode->setDisabled(true);
         menuTemplates->setDisabled(true);
-        actionCompile->setDisabled(true);
-        actionRun->setDisabled(true);
+        actionCompile->setDisabled(false);
+        actionRun->setDisabled(false);
         languageComboBoxAction->setVisible(false);
 
         srcRecompiled  = false;
