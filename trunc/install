@@ -16,9 +16,9 @@ if mkdir -p /usr/share/kuzya 		>/root/ierror	&&
 mkdir -p /usr/share/kuzya/src   	>/root/ierror   &&
 mkdir -p /usr/share/kuzya/profiles/   	>/root/ierror   &&
 mkdir -p /usr/bin			>/root/ierror	&&
-mkdir -p /usr/doc/kuzya			>/root/ierror	&&
+mkdir -p /usr/doc/kuzya		>/root/ierror	&&
 mkdir -p /usr/include/kuzya		>/root/ierror	&&
-mkdir -p /usr/include/kuzya/fpc		>/root/ierror	&&
+mkdir -p /usr/include/kuzya/fpc	>/root/ierror	&&
 mkdir -p /usr/share/kuzya/resources/translations; then
 	echo "...ok!"
 else
@@ -33,6 +33,8 @@ if cp -f ./graphics/c/graphics.h /usr/include/			2>/root/ierror	&&
 cp -fr ./doc /usr/doc/kuzya/					2>/root/ierror 	&&
 cp -fr ./profiles /usr/share/kuzya/				2>/root/ierror 	&&
 cp -fr ./resources /usr/share/kuzya/				2>/root/ierror 	&&
+cp -fr ./resources/icon/kuzya.png /usr/share/icons/		2>/root/ierror 	&&
+cp -fr ./resources/linux/kuzya.desktop /usr/share/applications/	2>/root/ierror 	&&
 cp -fr ./src/images /usr/share/kuzya/src/			2>/root/ierror 	&&
 cp -f ./graphics/fpc/unit/graph.ppu /usr/include/kuzya/fpc/    	2>/root/ierror  &&
 cp -f ./graphics/fpc/unit/graph.o /usr/include/kuzya/fpc/  	2>/root/ierror  &&

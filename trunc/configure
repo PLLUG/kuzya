@@ -1,21 +1,21 @@
 #!/bin/sh
 
 echo -e "qmake is prepareing to work...\t\t"
-if qmake -v = ?*4.5.2?* > /dev/null 2>&1; then
+if qmake -v = ?*4.*.*?* > /dev/null 2>&1; then
 	qmake
-elif qmake-qt4 -v = ?*4.5.2?* > /dev/null 2>&1; then
+elif qmake-qt4 -v = ?*4.*.*?* > /dev/null 2>&1; then
 	qmake-qt4
 	echo "...ok"
 else
-	echo"qt-4.5.2-1 is needed"
+	echo"qt-4.* is needed"
 	exit 1
 fi
 
 make distclean
 
-if qmake -v = ?*4.5.2?* > /dev/null 2>&1; then
+if qmake -v = ?*4.*.*?* > /dev/null 2>&1; then
         qmake
-elif qmake-qt4 -v = ?*4.5.2?* > /dev/null 2>&1; then
+elif qmake-qt4 -v = ?*4.*.*?* > /dev/null 2>&1; then
         qmake-qt4
 fi
 

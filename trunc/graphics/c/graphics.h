@@ -63,14 +63,24 @@ namespace KGNS{
   char  command[100];
   char text[100];
   
+  struct RGB
+  {
+    int r;
+    int g;
+    int b;
+  };
+  
   COLORS curentColor = WHITE;
-  int isCOLOR = 1;        ///0 colors 1 int 2 nothing for color
+  int isCOLOR = 1;        ///0 colors 1 int 2 RGB for color
   int curentIntColor = 0;
+  RGB currentRGBcolor;
   
   COLORS curentFillColor  = BLACK;
-  int isFillCOLOR = 1;        ///0 colors 1 int 2 nothing for fill color
+  int isFillCOLOR = 1;        ///0 colors 1 int 2 RGB for fill color
   int curentFillIntColor = 0;
- }
+  RGB currentFillRGBcolor;
+  void setPreviouslySetedColor(void);
+}
 
 int width =  640;
 int height = 480;
@@ -130,10 +140,13 @@ void rectangle(int x, int y,int x1,int y1, int color);
 void save(const char* path);
 void setbkcolor(COLORS color);
 void setbkcolor(int color);
+void setbkcolor(int red, int green, int blue);
 void setcolor(COLORS color);
 void setcolor(int color);
+void setcolor(int red, int green, int blue);
 void setfillcolor(int color);
 void setfillcolor(COLORS color);
+void setfillcolor(int red, int green, int blue);
 void setfillstyle(PATERN patern, COLORS color);
 void setfillstyle(int patern, COLORS color);
 void setfillstyle(PATERN patern, int color);
@@ -166,14 +179,7 @@ void arc(int x, int y, int stAngel, int endAngle, int radius, COLORS color)
 	sprintf(KGNS::command, "arc(%i,%i,%i,%i,%i);\n",x , y, stAngel*2, endAngle, radius);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 
-	if (0 == KGNS::isCOLOR)				      ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}	
+	KGNS::setPreviouslySetedColor();
 }
 ///***************arc__number********************************
 void arc(int x, int y, int stAngel, int endAngle, int radius, int color)
@@ -184,14 +190,7 @@ void arc(int x, int y, int stAngel, int endAngle, int radius, int color)
 	sprintf(KGNS::command, "arc(%i,%i,%i,%i,%i);\n",x , y, stAngel*2, endAngle, radius);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 
-	if (0 == KGNS::isCOLOR)				      ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}	
+	KGNS::setPreviouslySetedColor();
 }
 ///*****************Draws bar filled in with th help of fillcolor*****************
 void bar(int x, int y, int x1, int y1)
@@ -207,14 +206,7 @@ void bar(int x, int y, int x1, int y1,COLORS color)
 	sprintf(KGNS::command, "bar(%i,%i,%i,%i);\n",x , y, x1, y1);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 	
-	if (0 == KGNS::isCOLOR)                             ///previously seted color to draw figurs
-	{
-	  setfillcolor(KGNS::curentFillColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setfillcolor(KGNS::curentFillIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 void bar(int x, int y, int x1, int y1, int color)
  {
@@ -224,15 +216,8 @@ void bar(int x, int y, int x1, int y1, int color)
 	sprintf(KGNS::command, "bar(%i,%i,%i,%i);\n",x , y, x1, y1);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 	
-	if (0 == KGNS::isCOLOR)                             ///previously seted color to draw figurs
-	{
-	  setfillcolor(KGNS::curentFillColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setfillcolor(KGNS::curentFillIntColor);
-         }
-}
+	KGNS::setPreviouslySetedColor();
+ }
 ///***************3 demention rectangle**********************************
 void bar3d(int x, int y, int x1, int y1, int z, bool top)
 {
@@ -263,14 +248,7 @@ void circle(int x, int y, int radius, COLORS color)
 	sprintf(KGNS::command, "circle(%i,%i,%i);\n",x , y, radius);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);		
 	
-	if (0 == KGNS::isCOLOR)				      ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///**********circle___number**************************************************** 
 void circle(int x, int y, int radius, int color)
@@ -281,14 +259,7 @@ void circle(int x, int y, int radius, int color)
 	sprintf(KGNS::command, "circle(%i,%i,%i);\n",x , y, radius);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);		
 	
-	if (0 == KGNS::isCOLOR)				      ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///**********clearDevise********************************************
 void cleardevice()
@@ -429,14 +400,7 @@ void ellipse(int x, int y, int rWidth, int rHeight, int color)
 	sprintf(KGNS::command, "ellipse(%i,%i,%i,%i);\n",x , y, rWidth, rHeight);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 
-	if (0 == KGNS::isCOLOR)                             ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///******ellipse  color************************************
 void ellipse(int x, int y, int rWidth, int rHeight, COLORS color)
@@ -447,14 +411,7 @@ void ellipse(int x, int y, int rWidth, int rHeight, COLORS color)
 	sprintf(KGNS::command, "ellipse(%i,%i,%i,%i);\n",x , y, rWidth, rHeight);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 
-	if (0 == KGNS::isCOLOR)                             ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///******fillEllipse  with curent fillcolor**********************************
 void fillellipse(int x, int y, int rWidth, int rHeight)
@@ -471,14 +428,7 @@ void fillellipse(int x, int y, int rWidth, int rHeight, int color)
 	sprintf(KGNS::command, "fillellipse(%i,%i,%i,%i);\n",x , y, rWidth, rHeight);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 
-	if (0 == KGNS::isCOLOR)                             ///previously seted color to draw figurs
-	{
-	  setfillcolor(KGNS::curentFillColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setfillcolor(KGNS::curentFillIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///******fillEllipse  color************************************
 void fillellipse(int x, int y, int rWidth, int rHeight, COLORS color)
@@ -489,14 +439,7 @@ void fillellipse(int x, int y, int rWidth, int rHeight, COLORS color)
 	sprintf(KGNS::command, "fillellipse(%i,%i,%i,%i);\n",x , y, rWidth, rHeight);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 
-	if (0 == KGNS::isCOLOR)                             ///previously seted color to draw figurs
-	{
-	  setfillcolor(KGNS::curentFillColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setfillcolor(KGNS::curentFillIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///*************getMaxX****************************
 int getmaxx()
@@ -550,14 +493,7 @@ void line(int x, int y, int x1, int y1, COLORS color)
 	sprintf(KGNS::command, "line(%i,%i,%i,%i);\n",x , y,x1,y1);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 	
-	if (0 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 
 //**********line***********************************
@@ -569,14 +505,7 @@ void line(int x, int y, int x1, int y1, int color)
 	sprintf(KGNS::command, "line(%i,%i,%i,%i);\n",x , y,x1,y1);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 	
-	if (0 == KGNS::isCOLOR)                             ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///*********lineto*************************************
 void lineto(int x, int y)
@@ -593,14 +522,7 @@ void lineto(int x, int y, int color)
   	sprintf(KGNS::command, "lineto(%i, %i);\n", x, y);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 	
-	if (0 == KGNS::isCOLOR)                             ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///*********lineto with COLORS color*****************************
 void lineto(int x, int y, COLORS color)
@@ -611,14 +533,7 @@ void lineto(int x, int y, COLORS color)
   	sprintf(KGNS::command, "lineto(%i, %i);\n", x, y);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 	
-	if (0 == KGNS::isCOLOR)                             ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///*********moveto*************************************
 void moveto(int x, int y)
@@ -641,14 +556,7 @@ void outtextxy(int x, int y, const char* text, COLORS color)
 	sprintf(KGNS::command, "outtextxy(%i,%i,\"%s\");\n",x , y, text);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 	
-	if (0 == KGNS::isCOLOR)				     ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///********outTextXY number***********************************
 void outtextxy(int x, int y, const char* text, int color)
@@ -659,14 +567,7 @@ void outtextxy(int x, int y, const char* text, int color)
 	sprintf(KGNS::command, "outtextxy(%i,%i,\"%s\");\n",x , y, text);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 	
-	if (0 == KGNS::isCOLOR)				     ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///************outText*****************************************
 void outtext(const char* text)
@@ -683,14 +584,7 @@ void outtext(const char* text, COLORS color)
 	sprintf(KGNS::command, "outtext(\"%s\");\n", text);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	
 	
-	if (0 == KGNS::isCOLOR)				     ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///************outText with int color*****************************************
 void outtext(const char* text, int color)
@@ -701,14 +595,7 @@ void outtext(const char* text, int color)
 	sprintf(KGNS::command, "outtext(\"%s\");\n", text);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	
 	
-	if (0 == KGNS::isCOLOR)				     ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///********piesLice*********************************
 void pieslice(int x, int y, int stAngle, int endAngle, int radius)
@@ -725,14 +612,7 @@ void pieslice(int x, int y, int stAngle, int endAngle, int radius, int color)
 	sprintf(KGNS::command, "pieslice(%i,%i,%i,%i,%i);\n",x , y, stAngle, endAngle, radius);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	
 	
-	if (0 == KGNS::isCOLOR)				     ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///********piesLice color*********************************
 void pieslice(int x, int y, int stAngle, int endAngle, int radius, COLORS color)
@@ -743,14 +623,7 @@ void pieslice(int x, int y, int stAngle, int endAngle, int radius, COLORS color)
 	sprintf(KGNS::command, "pieslice(%i,%i,%i,%i,%i);\n",x , y, stAngle, endAngle, radius);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	
 	
-	if (0 == KGNS::isCOLOR)				     ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}	
+	KGNS::setPreviouslySetedColor();	
 }
 ///*******putPixel*********************************
 void putpixel(int x, int y)
@@ -767,14 +640,7 @@ void putpixel(int x, int y, COLORS color)
 	sprintf(KGNS::command, "putpixel(%i,%i);\n",x , y);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 	
-	if (0 == KGNS::isCOLOR)				     ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 //********putPixel_with_color_named_by_number******************
 void putpixel(int x, int y, int color)
@@ -785,14 +651,7 @@ void putpixel(int x, int y, int color)
 	sprintf(KGNS::command, "putpixel(%i,%i);\n",x , y);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 	
-	if (0 == KGNS::isCOLOR)				      ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///********rectangle***********************************
 void rectangle(int x, int y,int x1,int y1)
@@ -810,14 +669,7 @@ void rectangle(int x, int y,int x1,int y1, COLORS color)
 	sprintf(KGNS::command, "rectangle(%i,%i,%i,%i);\n",x , y, x1, y1);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 	
-	if (0 == KGNS::isCOLOR)				      ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 
 //********rectangle with setting int color*******************************
@@ -829,15 +681,7 @@ void rectangle(int x, int y,int x1,int y1, int color)
 	sprintf(KGNS::command, "rectangle(%i,%i,%i,%i);\n",x , y, x1, y1);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 	
-	
-	if (0 == KGNS::isCOLOR)				      ///previously seted color to draw figurs
-	{
-	  setcolor(KGNS::curentColor);
-	}
-	else if (1 == KGNS::isCOLOR)
-	{
-	  setcolor(KGNS::curentIntColor);
-	}
+	KGNS::setPreviouslySetedColor();
 }
 ///*******************save image in the given path with given name*****
 void save(const char* path)
@@ -857,6 +701,12 @@ void setbkcolor(int color)
 	sprintf(KGNS::command, "setbkcolor(%i);\n", color);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	
 }
+//***********setBGColor___RGB***********************************
+void setbkcolor(int red, int green, int blue)
+{
+	sprintf(KGNS::command, "setbkrgbcolor(%i, %i,%i);\n", red, green, blue);
+	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	
+}
 ///***********setColor___COLORS************************************
 void setcolor(COLORS color)
 {
@@ -873,6 +723,16 @@ void setcolor(int color)
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	
 	KGNS::isCOLOR = 1;
 }
+//**************set rgb color/****************************
+void setcolor(int red, int green, int blue)
+{
+	KGNS::currentRGBcolor.r = red;
+	KGNS::currentRGBcolor.g = green;
+	KGNS::currentRGBcolor.b = blue;
+	sprintf(KGNS::command, "setrgbcolor(%i,%i,%i);\n", red, green, blue);
+	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	
+	KGNS::isCOLOR = 2;
+}
 ///***********setFillColor___COLORS************************************
 void setfillcolor(COLORS color)
 {
@@ -888,6 +748,16 @@ void setfillcolor(int color)
 	sprintf(KGNS::command, "setfillcolor(%i);\n", color);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	
 	KGNS::isFillCOLOR = 1;
+}
+//***************set color to fill polygon*********************************
+void setfillcolor(int red, int green, int blue)
+{
+	KGNS::currentFillRGBcolor.r = red;
+	KGNS::currentFillRGBcolor.g = green;
+	KGNS::currentFillRGBcolor.b = blue;
+	sprintf(KGNS::command, "setfillrgbcolor(%i,%i,%i);\n", red, green, blue);
+	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	
+	KGNS::isFillCOLOR = 2;
 }
 ///**************set PATERN patern and COLORS color to fill some polygon*********
 void setfillstyle(PATERN patern, COLORS color)
@@ -987,3 +857,22 @@ void right(int angle)
 	sprintf(KGNS::command, "turtleright(%i);\n", angle);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	  
 }
+
+///***************
+///**************************************
+///**************
+void KGNS::setPreviouslySetedColor(void)
+{
+    if (0 == KGNS::isCOLOR)				      ///previously seted color to draw figurs
+    {
+      setcolor(KGNS::curentColor);
+    }
+    else if (1 == KGNS::isCOLOR)
+    {
+      setcolor(KGNS::curentIntColor);
+    }
+    else if (2 == KGNS::isCOLOR)
+    {
+      setcolor(KGNS::currentRGBcolor.r, KGNS::currentRGBcolor.g, KGNS::currentRGBcolor.b);
+    }
+} 
