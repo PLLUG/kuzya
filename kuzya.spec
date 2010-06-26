@@ -10,7 +10,7 @@ Summary:   Integrated Development Environment for students
 Version:   2.1.8
 Source0:   %{name}-%{version}.tar.bz2 
 Group:     Development/Tools
-Release:   fc12
+Release:   fc13
 License:   GPL
 Packager:  Volodymyr Shevchyk <volder@users.sourceforge.net>
 Vendor:    PLLUG
@@ -59,6 +59,8 @@ cp -fr ./doc/Kuzya_Help/* $RPM_BUILD_ROOT/usr/share/%{name}/doc/
 cp -f ./graphics/c/graphics.h $RPM_BUILD_ROOT/usr/include
 cp -fr ./profiles $RPM_BUILD_ROOT/usr/share/%{name}/
 cp -fr ./resources $RPM_BUILD_ROOT/usr/share/%{name}/
+cp -fr ./resources/icon/kuzya.png $RPM_BUILD_ROOT/usr/share/icons/
+cp -fr ./resources/linux/kuzya.desktop $RPM_BUILD_ROOT/usr/share/applications/
 cp -fr ./src/images $RPM_BUILD_ROOT/usr/share/%{name}/src/
 cp -fr ./resources/qss $RPM_BUILD_ROOT/usr/share/%{name}/resources/
 cp -fr ./src/images/kuzya.png $RPM_BUILD_ROOT/usr/share/%{name}/
