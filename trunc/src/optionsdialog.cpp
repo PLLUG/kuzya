@@ -221,7 +221,15 @@ void OptionsDialog::readODWSettings()
                 //QVariant(QLocale::system().name()).toString()
                 if ("empty" == settings->value("Language","empty").toString())
                 {
-                    settings->setValue("Language",QLocale::languageToString(QLocale::system().language()));
+                    if (-1==localizationLanguageCBox->findText(QLocale::languageToString(QLocale::system().language())))
+                    {
+                        settings->setValue("Language","English");
+                    }
+                    else
+                    {
+                        settings->setValue("Language",QLocale::languageToString(QLocale::system().language()));
+                    }
+
                 }
 #ifdef WIN32                
                 translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+settings->value("Language",QLocale::languageToString(QLocale::system().language())).toString()+".qm");

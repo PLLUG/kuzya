@@ -307,8 +307,13 @@ void Kuzya::retranslateAll(void)
         findText->retranslate();
         replaceText->retranslate();
         goToLine->retranslate();
-        settings->retranslate();
+        settings->retranslate();        
         retranslateUi(this);
+        int line;
+        int index;
+        textEditor->getCursorPosition(&line,&index);
+        slotUpdateStatusLabel(line,index);
+
 }
 ///***********************************************************************************************************///
 void Kuzya::setDefaultDir(QString dir)

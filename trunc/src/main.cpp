@@ -24,6 +24,7 @@
 #include <QTranslator>
 #include <QFile>
 #include <QString>
+
 #include <QFileInfo>
 
 #include <QDebug>
@@ -32,6 +33,34 @@
 
 int main(int argc, char ** argv)
 {
+
+    //qDebug()<<argc;
+/*    for(int i = 1;i<argc;i++)
+    {
+        QString paramStr = argv[i];
+        if( true == paramStr.startsWith('-') )
+        {
+            for (int j = 1;j < paramStr.count();j++)
+            {
+                switch ( paramStr.at(j).toAscii() )
+                {
+                    case 'h':
+                    {
+                        //std::cout<<"fgfgfgfg0";
+                                printf("\tThe Kuzya IDE - Free Development Environment.\n\n");
+                                printf("Arguments:\n");
+                                printf("   -a or --about\tPrints information about Kuzya IDE and exit\n");
+                                printf("   -h or --help\t\tPrints this help message and exit\n");
+                                printf("   -o or --open [FILE]\tOpen file \"FILE\"\n");
+                                printf("   -v or --version\tPrint version information and exit\n");
+                                return 0;                               
+                    }
+                }
+
+            }
+        }
+        
+    }*/
     Q_INIT_RESOURCE(images);
 
 //    qDebug() << QVariant(QLocale::system().name).toString();
