@@ -49,6 +49,6 @@ unix {
 }
 win32 { 
     TARGET = ../../bin/kuzya
-    LIBS += -L../../3rdparty/QScintilla/win32/2.4/
-    INCLUDEPATH = ../../3rdparty/QScintilla/win32/2.4/
+    LIBS += -L../../3rdparty/QScintilla/win32/2.4.3/debug/
+    INCLUDEPATH = ../../3rdparty/QScintilla/win32/2.4.3/
 }

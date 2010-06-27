@@ -40,21 +40,21 @@ class Kuzya;
 
 class OptionsDialog : public QDialog, private Ui::optionsForm
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     OptionsDialog(QWidget *parent = 0);
 	~OptionsDialog();
 	void writeSettings(void);
-        void readODWSettings();
-        void writeMainWindowState();
-        void readMainWindowState();
+    void readODWSettings();
+    void writeMainWindowState();
+    void readMainWindowState();
 	void openLastProject();
 	void saveLastProjectName(QString);
 	void retranslate(void);
-        bool ukrIsCheked();
-        QString readDefaultCompiler(QString lang);
-        QString readCompilerLocation(QString lang, QString comp);
-        QString readCompilerOptions(QString lang, QString comp);
+    bool ukrIsCheked();
+    QString readDefaultCompiler(QString lang);
+    QString readCompilerLocation(QString lang, QString comp);
+    QString readCompilerOptions(QString lang, QString comp);
 
 public slots:
 	void slotCommOptions(void);
@@ -66,32 +66,32 @@ private slots:
 	void slotDefaultAll(void);
 	void slotChangeFormColor(void);
 	void slotChangeDefDir(int);
-        void slotChangeDefDir(QString);
-        void slotChangeStyle(int);
-        void slotChangeSkin(QString);
-      //  void slotLoadCompilerSettings(void);
-        void slotUpdateSkinsCBox(void);
-        void slotUpdatelocalizationLanguageCBox();
-        void slotUpdateCompilerCBox(QString);
-        void slotLoadCompilerOptions(QString);
-        void slotChangeCompilerLocation();
-        void slotDefaultCompiler();
-        void slotResetCompilerOptions();
-        void slotChangsLocalizationLanguage(QString);
+    void slotChangeDefDir(QString);
+    void slotChangeStyle(int);
+    void slotChangeSkin(QString);
+    //  void slotLoadCompilerSettings(void);
+    void slotUpdateSkinsCBox(void);
+    void slotUpdatelocalizationLanguageCBox();
+    void slotUpdateCompilerCBox(QString);
+    void slotLoadCompilerOptions(QString);
+    void slotChangeCompilerLocation();
+    void slotDefaultCompiler();
+    void slotResetCompilerOptions();
+    void slotChangsLocalizationLanguage(QString);
 
 private:
 	QTranslator* trans_ua;
 	QTranslator* trans_en;
-        Kuzya* mw;
+    Kuzya* mw;
 	QFile file;
-        QSettings *settings;
+    QSettings *settings;
 	QsciScintilla* textEditor;
 	QTranslator translator;
 	QFont font;
-        QDir stylesDir;
-        QDir localizationLanguageDir;
-        QStringList styleFilters;
-        QStringList localizationLanguageFilters;
+    QDir stylesDir;
+    QDir localizationLanguageDir;
+    QStringList styleFilters;
+    QStringList localizationLanguageFilters;
 public:	
     bool isLineMarginVisible;
 	

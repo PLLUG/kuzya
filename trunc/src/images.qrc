@@ -85,8 +85,8 @@
         <file>images/styles/dot.png</file>
     </qresource>
     <qresource prefix="/flags">
-        <file>images/flags/Belarusian.png</file>
         <file>images/flags/English.png</file>
         <file>images/flags/Ukrainian.png</file>
+        <file>images/flags/Byelorussian.png</file>
     </qresource>
 </RCC>

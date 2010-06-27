@@ -25,6 +25,7 @@
 #include <QColor>
 #include <QFileDialog>
 #include <QDebug>
+#include <QLocale>
 #include "optionsdialog.h"
 
 OptionsDialog::OptionsDialog(QWidget *parent)
@@ -205,20 +206,28 @@ void OptionsDialog::readODWSettings()
                 sB_LOFCount->setValue(settings->value("LOFCount",5).toInt());
 		mw->setMaxCount_RFileList(sB_LOFCount->value());
 ///-----Style&Skins----------------------------------------------------------------------
-                settings->beginGroup("Interface");
+                settings->beginGroup("Interface");  
                     styleCBox->setCurrentIndex(styleCBox->findText(settings->value("Style","Cleanlooks").toString()));
                     qApp->setStyle(settings->value("Style","Cleanlooks").toString());
+                    if ("empty" == settings->value("Skin","empty").toString())
+                    {
+                        settings->setValue("Skin","creation");
+                    }
                     skinCBox->setCurrentIndex(skinCBox->findText(settings->value("Skin","creation").toString()));
                     slotChangeSkin(settings->value("Skin","creation").toString());
                 settings->endGroup();
 ///-----LANGUAGE-------------------------------------------------------------------------
 
-
-#ifdef WIN32
-                translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+settings->value("Language","English").toString()+".qm");
+                //QVariant(QLocale::system().name()).toString()
+                if ("empty" == settings->value("Language","empty").toString())
+                {
+                    settings->setValue("Language",QLocale::languageToString(QLocale::system().language()));
+                }
+#ifdef WIN32                
+                translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+settings->value("Language",QLocale::languageToString(QLocale::system().language())).toString()+".qm");
 
 #else
-                        translator.load("/usr/share/kuzya/resources/translations/" + settings->value("Language","English").toString()+".qm");    //QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua"
+                translator.load("/usr/share/kuzya/resources/translations/" + settings->value("Language",QLocale::languageToString(QLocale::system().language())).toString()+".qm");    //QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua"
 
 #endif
 

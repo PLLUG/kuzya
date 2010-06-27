@@ -34,7 +34,8 @@ int main(int argc, char ** argv)
 {
     Q_INIT_RESOURCE(images);
 
-    qDebug() << QVariant(QLocale::system().name()).toString();
+//    qDebug() << QVariant(QLocale::system().name).toString();
+//    qDebug()<<QLocale::languageToString(QLocale::system().language());
 
     QApplication a(argc, argv);
 
