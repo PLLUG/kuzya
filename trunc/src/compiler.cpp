@@ -424,7 +424,7 @@ void Compiler::run(void)
 #ifdef WIN32
     startDetached("cmd", QStringList() << "/C"<< "title "+programPath+"&&(set path=%path%;"+pathToKuzyagraph+ ")&&("+programPath+")&pause");
 #else
-    startDetached("xterm", QStringList() << "-e" << "/bin/sh" << "-c"<< programPath);
+    startDetached("xterm", QStringList() << "-e" << "/bin/sh -c \'" + programPath + " && read -p \"Press enter to continue... \" REPLY'");
 #endif
 
     QDir::setCurrent(prevPath);
