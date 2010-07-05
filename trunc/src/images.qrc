@@ -88,5 +88,6 @@
         <file>images/flags/English.png</file>
         <file>images/flags/Ukrainian.png</file>
         <file>images/flags/Byelorussian.png</file>
+        <file>images/flags/French.png</file>
     </qresource>
 </RCC>
