@@ -58,18 +58,19 @@ enum LINESTYLE
 	USERBIT_LINE
 };
 
-namespace KGNS{
-  FILE *kuzyaGraphFile;
-  char  command[100];
-  char text[100];
-  
+namespace KGNS
+{
   struct RGB
   {
     int r;
     int g;
     int b;
   };
-  
+
+  FILE *kuzyaGraphFile;
+  char  command[100];
+  char text[100];
+ 
   COLORS curentColor = WHITE;
   int isCOLOR = 1;        ///0 colors 1 int 2 RGB for color
   int curentIntColor = 0;

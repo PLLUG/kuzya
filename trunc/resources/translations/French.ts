@@ -663,7 +663,7 @@ F9</translation>
     <message>
         <location line="-268"/>
         <source>Kuzya</source>
-        <translation>Кузя</translation>
+        <translation>Kuzya</translation>
     </message>
     <message>
         <location line="+102"/>
