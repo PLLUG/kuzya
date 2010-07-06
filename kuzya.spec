@@ -7,8 +7,8 @@
 
 Name:      kuzya
 Summary:   Integrated Development Environment for students
-Version:   2.1.8
-Source0:   %{name}-%{version}.tar.bz2 
+Version:   2.1.11
+Source0:   %{name}-%{version}.tar.gz 
 Group:     Development/Tools
 Release:   fc13
 License:   GPL
