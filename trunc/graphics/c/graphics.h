@@ -168,7 +168,7 @@ void left(int angle);
 ///***************arc********************************
 void arc(int x, int y, int stAngel, int endAngle, int radius)
 {
-	sprintf(KGNS::command, "arc(%i,%i,%i,%i,%i);\n",x , y, stAngel*2, endAngle, radius);
+	sprintf(KGNS::command, "arc(%i,%i,%i,%i,%i);\n",x , y, stAngel, endAngle, radius);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);	
 }
 ///***************arc__color********************************
@@ -177,7 +177,7 @@ void arc(int x, int y, int stAngel, int endAngle, int radius, COLORS color)
 	sprintf(KGNS::command, "setcolor(%i);\n", color);      ///color to draw dot
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 	
-	sprintf(KGNS::command, "arc(%i,%i,%i,%i,%i);\n",x , y, stAngel*2, endAngle, radius);
+	sprintf(KGNS::command, "arc(%i,%i,%i,%i,%i);\n",x , y, stAngel, endAngle, radius);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 
 	KGNS::setPreviouslySetedColor();
@@ -188,7 +188,7 @@ void arc(int x, int y, int stAngel, int endAngle, int radius, int color)
 	sprintf(KGNS::command, "setcolor(%i);\n", color);      ///color to draw dot
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 	
-	sprintf(KGNS::command, "arc(%i,%i,%i,%i,%i);\n",x , y, stAngel*2, endAngle, radius);
+	sprintf(KGNS::command, "arc(%i,%i,%i,%i,%i);\n",x , y, stAngel, endAngle, radius);
 	fprintf(KGNS::kuzyaGraphFile, KGNS::command);
 
 	KGNS::setPreviouslySetedColor();
