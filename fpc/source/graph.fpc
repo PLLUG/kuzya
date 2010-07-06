@@ -131,7 +131,7 @@ curentcolor, curentFillColor:integer;
 	const kuzyagraph = 'kuzyagraph';
 
 {****************ARC********************************************}
-Procedure arc(x, y,stAngle, endAngle, radius:integer);
+Procedure arc(x, y, stAngle, endAngle, radius:integer);
 begin	
 	writeln(f, 'arc(', x, ',', y, ',', stAngle, ',', endAngle, ',', radius, ');');	
 end;
