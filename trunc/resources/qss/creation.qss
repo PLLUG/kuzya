@@ -36,6 +36,11 @@ QMenuBar::item::pressed
 	background-color:#7C746A;
 	color:white;
 }
+QMenu::item::checked
+{
+	background-color: lightgray;
+	
+}
 QMenu
 {
 
