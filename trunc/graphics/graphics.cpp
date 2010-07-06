@@ -132,7 +132,7 @@ void graphics::processCommand(QString  command)
                 index = indexOfSimbol;
                 indexOfSimbol = command.indexOf(",", index+1);
                 numberOf = indexOfSimbol - index;
-                stAngle = command.mid(index+1, numberOf-1).toInt(0,10) / 2;
+                stAngle = command.mid(index+1, numberOf-1).toInt(0,10);
 
                 index = indexOfSimbol;
                 indexOfSimbol = command.indexOf(",", index+1);
