@@ -117,6 +117,14 @@ Procedure setlinestyle(style:LINESTYLE; upattern, thickness:integer);
 Procedure setlinestyle(style, upattern, thickness:integer);
 Procedure settextstyle(font:string; mydirection:DIRECTION; size:integer);
 Procedure settextstyle(font:string; mydirection, size:integer);
+Procedure hideturtle();
+Procedure showturtle();
+Procedure goback(step:integer);
+Procedure goforward(step:integer);
+Procedure left(angle:integer);
+Procedure turtlepaint();
+Procedure turtlepaintnot();
+Procedure right(angle:integer);
 {*************All_procedures_and_Functions******************}
 
 implementation
@@ -514,6 +522,46 @@ End;
 Procedure settextstyle(font:string; mydirection, size:integer);
 Begin
 	writeln(f, 'settextstyle(', font, ',', mydirection, ',',  size, ');');
+End;
+{*****************-This function hide turtle-******************}
+Procedure hideturtle();
+Begin
+	writeln(f, 'hideturtle();');
+End;
+{*****************-This function show turtle-******************}
+Procedure showturtle();
+Begin
+	writeln(f, 'showturtle();');
+End;
+{**********-This function move turtle back for seted steps-********}
+Procedure goback(step:integer);
+Begin
+	writeln(f, 'turtlegoback(', step, ');');
+End;
+{************-This function move turtle forward for seted steps-******************}
+Procedure goforward(step:integer);
+Begin
+	writeln(f, 'turtlegoforward(', step, ');');
+End;
+{***********-This function turn turtle left for seted angle-******************}
+Procedure left(angle:integer);
+Begin
+	writeln(f, 'turtleleft(', angle, ');');
+End;
+{***********-This function let your turtle paint-******************}
+Procedure turtlepaint();
+Begin
+	writeln(f, 'turtlepaint();');
+End;
+{***********-This function let your turtle paint not-******************}
+Procedure turtlepaintnot();
+Begin
+	writeln(f, 'turtlepaintnot();');
+End;
+{***********-This function turn turtle right for seted angle-******************}
+Procedure right(angle:integer);
+Begin
+	writeln(f, 'turtleright(', angle, ');');
 End;
 
 End.
