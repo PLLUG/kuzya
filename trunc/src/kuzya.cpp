@@ -679,7 +679,7 @@ void Kuzya::refreshProfileSettings()
         path.truncate(path.lastIndexOf("/", -1));
         path = path+"/profiles/";
    #else
-        QString path = "/usr/share/kuzya/profiles/";
+        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/");
    #endif
         unloadTemplates();
         loadTemplates(path+language+"/"+language+".ini");
@@ -699,7 +699,7 @@ void Kuzya::refreshProfileSettings()
     path.truncate(path.lastIndexOf("/", -1));
     path = path+"/resources/";
 #else
-    QString path = "/usr/share/kuzya/resources/";
+    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/");
 #endif
 
     translator->openFile(fileName, language);
@@ -986,7 +986,7 @@ void Kuzya::slotAbout(void)
     #ifdef WIN32
         aboutBox->setIconPixmap(QPixmap(QApplication::applicationDirPath()+"/../resources/Kuzya.png"));
     #else
-        aboutBox->setIconPixmap(QPixmap("/usr/share/kuzya/resources/Kuzya.png"));
+        aboutBox->setIconPixmap(QPixmap(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/Kuzya.png")));
     #endif
 
         aboutBox->exec();
@@ -1130,7 +1130,7 @@ void Kuzya::slotHelpKuzya()
 #ifdef WIN32
         HelpBrowser* helpBrowser = new HelpBrowser(QApplication::applicationDirPath()+"/../doc/Kuzya_Help","main.htm");
 #else
-              HelpBrowser* helpBrowser = new HelpBrowser("/usr/share/kuzya/doc/","main.htm");
+              HelpBrowser* helpBrowser = new HelpBrowser(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/doc/"),"main.htm");
 #endif
         helpBrowser->resize(800,600);
         helpBrowser->show();
@@ -1293,7 +1293,7 @@ void Kuzya::slotChangeTranslation(QString translation)
         path.truncate(path.lastIndexOf("/", -1));
         path = path+"/profiles/";
     #else
-        QString path = "/usr/share/kuzya/profiles/";
+        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/");
     #endif
     unloadTemplates();
     loadTemplates(path+language+"/"+language+".ini");

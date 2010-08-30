@@ -64,8 +64,8 @@ OptionsDialog::OptionsDialog(QWidget *parent)
         stylesDir=QDir(QApplication::applicationDirPath()+"/../resources/qss/");
         localizationLanguageDir=QDir(QApplication::applicationDirPath()+"/../resources/translations/");
 #else
-        stylesDir=QDir("/usr/share/kuzya/resources/qss/");
-        localizationLanguageDir=QDir("/usr/share/kuzya/resources/translations/");
+        stylesDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/qss/"));
+        localizationLanguageDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/translations/"));
 #endif
 
        languageComboBox->clear();
@@ -121,7 +121,7 @@ void OptionsDialog::slotChangeSkin(QString sheetName)
 #ifdef WIN32
     QFile file(QApplication::applicationDirPath()+"/../resources/qss/"+sheetName.toLower()+".qss");
 #else
-    QFile file("/usr/share/kuzya/resources/qss/"+sheetName.toLower()+".qss");
+    QFile file(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/qss/")+sheetName.toLower()+".qss");
 #endif
     file.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(file.readAll());
@@ -235,7 +235,7 @@ void OptionsDialog::readODWSettings()
                 translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+settings->value("Language",QLocale::languageToString(QLocale::system().language())).toString()+".qm");
 
 #else
-                translator.load("/usr/share/kuzya/resources/translations/" + settings->value("Language",QLocale::languageToString(QLocale::system().language())).toString()+".qm");    //QApplication::applicationDirPath()+"/../trunc/src/translations/kuzya_ua"
+                translator.load(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/translations/") + settings->value("Language",QLocale::languageToString(QLocale::system().language())).toString()+".qm");
 
 #endif
 
@@ -562,7 +562,7 @@ void OptionsDialog::slotChangsLocalizationLanguage(QString langName)
                         translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+langName);
 
 #else
-                        translator.load("/usr/share/kuzya/resources/translations/"+langName);
+                        translator.load(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/translations/")+langName);
 
 #endif
                         qApp->installTranslator(&translator);

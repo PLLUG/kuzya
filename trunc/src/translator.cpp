@@ -40,7 +40,7 @@ QStringList Translator::getSupportedTranslations(QString lang)
     path.truncate(path.lastIndexOf("/", -1));
     path = path+"/profiles/"+lang;
 #else
-    QString path = "/usr/share/kuzya/profiles/"+lang;
+        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/")+lang;
 #endif
 
     supportedTranslations.clear();
@@ -111,7 +111,7 @@ void Translator::openFile(QString file, QString lang)
     path.truncate(path.lastIndexOf("/", -1));
     translationsPath = path+"/profiles/"+lang+"/";
 #else
-    translationsPath = "/usr/share/kuzya/profiles/"+lang+"/";
+    translationsPath = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/")+lang+"/";
 #endif
 
     codeTranslation = detectCodeLanguage(file, language);

@@ -54,7 +54,7 @@ void Compiler::refreshSupported()
     path.truncate(path.lastIndexOf("/", -1));
     path = path+"/profiles";
 #else
-    QString path = "/usr/share/kuzya/profiles";
+    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles");
 #endif
 
     QDirIterator it(path, QDir::NoDotAndDotDot|QDir::AllDirs, QDirIterator::NoIteratorFlags);
