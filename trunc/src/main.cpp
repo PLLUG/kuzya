@@ -74,7 +74,7 @@ int main(int argc, char ** argv)
 #ifdef WIN32
     splashDir=QApplication::applicationDirPath()+"/../resources/SplashCukr.png";
 #else
-    splashDir="/usr/share/kuzya/resources/SplashCukr.png";
+    splashDir=QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/SplashCukr.png");
 #endif
     splash->setPixmap(QPixmap(splashDir));
     splash->show();
