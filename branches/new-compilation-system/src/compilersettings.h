@@ -40,10 +40,7 @@ private:
 private:
      QStringList mProfilesList;
      QString mSettingsPath;
-     QString mMask;
      QDir path;
-
-
 
 };
 
