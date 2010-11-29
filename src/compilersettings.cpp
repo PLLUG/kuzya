@@ -18,11 +18,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>     *
  ******************************************************************************/
 #include "compilersettings.h"
-#include <QDebug>
 #include <QtGui>
 #include <QDir>
-#include <QFileInfo>
-#include <QDebug>
+
 CompilerSettings::CompilerSettings(QObject *parent) :
     QObject(parent)
 {
@@ -38,7 +36,6 @@ void CompilerSettings::setSettingsPath(QString pSettingsPath)
        while (dirIterator.hasNext())
        {
            QString qstr = dirIterator.next();
-           qDebug() << qstr;
        }
 
     refreshProfileList();
