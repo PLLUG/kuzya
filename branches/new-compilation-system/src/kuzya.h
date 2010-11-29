@@ -29,6 +29,7 @@
 #include "optionsdialog.h"
 #include "ui_kuzya.h"
 #include "compiler.h"
+//#include "compilersettings.h"
 
 class QListWidget;
 class QSplitter;
@@ -51,6 +52,7 @@ template <typename T> class QList;
 class Translator;
 class QsciLexer;
 class QFileDialog;
+class CompilerSettings;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -196,6 +198,7 @@ private:
 
         bool srcRecompiled;
         QFileDialog *fileDialog;
+        CompilerSettings* compilerSettings;
 };
 
 #endif
