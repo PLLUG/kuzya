@@ -37,6 +37,7 @@
 #include "finddialog.h"
 #include "replacedialog.h"
 #include "compiler.h"
+#include "compilersettings.h"
 #include "kuzya.h"
 #include "helpbrowser.h"
 #include "translator.h"
@@ -149,7 +150,11 @@ Kuzya::Kuzya(QWidget *parent)
 
         file = new QFile();
         goToLine = new GoToLineDialog(textEditor);
+
         compiler = new Compiler(this);
+        compilerSettings = new CompilerSettings(this);
+        compilerSettings->setSettingsPath("d:\\settings");
+
         translator = new Translator(this);
         settings = new OptionsDialog(this);
 

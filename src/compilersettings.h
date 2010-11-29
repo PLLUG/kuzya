@@ -21,16 +21,29 @@
 #define COMPILERSETTINGS_H
 
 #include <QObject>
-
+#include <QStringList>
+#include <QDir>
 class CompilerSettings : public QObject
 {
     Q_OBJECT
 public:
-    explicit CompilerSettings(QObject *parent = 0);
+     CompilerSettings(QObject *parent = 0);
+     void setSettingsPath(QString pSettingsPath);
 
 signals:
 
 public slots:
+
+private:
+     void refreshProfileList();
+
+private:
+     QStringList mProfilesList;
+     QString mSettingsPath;
+     QString mMask;
+     QDir path;
+
+
 
 };
 
