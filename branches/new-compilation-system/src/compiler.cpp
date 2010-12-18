@@ -21,9 +21,12 @@
 
 #include <QSettings>
 #include <QDirIterator>
+#include <QtCore/QCoreApplication>
+
 #include "QDebug"
 
 #include "compiler.h"
+#include "compilersettings.h"
 
 Compiler::Compiler(QObject *parent) : QProcess(parent)
 {  
@@ -32,177 +35,50 @@ Compiler::Compiler(QObject *parent) : QProcess(parent)
     connect(this, SIGNAL(error(QProcess::ProcessError)), this, SLOT(compilerProcessError(QProcess::ProcessError)));
 
     setProcessChannelMode(MergedChannels);
-    compilerProfile = NULL;
-    refreshSupported();
+
+    QString lCompilerSettingsPath = QDir::cleanPath(QCoreApplication::applicationDirPath()
+        + "../../profiles");
+    CompilerSettings::setSettingsPath(lCompilerSettingsPath);
+
+    mComplerSettings = new CompilerSettings(this);
 }
 
 Compiler::~Compiler()
 {
-    if (compilerProfile!=NULL) free(compilerProfile);
-}
-
-void Compiler::refreshSupported()
-{
-    supportedLanguages.clear();
-    supportedExtensions.clear();
-    profileLocations.clear();
-    supportedCompilers.clear();
-    profilesPathList.clear();
-
-#ifdef WIN32
-    QString path = QApplication::applicationDirPath();
-    path.truncate(path.lastIndexOf("/", -1));
-    path = path+"/profiles";
-#else
-    QString path = "/usr/share/kuzya/profiles";
-#endif
-
-    QDirIterator it(path, QDir::NoDotAndDotDot|QDir::AllDirs, QDirIterator::NoIteratorFlags);
-
-    QString name;
-    while (it.hasNext())
-    {
-        it.next();
-        if (it.fileInfo().isDir())
-        {
-            name = it.fileInfo().filePath()+"/"+it.fileInfo().fileName()+".ini";
-            QSettings info(name, QSettings::IniFormat);
-            if (QSettings::NoError == info.status())
-            {
-                info.beginGroup("info");
-                QString lang = info.value("language", "").toString();
-                QString ext = info.value("filter","").toString();
-                info.endGroup();
-
-                if (lang.isEmpty()||ext.isEmpty()) continue;
-
-                supportedLanguages << lang;
-                supportedExtensions << ext;
-
-                QString location =  it.fileInfo().filePath();
-                profileLocations << location;
-
-                QDirIterator fileIt(location, QStringList()<< "*.prof", QDir::NoDotAndDotDot|QDir::Files, QDirIterator::NoIteratorFlags);
-                QString prof;
-                QString profiles("");
-                QString compilers("");
-                while (fileIt.hasNext())
-                {
-                    fileIt.next();
-                    if (fileIt.fileInfo().isReadable())
-                    {
-                        prof = fileIt.fileInfo().filePath();
-                        QSettings profile(prof, QSettings::IniFormat);
-                        if (QSettings::NoError == info.status())
-                        {
-                            profile.beginGroup("info");
-                            QString str = profile.value("compiler", "").toString();
-                            profile.endGroup();
-
-                            if (!str.isEmpty())
-                            {
-                                compilers = compilers + str + " ";
-                                profiles = profiles + fileIt.fileInfo().filePath() + " ";
-                            }
-                            else continue;
-                        }
-                    }
-                }
-                //if (!compilers.isEmpty())
-                //{
-                    supportedCompilers << compilers;
-                    profilesPathList << profiles;
-                //}
-                //else continue;
-            }
-        }
-    }
 }
 
 QString Compiler::getProfilePath(QString lang, QString profile)
 {
-    QStringList profiles;
-    QStringList locations;
-
-    int index = supportedLanguages.indexOf(lang);
-    if (-1 == index) return QString::Null();
-
-    QString str = supportedCompilers.at(index);
-    profiles = str.split(" ");
-    profiles.removeAll("");
-
-    str = profilesPathList.at(index);
-    locations = str.split(" ");
-    locations.removeAll("");
-
-    index = profiles.indexOf(profile);
-    if (-1 == index) return QString::Null();
-
-    return locations.at(index);
+    return CompilerSettings::getCompilerSettingsPath(profile);
 }
 
 QStringList Compiler::getSupportedLanguages()
 {
-    refreshSupported();
-    return supportedLanguages;
+    return CompilerSettings::supportedLanguages();
 }
 
 QString Compiler::getSupportedExtensions(QString lang)
 {
-    if (!supportedLanguages.contains(lang)) return QString::null;
-
-    int index = supportedLanguages.indexOf(lang);
-
-    if (-1 == index) return QString("");
-    else return supportedExtensions.at(index);
+    return CompilerSettings::getFileFilters(lang).join(" ");
 }
 
 QStringList Compiler::getSupportedCompilers(QString lang)
 {
-    QStringList supported;
-
-    if (!supportedLanguages.contains(lang)) return QStringList();
-    int index = supportedLanguages.indexOf(lang);
-
-    if (-1 == index) return QStringList();
-    QString str = supportedCompilers.at(index);
-
-    supported = str.split(" ");
-    supported.removeAll("");
-
-    return supported;
+    return CompilerSettings::supportedCompilers(lang);
 }
 
 QString Compiler::getCompilerInfo(QString lang, QString profile)
 {
-    if (lang.isEmpty() || profile.isEmpty()) return "";
-
-    QString profPath = getProfilePath(lang, profile);
-    if (QString::Null() == profPath) return "";
-
-    QSettings prof(profPath, QSettings::IniFormat);
-    prof.beginGroup("info");
-    QString info = prof.value("comment", "").toString();
-    prof.endGroup();
-    
-    return info;
+    return CompilerSettings::getCompilerDescription(profile);
 }
 
 void Compiler::loadProfile(QString lang, QString profile)
 {
-    if (NULL != compilerProfile)
-    {
-        free(compilerProfile);
-    }
-	
     if (lang.isEmpty() || profile.isEmpty()) return;
 
-    refreshSupported();
-    QString profPath = getProfilePath(lang, profile);
-    if (QString::Null() == profPath) return;
+    compileMode = CompilerSettings::DEFAULT;
 
-    compilerProfile = new QSettings(profPath, QSettings::IniFormat);
-    compileMode = DEFAULT;
+    mComplerSettings->loadCompilerSettings(profile);
 }
 
 void Compiler::setOptions(QString str)
@@ -217,40 +93,13 @@ void Compiler::setCompilerDir(QString dir)
 
 bool Compiler::isReady()
 {
-    if (NULL == compilerProfile) return false;
-
-    if (compilerProfile->status() == QSettings::NoError) return true;
-    else return false;
+    return true;
 }
 
 bool Compiler::isModeAvailable(int compileMode)
 {
-    compilerProfile->beginGroup("compile");
-    QString param;
-    switch (compileMode)
-    {
-        case DEFAULT:
-            param = compilerProfile->value("default","").toString();
-            break;
-        case ALTERNATIVE:
-            param = compilerProfile->value("alternative").toString();
-            break;
-        case OBJECT:
-            param = compilerProfile->value("object","").toString();
-            break;
-        case STATIC_LIB:
-            param = compilerProfile->value("static_lib","").toString();
-            break;
-        case DYNAMIC_LIB:
-            param = compilerProfile->value("dynamic_lib","").toString();
-            break;
-        default:
-            param = "";
-    }
-    compilerProfile->endGroup();
-
-    return !param.isEmpty();
-}
+    return mComplerSettings->isModeAvailable(compileMode);
+ }
 
 void Compiler::setCompilerMode(int mode)
 {
@@ -265,17 +114,7 @@ void Compiler::openFile(QString srcPath)
 
 QString Compiler::getCompilerName()
 {
-    compilerProfile->beginGroup("info");
-    QString compiler = compilerProfile->value("compiler", "").toString();
-    compilerProfile->endGroup();
-
-    if (compiler.isEmpty())
-    {
-        qDebug() << "FAIL: Could not find compiler.\n";
-        return "";
-    }
-
-    return compiler;
+    return mComplerSettings->compilerName();
 }
 
 QString Compiler::getCompilerParams()
@@ -288,44 +127,14 @@ QString Compiler::getCompilerParams()
     qDebug() <<   "PROGRAM PATH:" << programPath;
     qDebug() <<   "SOURCE PATH:" << sourcePath;
 
-    compilerProfile->beginGroup("compile");
-    QString param;
-    switch (compileMode)
-    {
-        case DEFAULT:
-            param = compilerProfile->value("default","").toString();
-            break;
-        case ALTERNATIVE:
-            param = compilerProfile->value("alternative").toString();
-            break;
-        case OBJECT:
-            param = compilerProfile->value("object","").toString();
-            break;
-        case STATIC_LIB:
-            param = compilerProfile->value("static_lib","").toString();
-            break;
-        case DYNAMIC_LIB:
-            param = compilerProfile->value("dynamic_lib","").toString();
-            break;
-        default:
-            param = "";
-    }
-
-    QString opt;
-
-#ifdef WIN32
-    opt = compilerProfile->value("win32_opt", "").toString();
-#else
-    opt = compilerProfile->value("unix_opt", "").toString();
-#endif
-
-    compilerProfile->endGroup();
+    QString param = mComplerSettings->getCompilationParams(compileMode);
 
     if (!param.isEmpty())
     {
         param.replace(QString("$source$"), sourceFile);
         param.replace(QString("$output$"), programPath);
-        param.replace(QString("$options$"), opt+" "+options);
+//        param.replace(QString("$options$"), opt+" "+options);
+        param.replace(QString("$options$"), "");
         param.replace(QString("$compilerdir$"), compilerDir);
     }
     else
@@ -337,37 +146,14 @@ QString Compiler::getCompilerParams()
     return param;
 }
 
-QString Compiler::getConfig()
-{
-    compilerProfile->beginGroup("info");
-    QString config = compilerProfile->value("config", "").toString();
-    compilerProfile->endGroup();
-    return config;
-}
-
 void Compiler::resetParseErrorList()
 {
-    QStringList keyList;
-    parseErrorList.clear();
-    compilerProfile->beginGroup("errors");
-    keyList = compilerProfile->childKeys();
-    foreach(QString key, keyList)
-        parseErrorList << compilerProfile->value(key,"").toString();
-    compilerProfile->endGroup();
-    parseErrorList.removeAll("");
+    parseErrorList = mComplerSettings->errorMsgTemplates();
 }
 
 void Compiler::resetParseWarningList()
 {
-    QStringList keyList;
-    parseWarningList.clear();
-    compilerProfile->beginGroup("warnings");
-    keyList = compilerProfile->childKeys();
-    foreach(QString key, keyList)
-        parseWarningList << compilerProfile->value(key,"").toString();
-    compilerProfile->endGroup();
-    parseErrorList.removeAll("");
-
+    parseWarningList = mComplerSettings->warningMsgTemplates();
 }
 
 void Compiler::compile()
@@ -379,7 +165,7 @@ void Compiler::compile()
     outFile.clear();
 
     QString compiler = getCompilerName();
-    QString config = getConfig();
+//    QString config = getConfig();
     QString param = getCompilerParams();
 
     if (compiler.isEmpty() || param.isEmpty()) return;
@@ -387,14 +173,14 @@ void Compiler::compile()
     resetParseErrorList();
     resetParseWarningList();
 
-#ifdef WIN32
-    if (config.contains("outfile"))
-    {
-        outFile = sourcePath+"out.txt";
-        param = param+" > "+outFile;
-        qDebug() << "CONFIG:outfile";
-    }
-#endif
+//#ifdef WIN32
+//    if (config.contains("outfile"))
+//    {
+//        outFile = sourcePath+"out.txt";
+//        param = param+" > "+outFile;
+//        qDebug() << "CONFIG:outfile";
+//    }
+//#endif
 
 #ifdef WIN32
     QString prevDir = QApplication::applicationDirPath();
@@ -527,5 +313,3 @@ void Compiler::readStdErr(void)
         }
     }
 }
-
-
