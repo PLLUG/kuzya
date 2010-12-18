@@ -37,11 +37,11 @@
 #include "finddialog.h"
 #include "replacedialog.h"
 #include "compiler.h"
-#include "compilersettings.h"
 #include "kuzya.h"
 #include "helpbrowser.h"
 #include "translator.h"
 #include "version.h"
+#include "compilersettings.h"
 //#include "helpassistant.h"
 
 
@@ -53,7 +53,7 @@ Kuzya::Kuzya(QWidget *parent)
         setWindowTitle("Kuzya");
 
         languageComboBox = new QComboBox(this);
-
+        toolBar->setIconSize(QSize(30,30));
         toolBar->addAction(actionNew);
         toolBar->addAction(actionOpen);
         toolBar->addAction(actionSave);
@@ -84,7 +84,7 @@ Kuzya::Kuzya(QWidget *parent)
 
         menuCompilation_Mode->setDisabled(true);
         menuTemplates->setDisabled(true);
-        actionCompile->setDisabled(true);
+        actionCompile->setDisabled(false);
         actionRun->setDisabled(true);
 
         statusLabel = new QLabel(this);
@@ -150,11 +150,7 @@ Kuzya::Kuzya(QWidget *parent)
 
         file = new QFile();
         goToLine = new GoToLineDialog(textEditor);
-
         compiler = new Compiler(this);
-        compilerSettings = new CompilerSettings(this);
-        compilerSettings->setSettingsPath("d:\\settings");
-
         translator = new Translator(this);
         settings = new OptionsDialog(this);
 
@@ -312,8 +308,13 @@ void Kuzya::retranslateAll(void)
         findText->retranslate();
         replaceText->retranslate();
         goToLine->retranslate();
-        settings->retranslate();
+        settings->retranslate();        
         retranslateUi(this);
+        int line;
+        int index;
+        textEditor->getCursorPosition(&line,&index);
+        slotUpdateStatusLabel(line,index);
+
 }
 ///***********************************************************************************************************///
 void Kuzya::setDefaultDir(QString dir)
@@ -527,8 +528,8 @@ void Kuzya::slotNew(void)
 
         menuCompilation_Mode->setDisabled(true);
         menuTemplates->setDisabled(true);
-        actionCompile->setDisabled(true);
-        actionRun->setDisabled(true);
+        actionCompile->setDisabled(false);
+        actionRun->setDisabled(false);
         languageComboBoxAction->setVisible(false);
 
         srcRecompiled  = false;
@@ -566,36 +567,36 @@ void Kuzya::slotOpen(void)
 void Kuzya::refreshCompileModes()
 {
     actionDefaultMode->setChecked(true);
-    compiler->setCompilerMode(Compiler::DEFAULT);
-    actionAlternativeMode->setVisible(compiler->isModeAvailable(Compiler::ALTERNATIVE));
-    actionObjectMode->setVisible(compiler->isModeAvailable(Compiler::OBJECT));
-    actionStaticLibMode->setVisible(compiler->isModeAvailable(Compiler::STATIC_LIB));
-    actionDynamicLibMode->setVisible(compiler->isModeAvailable(Compiler::DYNAMIC_LIB));
+    compiler->setCompilerMode(CompilerSettings::DEFAULT);
+    actionAlternativeMode->setVisible(compiler->isModeAvailable(CompilerSettings::ALTERNATIVE));
+    actionObjectMode->setVisible(compiler->isModeAvailable(CompilerSettings::OBJECT));
+    actionStaticLibMode->setVisible(compiler->isModeAvailable(CompilerSettings::STATIC_LIB));
+    actionDynamicLibMode->setVisible(compiler->isModeAvailable(CompilerSettings::DYNAMIC_LIB));
 }
 
 void Kuzya::slotDefaultMode()
 {
-    compiler->setCompilerMode(Compiler::DEFAULT);
+    compiler->setCompilerMode(CompilerSettings::DEFAULT);
 }
 
 void Kuzya::slotAlternativeMode()
 {
-    compiler->setCompilerMode(Compiler::ALTERNATIVE);
+    compiler->setCompilerMode(CompilerSettings::ALTERNATIVE);
 }
 
 void Kuzya::slotObjectMode()
 {
-    compiler->setCompilerMode(Compiler::OBJECT);
+    compiler->setCompilerMode(CompilerSettings::OBJECT);
 }
 
 void Kuzya::slotStaticLibMode()
 {
-    compiler->setCompilerMode(Compiler::STATIC_LIB);
+    compiler->setCompilerMode(CompilerSettings::STATIC_LIB);
 }
 
 void Kuzya::slotDynamicLibMode()
 {
-    compiler->setCompilerMode(Compiler::DYNAMIC_LIB);
+    compiler->setCompilerMode(CompilerSettings::DYNAMIC_LIB);
 }
 
 void Kuzya::slotSetFileSuffix(QString filter)
@@ -679,7 +680,7 @@ void Kuzya::refreshProfileSettings()
         path.truncate(path.lastIndexOf("/", -1));
         path = path+"/profiles/";
    #else
-        QString path = "/usr/share/kuzya/profiles/";
+        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/");
    #endif
         unloadTemplates();
         loadTemplates(path+language+"/"+language+".ini");
@@ -699,7 +700,7 @@ void Kuzya::refreshProfileSettings()
     path.truncate(path.lastIndexOf("/", -1));
     path = path+"/resources/";
 #else
-    QString path = "/usr/share/kuzya/resources/";
+    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/");
 #endif
 
     translator->openFile(fileName, language);
@@ -966,7 +967,7 @@ void Kuzya::slotAbout(void)
 {
     QMessageBox *aboutBox= new QMessageBox( QMessageBox::Information,tr("About"),QString("\t  <big><b><centre> \t    The Kuzya %1 </centre> </b></big>  "
                                               "\n  <p> Free Development Environment</p>\n\n"
-                                              "build on April 19 2010"
+                                              "build on Jule 7 2010"
                                               "<p> Kuzya is simple crossplatform IDE for people who study  programming."
                                               "Main idea of it is to concentrate attention  of the users only on learning the programming \n"
                                               "\t language  but not on usage of IDE. For more information visit our official web site "
@@ -986,7 +987,7 @@ void Kuzya::slotAbout(void)
     #ifdef WIN32
         aboutBox->setIconPixmap(QPixmap(QApplication::applicationDirPath()+"/../resources/Kuzya.png"));
     #else
-        aboutBox->setIconPixmap(QPixmap("/usr/share/kuzya/resources/Kuzya.png"));
+        aboutBox->setIconPixmap(QPixmap(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/Kuzya.png")));
     #endif
 
         aboutBox->exec();
@@ -1130,7 +1131,7 @@ void Kuzya::slotHelpKuzya()
 #ifdef WIN32
         HelpBrowser* helpBrowser = new HelpBrowser(QApplication::applicationDirPath()+"/../doc/Kuzya_Help","main.htm");
 #else
-              HelpBrowser* helpBrowser = new HelpBrowser("/usr/share/kuzya/doc/","main.htm");
+              HelpBrowser* helpBrowser = new HelpBrowser(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/doc/"),"main.htm");
 #endif
         helpBrowser->resize(800,600);
         helpBrowser->show();
@@ -1293,7 +1294,7 @@ void Kuzya::slotChangeTranslation(QString translation)
         path.truncate(path.lastIndexOf("/", -1));
         path = path+"/profiles/";
     #else
-        QString path = "/usr/share/kuzya/profiles/";
+        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/");
     #endif
     unloadTemplates();
     loadTemplates(path+language+"/"+language+".ini");
