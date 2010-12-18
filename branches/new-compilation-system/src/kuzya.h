@@ -198,7 +198,6 @@ private:
 
         bool srcRecompiled;
         QFileDialog *fileDialog;
-        CompilerSettings* compilerSettings;
 };
 
 #endif

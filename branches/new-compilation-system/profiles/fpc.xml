@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<compilersettings name="fpc" info="FreePascal Compiler" lang="pascal" filter="*.pas">
+	<options>
+		<option type="param" platform="unix" value="-Fu/usr/include/kuzya/fpc/"/>
+	</options>
+	<modes>
+		<default params="-vr -vw $options$ $source$" />
+		<object params="-vr -Cn $options$ $source$" />
+		<staticlib params="-vr -Ur $options$ $source$" />
+		<dylib params="" />
+		<alternative params="" />
+	</modes>
+	<errors>
+		<msg ln="1" txt="3" visible="1" regexp="(\d+):\s(.*)error.\s(.*)"/>
+		<msg ln="1" txt="4" visible="1" regexp="(\d+):\s(.*)error:\s(\d+)(.*)"/>
+		<msg ln="0" txt="1" visible="1" regexp="^error:(.*)"/>
+		<msg ln="0" txt="1" visible="1" regexp="^Fatal:(.*)"/>
+		<msg ln="0" txt="1" visible="1" regexp="^(PPU\s[^L]*)$"/>
+		<msg ln="0" txt="1" visible="1" regexp="ld:(.*)"/>
+	</errors>
+	<warnings>
+		<msg ln="1" txt="4" visible="1" regexp="(\d+):\s(.*)warning:\s(\d+)(.*)"/>
+		<msg ln="0" txt="1" visible="0" regexp="^(Free\sPascal\sCompiler\s.*)"/>
+	</warnings>
+</compilersettings>

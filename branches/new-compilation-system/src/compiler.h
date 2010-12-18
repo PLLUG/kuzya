@@ -26,13 +26,13 @@
 #include "replacedialog.h"
 
 class QSettings;
+class CompilerSettings;
 
 class Compiler : public QProcess
 {
 	Q_OBJECT
 public:
         enum endStatusEnum{NOERROR, ERROR, FAILED_TO_START, CRASHED};
-        enum compileModeEnum{DEFAULT, ALTERNATIVE, OBJECT, STATIC_LIB, DYNAMIC_LIB};
 
 	struct compilerError
 	{
@@ -70,13 +70,11 @@ private slots:
         void readStdErr(void);
 
 private:
-        void refreshSupported();
         QString getProfilePath(QString lang, QString profile);
         void resetParseErrorList();
         void resetParseWarningList();
         QString getCompilerName();
         QString getCompilerParams();
-        QString getConfig();
 
         QString sourceFile;
         QString sourcePath;
@@ -88,7 +86,6 @@ private:
         //QString config;
         QString compilerDir;
         QString options;
-        QSettings* compilerProfile;
         QStringList parseErrorList;
         QStringList parseWarningList;
         QStringList supportedLanguages;
@@ -97,6 +94,7 @@ private:
         QStringList supportedCompilers;
         QStringList profilesPathList;
         QString outFile;
+        CompilerSettings *mComplerSettings;
 };
 
 #endif

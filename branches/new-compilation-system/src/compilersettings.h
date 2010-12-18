@@ -20,28 +20,71 @@
 #ifndef COMPILERSETTINGS_H
 #define COMPILERSETTINGS_H
 
-#include <QObject>
-#include <QStringList>
-#include <QDir>
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
+#include <QtCore/QMap>
+
+class QXmlStreamReader;
+
 class CompilerSettings : public QObject
 {
     Q_OBJECT
+
 public:
+
+    enum compileModeEnum{DEFAULT, ALTERNATIVE, OBJECT, STATIC_LIB, DYNAMIC_LIB};
+
      CompilerSettings(QObject *parent = 0);
-     void setSettingsPath(QString pSettingsPath);
+
+     static QString settingsPath();
+     static void setSettingsPath(QString pSettingsPath);
+     static QStringList supportedLanguages();
+     static QStringList supportedCompilers(QString pProgLanguage);
+     static QString getCompilerSettingsPath(QString pCompilerName);
+     static QString getCompilerDescription(QString pCompilerName);
+     static QStringList getFileFilters(QString pProgLanguage);
+
+     QString compilerName();
+     void loadCompilerSettings(QString pCompilerName);
+     bool isModeAvailable(int pMode);
+     QString getCompilationParams(int pMode);
+     QStringList errorMsgTemplates();
+     QStringList warningMsgTemplates();
 
 signals:
 
 public slots:
 
 private:
-     void refreshProfileList();
+     static void refreshProfileList();
+     static void parseSettingsInfo(QString pSettingsPath);
+
+     void parseCompilerSettings(QString pSettingsPath);
+     void parseCompilerOptions(QXmlStreamReader *pXmlReader);
+     void parseOption(QXmlStreamReader *pXmlReader);
+     void addCompilerOption(QString pType, QString pPlatform, QString pValue);
+     void parseCompilingModes(QXmlStreamReader *pXmlReader);
+     void parseCompilerErrorMessages(QXmlStreamReader *pXmlReader);
+     void parseCompilerWarningMessages(QXmlStreamReader *pXmlReader);
 
 private:
-     QStringList mProfilesList;
-     QString mSettingsPath;
-     QDir path;
+     static QMap<QString, QString> mProgLanguges;
+     static QMap<QString, QStringList> mFileFilters;
+     static QMap<QString, QStringList> mCompilerFilters;
+     static QMap<QString, QString> mSettingsPathes;
+     static QMap<QString, QString> mCompilersDescriptions;
+     static QString mSettingsPath;
 
+     QString mAddParam;
+     QString mDefaultParams;
+     QString mObjectParams;
+     QString mStaticlibParams;
+     QString mDylibParams;
+     QString mAlternativeParams;
+     QString mCompilerName;
+
+     QStringList mErrorMsgs;
+     QStringList mWarningMsgs;
 };
 
 #endif // COMPILERSETTINGS_H
