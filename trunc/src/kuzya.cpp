@@ -45,196 +45,201 @@
 
 
 Kuzya::Kuzya(QWidget *parent)
-        : QMainWindow(parent)
+    : QMainWindow(parent)
 {
-        setupUi(this);
-        setObjectName("Kuzya");
-        setWindowTitle("Kuzya");
+    setupUi(this);
+    setObjectName("Kuzya");
+    setWindowTitle("Kuzya");
 
-        languageComboBox = new QComboBox(this);
-        toolBar->setIconSize(QSize(30,30));
-        toolBar->addAction(actionNew);
-        toolBar->addAction(actionOpen);
-        toolBar->addAction(actionSave);
-        toolBar->addSeparator();
-        toolBar->addAction(actionUndo);
-        toolBar->addAction(actionRedo);
-        actionCut->setShortcuts(QKeySequence::Cut);
-        toolBar->addAction(actionCut);
-        actionCopy->setShortcuts(QKeySequence::Copy);
-        toolBar->addAction(actionCopy);
-        actionPaste->setShortcuts(QKeySequence::Paste);
-        toolBar->addAction(actionPaste);
-        toolBar->addSeparator();
-        toolBar->addAction(actionNotificationList);
-        toolBar->addSeparator();
-        toolBar->addAction(actionCompile);
-        toolBar->addAction(actionRun);
-        toolBar->addSeparator();
-        languageComboBoxAction = toolBar->addWidget(languageComboBox);
-        languageComboBoxAction->setVisible(false);
+    languageComboBox = new QComboBox(this);
+    toolBar->setIconSize(QSize(30,30));
+    toolBar->addAction(actionNew);
+    toolBar->addAction(actionOpen);
+    toolBar->addAction(actionSave);
+    toolBar->addSeparator();
+    toolBar->addAction(actionUndo);
+    toolBar->addAction(actionRedo);
+    actionCut->setShortcuts(QKeySequence::Cut);
+    toolBar->addAction(actionCut);
+    actionCopy->setShortcuts(QKeySequence::Copy);
+    toolBar->addAction(actionCopy);
+    actionPaste->setShortcuts(QKeySequence::Paste);
+    toolBar->addAction(actionPaste);
+    toolBar->addSeparator();
+    toolBar->addAction(actionNotificationList);
+    toolBar->addSeparator();
+    toolBar->addAction(actionCompile);
+    toolBar->addAction(actionRun);
+    toolBar->addSeparator();
+    languageComboBoxAction = toolBar->addWidget(languageComboBox);
+    languageComboBoxAction->setVisible(false);
 
-        compilerModeGroup = new QActionGroup(this);
-        compilerModeGroup->addAction(actionDefaultMode);
-        compilerModeGroup->addAction(actionObjectMode);
-        compilerModeGroup->addAction(actionStaticLibMode);
-        compilerModeGroup->addAction(actionDynamicLibMode);
-        compilerModeGroup->addAction(actionAlternativeMode);
+    compilerModeGroup = new QActionGroup(this);
+    compilerModeGroup->addAction(actionDefaultMode);
+    compilerModeGroup->addAction(actionObjectMode);
+    compilerModeGroup->addAction(actionStaticLibMode);
+    compilerModeGroup->addAction(actionDynamicLibMode);
+    compilerModeGroup->addAction(actionAlternativeMode);
 
-        menuCompilation_Mode->setDisabled(true);
-        menuTemplates->setDisabled(true);
-        actionCompile->setDisabled(false);
-        actionRun->setDisabled(true);
+    menuCompilation_Mode->setDisabled(true);
+    menuTemplates->setDisabled(true);
+    actionCompile->setDisabled(false);
+    actionRun->setDisabled(true);
 
-        statusLabel = new QLabel(this);
-        statusBar()->addPermanentWidget(statusLabel);
+    statusLabel = new QLabel(this);
+    statusBar()->addPermanentWidget(statusLabel);
 
-        QGridLayout *gridLayout;
-        gridLayout = new QGridLayout(centralwidget);
-        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+    QGridLayout *gridLayout;
+    gridLayout = new QGridLayout(centralwidget);
+    gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
 
-        textEditor = new QsciScintilla(this);
-        textEditor->setEolMode(QsciScintilla::EolUnix);
+    textEditor = new QsciScintilla(this);
+    textEditor->setEolMode(QsciScintilla::EolUnix);
 
-        notificationList = new QListWidget(this);
-        notificationList->setVisible(false);
+    notificationList = new QListWidget(this);
+    notificationList->setVisible(false);
 
-        QSplitter *splitter = new QSplitter(this);
-        splitter->setOrientation(Qt::Vertical);
-        splitter->addWidget(textEditor);
-        splitter->addWidget(notificationList);
-        splitter->setChildrenCollapsible(false);
-        splitter->setStretchFactor(0, 5);
-        splitter->setStretchFactor(1, 2);
-        splitter->setHandleWidth(5);
+    QSplitter *splitter = new QSplitter(this);
+    splitter->setOrientation(Qt::Vertical);
+    splitter->addWidget(textEditor);
+    splitter->addWidget(notificationList);
+    splitter->setChildrenCollapsible(false);
+    splitter->setStretchFactor(0, 5);
+    splitter->setStretchFactor(1, 2);
+    splitter->setHandleWidth(5);
 
-        gridLayout->addWidget(splitter, 0, 0, 1, 1);
+    gridLayout->addWidget(splitter, 0, 0, 1, 1);
 
-        textEditor->setCaretLineBackgroundColor(QColor(215, 215, 250));
-        textEditor->setCaretLineVisible(true);
+    textEditor->setCaretLineBackgroundColor(QColor(215, 215, 250));
+    textEditor->setCaretLineVisible(true);
 
-        QFont font("Courier", 10);
+    QFont font("Courier", 10);
 
-        textEditor->setFont(font);
+    textEditor->setFont(font);
 
-        cppLexer = new QsciLexerCPP(this);
-        cppLexer->setFont(font);
-        pascalLexer = new QsciLexerPascal(this);
-        pascalLexer->setFont(font);
-        fortranLexer = new QsciLexerFortran(this);
-        fortranLexer->setFont(font);
-        javaLexer = new QsciLexerJava(this);
-        javaLexer->setFont(font);
-       
-        textEditor->setLexer();
+    cppLexer = new QsciLexerCPP(this);
+    cppLexer->setFont(font);
+    pascalLexer = new QsciLexerPascal(this);
+    pascalLexer->setFont(font);
+    fortranLexer = new QsciLexerFortran(this);
+    fortranLexer->setFont(font);
+    javaLexer = new QsciLexerJava(this);
+    javaLexer->setFont(font);
 
-        textEditor->setBraceMatching(QsciScintilla::SloppyBraceMatch);
-        textEditor->setMatchedBraceBackgroundColor(QColor(200, 100, 100));
+    textEditor->setLexer();
 
-        textEditor->setSelectionBackgroundColor(QColor(100, 100, 200));
-        textEditor->setUtf8(true);
+    textEditor->setBraceMatching(QsciScintilla::SloppyBraceMatch);
+    textEditor->setMatchedBraceBackgroundColor(QColor(200, 100, 100));
+
+    textEditor->setSelectionBackgroundColor(QColor(100, 100, 200));
+    textEditor->setUtf8(true);
 
 
-        warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor));
-        errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
-        currentMarker = textEditor->markerDefine(QPixmap(":/markers/current_line","",Qt::AutoColor));
+    warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor));
+    errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
+    currentMarker = textEditor->markerDefine(QPixmap(":/markers/current_line","",Qt::AutoColor));
 
-        textEditor->setMarginMarkerMask(1,3);
-        textEditor->setMarginMarkerMask(2,4);
-        textEditor->setMarginWidth(1, 15);
-        textEditor->setMarginWidth(2, 20);
-       
-        textEditor->setMarginSensitivity(1, true);
-        //textEditor->setMarginsBackgroundColor(QColor(190, 178, 157,255));
+    textEditor->setMarginMarkerMask(1,3);
+    textEditor->setMarginMarkerMask(2,4);
+    textEditor->setMarginWidth(1, 15);
+    textEditor->setMarginWidth(2, 20);
 
-        file = new QFile();
-        goToLine = new GoToLineDialog(textEditor);
-        compiler = new Compiler(this);
-        translator = new Translator(this);
-        settings = new OptionsDialog(this);
+    textEditor->setMarginSensitivity(1, true);
+    //textEditor->setMarginsBackgroundColor(QColor(190, 178, 157,255));
 
-        findText = new FindDialog(textEditor);
-        replaceText = new ReplaceDialog(textEditor);
-        signalMapper= new QSignalMapper(this);
+    file = new QFile();
+    goToLine = new GoToLineDialog(textEditor);
+    compiler = new Compiler(this);
+    translator = new Translator(this);
+    settings = new OptionsDialog(this);
 
-        RFileList = new QList<QString>();
+    findText = new FindDialog(textEditor);
+    replaceText = new ReplaceDialog(textEditor);
+    signalMapper= new QSignalMapper(this);
 
-        DefaultDir=DefaultDir;
-        shortcut = new QShortcut(textEditor);
-        shortcut->setKey(Qt::CTRL+Qt::Key_Space);
+    RFileList = new QList<QString>();
 
-        
-        settings->readODWSettings();
-        settings->openLastProject();
-        settings->readMainWindowState();
-        ActOpenRecentFileVector.clear();
+    DefaultDir=DefaultDir;
+    shortcut = new QShortcut(textEditor);
+    shortcut->setKey(Qt::CTRL+Qt::Key_Space);
 
-        srcRecompiled = false;
 
-        fileDialog = new QFileDialog(this);
-        QList<QUrl> list = fileDialog->sidebarUrls();
-        list << QUrl::fromLocalFile(DefaultDir);
-        fileDialog->setSidebarUrls(list);
+    settings->readODWSettings();
+    settings->openLastProject();
+    settings->readMainWindowState();
+    ActOpenRecentFileVector.clear();
 
-///-------------------------------------------------------------------------------------------------------------------
+    srcRecompiled = false;
 
-        connect(actionNew,	SIGNAL(triggered()),this,		SLOT(slotNew()));
-        connect(actionOpen, 	SIGNAL(triggered()),this,		SLOT(slotOpen()));
-        connect(actionSave,	SIGNAL(triggered()),this,		SLOT(slotSave()));
-        connect(actionSave_as,	SIGNAL(triggered()),this,		SLOT(slotSave_as()));
-        connect(actionPrint,	SIGNAL(triggered()),this,		SLOT(slotPrint()));
-        connect(actionExit, 	SIGNAL(triggered()), this,		SLOT(slotExit()));
-        connect(actionUndo, 	SIGNAL(triggered()), textEditor,	SLOT(undo()));
-        connect(actionRedo, 	SIGNAL(triggered()), textEditor,	SLOT(redo()));
-        connect(actionCut, 	SIGNAL(triggered()), textEditor,	SLOT(cut()));
-        connect(actionCopy, 	SIGNAL(triggered()), textEditor,	SLOT(copy()));
-        connect(actionPaste,	SIGNAL(triggered()), textEditor,	SLOT(paste()));
-        connect(actionSelect_all,SIGNAL(triggered()), textEditor,	SLOT(selectAll()));
-        connect(actionGoToLine, SIGNAL(triggered()), goToLine, 		SLOT(slotGoToLine()));
-        connect(actionGoToMatchingBracket, SIGNAL(triggered()),textEditor ,SLOT(moveToMatchingBrace()));
-        connect(actionCompile, 	SIGNAL(triggered()), this, 		SLOT(slotCompile()));
-        connect(actionRun, 	SIGNAL(triggered()),this,		SLOT(slotRun()));
-        connect(actionCommon,	SIGNAL(triggered()), settings, 		SLOT(slotCommOptions()));
-        connect(actionAbout, 	SIGNAL(triggered()),this,		SLOT(slotAbout()));
-        connect(actionKuzya_Help,	SIGNAL(triggered()),this,	SLOT(slotHelpKuzya()));
-        connect(actionFind,	SIGNAL(triggered()),findText,		SLOT(slotFindDialog()));
-        connect(actionReplace,	SIGNAL(triggered()),replaceText,	SLOT(slotReplaceDialog()));
-        connect(textEditor,	SIGNAL(cursorPositionChanged (int, int)),this,	SLOT(slotUpdateStatusLabel(int, int)));
-        connect(textEditor,	SIGNAL(modificationChanged(bool)),this,	SLOT(slotUpdateWindowName(bool)));
-        connect(textEditor,	SIGNAL(marginClicked (int, int, Qt::KeyboardModifiers)), this, SLOT(slotMarginClicked(int, int, Qt::KeyboardModifiers)));
-        connect(compiler,	SIGNAL(compileEnded(int)),	this,	SLOT(slotAfterCompile(int)));
+    fileDialog = new QFileDialog(this);
+    QList<QUrl> list = fileDialog->sidebarUrls();
+    list << QUrl::fromLocalFile(DefaultDir);
+    fileDialog->setSidebarUrls(list);
 
-        connect(actionNotificationList, SIGNAL(toggled(bool)), this,    SLOT(slotShowNotificationList(bool)));
-        connect(notificationList, SIGNAL(itemSelectionChanged()), this, SLOT(slotShowErrorFromList()));
-        connect(notificationList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotGotoErrorLine(QListWidgetItem*)));
+    ///-------------------------------------------------------------------------------------------------------------------
 
-        connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
+    connect(actionNew,	SIGNAL(triggered()),this,		SLOT(slotNew()));
+    connect(actionOpen, 	SIGNAL(triggered()),this,		SLOT(slotOpen()));
+    connect(actionSave,	SIGNAL(triggered()),this,		SLOT(slotSave()));
+    connect(actionSave_as,	SIGNAL(triggered()),this,		SLOT(slotSave_as()));
+    connect(actionPrint,	SIGNAL(triggered()),this,		SLOT(slotPrint()));
+    connect(actionExit, 	SIGNAL(triggered()), this,		SLOT(slotExit()));
+    connect(actionUndo, 	SIGNAL(triggered()), textEditor,	SLOT(undo()));
+    connect(actionRedo, 	SIGNAL(triggered()), textEditor,	SLOT(redo()));
+    connect(actionCut, 	SIGNAL(triggered()), textEditor,	SLOT(cut()));
+    connect(actionCopy, 	SIGNAL(triggered()), textEditor,	SLOT(copy()));
+    connect(actionPaste,	SIGNAL(triggered()), textEditor,	SLOT(paste()));
+    connect(actionSelect_all,SIGNAL(triggered()), textEditor,	SLOT(selectAll()));
+    connect(actionGoToLine, SIGNAL(triggered()), goToLine, 		SLOT(slotGoToLine()));
+    connect(actionGoToMatchingBracket, SIGNAL(triggered()),textEditor ,SLOT(moveToMatchingBrace()));
+    connect(actionCompile, 	SIGNAL(triggered()), this, 		SLOT(slotCompile()));
+    connect(actionRun, 	SIGNAL(triggered()),this,		SLOT(slotRun()));
+    connect(actionCommon,	SIGNAL(triggered()), settings, 		SLOT(slotCommOptions()));
+    connect(actionAbout, 	SIGNAL(triggered()),this,		SLOT(slotAbout()));
+    connect(actionKuzya_Help,	SIGNAL(triggered()),this,	SLOT(slotHelpKuzya()));
+    connect(actionFind,	SIGNAL(triggered()),findText,		SLOT(slotFindDialog()));
+    connect(actionReplace,	SIGNAL(triggered()),replaceText,	SLOT(slotReplaceDialog()));
+    connect(textEditor,	SIGNAL(cursorPositionChanged (int, int)),this,	SLOT(slotUpdateStatusLabel(int, int)));
+    connect(textEditor,	SIGNAL(modificationChanged(bool)),this,	SLOT(slotUpdateWindowName(bool)));
+    connect(textEditor,	SIGNAL(marginClicked (int, int, Qt::KeyboardModifiers)), this, SLOT(slotMarginClicked(int, int, Qt::KeyboardModifiers)));
+    connect(compiler,	SIGNAL(compileEnded(int)),	this,	SLOT(slotAfterCompile(int)));
 
-        connect ( actionDefFontSize,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomDef() ) );
-        connect ( actionEnlFont,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomIn() ) );
-        connect ( actionShrinkFont,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomOut() ) );
-        connect	(actionToggleFolds,	SIGNAL(triggered()),	this,	SLOT (slotToggleFolds()));
-        connect ( actionAbout_Qt,	SIGNAL ( triggered() ),	qApp,	SLOT ( aboutQt() ) );
+    connect(actionNotificationList, SIGNAL(toggled(bool)), this,    SLOT(slotShowNotificationList(bool)));
+    connect(notificationList, SIGNAL(itemSelectionChanged()), this, SLOT(slotShowErrorFromList()));
+    connect(notificationList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotGotoErrorLine(QListWidgetItem*)));
 
-        connect(actionDefaultMode, SIGNAL(triggered()), this,           SLOT(slotDefaultMode()));
-        connect(actionAlternativeMode, SIGNAL(triggered()), this,       SLOT(slotAlternativeMode()));
-        connect(actionObjectMode, SIGNAL(triggered()), this,            SLOT(slotObjectMode()));
-        connect(actionStaticLibMode, SIGNAL(triggered()), this,         SLOT(slotStaticLibMode()));
-        connect(actionDynamicLibMode, SIGNAL(triggered()), this,        SLOT(slotDynamicLibMode()));
+    connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
 
-        connect(textEditor,	SIGNAL(modificationChanged(bool)), this,SLOT(slotModificationChanged(bool)));
+    connect ( actionDefFontSize,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomDef() ) );
+    connect ( actionEnlFont,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomIn() ) );
+    connect ( actionShrinkFont,	SIGNAL ( triggered() ),	this,	SLOT ( slotZoomOut() ) );
+    connect	(actionToggleFolds,	SIGNAL(triggered()),	this,	SLOT (slotToggleFolds()));
+    connect ( actionAbout_Qt,	SIGNAL ( triggered() ),	qApp,	SLOT ( aboutQt() ) );
 
-        connect(fileDialog, SIGNAL(filterSelected(QString)), this,      SLOT(slotSetFileSuffix(QString)));
+    connect(actionDefaultMode, SIGNAL(triggered()), this,           SLOT(slotDefaultMode()));
+    connect(actionAlternativeMode, SIGNAL(triggered()), this,       SLOT(slotAlternativeMode()));
+    connect(actionObjectMode, SIGNAL(triggered()), this,            SLOT(slotObjectMode()));
+    connect(actionStaticLibMode, SIGNAL(triggered()), this,         SLOT(slotStaticLibMode()));
+    connect(actionDynamicLibMode, SIGNAL(triggered()), this,        SLOT(slotDynamicLibMode()));
 
-        statusBar()->showMessage(tr("Ready"));
+    connect(textEditor,	SIGNAL(modificationChanged(bool)), this,SLOT(slotModificationChanged(bool)));
 
-        QShortcut *notificationListShortcut = new QShortcut(textEditor);
-        notificationListShortcut->setKey(Qt::CTRL+Qt::Key_Down);
-        connect(notificationListShortcut, SIGNAL(activated()), notificationList, SLOT(setFocus()));
+    connect(fileDialog, SIGNAL(filterSelected(QString)), this,      SLOT(slotSetFileSuffix(QString)));
 
-        QShortcut *textEditorShortcut = new QShortcut(textEditor);
-        textEditorShortcut->setKey(Qt::CTRL+Qt::Key_Up);
-        connect(textEditorShortcut, SIGNAL(activated()), textEditor, SLOT(setFocus()));
+    statusBar()->showMessage(tr("Ready"));
+
+    QShortcut *notificationListShortcut = new QShortcut(textEditor);
+    notificationListShortcut->setKey(Qt::CTRL+Qt::Key_Down);
+    connect(notificationListShortcut, SIGNAL(activated()), notificationList, SLOT(setFocus()));
+
+    QShortcut *textEditorShortcut = new QShortcut(textEditor);
+    textEditorShortcut->setKey(Qt::CTRL+Qt::Key_Up);
+    connect(textEditorShortcut, SIGNAL(activated()), textEditor, SLOT(setFocus()));
+
+    if (qApp->argc() > 1)
+    {
+        this->openFile(qApp->argv()[qApp->argc()-1]);
+    }
 }
 ///___________________________________________________________________________________________________________________
 /**
@@ -254,17 +259,17 @@ ________________________________________________________________________________
 
 void Kuzya::setAutoCompletionEnabled(bool b)
 {
-        if(b)
+    if(b)
+    {
+        connect(shortcut,SIGNAL(activated()),this,SLOT(slotShowAutoComplete()));
+    }
+    else
+    {
+        try
         {
-                connect(shortcut,SIGNAL(activated()),this,SLOT(slotShowAutoComplete()));
-        }
-        else
-        {
-           try
-           {
-                disconnect(shortcut,SIGNAL(activated()),this,SLOT(slotShowAutoComplete()));
-           }catch(int e){}
-        }
+            disconnect(shortcut,SIGNAL(activated()),this,SLOT(slotShowAutoComplete()));
+        }catch(int e){}
+    }
 }
 
 
@@ -272,84 +277,84 @@ void Kuzya::setAutoCompletionEnabled(bool b)
 
 void Kuzya::loadPascalLexer(void)
 {
-        QsciLexerPascal *pascalLexer = new QsciLexerPascal(this);
-        textEditor->setLexer(pascalLexer);
+    QsciLexerPascal *pascalLexer = new QsciLexerPascal(this);
+    textEditor->setLexer(pascalLexer);
 }
 ///***********************************************************************************************************///
 void Kuzya::toggleFoldsActionEnabled(bool b)
 {
-       actionToggleFolds->setEnabled(b);
+    actionToggleFolds->setEnabled(b);
 }
 ///***********************************************************************************************************///
 QsciScintilla* Kuzya::getTextEditorPointer(void)
 {
-        return textEditor;
+    return textEditor;
 }
 ///***********************************************************************************************************///
 void Kuzya::loadCPPLexer(void)
 {
-        cppLexer = new QsciLexerCPP(this);
-        textEditor->setLexer(cppLexer);
+    cppLexer = new QsciLexerCPP(this);
+    textEditor->setLexer(cppLexer);
 }
 ///***********************************************************************************************************///
 void Kuzya::setEditorFont(QFont font)
 {
-        cppLexer->setFont(font,-1);
+    cppLexer->setFont(font,-1);
 }
 ///***********************************************************************************************************///
 QFont Kuzya::getEditorFont(void)
 {
-        return cppLexer->font(-1);
+    return cppLexer->font(-1);
 }
 ///***********************************************************************************************************///
 void Kuzya::retranslateAll(void)
 {
-        findText->retranslate();
-        replaceText->retranslate();
-        goToLine->retranslate();
-        settings->retranslate();        
-        retranslateUi(this);
-        int line;
-        int index;
-        textEditor->getCursorPosition(&line,&index);
-        slotUpdateStatusLabel(line,index);
+    findText->retranslate();
+    replaceText->retranslate();
+    goToLine->retranslate();
+    settings->retranslate();
+    retranslateUi(this);
+    int line;
+    int index;
+    textEditor->getCursorPosition(&line,&index);
+    slotUpdateStatusLabel(line,index);
 
 }
 ///***********************************************************************************************************///
 void Kuzya::setDefaultDir(QString dir)
 {
-        DefaultDir=dir;
+    DefaultDir=dir;
 }
 ///***********************************************************************************************************///
 void Kuzya::markerDeleteAll(void)
 {
-        textEditor->markerDeleteAll();
+    textEditor->markerDeleteAll();
 }
 ///***********************************************************************************************************///
 void Kuzya::setText(QString text)
 {
-        textEditor->setText(text);
+    textEditor->setText(text);
 }
 ///***********************************************************************************************************///
 void Kuzya::setMWTitle(QString title)
 {
-        fileName=title;
-        slotUpdateWindowName(false);
+    fileName=title;
+    slotUpdateWindowName(false);
 }
 ///***********************************************************************************************************///
 void Kuzya::setTEModified(bool status)
 {
-        textEditor->setModified(status);
+    textEditor->setModified(status);
 }
 ///***********************************************************************************************************///
 void Kuzya::setFont(QFont Font)
 {
-        textEditor->setFont(Font);
+    textEditor->setFont(Font);
 }
 ///***********************************************************************************************************///
 void Kuzya::retranslate(void)
 {
-        retranslateUi(this);
+    retranslateUi(this);
 }
 /**
 *********openFile*****************************************************************************************************
@@ -357,26 +362,28 @@ void Kuzya::retranslate(void)
 
 void Kuzya::openFile(QString FileName)
 {
-        fileName=FileName;
-        if (FileName.isEmpty()) return;
+    fileName=FileName;
+    if (FileName.isEmpty()) return;
 
-        file->setFileName(FileName);
-        if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) return;
+    file->setFileName(FileName);
+    if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) return;
 
-        QTextStream stream(file);
-        textEditor->setText(stream.readAll());
-        file->close();
+    QTextStream stream(file);
+    textEditor->setText(stream.readAll());
+    file->close();
 
-        if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
+    if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
 
-        textEditor->setModified(false);
+    textEditor->setModified(false);
 
-        statusBar()->showMessage(tr("Opened"), 2000);
+    statusBar()->showMessage(tr("Opened"), 2000);
 
-        slotUpdateWindowName(false);
+    slotUpdateWindowName(false);
 
-        addFileNameToList(FileName);
-        settings->saveLastProjectName(fileName);
+    addFileNameToList(FileName);
+    settings->saveLastProjectName(fileName);
+
+    refreshProfileSettings();
 }
 
 /**
@@ -384,35 +391,35 @@ void Kuzya::openFile(QString FileName)
 **/
 void Kuzya::cleanMemory_ActOpenRecentFileVector(void)
 {
-        disconnect(signalMapper, SIGNAL(mapped(QString)),this, SLOT(slotOpenRecentFile(QString)));
-        if(!ActOpenRecentFileVector.isEmpty())
+    disconnect(signalMapper, SIGNAL(mapped(QString)),this, SLOT(slotOpenRecentFile(QString)));
+    if(!ActOpenRecentFileVector.isEmpty())
+    {
+        for(int i=getFileListCount()-1;i>=0;i--)
         {
-                for(int i=getFileListCount()-1;i>=0;i--)
-                {
-                        delete ActOpenRecentFileVector[i];
-                        signalMapper->removeMappings(ActOpenRecentFileVector[i]);
-                }
-
+            delete ActOpenRecentFileVector[i];
+            signalMapper->removeMappings(ActOpenRecentFileVector[i]);
         }
+
+    }
 }
 /**
 *******************************************************************************************************
 **/
 void Kuzya::slotUpdateRecentFileList(void)
 {
-        ActOpenRecentFileVector.clear();
-        menuRecent_Files->clear();
-        for(int i=getFileListCount()-1;i>=0;i--)
-        {
-                ActOpenRecentFileVector.push_front(new QAction(RFileList->at(i),this));
-        }
-        for(int i=getFileListCount()-1;i>=0;i--)
-        {
-                menuRecent_Files->addAction(ActOpenRecentFileVector[i]);
-                connect(ActOpenRecentFileVector[i],SIGNAL(triggered()),signalMapper,SLOT(map()));
-                signalMapper->setMapping(ActOpenRecentFileVector[i],ActOpenRecentFileVector[i]->text());
-        }
-        connect(signalMapper,SIGNAL(mapped(QString)),this,SLOT(slotOpenRecentFile(QString)));
+    ActOpenRecentFileVector.clear();
+    menuRecent_Files->clear();
+    for(int i=getFileListCount()-1;i>=0;i--)
+    {
+        ActOpenRecentFileVector.push_front(new QAction(RFileList->at(i),this));
+    }
+    for(int i=getFileListCount()-1;i>=0;i--)
+    {
+        menuRecent_Files->addAction(ActOpenRecentFileVector[i]);
+        connect(ActOpenRecentFileVector[i],SIGNAL(triggered()),signalMapper,SLOT(map()));
+        signalMapper->setMapping(ActOpenRecentFileVector[i],ActOpenRecentFileVector[i]->text());
+    }
+    connect(signalMapper,SIGNAL(mapped(QString)),this,SLOT(slotOpenRecentFile(QString)));
 }
 
 
@@ -422,80 +429,80 @@ void Kuzya::slotUpdateRecentFileList(void)
 **/
 int Kuzya::getFileListCount(void)
 {
-        return RFileList->count();
+    return RFileList->count();
 }
 /**
 *******addToRecentFilesMenu****************************************************************************************
 **/
 void Kuzya::addFileNameToList(QString FN)
 {
-                cleanMemory_ActOpenRecentFileVector();
-                if(MaxCount_RFileList!=0)
-                {
-                        if(!menuRecent_Files->isEnabled()) menuRecent_Files->setEnabled(true);
-                        if(RFileList->indexOf(FN)!=-1)
-                        {
-                                RFileList->move(RFileList->indexOf(FN),RFileList->count()-1);
-                        }
-                        else
-                        {
-                                if(RFileList->count()<MaxCount_RFileList)
-                                {
-                                        RFileList->push_back(FN);
-                                }
-                                else
-                                {
-                                        RFileList->removeFirst();
-                                        RFileList->push_back(FN);
-                                }
-                        }
-                        slotUpdateRecentFileList();
-                }
-                else
-                {
-                        if(menuRecent_Files->isEnabled()) menuRecent_Files->setEnabled(false);
-                }
+    cleanMemory_ActOpenRecentFileVector();
+    if(MaxCount_RFileList!=0)
+    {
+        if(!menuRecent_Files->isEnabled()) menuRecent_Files->setEnabled(true);
+        if(RFileList->indexOf(FN)!=-1)
+        {
+            RFileList->move(RFileList->indexOf(FN),RFileList->count()-1);
+        }
+        else
+        {
+            if(RFileList->count()<MaxCount_RFileList)
+            {
+                RFileList->push_back(FN);
+            }
+            else
+            {
+                RFileList->removeFirst();
+                RFileList->push_back(FN);
+            }
+        }
+        slotUpdateRecentFileList();
+    }
+    else
+    {
+        if(menuRecent_Files->isEnabled()) menuRecent_Files->setEnabled(false);
+    }
 }
 /**
 **********resizeRFileList*****************************************************************************************
 **/
 void Kuzya::resizeRFileList(int NewCount)
 {
-        if(NewCount<RFileList->count())
+    if(NewCount<RFileList->count())
+    {
+        for(int i=RFileList->count()-NewCount;i>0;i--)
         {
-                for(int i=RFileList->count()-NewCount;i>0;i--)
-                {
-                        RFileList->removeFirst();//changing size of list
-                }
+            RFileList->removeFirst();//changing size of list
+        }
 
-        }
-        if(NewCount==0)
-        {
-                menuRecent_Files->setEnabled (false);
-        }
-        cleanMemory_ActOpenRecentFileVector();
-        slotUpdateRecentFileList();
+    }
+    if(NewCount==0)
+    {
+        menuRecent_Files->setEnabled (false);
+    }
+    cleanMemory_ActOpenRecentFileVector();
+    slotUpdateRecentFileList();
 }
 /**
 **************getRFileListAt****************************************************************************************
 **/
 QString Kuzya::getRFileListAt(int i)
 {
-        return RFileList->at(i);
+    return RFileList->at(i);
 }
 /**
 ********setMaxCount_RFileList****************************************************************************************
 **/
 void Kuzya::setMaxCount_RFileList(int count)
 {
-        MaxCount_RFileList=count;
+    MaxCount_RFileList=count;
 }
 /**
 *******getMaxCount_RFileList****************************************************************************************
 **/
 int Kuzya::getMaxCount_RFileList(void)
 {
-        return MaxCount_RFileList;
+    return MaxCount_RFileList;
 }
 
 /**
@@ -509,29 +516,29 @@ ________________________________________________________________________________
 
 void Kuzya::slotNew(void)
 {
-        if(slotSaveChangesNotifier()==false) return;
+    if(slotSaveChangesNotifier()==false) return;
 
-        textEditor->markerDeleteAll();
-        notificationList->clear();
-        languageComboBox->clear();
-        textEditor->setLexer(0);
+    textEditor->markerDeleteAll();
+    notificationList->clear();
+    languageComboBox->clear();
+    textEditor->setLexer(0);
 
-        fileName = QString::null;
-        translatedFileName = QString::null;
+    fileName = QString::null;
+    translatedFileName = QString::null;
 
-        textEditor->clear();
-        textEditor->setMarginWidth(3,"12");
-        setWindowTitle("Kuzya");
-        statusBar()->showMessage(tr("Created new file"), 2000);
-        textEditor->setModified(false);
+    textEditor->clear();
+    textEditor->setMarginWidth(3,"12");
+    setWindowTitle("Kuzya");
+    statusBar()->showMessage(tr("Created new file"), 2000);
+    textEditor->setModified(false);
 
-        menuCompilation_Mode->setDisabled(true);
-        menuTemplates->setDisabled(true);
-        actionCompile->setDisabled(false);
-        actionRun->setDisabled(false);
-        languageComboBoxAction->setVisible(false);
+    menuCompilation_Mode->setDisabled(true);
+    menuTemplates->setDisabled(true);
+    actionCompile->setDisabled(false);
+    actionRun->setDisabled(false);
+    languageComboBoxAction->setVisible(false);
 
-        srcRecompiled  = false;
+    srcRecompiled  = false;
 }
 
 /**
@@ -539,24 +546,24 @@ void Kuzya::slotNew(void)
 **/
 void Kuzya::slotOpen(void)
 {
-        if(slotSaveChangesNotifier()==false) return;
+    if(slotSaveChangesNotifier()==false) return;
 
-        //QString openedFileName = fileDialog->getOpenFileName(this, tr("Open File"), DefaultDir, filter, &currentFilter);
-        refreshDialogSettings();
-        fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
-        fileDialog->setFileMode(QFileDialog::ExistingFile);
-        fileDialog->setDirectory(DefaultDir);
-        QString openedFileName;
-        if (fileDialog->exec())
-            openedFileName = fileDialog->selectedFiles().at(0);
+    //QString openedFileName = fileDialog->getOpenFileName(this, tr("Open File"), DefaultDir, filter, &currentFilter);
+    refreshDialogSettings();
+    fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
+    fileDialog->setFileMode(QFileDialog::ExistingFile);
+    fileDialog->setDirectory(DefaultDir);
+    QString openedFileName;
+    if (fileDialog->exec())
+        openedFileName = fileDialog->selectedFiles().at(0);
 
-        if ("" != openedFileName)
-        {
-                textEditor->markerDeleteAll();
-                notificationList->clear();
-                openFile(openedFileName);
-                refreshProfileSettings();
-        }
+    if ("" != openedFileName)
+    {
+        textEditor->markerDeleteAll();
+        notificationList->clear();
+        openFile(openedFileName);
+//        refreshProfileSettings();
+    }
 }
 
 /**
@@ -674,13 +681,13 @@ void Kuzya::refreshProfileSettings()
 
         srcRecompiled = false;
 
-   #ifdef WIN32
+#ifdef WIN32
         QString path = QApplication::applicationDirPath();
         path.truncate(path.lastIndexOf("/", -1));
         path = path+"/profiles/";
-   #else
+#else
         QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/");
-   #endif
+#endif
         unloadTemplates();
         loadTemplates(path+language+"/"+language+".ini");
 
@@ -717,7 +724,7 @@ void Kuzya::refreshProfileSettings()
         languageComboBox->addItem(QIcon(path+"english.png"), "english (default)");
         foreach (QString trans, supportedTranslations)
         {
-           languageComboBox->addItem(QIcon(path+trans+".png"), trans);
+            languageComboBox->addItem(QIcon(path+trans+".png"), trans);
         }
         QString codeTranslation = translator->translation();
         languageComboBox->setCurrentIndex(supportedTranslations.indexOf(codeTranslation)+1);
@@ -731,61 +738,11 @@ void Kuzya::refreshProfileSettings()
 **/
 bool Kuzya::slotSave(void)
 {
-        QString newFileName;
-        if (fileName.isEmpty())
-        {
+    QString newFileName;
+    if (fileName.isEmpty())
+    {
 
-           // fileName = fileDialog->getSaveFileName(this, tr("Save as..."), DefaultDir, filter, &currentFilter);
-            refreshDialogSettings();
-            fileDialog->setAcceptMode(QFileDialog::AcceptSave);
-            fileDialog->setFileMode(QFileDialog::AnyFile);
-
-            if (fileDialog->exec())
-                newFileName = fileDialog->selectedFiles().at(0);
-
-            if (newFileName.isEmpty()) return false;
-            else fileName = newFileName;
-        }
-
-
-        QFile file(fileName);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        {
-                QMessageBox *msgBox= new QMessageBox();
-                msgBox->setIcon(QMessageBox::Warning);
-                msgBox->setWindowTitle(tr("File cannot be saved "));
-                msgBox->setText(tr("Do you have permision to access data in this folder? Select another place to save this file"));
-                QAbstractButton *OkBtn = msgBox->addButton(tr("Ok"),QMessageBox::ActionRole);
-                msgBox->exec();
-                if (msgBox->clickedButton()==(OkBtn))
-                {
-                    //slotSave_as();
-                }
-                delete msgBox;
-                return false ;
-        }
-        QTextStream stream(&file);
-        stream << textEditor->text();
-        textEditor->setModified(false);
-        file.close();
-        statusBar()->showMessage(tr("Saved"), 2000);
-        addFileNameToList(file.fileName());
-        refreshProfileSettings();
-        slotUpdateWindowName(false);
-        if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
-        return true;
-}
-
-/**
-*******************************************************************************************************
-**/
-void Kuzya::slotSave_as(void)
-{
-        QString oldFileName(fileName);
-        QString newFileName;
-//        newFileName = fileDialog->getSaveFileName(this, tr("Save as..."),
-//                                           DefaultDir , filter, &currentFilter);
-
+        // fileName = fileDialog->getSaveFileName(this, tr("Save as..."), DefaultDir, filter, &currentFilter);
         refreshDialogSettings();
         fileDialog->setAcceptMode(QFileDialog::AcceptSave);
         fileDialog->setFileMode(QFileDialog::AnyFile);
@@ -793,49 +750,99 @@ void Kuzya::slotSave_as(void)
         if (fileDialog->exec())
             newFileName = fileDialog->selectedFiles().at(0);
 
-        if (newFileName.isEmpty()) return;
+        if (newFileName.isEmpty()) return false;
+        else fileName = newFileName;
+    }
 
-        fileName = newFileName;
-        if (!slotSave()) fileName = oldFileName;
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QMessageBox *msgBox= new QMessageBox();
+        msgBox->setIcon(QMessageBox::Warning);
+        msgBox->setWindowTitle(tr("File cannot be saved "));
+        msgBox->setText(tr("Do you have permision to access data in this folder? Select another place to save this file"));
+        QAbstractButton *OkBtn = msgBox->addButton(tr("Ok"),QMessageBox::ActionRole);
+        msgBox->exec();
+        if (msgBox->clickedButton()==(OkBtn))
+        {
+            //slotSave_as();
+        }
+        delete msgBox;
+        return false ;
+    }
+    QTextStream stream(&file);
+    stream << textEditor->text();
+    textEditor->setModified(false);
+    file.close();
+    statusBar()->showMessage(tr("Saved"), 2000);
+    addFileNameToList(file.fileName());
+    refreshProfileSettings();
+    slotUpdateWindowName(false);
+    if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
+    return true;
+}
+
+/**
+*******************************************************************************************************
+**/
+void Kuzya::slotSave_as(void)
+{
+    QString oldFileName(fileName);
+    QString newFileName;
+    //        newFileName = fileDialog->getSaveFileName(this, tr("Save as..."),
+    //                                           DefaultDir , filter, &currentFilter);
+
+    refreshDialogSettings();
+    fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+    fileDialog->setFileMode(QFileDialog::AnyFile);
+
+    if (fileDialog->exec())
+        newFileName = fileDialog->selectedFiles().at(0);
+
+    if (newFileName.isEmpty()) return;
+
+    fileName = newFileName;
+    if (!slotSave()) fileName = oldFileName;
 }
 /**
 *******************************************************************************************************
 **/
 void Kuzya::slotPrint(void)
 {
-        printer = new QsciPrinter(QPrinter::ScreenResolution);
-      //  QsciScintillaBase* qsb;
-       // qsb=new QsciScintillaBase(textEditor);
-        //formatPage(QPainter&painter,bool drawing,QPrinter::setFullPage(),int   pagenr );
-      //  printer->printRange(qsb,-1,-1);
-        QPrintDialog printDialog(printer,textEditor);
+    printer = new QsciPrinter(QPrinter::ScreenResolution);
+    //  QsciScintillaBase* qsb;
+    // qsb=new QsciScintillaBase(textEditor);
+    //formatPage(QPainter&painter,bool drawing,QPrinter::setFullPage(),int   pagenr );
+    //  printer->printRange(qsb,-1,-1);
+    QPrintDialog printDialog(printer,textEditor);
 
-        if(printDialog.exec()==QDialog::Accepted)
-        {
-            QTextDocument doc;
-            doc.setPlainText(textEditor->text());
-            doc.print(printer);
-           /*     QPainter painter(printer);
+    if(printDialog.exec()==QDialog::Accepted)
+    {
+        QTextDocument doc;
+        doc.setPlainText(textEditor->text());
+        doc.print(printer);
+        /*     QPainter painter(printer);
                 QRect rect(painter.viewport());
                 painter.drawText(rect,textEditor->text());
               */
 
-        }
-        delete printer;
+    }
+    delete printer;
 }
 /**
 *******************************************************************************************************
 **/
 void Kuzya::slotExit(void)
 {
-        settings->writeSettings();
-        settings->writeMainWindowState();
+    settings->writeSettings();
+    settings->writeMainWindowState();
 
 
-//        if (!fileName.isEmpty())
-//            settings->saveLastProjectName(fileName);
+    //        if (!fileName.isEmpty())
+    //            settings->saveLastProjectName(fileName);
 
-        close();
+    close();
 }
 /**
 *******************************************************************************************************
@@ -860,31 +867,31 @@ void Kuzya::slotRun(void)
 **/
 void Kuzya::slotCompile(void)
 {
-        if (textEditor->isModified()) slotSave();
+    if (textEditor->isModified()) slotSave();
 
-        removeAllNotifications();
-        textEditor->markerDeleteAll(currentMarker);
-        if (fileName.isEmpty())
-        {
-                addNotification(FAILING, tr("No source to compile"));
-                return;
-        }
+    removeAllNotifications();
+    textEditor->markerDeleteAll(currentMarker);
+    if (fileName.isEmpty())
+    {
+        addNotification(FAILING, tr("No source to compile"));
+        return;
+    }
 
+    textEditor->setReadOnly(true);
+    if (compiler->isReady())
+    {
+        addNotification(WAIT, tr("Compilling..."));
         textEditor->setReadOnly(true);
-        if (compiler->isReady())
-        {
-                addNotification(WAIT, tr("Compilling..."));
-                textEditor->setReadOnly(true);
-                translator->retranslate();
-                compiler->compile();
-                srcRecompiled = true;
-        }
-        else addNotification(FAILING, tr("Could not open compiler profile"));
+        translator->retranslate();
+        compiler->compile();
+        srcRecompiled = true;
+    }
+    else addNotification(FAILING, tr("Could not open compiler profile"));
 }
 
 Compiler* Kuzya::getCurrentCompiler(void)
 {
-        return compiler;
+    return compiler;
 }
 
 /**
@@ -892,26 +899,26 @@ Compiler* Kuzya::getCurrentCompiler(void)
 **/
 void Kuzya::slotAfterCompile(int status)
 {
-        textEditor->setReadOnly(false);
-        notificationList->clear();
-        if (Compiler::NOERROR == status)
+    textEditor->setReadOnly(false);
+    notificationList->clear();
+    if (Compiler::NOERROR == status)
+    {
+        paintWarningMarkers(compiler->getLastWarnings());
+        addNotification(SUCCESS, tr("Compiled successfuly!"));
+    }
+    else
+    {
+        if (Compiler::FAILED_TO_START == status)
         {
-                paintWarningMarkers(compiler->getLastWarnings());
-                addNotification(SUCCESS, tr("Compiled successfuly!"));
+            addNotification(FAILING, tr("Unable to start compiler"));
         }
         else
         {
-                if (Compiler::FAILED_TO_START == status)
-                {
-                    addNotification(FAILING, tr("Unable to start compiler"));
-                }
-                else
-                {
-                    paintErrorMarkers(compiler->getLastErrors());
-                    paintWarningMarkers(compiler->getLastWarnings());
-                    addNotification(FAILING, tr("Compilation failed!"));
-                }
+            paintErrorMarkers(compiler->getLastErrors());
+            paintWarningMarkers(compiler->getLastWarnings());
+            addNotification(FAILING, tr("Compilation failed!"));
         }
+    }
 
 }
 
@@ -920,43 +927,43 @@ void Kuzya::slotAfterCompile(int status)
 **/
 void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
 {
-        if (errorList->empty()) return;
-        int errCount = 0;
-        int firstAttached = 0;
-        for (int i = 0; i < errorList->size(); ++i)
+    if (errorList->empty()) return;
+    int errCount = 0;
+    int firstAttached = 0;
+    for (int i = 0; i < errorList->size(); ++i)
+    {
+        if (0 != errorList->at(i).line)
         {
-            if (0 != errorList->at(i).line)
-            {
-                addNotification(ERROR, errorList->at(i).description, true, errorList->at(i).line);
-                if (0 == firstAttached) firstAttached = i;
-                errCount++;
-            }
-            else addNotification(COMPILER, errorList->at(i).description);
+            addNotification(ERROR, errorList->at(i).description, true, errorList->at(i).line);
+            if (0 == firstAttached) firstAttached = i;
+            errCount++;
         }
+        else addNotification(COMPILER, errorList->at(i).description);
+    }
 
-        QString str;
-        if (0 != errCount) addNotification(INFO, tr("Found errors (%2) in file %1").arg(fileName).arg(errCount));
+    QString str;
+    if (0 != errCount) addNotification(INFO, tr("Found errors (%2) in file %1").arg(fileName).arg(errCount));
 
-        notificationList->setCurrentItem(notificationList->item(firstAttached));
-        notificationList->setFocus();
+    notificationList->setCurrentItem(notificationList->item(firstAttached));
+    notificationList->setFocus();
 }
 /**
 *******************************************************************************************************
 **/
 void Kuzya::paintWarningMarkers(QList<Compiler::compilerWarning>* warningList)
 {
-        if (warningList->empty()) return;
-        int waCount = 0;
-        for (int i = 0; i < warningList->size(); ++i)
+    if (warningList->empty()) return;
+    int waCount = 0;
+    for (int i = 0; i < warningList->size(); ++i)
+    {
+        if (0 != warningList->at(i).line)
         {
-            if (0 != warningList->at(i).line)
-            {
-                addNotification(WARNING, warningList->at(i).description, true, warningList->at(i).line);
-                waCount++;
-            }
-            else addNotification(COMPILER, warningList->at(i).description);
+            addNotification(WARNING, warningList->at(i).description, true, warningList->at(i).line);
+            waCount++;
         }
-        if (0 != waCount) addNotification(INFO, tr("Found warnings (%2) in file %1").arg(fileName).arg(waCount));
+        else addNotification(COMPILER, warningList->at(i).description);
+    }
+    if (0 != waCount) addNotification(INFO, tr("Found warnings (%2) in file %1").arg(fileName).arg(waCount));
 }
 
 /**
@@ -965,31 +972,31 @@ void Kuzya::paintWarningMarkers(QList<Compiler::compilerWarning>* warningList)
 void Kuzya::slotAbout(void)
 {
     QMessageBox *aboutBox= new QMessageBox( QMessageBox::Information,tr("About"),QString("\t  <big><b><centre> \t    The Kuzya %1 </centre> </b></big>  "
-                                              "\n  <p> Free Development Environment</p>\n\n"
-                                              "build on Jule 7 2010"
-                                              "<p> Kuzya is simple crossplatform IDE for people who study  programming."
-                                              "Main idea of it is to concentrate attention  of the users only on learning the programming \n"
-                                              "\t language  but not on usage of IDE. For more information visit our official web site "
-                                              "<a href= http://kuzya.sourceforge.net>http://kuzya.sourceforge.net</a> \n\n </p>"
-                                              "<pre> <b>Idea:</b> \n \t <centre>Grygoriy Zlobin</centre>"
-                                              "\n <u>zlobin@electronics.wups.lviv.ua</u> "
-                                              "\n\n <b>Team leader:</b> \n \t <centre>Andriy Shevchyk</centre> "
-                                              "\n <u>shevchyk@users.sourceforge.net</u> "
-                                              "\n\n <b>Developers:</b>      \n \t <centre>Volodymyr Shevchyk</centre> "
-                                              "\n <u>volder@users.sourceforge.net</u>"
-                                              "\n              \n \t <centre>Victor Sklyar</centre> "
-                                              "\n <u>bouyantgrambler@users.sourceforge.net</u>"
-                                              "\n              \n \t <centre>Alex Chmykhalo</centre> "
-                                              "\n <u>alexchmykhalo@users.sourceforge.net</u>"
-                                              "\n\n <b>Splashscreen Design:</b>      \n \t <centre>Oksana Rondyak</centre> "
-                                              "\n <u>relax777@users.sourceforge.net</u> </pre>").arg(KUZYA_VERSION),QMessageBox::Ok,this,Qt::Dialog);
-    #ifdef WIN32
-        aboutBox->setIconPixmap(QPixmap(QApplication::applicationDirPath()+"/../resources/Kuzya.png"));
-    #else
-        aboutBox->setIconPixmap(QPixmap(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/Kuzya.png")));
-    #endif
+                                                                                         "\n  <p> Free Development Environment</p>\n\n"
+                                                                                         "build on Jule 7 2010"
+                                                                                         "<p> Kuzya is simple crossplatform IDE for people who study  programming."
+                                                                                         "Main idea of it is to concentrate attention  of the users only on learning the programming \n"
+                                                                                         "\t language  but not on usage of IDE. For more information visit our official web site "
+                                                                                         "<a href= http://kuzya.sourceforge.net>http://kuzya.sourceforge.net</a> \n\n </p>"
+                                                                                         "<pre> <b>Idea:</b> \n \t <centre>Grygoriy Zlobin</centre>"
+                                                                                         "\n <u>zlobin@electronics.wups.lviv.ua</u> "
+                                                                                         "\n\n <b>Team leader:</b> \n \t <centre>Andriy Shevchyk</centre> "
+                                                                                         "\n <u>shevchyk@users.sourceforge.net</u> "
+                                                                                         "\n\n <b>Developers:</b>      \n \t <centre>Volodymyr Shevchyk</centre> "
+                                                                                         "\n <u>volder@users.sourceforge.net</u>"
+                                                                                         "\n              \n \t <centre>Victor Sklyar</centre> "
+                                                                                         "\n <u>bouyantgrambler@users.sourceforge.net</u>"
+                                                                                         "\n              \n \t <centre>Alex Chmykhalo</centre> "
+                                                                                         "\n <u>alexchmykhalo@users.sourceforge.net</u>"
+                                                                                         "\n\n <b>Splashscreen Design:</b>      \n \t <centre>Oksana Rondyak</centre> "
+                                                                                         "\n <u>relax777@users.sourceforge.net</u> </pre>").arg(KUZYA_VERSION),QMessageBox::Ok,this,Qt::Dialog);
+#ifdef WIN32
+    aboutBox->setIconPixmap(QPixmap(QApplication::applicationDirPath()+"/../resources/Kuzya.png"));
+#else
+    aboutBox->setIconPixmap(QPixmap(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/Kuzya.png")));
+#endif
 
-        aboutBox->exec();
+    aboutBox->exec();
     delete aboutBox;
 }
 
@@ -998,7 +1005,7 @@ void Kuzya::slotAbout(void)
 **/
 void Kuzya::slotUpdateStatusLabel(int line, int pos)
 {
-        statusLabel->setText(QString(tr("Line: %1 Pos: %2")).arg(line + 1).arg(pos));
+    statusLabel->setText(QString(tr("Line: %1 Pos: %2")).arg(line + 1).arg(pos));
 }
 
 /**
@@ -1006,11 +1013,11 @@ void Kuzya::slotUpdateStatusLabel(int line, int pos)
 **/
 void Kuzya::slotUpdateWindowName(bool m)
 {
-        if (!fileName.isEmpty())
-        {
-                if (m) setWindowTitle(fileName.section('/', -1) + " - " + fileName + tr(" [modified] - kuzya"));
-                else setWindowTitle(fileName.section('/', -1) + " - " + fileName + tr(" - kuzya"));
-        }
+    if (!fileName.isEmpty())
+    {
+        if (m) setWindowTitle(fileName.section('/', -1) + " - " + fileName + tr(" [modified] - kuzya"));
+        else setWindowTitle(fileName.section('/', -1) + " - " + fileName + tr(" - kuzya"));
+    }
 }
 
 /**
@@ -1018,15 +1025,15 @@ void Kuzya::slotUpdateWindowName(bool m)
 **/
 void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers)
 {
-        if ((0 != textEditor->markersAtLine(line)) && (1 == margin))
-        {
-            QListWidgetItem *item = notificationList->findItems(QString(" %1)").arg(line+1), Qt::MatchContains).at(0);
-            textEditor->markerDeleteAll(currentMarker);
-            textEditor->markerAdd(line,currentMarker);
-            notificationList->setCurrentItem(item);
-            notificationList->setFocus();
-            statusBar()->showMessage(item->data(Kuzya::descriptionRole).toString());
-        }
+    if ((0 != textEditor->markersAtLine(line)) && (1 == margin))
+    {
+        QListWidgetItem *item = notificationList->findItems(QString(" %1)").arg(line+1), Qt::MatchContains).at(0);
+        textEditor->markerDeleteAll(currentMarker);
+        textEditor->markerAdd(line,currentMarker);
+        notificationList->setCurrentItem(item);
+        notificationList->setFocus();
+        statusBar()->showMessage(item->data(Kuzya::descriptionRole).toString());
+    }
 }
 
 /**
@@ -1037,42 +1044,42 @@ void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers)
 **/
 bool Kuzya::slotSaveChangesNotifier(void)
 {
-        if (textEditor->isModified())
+    if (textEditor->isModified())
+    {
+        QMessageBox *msgBox= new QMessageBox();
+        msgBox->setIcon(QMessageBox::Warning);
+        msgBox->setWindowTitle(tr("File was modified"));
+        msgBox->setText(tr("Do you want to save changes?"));
+        QAbstractButton *yesBtn = msgBox->addButton(tr("Yes"),QMessageBox::ActionRole);
+        QAbstractButton *noBtn = msgBox->addButton(tr("No"),QMessageBox::ActionRole);
+        QAbstractButton *cancelBtn = msgBox->addButton(tr("Cancel"),QMessageBox::ActionRole);
+        msgBox->setDefaultButton((QPushButton*)cancelBtn);
+        /*int ret = */msgBox->exec();
+        if (msgBox->clickedButton() ==cancelBtn)
         {
-                QMessageBox *msgBox= new QMessageBox();
-                msgBox->setIcon(QMessageBox::Warning);
-                msgBox->setWindowTitle(tr("File was modified"));
-                msgBox->setText(tr("Do you want to save changes?"));
-                QAbstractButton *yesBtn = msgBox->addButton(tr("Yes"),QMessageBox::ActionRole);
-                QAbstractButton *noBtn = msgBox->addButton(tr("No"),QMessageBox::ActionRole);
-                QAbstractButton *cancelBtn = msgBox->addButton(tr("Cancel"),QMessageBox::ActionRole);
-                msgBox->setDefaultButton((QPushButton*)cancelBtn);
-                /*int ret = */msgBox->exec();
-                if (msgBox->clickedButton() ==cancelBtn)
-                {
-                        return false;	// false - cancelbtn pressed
-                }
-                if (msgBox->clickedButton() ==yesBtn)
-                {
-                        if(slotSave()==true)
-                        {
-                                addFileNameToList(fileName);
-                                delete msgBox;
-                                return true;
-                        }
-                        else
-                        {
-                            delete msgBox;
-                            return false;///false - Saving was canceled
-                        }
-                }
-                if (msgBox->clickedButton() ==noBtn)
-                {
-                        delete msgBox;
-                        return true;
-                }
+            return false;	// false - cancelbtn pressed
         }
-        return true;/// true - File was saved
+        if (msgBox->clickedButton() ==yesBtn)
+        {
+            if(slotSave()==true)
+            {
+                addFileNameToList(fileName);
+                delete msgBox;
+                return true;
+            }
+            else
+            {
+                delete msgBox;
+                return false;///false - Saving was canceled
+            }
+        }
+        if (msgBox->clickedButton() ==noBtn)
+        {
+            delete msgBox;
+            return true;
+        }
+    }
+    return true;/// true - File was saved
 
 }
 /**
@@ -1080,46 +1087,46 @@ bool Kuzya::slotSaveChangesNotifier(void)
 **/
 void Kuzya :: slotOpenRecentFile(QString FileName)
 {
-        if(slotSaveChangesNotifier()==false) return;
-        if(QFile::exists(FileName))
-        {
-                openFile(FileName);
-                refreshProfileSettings();
-        }
-        else
-        {
-                QMessageBox msgBox;
-                msgBox.setWindowTitle(tr("Sorry"));
-                msgBox.setText(tr("This file wasn't founded"));
-                msgBox.exec();
-                RFileList->removeAt(RFileList->indexOf(FileName));
-                slotUpdateRecentFileList();
-        }
+    if(slotSaveChangesNotifier()==false) return;
+    if(QFile::exists(FileName))
+    {
+        openFile(FileName);
+//        refreshProfileSettings();
+    }
+    else
+    {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle(tr("Sorry"));
+        msgBox.setText(tr("This file wasn't founded"));
+        msgBox.exec();
+        RFileList->removeAt(RFileList->indexOf(FileName));
+        slotUpdateRecentFileList();
+    }
 }
 /**
 *******************************************************************************************************
 **/
- void Kuzya::closeEvent(QCloseEvent *event)
- {
+void Kuzya::closeEvent(QCloseEvent *event)
+{
 
-        settings->writeSettings();
-        settings->writeMainWindowState();
-        if(slotSaveChangesNotifier()==false)
-        {
-                event->ignore();
-        }
+    settings->writeSettings();
+    settings->writeMainWindowState();
+    if(slotSaveChangesNotifier()==false)
+    {
+        event->ignore();
+    }
 
 
-//        if (!fileName.isEmpty())
-//            settings->saveLastProjectName(fileName);
- }
+    //        if (!fileName.isEmpty())
+    //            settings->saveLastProjectName(fileName);
+}
 /**
 *******************************************************************************************************
 **/
 void Kuzya::slotShowAutoComplete()
 {
-        //textEditor->autoCompletionSource();
-        textEditor->autoCompleteFromAll();
+    //textEditor->autoCompletionSource();
+    textEditor->autoCompleteFromAll();
 
 }
 /**
@@ -1128,35 +1135,35 @@ void Kuzya::slotShowAutoComplete()
 void Kuzya::slotHelpKuzya()
 {
 #ifdef WIN32
-        HelpBrowser* helpBrowser = new HelpBrowser(QApplication::applicationDirPath()+"/../doc/Kuzya_Help","main.htm");
+    HelpBrowser* helpBrowser = new HelpBrowser(QApplication::applicationDirPath()+"/../doc/Kuzya_Help","main.htm");
 #else
-              HelpBrowser* helpBrowser = new HelpBrowser(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/doc/"),"main.htm");
+    HelpBrowser* helpBrowser = new HelpBrowser(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/doc/"),"main.htm");
 #endif
-        helpBrowser->resize(800,600);
-        helpBrowser->show();
-        //HelpAssistant::showPage("main.htm");
+    helpBrowser->resize(800,600);
+    helpBrowser->show();
+    //HelpAssistant::showPage("main.htm");
 }
 ///***********************************************************************************************************///
 void Kuzya::slotToggleFolds(void)
 {
-        textEditor->foldAll();
+    textEditor->foldAll();
 }
 
 ///***********************************************************************************************************///
 
 void Kuzya::slotZoomDef(void)
 {
-        textEditor->zoomTo(0);
+    textEditor->zoomTo(0);
 }
 ///***********************************************************************************************************///
 void Kuzya::slotZoomOut(void)
 {
-        textEditor->zoomOut();
+    textEditor->zoomOut();
 }
 ///***********************************************************************************************************///
 void Kuzya::slotZoomIn(void)
 {
-        textEditor->zoomIn();
+    textEditor->zoomIn();
 }
 ///***********************************************************************************************************///
 void Kuzya::addNotification(int type, QString descr, bool attached, int line)
@@ -1165,35 +1172,35 @@ void Kuzya::addNotification(int type, QString descr, bool attached, int line)
     QIcon icon;
 
     switch (type) {
-        case ERROR:
-            str = tr("Compilation error (line ")+QVariant(line).toString()+") "+descr;
-            textEditor->markerAdd(line-1, errorMarker);
-            icon.addFile(":/notifications/error");
-            break;
-        case WARNING:
-            str = tr("Compilation warning (line ")+QVariant(line).toString()+") "+descr;
-            icon.addFile(":/notifications/warning");
-            textEditor->markerAdd(line-1, warningMarker);
-            break;
-        case SUCCESS:
-            icon.addFile(":/notifications/success");
-            statusBar()->showMessage(descr, 3000);
-            break;
-        case FAILING:
-            icon.addFile(":/notifications/failing");
-            statusBar()->showMessage(descr, 3000);
-            slotShowNotificationList(true);
-            break;
-        case WAIT:
-            icon.addFile(":/notifications/wait");
-            statusBar()->showMessage(descr, 3000);
-            break;
-        case INFO:
-            icon.addFile(":/notifications/info");
-            break;
-        case COMPILER:
-            icon.addFile(":/notifications/comment");
-            break;
+    case ERROR:
+        str = tr("Compilation error (line ")+QVariant(line).toString()+") "+descr;
+        textEditor->markerAdd(line-1, errorMarker);
+        icon.addFile(":/notifications/error");
+        break;
+    case WARNING:
+        str = tr("Compilation warning (line ")+QVariant(line).toString()+") "+descr;
+        icon.addFile(":/notifications/warning");
+        textEditor->markerAdd(line-1, warningMarker);
+        break;
+    case SUCCESS:
+        icon.addFile(":/notifications/success");
+        statusBar()->showMessage(descr, 3000);
+        break;
+    case FAILING:
+        icon.addFile(":/notifications/failing");
+        statusBar()->showMessage(descr, 3000);
+        slotShowNotificationList(true);
+        break;
+    case WAIT:
+        icon.addFile(":/notifications/wait");
+        statusBar()->showMessage(descr, 3000);
+        break;
+    case INFO:
+        icon.addFile(":/notifications/info");
+        break;
+    case COMPILER:
+        icon.addFile(":/notifications/comment");
+        break;
     }
 
     if (str.isEmpty()) str = descr;
@@ -1220,24 +1227,24 @@ void Kuzya::slotShowNotificationList(bool visible)
 ///***********************************************************************************************************///
 void Kuzya::slotShowErrorFromList()
 {
-            QListWidgetItem * item = notificationList->currentItem();
-            textEditor->markerDeleteAll(currentMarker);
-            if (item->data(Kuzya::attachedRole).toBool())
-            {
-                    textEditor->setCursorPosition(item->data(Kuzya::lineRole).toInt()-1,1);
-                    textEditor->ensureCursorVisible();
-                    textEditor->markerAdd(item->data(Kuzya::lineRole).toInt()-1, currentMarker);
-            }
+    QListWidgetItem * item = notificationList->currentItem();
+    textEditor->markerDeleteAll(currentMarker);
+    if (item->data(Kuzya::attachedRole).toBool())
+    {
+        textEditor->setCursorPosition(item->data(Kuzya::lineRole).toInt()-1,1);
+        textEditor->ensureCursorVisible();
+        textEditor->markerAdd(item->data(Kuzya::lineRole).toInt()-1, currentMarker);
+    }
 }
 ///***********************************************************************************************************///
 void Kuzya::slotGotoErrorLine(QListWidgetItem * item)
 {
-            textEditor->markerDeleteAll(currentMarker);
-            if (item->data(Kuzya::attachedRole).toBool())
-            {
-                textEditor->setCursorPosition(item->data(Kuzya::lineRole).toInt()-1,1);
-                textEditor->setFocus();
-            }
+    textEditor->markerDeleteAll(currentMarker);
+    if (item->data(Kuzya::attachedRole).toBool())
+    {
+        textEditor->setCursorPosition(item->data(Kuzya::lineRole).toInt()-1,1);
+        textEditor->setFocus();
+    }
 }
 /**
 ******************************************************************************************
@@ -1288,13 +1295,13 @@ void Kuzya::slotChangeTranslation(QString translation)
     openFile(translator->translatedCodeFile());
     qDebug() << "TR CODE: " << translator->translatedCodeFile();
 
-    #ifdef WIN32
-        QString path = QApplication::applicationDirPath();
-        path.truncate(path.lastIndexOf("/", -1));
-        path = path+"/profiles/";
-    #else
-        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/");
-    #endif
+#ifdef WIN32
+    QString path = QApplication::applicationDirPath();
+    path.truncate(path.lastIndexOf("/", -1));
+    path = path+"/profiles/";
+#else
+    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/");
+#endif
     unloadTemplates();
     loadTemplates(path+language+"/"+language+".ini");
 }
@@ -1303,13 +1310,13 @@ void Kuzya::slotPasteTemplate(QString keyStr)
 {
     QStringList tempStrList;
     tlist->beginGroup("templates");
-        tlist->beginReadArray(keyStr.left(keyStr.indexOf("/")));
-            tlist->setArrayIndex((keyStr.right(keyStr.length()-keyStr.indexOf("/")-1)).toUInt());
-            tempStrList<<tlist->value("template").toString();
-            translator->translateList(&tempStrList);
-            textEditor->removeSelectedText();
-            textEditor->insert(tempStrList.at(0));
-        tlist->endArray();
+    tlist->beginReadArray(keyStr.left(keyStr.indexOf("/")));
+    tlist->setArrayIndex((keyStr.right(keyStr.length()-keyStr.indexOf("/")-1)).toUInt());
+    tempStrList<<tlist->value("template").toString();
+    translator->translateList(&tempStrList);
+    textEditor->removeSelectedText();
+    textEditor->insert(tempStrList.at(0));
+    tlist->endArray();
     tlist->endGroup();
 }
 ///***********************************************************************************************************///
@@ -1378,7 +1385,7 @@ void Kuzya::dropEvent(QDropEvent *event)
     textEditor->markerDeleteAll();
     notificationList->clear();
     openFile(fileName);
-    refreshProfileSettings();
+//    refreshProfileSettings();
 }
 
 void Kuzya::slotModificationChanged(bool modified)
