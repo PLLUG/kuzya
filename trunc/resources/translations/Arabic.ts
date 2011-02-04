@@ -84,7 +84,7 @@
     </message>
     <message>
         <source>Line: %1 Pos: %2</source>
-        <translation>خط: %1مرتبة:% 2</translation>
+        <translation>خط: %1مرتبة:%2</translation>
     </message>
     <message>
         <source> [modified] - kuzya</source>
@@ -662,7 +662,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>TextEditorAdditional</source>
-        <translation></translation>
+        <translation>محرر النص</translation>
     </message>
     <message>
         <source>Indentations</source>
