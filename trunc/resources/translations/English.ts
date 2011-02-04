@@ -839,7 +839,7 @@
     <message>
         <location line="+40"/>
         <source>TextEditorAdditional</source>
-        <translation type="unfinished"></translation>
+        <translation>Text Editor</translation>
     </message>
     <message>
         <location line="+42"/>
