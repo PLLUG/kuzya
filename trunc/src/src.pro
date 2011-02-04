@@ -22,7 +22,8 @@ SOURCES += kuzya.cpp \
     replacedialog.cpp \
     translator.cpp
 RESOURCES = images.qrc
-TRANSLATIONS = ../resources/translations/kuzya_ua.ts
+TRANSLATIONS = ../resources/translations/kuzya_ua.ts \
+               ../resources/translations/Arabic.ts
 LIBS += -lqscintilla2
 unix { 
     TARGET = ../bin/kuzya
