@@ -82,7 +82,7 @@
     <message>
         <location line="+30"/>
         <source>Line: %1 Pos: %2</source>
-        <translation>Линији:% 1 Поз:% 2</translation>
+        <translation type="unfinished">Линији:%1 Поз:%2</translation>
     </message>
     <message>
         <location line="+10"/>
