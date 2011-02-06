@@ -626,8 +626,7 @@ F9</translation>
         <location line="+300"/>
         <location line="+3"/>
         <source>Show notifications</source>
-        <translation>Montrer les notifications
-</translation>
+        <translation>Montrer les notifications</translation>
     </message>
     <message>
         <location line="+8"/>
