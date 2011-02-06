@@ -21,6 +21,7 @@
 
 #include <QSettings>
 #include <QDirIterator>
+#include <QMessageBox>
 #include "QDebug"
 
 #include "compiler.h"
@@ -55,6 +56,16 @@ void Compiler::refreshSupported()
     path = path+"/profiles";
 #else
     QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles");
+    if (false == QDir(path).exists())
+    {
+        path = QDir::cleanPath(QApplication::applicationDirPath() + "/../profiles");
+        if (false == QDir(path).exists())
+        {
+            QMessageBox msgBox;
+            msgBox.setText("There is some problem with loading of profiles");
+            msgBox.exec();
+        }
+    }
 #endif
 
     QDirIterator it(path, QDir::NoDotAndDotDot|QDir::AllDirs, QDirIterator::NoIteratorFlags);
@@ -110,8 +121,8 @@ void Compiler::refreshSupported()
                 }
                 //if (!compilers.isEmpty())
                 //{
-                    supportedCompilers << compilers;
-                    profilesPathList << profiles;
+                supportedCompilers << compilers;
+                profilesPathList << profiles;
                 //}
                 //else continue;
             }
@@ -194,7 +205,7 @@ void Compiler::loadProfile(QString lang, QString profile)
     {
         free(compilerProfile);
     }
-	
+
     if (lang.isEmpty() || profile.isEmpty()) return;
 
     refreshSupported();
@@ -229,23 +240,23 @@ bool Compiler::isModeAvailable(int compileMode)
     QString param;
     switch (compileMode)
     {
-        case DEFAULT:
-            param = compilerProfile->value("default","").toString();
-            break;
-        case ALTERNATIVE:
-            param = compilerProfile->value("alternative").toString();
-            break;
-        case OBJECT:
-            param = compilerProfile->value("object","").toString();
-            break;
-        case STATIC_LIB:
-            param = compilerProfile->value("static_lib","").toString();
-            break;
-        case DYNAMIC_LIB:
-            param = compilerProfile->value("dynamic_lib","").toString();
-            break;
-        default:
-            param = "";
+    case DEFAULT:
+        param = compilerProfile->value("default","").toString();
+        break;
+    case ALTERNATIVE:
+        param = compilerProfile->value("alternative").toString();
+        break;
+    case OBJECT:
+        param = compilerProfile->value("object","").toString();
+        break;
+    case STATIC_LIB:
+        param = compilerProfile->value("static_lib","").toString();
+        break;
+    case DYNAMIC_LIB:
+        param = compilerProfile->value("dynamic_lib","").toString();
+        break;
+    default:
+        param = "";
     }
     compilerProfile->endGroup();
 
@@ -292,23 +303,23 @@ QString Compiler::getCompilerParams()
     QString param;
     switch (compileMode)
     {
-        case DEFAULT:
-            param = compilerProfile->value("default","").toString();
-            break;
-        case ALTERNATIVE:
-            param = compilerProfile->value("alternative").toString();
-            break;
-        case OBJECT:
-            param = compilerProfile->value("object","").toString();
-            break;
-        case STATIC_LIB:
-            param = compilerProfile->value("static_lib","").toString();
-            break;
-        case DYNAMIC_LIB:
-            param = compilerProfile->value("dynamic_lib","").toString();
-            break;
-        default:
-            param = "";
+    case DEFAULT:
+        param = compilerProfile->value("default","").toString();
+        break;
+    case ALTERNATIVE:
+        param = compilerProfile->value("alternative").toString();
+        break;
+    case OBJECT:
+        param = compilerProfile->value("object","").toString();
+        break;
+    case STATIC_LIB:
+        param = compilerProfile->value("static_lib","").toString();
+        break;
+    case DYNAMIC_LIB:
+        param = compilerProfile->value("dynamic_lib","").toString();
+        break;
+    default:
+        param = "";
     }
 
     QString opt;
