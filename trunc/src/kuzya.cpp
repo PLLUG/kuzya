@@ -1001,12 +1001,7 @@ void Kuzya::slotAbout(void)
                                                                                          "\n <u>alexchmykhalo@users.sourceforge.net</u>"
                                                                                          "\n\n <b>Splashscreen Design:</b>      \n \t <centre>Oksana Rondyak</centre> "
                                                                                          "\n <u>relax777@users.sourceforge.net</u> </pre>").arg(KUZYA_VERSION),QMessageBox::Ok,this,Qt::Dialog);
-#ifdef WIN32
-    aboutBox->setIconPixmap(QPixmap(QApplication::applicationDirPath()+"/../resources/Kuzya.png"));
-#else
-    aboutBox->setIconPixmap(QPixmap(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/Kuzya.png")));
-#endif
-
+    aboutBox->setIconPixmap(QPixmap(":/common/Kuzya_about.png"));
     aboutBox->exec();
     delete aboutBox;
 }
