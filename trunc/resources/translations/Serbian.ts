@@ -13,7 +13,7 @@
         <location line="-10"/>
         <location line="+11"/>
         <source>No matches found for:  </source>
-        <translation>Нема резултата пронађен</translation>
+        <translation>Нема резултата пронађен:  </translation>
     </message>
 </context>
 <context>
@@ -82,7 +82,7 @@
     <message>
         <location line="+30"/>
         <source>Line: %1 Pos: %2</source>
-        <translation type="unfinished">Линији:%1 Поз:%2</translation>
+        <translation>Линији: %1 Поз: %2</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -147,7 +147,7 @@
     <message>
         <location line="+1"/>
         <source>Save your changes before translation?</source>
-        <translation>Сачувајте промене пре него</translation>
+        <translation>Сачувајте промене пре него?</translation>
     </message>
     <message>
         <location line="-482"/>
@@ -177,12 +177,12 @@
     <message>
         <location line="+26"/>
         <source>Found errors (%2) in file %1</source>
-        <translation>Пронађено грешке (2%) у фајл% 1</translation>
+        <translation>Пронађено грешке (%2) у фајл %1</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Found warnings (%2) in file %1</source>
-        <translation>Пронађено упозорење (2%) у фајл% 1</translation>
+        <translation>Пронађено упозорење (%2) у фајл %1</translation>
     </message>
 </context>
 <context>
@@ -571,8 +571,7 @@
     <message>
         <location line="+9"/>
         <source>Find</source>
-        <translation>Пронаћи
-</translation>
+        <translation>Пронаћи</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -612,8 +611,7 @@
     <message>
         <location line="+5"/>
         <source>Select all</source>
-        <translation>Изаберити све
-</translation>
+        <translation>Изаберити све</translation>
     </message>
     <message>
         <location line="+3"/>
