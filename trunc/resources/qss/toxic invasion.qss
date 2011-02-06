@@ -351,10 +351,10 @@ QPushButton:focus
 	padding-left: 2px;
     padding-top: 2px;
 }
-
+/*
 QsciScintilla{
 	border: 3px double black;
-}
+}*/
 
 QListWidget
 {	
