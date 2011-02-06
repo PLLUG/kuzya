@@ -92,4 +92,7 @@
         <file>images/flags/Serbian.png</file>
         <file>images/flags/Arabic.png</file>
     </qresource>
+    <qresource prefix="/common">
+        <file alias="Kuzya_about.png">images/Kuzya_about.png</file>
+    </qresource>
 </RCC>
