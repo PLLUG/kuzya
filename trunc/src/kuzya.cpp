@@ -562,7 +562,7 @@ void Kuzya::slotOpen(void)
         textEditor->markerDeleteAll();
         notificationList->clear();
         openFile(openedFileName);
-//        refreshProfileSettings();
+        //        refreshProfileSettings();
     }
 }
 
@@ -686,10 +686,21 @@ void Kuzya::refreshProfileSettings()
         path.truncate(path.lastIndexOf("/", -1));
         path = path+"/profiles/";
 #else
-        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/");
+        //        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/");
+        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles");
+        if (false == QDir(path).exists())
+        {
+            path = QDir::cleanPath(QApplication::applicationDirPath() + "/../profiles");
+            if (false == QDir(path).exists())
+            {
+                QMessageBox msgBox;
+                msgBox.setText("There is some problem with loading of templates");
+                msgBox.exec();
+            }
+        }
 #endif
         unloadTemplates();
-        loadTemplates(path+language+"/"+language+".ini");
+        loadTemplates(path+"/"+language+"/"+language+".ini");
 
         if ("pascal" == language) currentLexer = pascalLexer;
         else if ("c++" == language) currentLexer = cppLexer;
@@ -1091,7 +1102,7 @@ void Kuzya :: slotOpenRecentFile(QString FileName)
     if(QFile::exists(FileName))
     {
         openFile(FileName);
-//        refreshProfileSettings();
+        //        refreshProfileSettings();
     }
     else
     {
@@ -1137,7 +1148,19 @@ void Kuzya::slotHelpKuzya()
 #ifdef WIN32
     HelpBrowser* helpBrowser = new HelpBrowser(QApplication::applicationDirPath()+"/../doc/Kuzya_Help","main.htm");
 #else
-    HelpBrowser* helpBrowser = new HelpBrowser(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/doc/"),"main.htm");
+    //    HelpBrowser* helpBrowser = new HelpBrowser(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/doc/"),"main.htm");
+    QDir lHelpDir = QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/doc/"));
+    if (lHelpDir.exists() == false)
+    {
+        lHelpDir = QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../doc/Kuzya_Help/"));
+        if (lHelpDir.exists() == false)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("There is some problem with loading of help dicumentation");
+            msgBox.exec();
+        }
+    }
+    HelpBrowser* helpBrowser = new HelpBrowser(lHelpDir.absolutePath(),"main.htm");
 #endif
     helpBrowser->resize(800,600);
     helpBrowser->show();
@@ -1300,10 +1323,21 @@ void Kuzya::slotChangeTranslation(QString translation)
     path.truncate(path.lastIndexOf("/", -1));
     path = path+"/profiles/";
 #else
-    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/");
+    //    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/");
+    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles");
+    if (false == QDir(path).exists())
+    {
+        path = QDir::cleanPath(QApplication::applicationDirPath() + "/../profiles");
+        if (false == QDir(path).exists())
+        {
+            QMessageBox msgBox;
+            msgBox.setText("There is some problem with loading of templates");
+            msgBox.exec();
+        }
+    }
 #endif
     unloadTemplates();
-    loadTemplates(path+language+"/"+language+".ini");
+    loadTemplates(path+"/"+language+"/"+language+".ini");
 }
 ///***********************************************************************************************************///
 void Kuzya::slotPasteTemplate(QString keyStr)
@@ -1385,7 +1419,7 @@ void Kuzya::dropEvent(QDropEvent *event)
     textEditor->markerDeleteAll();
     notificationList->clear();
     openFile(fileName);
-//    refreshProfileSettings();
+    //    refreshProfileSettings();
 }
 
 void Kuzya::slotModificationChanged(bool modified)
