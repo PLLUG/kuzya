@@ -1,9 +1,11 @@
 TEMPLATE = app
+
 FORMS += kuzya.ui \
     gotolinedialog.ui \
     optionsdialog.ui \
     finddialog.ui \
     replacedialog.ui
+
 HEADERS += kuzya.h \
     gotolinedialog.h \
     compiler.h \
@@ -13,6 +15,7 @@ HEADERS += kuzya.h \
     helpbrowser.h \
     translator.h \
     version.h
+
 SOURCES += kuzya.cpp \
     main.cpp \
     gotolinedialog.cpp \
@@ -21,11 +24,20 @@ SOURCES += kuzya.cpp \
     finddialog.cpp \
     replacedialog.cpp \
     translator.cpp
+
 RESOURCES = images.qrc
-TRANSLATIONS = ../resources/translations/kuzya_ua.ts \
-               ../resources/translations/Arabic.ts
+
+TRANSLATIONS = ../resources/translations/Ukrainian.ts \
+    ../resources/translations/English.ts \
+    ../resources/translations/Byelorussian.ts \
+    ../resources/translations/French.ts \
+    ../resources/translations/Serbian.ts \
+    ../resources/translations/Arabic.ts
+
 LIBS += -lqscintilla2
+
 unix { 
+
     TARGET = ../bin/kuzya
     target.path = /usr/bin
     translations.path = /usr/share/kuzya/translations
@@ -40,6 +52,7 @@ unix {
     kuzya_icon.files = ../resources/icon/*
     kuzya_app_desktop.path = /usr/share/applications
     kuzya_app_desktop.files = ../resources/linux/*
+
     INSTALLS += target \
         translations \
         kuzya_profiles \
@@ -48,6 +61,7 @@ unix {
 	kuzya_icon\
 	kuzya_app_desktop
 }
+
 win32 { 
     TARGET = ../../bin/kuzya
     LIBS += -L../../3rdparty/QScintilla/win32/2.4.5/debug
