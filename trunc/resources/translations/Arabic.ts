@@ -138,6 +138,10 @@
         <source>Save your changes before translation?</source>
         <translation>هل تريد حفظ تعديلاتك قبل الترجمة؟</translation>
     </message>
+    <message>
+        <source>LTR</source>
+        <translation>RTL</translation>
+    </message>
 </context>
 <context>
     <name>OptionsDialog</name>
@@ -790,6 +794,35 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Close</source>
         <translation>إغلاق</translation>
+    </message>
+</context>
+<context>
+    <name>QApplication</name>
+    <message>
+        <location filename="../src/gui/kernel/qapplication.cpp" line="+2248"/>
+        <source>QT_LAYOUT_DIRECTION</source>
+        <comment>Translate this string to the string &apos;LTR&apos; in left-to-right languages or to &apos;RTL&apos; in right-to-left languages (such as Hebrew and Arabic) to get proper widget layout.</comment>
+        <translation>RTL</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs/qmessagebox.h" line="+352"/>
+        <source>Executable &apos;%1&apos; requires Qt %2, found Qt %3.</source>
+        <translation>البرنامج &apos;%1&apos; يتطلّب Qt %2، تمّ إيجاد Qt %3.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Incompatible Qt Library Error</source>
+        <translation>خطأ: مكتبة Qt غير موافقة</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/accessible/qaccessibleobject.cpp" line="+376"/>
+        <source>Activate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Activates the program&apos;s main window</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

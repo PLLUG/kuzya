@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.0" language="fr">
 <context>
     <name>FindDialog</name>
     <message>
@@ -289,13 +289,6 @@
     <message>
         <source>Go To Line</source>
         <translation>Accéder à la ligne</translation>
-    </message>
-</context>
-<context>
-    <name>graphicsForm</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="obsolete">Dialogue</translation>
     </message>
 </context>
 <context>
@@ -822,6 +815,34 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Close</source>
         <translation>Закрыць</translation>
+    </message>
+</context>
+<context>
+    <name>QApplication</name>
+    <message>
+        <source>QT_LAYOUT_DIRECTION</source>
+        <comment>Translate this string to the string &apos;LTR&apos; in left-to-right languages or to &apos;RTL&apos; in right-to-left languages (such as Hebrew and Arabic) to get proper widget layout.</comment>
+        <translation>LTR</translation>
+    </message>
+    <message>
+        <source>Executable &apos;%1&apos; requires Qt %2, found Qt %3.</source>
+        <translation>L&apos;exécutable &apos;%1&apos; requiert Qt %2 (Qt %3 présent).</translation>
+    </message>
+    <message>
+        <source>Incompatible Qt Library Error</source>
+        <translation>Erreur : bibliothèque Qt incompatible</translation>
+    </message>
+    <message>
+        <source>Activate</source>
+        <translation>Activer</translation>
+    </message>
+    <message>
+        <source>Activates the program&apos;s main window</source>
+        <translation>Active la fenêtre principale du programme</translation>
+    </message>
+    <message>
+        <source>QT_LAYOUT_DIRECTION</source>
+        <translation type="obsolete">LTR</translation>
     </message>
 </context>
 </TS>
