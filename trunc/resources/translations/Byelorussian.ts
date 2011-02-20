@@ -292,13 +292,6 @@
     </message>
 </context>
 <context>
-    <name>graphicsForm</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="obsolete">Дыялог</translation>
-    </message>
-</context>
-<context>
     <name>kuzyaForm</name>
     <message>
         <source>File</source>
@@ -821,6 +814,35 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Close</source>
         <translation>Закрыць</translation>
+    </message>
+</context>
+<context>
+    <name>QApplication</name>
+    <message>
+        <location filename="../src/gui/accessible/qaccessibleobject.cpp" line="+376"/>
+        <source>Activate</source>
+        <translation>Активувати</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs/qmessagebox.h" line="+352"/>
+        <source>Executable &apos;%1&apos; requires Qt %2, found Qt %3.</source>
+        <translation>Програма &quot;%1&quot; потребує Qt %2, але знайдено Qt %3.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Incompatible Qt Library Error</source>
+        <translation>Помилка несумісності бібліотеки Qt</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/kernel/qapplication.cpp" line="+2248"/>
+        <source>QT_LAYOUT_DIRECTION</source>
+        <comment>Translate this string to the string &apos;LTR&apos; in left-to-right languages or to &apos;RTL&apos; in right-to-left languages (such as Hebrew and Arabic) to get proper widget layout.</comment>
+        <translation>LTR</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/accessible/qaccessibleobject.cpp" line="+2"/>
+        <source>Activates the program&apos;s main window</source>
+        <translation>Активує головне вікно програми</translation>
     </message>
 </context>
 </TS>
