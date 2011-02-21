@@ -67,7 +67,8 @@ int main(int argc, char ** argv)
 //    qDebug()<<QLocale::languageToString(QLocale::system().language());
 
     QApplication a(argc, argv);
-
+    a.setOrganizationName("PLLUG Community");
+    a.setApplicationName("Kuzya");
 
     QString splashDir;
     QSplashScreen *splash = new QSplashScreen();
