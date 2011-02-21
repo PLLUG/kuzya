@@ -20,6 +20,7 @@
 
 #include <QDebug>
 #include <stdio.h>
+#include <QCoreApplication>
 
 #include "readstdin.h"
 
@@ -39,6 +40,7 @@ void ReadStdIn::run()
 	QTextStream in(stdin);
         do
 	{
+            QCoreApplication::processEvents();
             str = in.readLine();
             if (!str.isEmpty())
                 emit commandAppeared(str);

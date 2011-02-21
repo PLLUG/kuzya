@@ -196,6 +196,8 @@ private:
 
         bool srcRecompiled;
         QFileDialog *fileDialog;
+
+        QToolBar *toolBar;
 };
 
 #endif

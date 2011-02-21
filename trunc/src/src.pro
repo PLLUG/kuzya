@@ -67,3 +67,9 @@ win32 {
     LIBS += -L../../3rdparty/QScintilla/win32/2.4.5/debug
     INCLUDEPATH = ../../3rdparty/QScintilla/win32/2.4.5/
 }
+
+mac {
+    CONFIG-=app_bundle
+    DESTDIR +=../kuzya
+    TARGET +=kuzya
+}
