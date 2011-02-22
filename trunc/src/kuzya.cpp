@@ -57,7 +57,10 @@ Kuzya::Kuzya(QWidget *parent)
     toolBar->addAction(actionNew);
     toolBar->addAction(actionOpen);
     toolBar->addAction(actionSave);
+#ifdef Q_OS_MAC
+#else
     toolBar->addSeparator();
+#endif
     toolBar->addAction(actionUndo);
     toolBar->addAction(actionRedo);
     actionCut->setShortcuts(QKeySequence::Cut);
@@ -66,12 +69,21 @@ Kuzya::Kuzya(QWidget *parent)
     toolBar->addAction(actionCopy);
     actionPaste->setShortcuts(QKeySequence::Paste);
     toolBar->addAction(actionPaste);
+#ifdef Q_OS_MAC
+#else
     toolBar->addSeparator();
+#endif
     toolBar->addAction(actionNotificationList);
+#ifdef Q_OS_MAC
+#else
     toolBar->addSeparator();
+#endif
     toolBar->addAction(actionCompile);
     toolBar->addAction(actionRun);
+#ifdef Q_OS_MAC
+#else
     toolBar->addSeparator();
+#endif
     languageComboBoxAction = toolBar->addWidget(languageComboBox);
     languageComboBoxAction->setVisible(false);
 
@@ -241,6 +253,11 @@ Kuzya::Kuzya(QWidget *parent)
     {
         this->openFile(qApp->argv()[qApp->argc()-1]);
     }
+
+#ifdef Q_OS_MAC
+    setAllIconsVisibleInMenu(false);
+    setUnifiedTitleAndToolBarOnMac(true);
+#endif
 }
 ///___________________________________________________________________________________________________________________
 /**
@@ -1421,4 +1438,40 @@ void Kuzya::dropEvent(QDropEvent *event)
 void Kuzya::slotModificationChanged(bool modified)
 {
     if (modified) srcRecompiled = false;
+}
+
+void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
+{
+    actionAbout->setIconVisibleInMenu(isVisible);
+    actionAbout_Qt->setIconVisibleInMenu(isVisible);
+    actionAlternativeMode->setIconVisibleInMenu(isVisible);
+    actionCommon->setIconVisibleInMenu(isVisible);
+    actionCompile->setIconVisibleInMenu(isVisible);
+    actionCopy->setIconVisibleInMenu(isVisible);
+    actionCut->setIconVisibleInMenu(isVisible);
+    actionDefaultMode->setIconVisibleInMenu(isVisible);
+    actionDefFontSize->setIconVisibleInMenu(isVisible);
+    actionDynamicLibMode->setIconVisibleInMenu(isVisible);
+    actionEnlFont->setIconVisibleInMenu(isVisible);
+    actionExit->setIconVisibleInMenu(isVisible);
+    actionFind->setIconVisibleInMenu(isVisible);
+    actionGoToLine->setIconVisibleInMenu(isVisible);
+    actionGoToMatchingBracket->setIconVisibleInMenu(isVisible);
+    actionKuzya_Help->setIconVisibleInMenu(isVisible);
+    actionNew->setIconVisibleInMenu(isVisible);
+    actionNotificationList->setIconVisibleInMenu(isVisible);
+    actionObjectMode->setIconVisibleInMenu(isVisible);
+    actionOpen->setIconVisibleInMenu(isVisible);
+    actionPaste->setIconVisibleInMenu(isVisible);
+    actionPrint->setIconVisibleInMenu(isVisible);
+    actionRedo->setIconVisibleInMenu(isVisible);
+    actionReplace->setIconVisibleInMenu(isVisible);
+    actionRun->setIconVisibleInMenu(isVisible);
+    actionSave->setIconVisibleInMenu(isVisible);
+    actionSave_as->setIconVisibleInMenu(isVisible);
+    actionSelect_all->setIconVisibleInMenu(isVisible);
+    actionShrinkFont->setIconVisibleInMenu(isVisible);
+    actionStaticLibMode->setIconVisibleInMenu(isVisible);
+    actionToggleFolds->setIconVisibleInMenu(isVisible);
+    actionUndo->setIconVisibleInMenu(isVisible);
 }
