@@ -156,6 +156,7 @@ private:
         void unloadTemplates();
         void refreshCompileModes();
         void refreshDialogSettings();
+        void setAllIconsVisibleInMenu(bool isVisible);
 
 private:
         QFile *file;
