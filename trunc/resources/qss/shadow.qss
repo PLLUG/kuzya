@@ -17,12 +17,16 @@ QMessageBox
 HelpBrowser
 {
 	background:rgb(34, 34, 36);
-}
+}*/
 QDialog#optionsForm
 {
-	background-color:rgb(13, 13, 13)
+	background-color:rgb(13, 13, 13);
 }
-*/
+QGroupBox
+{
+  color: lightgray;
+}
+
 QMenuBar
 {
 	color: #9D9EA3;	
@@ -401,3 +405,22 @@ QListWidget QScrollBar:vertical
 {
 	background:rgb(255, 220, 158);
 }*/
+QListWidget#mTabIconView
+{
+  background:lightgray;
+  border: 1px solid gray;  
+}
+
+QLabel
+{
+  color: #59AEE7;
+}
+QCheckBox
+{
+  color: #59AEE7;
+}
+QLineEdit, QComboBox, QPlainTextEdit
+{
+  color: white;
+  background: rgba(137,137,137,200);
+}

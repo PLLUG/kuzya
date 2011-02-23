@@ -111,6 +111,7 @@ Kuzya::Kuzya(QWidget *parent)
     textEditor->setEolMode(QsciScintilla::EolUnix);
 
     notificationList = new QListWidget(this);
+    notificationList->setObjectName("notificationList");
     notificationList->setVisible(false);
 
     QSplitter *splitter = new QSplitter(this);
