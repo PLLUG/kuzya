@@ -13,6 +13,7 @@ QMessageBox
 {
   
 }
+/*
 HelpBrowser
 {
 	background:rgb(34, 34, 36);
@@ -21,6 +22,7 @@ QDialog#optionsForm
 {
 	background-color:rgb(13, 13, 13)
 }
+*/
 QMenuBar
 {
 	color: #9D9EA3;	

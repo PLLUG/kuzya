@@ -9,6 +9,7 @@ QDialog
 
 
 }
+/*
 HelpBrowser
 {
 	background:#D9AE36;
@@ -17,6 +18,7 @@ QDialog#optionsForm
 {
 	background-color:#FFCF41;
 }
+*/
 QMenuBar
 {
 	
