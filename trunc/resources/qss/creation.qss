@@ -8,19 +8,17 @@ QMainWindow
 QDialog
 {
 	background-color:#E0DFDF;
-
-
 }
 /*
 HelpBrowser
 {
 	background:#D9AE36;
-}
+}*/
 QDialog#optionsForm
 {
-	background-color:#FFCF41;
+	background-color:lightgray;
 }
-*/
+
 QMenuBar
 {
 	border: 1px ridge gray;
@@ -364,7 +362,7 @@ QsciScintilla{
 	border: 3px double black;
 }
 */
-QListWidget
+QListWidget#notificationList
 {	
 	background:#FFFCE2;/* #FFEFBF;*/
 	border: 3px double black;
@@ -391,3 +389,14 @@ QListWidget QScrollBar:vertical
 {
 	background:rgb(255, 220, 158);
 }*/
+QListWidget#mTabIconView
+{
+  background:#FFFCE2;
+  border: 1px solid gray;  
+}
+QGroupBox
+{
+  /*background: qlineargradient(spread:pad, x1:0.50705, y1:0.983, x2:0.532663, y2:0, stop:0 rgba(123, 123, 123, 125), stop:1 rgba(123, 123, 123, 7))*/
+  background:qlineargradient(spread:pad, x1:0.50705, y1:0.983, x2:0.532663, y2:0, stop:0 rgba(123, 123, 123, 96), stop:1 rgba(123, 123, 123, 7));
+}
+

@@ -1,21 +1,15 @@
-
-QWidget#StartScreen, QWidget#MainWidget {
-   border: none;
-}
-
-QWidget#StartScreen, .QFrame {
+.QFrame {
    background-color: beige;
 }
 
-QPushButton, QToolButton {
+QPushButton{
     background-color: palegoldenrod;
-    border-width: 2px;
+    border-width: 1px;
     border-color: darkkhaki;
     border-style: solid;
     border-radius: 5;
     padding: 3px;
-    /* min-width: 96px; */
-    /* min-height: 48px; */
+   
 	qproperty-focusPolicy: NoFocus
 }
 
@@ -33,7 +27,8 @@ QLabel, QAbstractButton {
     font: italic 11pt "Times New Roman";
 }
 
-QFrame, QLabel#title {
+QFrame
+{
     border-width: 2px;
     padding: 1px;
     border-style: solid;
@@ -53,48 +48,13 @@ QLabel {
     background: none;
 }
 
-QLabel#title {
-	font: 32px bold;
+QListView 
+{   
+    selection-color: #0a214c; 
+    selection-background-color: khaki;
 }
 
-QSpinBox {
-     padding-left: 24px;
-     padding-right: 24px;
-	 border-color: darkkhaki;
-	 border-style: solid;
-	 border-radius: 5;
-     border-width: 3;
-}
-
-QSpinBox::up-button 
+QListView::item:hover 
 {
-     subcontrol-origin: padding;
-     subcontrol-position: right; /* position at the top right corner */
-     width: 24px;
-     height: 24px;
-     border-width: 3px;
-	 border-image: url(:/files/spindownpng) 1;
+    background-color: wheat;
 }
-
-QSpinBox::up-arrow {
-     image: url(:/files/add.png);
-     width: 12px;
-     height: 12px;
- }
-
-
-QSpinBox::down-button 
-{
-     subcontrol-origin: border;
-     subcontrol-position: left;
-     width: 24px;
-     height: 24px;
-     border-width: 3px;
-	 border-image: url(:/files/spindownpng) 1;
-}
-
-QSpinBox::down-arrow {
-     image: url(:/files/remove.png);
-     width: 12px;
-     height: 12px;
- }

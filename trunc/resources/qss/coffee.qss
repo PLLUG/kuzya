@@ -69,7 +69,7 @@ QListView::item:hover {
    we kill the padding and enlarge the border. This makes the items
    glow. */
 QLineEdit, QFrame {
-    border-width: 2px;
+    border-width: 1px;
     padding: 1px;
     border-style: solid;
     border-color: darkkhaki;
@@ -91,7 +91,7 @@ QLabel {
 
 /* A QToolTip is a QLabel ... */
 QToolTip {
-    border: 2px solid darkkhaki;
+    border: 1px solid darkkhaki;
     padding: 5px;
     border-radius: 3px;
     opacity: 200;
@@ -106,5 +106,32 @@ QRadioButton:hover, QCheckBox:hover {
 QDialogButtonBox {
     button-layout: 0;
 }
-
-
+QDialog#optionsForm
+{
+	background-color: rgb(219,209,181);
+}
+QToolBar:horizontal
+{
+	border: 1px solid darkgray;
+	background-color: qlineargradient(spread:pad, x1:0.487437, y1:0, x2:0.492462, y2:1, stop:0.18593 rgba(255, 213, 171, 255), stop:0.773869 rgba(198, 125, 51, 255), stop:1 rgba(103, 30, 30, 252));
+}
+QToolBar:vertical
+{
+  border: 1px solid darkgray;
+  background-color:qlineargradient(spread:pad, x1:1, y1:0.556318, x2:0.00502513, y2:0.551136, stop:0.18593 rgba(255, 213, 171, 255), stop:0.773869 rgba(198, 125, 51, 255), stop:1 rgba(103, 30, 30, 252));
+}
+QMainWindow
+{
+	background: rgb(219,209,181);
+}
+QSplitter:vertical
+{
+ height: 20px;
+ border: 0px outset black; 
+}
+QSplitter::handle:vertical
+{
+	width:5;
+ 	background:beige;
+	/*background:rgb(123, 131, 159);*/
+}
