@@ -183,6 +183,34 @@
     </message>
 </context>
 <context>
+    <name>QApplication</name>
+    <message>
+        <source>QT_LAYOUT_DIRECTION</source>
+        <comment>Translate this string to the string &apos;LTR&apos; in left-to-right languages or to &apos;RTL&apos; in right-to-left languages (such as Hebrew and Arabic) to get proper widget layout.</comment>
+        <translation>LTR</translation>
+    </message>
+    <message>
+        <source>Executable &apos;%1&apos; requires Qt %2, found Qt %3.</source>
+        <translation>L&apos;exécutable &apos;%1&apos; requiert Qt %2 (Qt %3 présent).</translation>
+    </message>
+    <message>
+        <source>Incompatible Qt Library Error</source>
+        <translation>Erreur : bibliothèque Qt incompatible</translation>
+    </message>
+    <message>
+        <source>Activate</source>
+        <translation>Activer</translation>
+    </message>
+    <message>
+        <source>Activates the program&apos;s main window</source>
+        <translation>Active la fenêtre principale du programme</translation>
+    </message>
+    <message>
+        <source>QT_LAYOUT_DIRECTION</source>
+        <translation>LTR</translation>
+    </message>
+</context>
+<context>
     <name>ReplaceDialog</name>
     <message>
         <source>Replace</source>
@@ -599,7 +627,7 @@ F9</translation>
     </message>
     <message>
         <source>Project settings</source>
-        <translation>Les paramètres de projet</translation>
+        <translation type="obsolete">Les paramètres de projet</translation>
     </message>
     <message>
         <source>Interface language:</source>
@@ -651,11 +679,11 @@ F9</translation>
     </message>
     <message>
         <source>Compiler options :</source>
-        <translation>Options de compilateur:</translation>
+        <translation type="obsolete">Options de compilateur:</translation>
     </message>
     <message>
         <source>Compiler location :</source>
-        <translation>La location de compilateur :</translation>
+        <translation type="obsolete">La location de compilateur :</translation>
     </message>
     <message>
         <source>Programming language:</source>
@@ -699,7 +727,7 @@ F9</translation>
     </message>
     <message>
         <source>Code Folding</source>
-        <translation>Pliage de code</translation>
+        <translation type="obsolete">Pliage de code</translation>
     </message>
     <message>
         <source>Show folding markers</source>
@@ -707,7 +735,7 @@ F9</translation>
     </message>
     <message>
         <source>Border</source>
-        <translation>Bordure</translation>
+        <translation type="obsolete">Bordure</translation>
     </message>
     <message>
         <source>Show line numbers</source>
@@ -715,7 +743,7 @@ F9</translation>
     </message>
     <message>
         <source>Word Wrap</source>
-        <translation>Retour à la ligne</translation>
+        <translation type="obsolete">Retour à la ligne</translation>
     </message>
     <message>
         <source>Dynamic word wrap</source>
@@ -723,7 +751,7 @@ F9</translation>
     </message>
     <message>
         <source>Word Completion</source>
-        <translation>Complétion des mots</translation>
+        <translation type="obsolete">Complétion des mots</translation>
     </message>
     <message>
         <source>Use auto-completion</source>
@@ -764,6 +792,25 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;&amp;lt;none&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Compiler location</source>
+        <translation>La location de compilateur</translation>
+    </message>
+    <message>
+        <source>Compiler options</source>
+        <translation>Options de compilateur</translation>
+    </message>
+    <message>
+        <source>Text Editor</source>
+        <translation>Traitement 
+de texte</translation>
+    </message>
+    <message>
+        <source>Colors 
+and Fonts</source>
+        <translation>Couleur et 
+Caractères</translation>
     </message>
 </context>
 <context>
@@ -815,34 +862,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Close</source>
         <translation>Закрыць</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <source>QT_LAYOUT_DIRECTION</source>
-        <comment>Translate this string to the string &apos;LTR&apos; in left-to-right languages or to &apos;RTL&apos; in right-to-left languages (such as Hebrew and Arabic) to get proper widget layout.</comment>
-        <translation>LTR</translation>
-    </message>
-    <message>
-        <source>Executable &apos;%1&apos; requires Qt %2, found Qt %3.</source>
-        <translation>L&apos;exécutable &apos;%1&apos; requiert Qt %2 (Qt %3 présent).</translation>
-    </message>
-    <message>
-        <source>Incompatible Qt Library Error</source>
-        <translation>Erreur : bibliothèque Qt incompatible</translation>
-    </message>
-    <message>
-        <source>Activate</source>
-        <translation>Activer</translation>
-    </message>
-    <message>
-        <source>Activates the program&apos;s main window</source>
-        <translation>Active la fenêtre principale du programme</translation>
-    </message>
-    <message>
-        <source>QT_LAYOUT_DIRECTION</source>
-        <translation type="obsolete">LTR</translation>
     </message>
 </context>
 </TS>

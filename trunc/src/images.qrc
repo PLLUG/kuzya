@@ -95,4 +95,10 @@
     <qresource prefix="/common">
         <file alias="Kuzya_about.png">images/Kuzya_about.png</file>
     </qresource>
+    <qresource prefix="/tabicon">
+        <file alias="Application.png">images/apllication.png</file>
+        <file alias="Compiler.png">images/compiler.png</file>
+        <file alias="Styling.png">images/styling.png</file>
+        <file alias="TextEditor.png">images/texteditor.png</file>
+    </qresource>
 </RCC>

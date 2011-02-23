@@ -184,6 +184,30 @@
     </message>
 </context>
 <context>
+    <name>QApplication</name>
+    <message>
+        <source>Activate</source>
+        <translation>Activate</translation>
+    </message>
+    <message>
+        <source>Executable &apos;%1&apos; requires Qt %2, found Qt %3.</source>
+        <translation>Executable &apos;%1&apos; requires Qt %2, found Qt %3.</translation>
+    </message>
+    <message>
+        <source>Incompatible Qt Library Error</source>
+        <translation>Incompatible Qt Library Error</translation>
+    </message>
+    <message>
+        <source>QT_LAYOUT_DIRECTION</source>
+        <comment>Translate this string to the string &apos;LTR&apos; in left-to-right languages or to &apos;RTL&apos; in right-to-left languages (such as Hebrew and Arabic) to get proper widget layout.</comment>
+        <translation>LTR</translation>
+    </message>
+    <message>
+        <source>Activates the program&apos;s main window</source>
+        <translation>Activates the program&apos;s main window</translation>
+    </message>
+</context>
+<context>
     <name>ReplaceDialog</name>
     <message>
         <source>Replace</source>
@@ -601,7 +625,7 @@
     </message>
     <message>
         <source>Project settings</source>
-        <translation>Подешавања проекта</translation>
+        <translation type="obsolete">Подешавања проекта</translation>
     </message>
     <message>
         <source>Interface language:</source>
@@ -657,11 +681,11 @@
     </message>
     <message>
         <source>Compiler options :</source>
-        <translation>Пдешавање компилатора:</translation>
+        <translation type="obsolete">Пдешавање компилатора:</translation>
     </message>
     <message>
         <source>Compiler location :</source>
-        <translation>Локација компилатора:
+        <translation type="obsolete">Локација компилатора:
 </translation>
     </message>
     <message>
@@ -698,8 +722,7 @@
     </message>
     <message>
         <source>Backspace key indents</source>
-        <translation>Витеранниа картицу
-</translation>
+        <translation>Витеранниа картицу</translation>
     </message>
     <message>
         <source>Automatic indentation</source>
@@ -707,7 +730,7 @@
     </message>
     <message>
         <source>Code Folding</source>
-        <translation>Враћање кода</translation>
+        <translation type="obsolete">Враћање кода</translation>
     </message>
     <message>
         <source>Show folding markers</source>
@@ -715,7 +738,7 @@
     </message>
     <message>
         <source>Border</source>
-        <translation>Ивица</translation>
+        <translation type="obsolete">Ивица</translation>
     </message>
     <message>
         <source>Show line numbers</source>
@@ -723,16 +746,15 @@
     </message>
     <message>
         <source>Word Wrap</source>
-        <translation>Прекид реда</translation>
+        <translation type="obsolete">Прекид реда</translation>
     </message>
     <message>
         <source>Dynamic word wrap</source>
-        <translation>Динамички реч урап
-</translation>
+        <translation>Динамички реч урап</translation>
     </message>
     <message>
         <source>Word Completion</source>
-        <translation>Завршетак речи</translation>
+        <translation type="obsolete">Завршетак речи</translation>
     </message>
     <message>
         <source>Use auto-completion</source>
@@ -773,6 +795,23 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;&amp;lt;none&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Compiler location</source>
+        <translation>Локација компилатора</translation>
+    </message>
+    <message>
+        <source>Compiler options</source>
+        <translation>Пдешавање компилатора</translation>
+    </message>
+    <message>
+        <source>Text Editor</source>
+        <translation>Текст Едитор</translation>
+    </message>
+    <message>
+        <source>Colors 
+and Fonts</source>
+        <translation>Боје и фонт</translation>
     </message>
 </context>
 <context>
@@ -825,35 +864,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Close</source>
         <translation>Затворити</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <location filename="../src/gui/accessible/qaccessibleobject.cpp" line="+376"/>
-        <source>Activate</source>
-        <translation>Activate</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/dialogs/qmessagebox.h" line="+352"/>
-        <source>Executable &apos;%1&apos; requires Qt %2, found Qt %3.</source>
-        <translation>Executable &apos;%1&apos; requires Qt %2, found Qt %3.</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Incompatible Qt Library Error</source>
-        <translation>Incompatible Qt Library Error</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/kernel/qapplication.cpp" line="+2248"/>
-        <source>QT_LAYOUT_DIRECTION</source>
-        <comment>Translate this string to the string &apos;LTR&apos; in left-to-right languages or to &apos;RTL&apos; in right-to-left languages (such as Hebrew and Arabic) to get proper widget layout.</comment>
-        <translation>LTR</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/accessible/qaccessibleobject.cpp" line="+2"/>
-        <source>Activates the program&apos;s main window</source>
-        <translation>Activates the program&apos;s main window</translation>
     </message>
 </context>
 </TS>
