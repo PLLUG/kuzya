@@ -36,6 +36,7 @@
 #define STYLESHEETS_RELATIVE_PATH "resources/qss/"
 #define TRANSLATIONS_REALATIVE_PATH "resources/translations/"
 
+class QListWidget;
 class QsciScintilla;
 class Kuzya;
 
@@ -60,6 +61,7 @@ public:
 
 public slots:
     void slotCommOptions(void);
+
 private slots:
 
     void slotClose(void);
@@ -80,6 +82,7 @@ private slots:
     void slotDefaultCompiler();
     void slotResetCompilerOptions();
     void slotChangsLocalizationLanguage(QString);
+    void slotChangeOptionPage(int);
 
 private:
     QTranslator* trans_ua;
@@ -96,12 +99,6 @@ private:
     QStringList localizationLanguageFilters;
 public:	
     bool isLineMarginVisible;
-
-private:
-
-public: 
-
-
 };
 
 #endif

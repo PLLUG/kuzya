@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="en_US">
+<!DOCTYPE TS><TS>
 <context>
     <name>FindDialog</name>
     <message>
@@ -172,6 +170,30 @@
     <message>
         <source> not exists</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>QApplication</name>
+    <message>
+        <source>Activate</source>
+        <translation type="obsolete">Activate</translation>
+    </message>
+    <message>
+        <source>Executable &apos;%1&apos; requires Qt %2, found Qt %3.</source>
+        <translation type="obsolete">Executable &apos;%1&apos; requires Qt %2, found Qt %3.</translation>
+    </message>
+    <message>
+        <source>Incompatible Qt Library Error</source>
+        <translation type="obsolete">Incompatible Qt Library Error</translation>
+    </message>
+    <message>
+        <source>QT_LAYOUT_DIRECTION</source>
+        <comment>Translate this string to the string &apos;LTR&apos; in left-to-right languages or to &apos;RTL&apos; in right-to-left languages (such as Hebrew and Arabic) to get proper widget layout.</comment>
+        <translation type="obsolete">LTR</translation>
+    </message>
+    <message>
+        <source>Activates the program&apos;s main window</source>
+        <translation type="obsolete">Activates the program&apos;s main window</translation>
     </message>
 </context>
 <context>
@@ -589,10 +611,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Project settings</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Interface language:</source>
         <translation></translation>
     </message>
@@ -622,14 +640,6 @@
     </message>
     <message>
         <source>Compilation  settings</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Compiler options :</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Compiler location :</source>
         <translation></translation>
     </message>
     <message>
@@ -673,15 +683,7 @@
         <translation></translation>
     </message>
     <message>
-        <source>Code Folding</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Show folding markers</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Border</source>
         <translation></translation>
     </message>
     <message>
@@ -689,15 +691,7 @@
         <translation></translation>
     </message>
     <message>
-        <source>Word Wrap</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Dynamic word wrap</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Word Completion</source>
         <translation></translation>
     </message>
     <message>
@@ -739,6 +733,23 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;&amp;lt;none&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Compiler location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compiler options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Text Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Colors 
+and Fonts</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -790,35 +801,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Close</source>
         <translation></translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <location filename="../src/gui/accessible/qaccessibleobject.cpp" line="+376"/>
-        <source>Activate</source>
-        <translation>Activate</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/dialogs/qmessagebox.h" line="+352"/>
-        <source>Executable &apos;%1&apos; requires Qt %2, found Qt %3.</source>
-        <translation>Executable &apos;%1&apos; requires Qt %2, found Qt %3.</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Incompatible Qt Library Error</source>
-        <translation>Incompatible Qt Library Error</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/kernel/qapplication.cpp" line="+2248"/>
-        <source>QT_LAYOUT_DIRECTION</source>
-        <comment>Translate this string to the string &apos;LTR&apos; in left-to-right languages or to &apos;RTL&apos; in right-to-left languages (such as Hebrew and Arabic) to get proper widget layout.</comment>
-        <translation>LTR</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/accessible/qaccessibleobject.cpp" line="+2"/>
-        <source>Activates the program&apos;s main window</source>
-        <translation>Activates the program&apos;s main window</translation>
     </message>
 </context>
 </TS>

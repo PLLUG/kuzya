@@ -140,7 +140,7 @@
     </message>
     <message>
         <source>LTR</source>
-        <translation>RTL</translation>
+        <translation type="obsolete">RTL</translation>
     </message>
 </context>
 <context>
@@ -176,6 +176,22 @@
     <message>
         <source>Show compiler location: (</source>
         <translation>أشر موضع ترجمة البرنامج: (</translation>
+    </message>
+</context>
+<context>
+    <name>QApplication</name>
+    <message>
+        <source>QT_LAYOUT_DIRECTION</source>
+        <comment>Translate this string to the string &apos;LTR&apos; in left-to-right languages or to &apos;RTL&apos; in right-to-left languages (such as Hebrew and Arabic) to get proper widget layout.</comment>
+        <translation>RTL</translation>
+    </message>
+    <message>
+        <source>Executable &apos;%1&apos; requires Qt %2, found Qt %3.</source>
+        <translation>البرنامج &apos;%1&apos; يتطلّب Qt %2، تمّ إيجاد Qt %3.</translation>
+    </message>
+    <message>
+        <source>Incompatible Qt Library Error</source>
+        <translation>خطأ: مكتبة Qt غير موافقة</translation>
     </message>
 </context>
 <context>
@@ -590,7 +606,7 @@
     </message>
     <message>
         <source>Project settings</source>
-        <translation>تفضيلات مشروع</translation>
+        <translation type="obsolete">تفضيلات مشروع</translation>
     </message>
     <message>
         <source>Load last project on startup</source>
@@ -630,7 +646,7 @@
     </message>
     <message>
         <source>Compiler options :</source>
-        <translation>خيارات برنامج مترجم:</translation>
+        <translation type="obsolete">خيارات برنامج مترجم:</translation>
     </message>
     <message>
         <source>...</source>
@@ -638,7 +654,7 @@
     </message>
     <message>
         <source>Compiler location :</source>
-        <translation>موضع برنامج مترجم:</translation>
+        <translation type="obsolete">موضع برنامج مترجم:</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -698,7 +714,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Code Folding</source>
-        <translation>طيّ رمز</translation>
+        <translation type="obsolete">طيّ رمز</translation>
     </message>
     <message>
         <source>Show folding markers</source>
@@ -706,7 +722,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Border</source>
-        <translation>الحدود</translation>
+        <translation type="obsolete">الحدود</translation>
     </message>
     <message>
         <source>Show line numbers</source>
@@ -714,7 +730,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Word Wrap</source>
-        <translation>قطع خط</translation>
+        <translation type="obsolete">قطع خط</translation>
     </message>
     <message>
         <source>Dynamic word wrap</source>
@@ -722,7 +738,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Word Completion</source>
-        <translation>إكمال كلمات</translation>
+        <translation type="obsolete">إكمال كلمات</translation>
     </message>
     <message>
         <source>Use auto-completion</source>
@@ -743,6 +759,23 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Skin:</source>
         <translation>قشرة:</translation>
+    </message>
+    <message>
+        <source>Compiler location</source>
+        <translation>موضع برنامج مترجم</translation>
+    </message>
+    <message>
+        <source>Compiler options</source>
+        <translation>خيارات برنامج مترجم</translation>
+    </message>
+    <message>
+        <source>Text Editor</source>
+        <translation>محرر النص</translation>
+    </message>
+    <message>
+        <source>Colors 
+and Fonts</source>
+        <translation>ألوان و خطوط</translation>
     </message>
 </context>
 <context>
@@ -794,35 +827,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Close</source>
         <translation>إغلاق</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <location filename="../src/gui/kernel/qapplication.cpp" line="+2248"/>
-        <source>QT_LAYOUT_DIRECTION</source>
-        <comment>Translate this string to the string &apos;LTR&apos; in left-to-right languages or to &apos;RTL&apos; in right-to-left languages (such as Hebrew and Arabic) to get proper widget layout.</comment>
-        <translation>RTL</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/dialogs/qmessagebox.h" line="+352"/>
-        <source>Executable &apos;%1&apos; requires Qt %2, found Qt %3.</source>
-        <translation>البرنامج &apos;%1&apos; يتطلّب Qt %2، تمّ إيجاد Qt %3.</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Incompatible Qt Library Error</source>
-        <translation>خطأ: مكتبة Qt غير موافقة</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/accessible/qaccessibleobject.cpp" line="+376"/>
-        <source>Activate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Activates the program&apos;s main window</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

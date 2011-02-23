@@ -19,6 +19,7 @@
  ******************************************************************************/
 
 #include <Qsci/qsciscintilla.h>
+#include <QListWidget>
 #include <QMessageBox>
 #include <QFontDialog>
 #include <QColorDialog>
@@ -32,6 +33,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
     : QDialog(parent)
 {
     setupUi(this);
+
     setWindowTitle(tr("Settings"));
     mw =(Kuzya*)parent;
     textEditor=mw->getTextEditorPointer();
@@ -55,7 +57,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
     connect(defaultUsePushButton, SIGNAL(clicked()), this, SLOT(slotDefaultCompiler()));
     connect(compilerResetPushButton, SIGNAL(clicked()) ,this, SLOT(slotResetCompilerOptions()));
     connect(localizationLanguageCBox,SIGNAL(activated(QString)),this,SLOT(slotChangsLocalizationLanguage(QString)));
-
+    connect(mTabIconView,SIGNAL(currentRowChanged(int)),this,SLOT(slotChangeOptionPage(int)));
     ///-----------------------------Fonts and Colors-------------------------------------------------------
     styleCBox->addItems(QStyleFactory::keys());
 
@@ -101,7 +103,6 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 
     slotUpdateSkinsCBox();
     slotUpdatelocalizationLanguageCBox();
-    errorInformLabel->hide();
 
 
 }
@@ -469,7 +470,7 @@ void OptionsDialog::slotChangeDefDir(QString dirName)
     if (QDir(dirName).exists())
     {
         errorInformLabel->setStyleSheet("");
-        errorInformLabel->hide();
+        errorInformLabel->setText("");
         applyBtn->setEnabled(true);
         okBtn->setEnabled(true);
     }
@@ -477,7 +478,6 @@ void OptionsDialog::slotChangeDefDir(QString dirName)
     {
         errorInformLabel->setText(tr("The path:")+dirName+tr(" not exists"));
         errorInformLabel->setStyleSheet("background-color:red;");
-        errorInformLabel->show();
         applyBtn->setEnabled(false);
         okBtn->setEnabled(false);
 
@@ -591,4 +591,9 @@ void OptionsDialog::slotChangsLocalizationLanguage(QString langName)
 #endif
     qApp->installTranslator(&translator);
     mw->retranslateAll();
+}
+
+void OptionsDialog::slotChangeOptionPage(int pIndex)
+{
+    mStackedWidget->setCurrentIndex(pIndex);
 }
