@@ -54,7 +54,7 @@ Kuzya::Kuzya(QWidget *parent)
     languageComboBox = new QComboBox(this);
     toolBar = addToolBar("General");
     toolBar->setObjectName("KuzyaToolBar");
-    //toolBar->setIconSize(QSize(30,30));
+    toolBar->setIconSize(QSize(30,30));
     toolBar->addAction(actionNew);
     toolBar->addAction(actionOpen);
     toolBar->addAction(actionSave);

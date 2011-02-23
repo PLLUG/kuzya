@@ -8,6 +8,7 @@ QDialog
 	background-color:qlineargradient(spread:pad, x1:0.534091, y1:1, x2:0.528, y2:0, stop:0 rgba(255, 171, 171, 255), stop:0.454545 rgba(191, 164, 80, 255), stop:1 rgba(26, 171, 110, 255));/*qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(14, 8, 73, 255), stop:0.00568182 rgba(26, 126, 114, 255), stop:1 rgba(239, 236, 55, 255));*/
 
 }
+/*
 HelpBrowser
 {
 	background:rgb(103, 194, 164);
@@ -16,6 +17,7 @@ QDialog#optionsForm
 {
 	background-color:rgb(103, 194, 164)
 }
+*/
 QMenuBar
 {
 	
