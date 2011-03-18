@@ -27,7 +27,7 @@
 #include "compiler.h"
 
 Compiler::Compiler(QObject *parent) : QProcess(parent)
-{  
+{
     connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(afterExit(int, QProcess::ExitStatus)));
     connect(this, SIGNAL(readyReadStandardOutput()), this, SLOT(readStdErr()));
     connect(this, SIGNAL(error(QProcess::ProcessError)), this, SLOT(compilerProcessError(QProcess::ProcessError)));
@@ -195,7 +195,7 @@ QString Compiler::getCompilerInfo(QString lang, QString profile)
     prof.beginGroup("info");
     QString info = prof.value("comment", "").toString();
     prof.endGroup();
-    
+
     return info;
 }
 
@@ -432,16 +432,19 @@ void Compiler::run(void)
 
     QString pathToKuzyagraph = QDir::toNativeSeparators(QApplication::applicationDirPath());
 
-#ifdef WIN32
+#ifdef Q_OS_WIN32
     startDetached("cmd", QStringList() << "/C"<< "title "+programPath+"&&(set path=%path%;"+pathToKuzyagraph+ ")&&("+programPath+")&pause");
-#endif
+#endif /*Q_OS_WIN32*/
+
+#ifdef Q_OS_UNIX
+
 #ifdef Q_OS_MAC
     startDetached("xterm", QStringList() << "-e" << "/bin/sh -c \'" + programPath + " && read -p \"Press enter to continue... \" REPLY'");
-#endif
-#ifdef UNIX
+#else
     startDetached("xterm", QStringList() << "-e" << "/bin/sh -c \'" + programPath + " && read -p \"Press enter to continue... \" REPLY'");
-#endif
+#endif /*Q_OS_MAC*/
 
+#endif /*Q_OS_UNIX*/
     QDir::setCurrent(prevPath);
 }
 

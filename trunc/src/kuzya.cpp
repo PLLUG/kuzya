@@ -288,7 +288,10 @@ void Kuzya::setAutoCompletionEnabled(bool b)
         try
         {
             disconnect(shortcut,SIGNAL(activated()),this,SLOT(slotShowAutoComplete()));
-        }catch(int e){}
+        }catch(int e)
+        {
+            Q_UNUSED(e)
+        }
     }
 }
 
