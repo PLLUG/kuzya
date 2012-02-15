@@ -41,8 +41,7 @@
 #include "helpbrowser.h"
 #include "translator.h"
 #include "version.h"
-//#include "helpassistant.h"
-
+#include "aboutdialog.h"
 
 Kuzya::Kuzya(QWidget *parent)
     : QMainWindow(parent)
@@ -191,6 +190,8 @@ Kuzya::Kuzya(QWidget *parent)
     list << QUrl::fromLocalFile(DefaultDir);
     fileDialog->setSidebarUrls(list);
 
+    mAboutDialog = new AboutDialog(this);
+    mAboutDialog->setWindowModality(Qt::WindowModal);
     ///-------------------------------------------------------------------------------------------------------------------
 
     connect(actionNew,	SIGNAL(triggered()),this,		SLOT(slotNew()));
@@ -1028,7 +1029,7 @@ void Kuzya::slotAbout(void)
     aboutBox->exec();
     delete aboutBox;
     */
-    mAboutDialog.show();
+    mAboutDialog->show();
 }
 
 /**
