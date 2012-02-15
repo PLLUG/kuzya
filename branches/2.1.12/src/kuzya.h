@@ -29,7 +29,6 @@
 #include "optionsdialog.h"
 #include "ui_kuzya.h"
 #include "compiler.h"
-#include "aboutdialog.h"
 
 class QListWidget;
 class QSplitter;
@@ -52,6 +51,7 @@ template <typename T> class QList;
 class Translator;
 class QsciLexer;
 class QFileDialog;
+class AboutDialog;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -200,7 +200,7 @@ private:
         QFileDialog *fileDialog;
 
         QToolBar *toolBar;
-        AboutDialog mAboutDialog;
+        AboutDialog *mAboutDialog;
 };
 
 #endif
