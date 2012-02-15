@@ -16,6 +16,9 @@ public:
     ~AboutDialog();
 
 private:
+    QString getVerionString();
+
+private:
     Ui::AboutDialog *ui;
 };
 
