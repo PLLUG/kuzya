@@ -35,6 +35,9 @@ Compiler::Compiler(QObject *parent) : QProcess(parent)
     setProcessChannelMode(MergedChannels);
     compilerProfile = NULL;
     refreshSupported();
+
+    QString pathToKuzyagraph = QDir::toNativeSeparators(QApplication::applicationDirPath());
+    qputenv("PATH",qgetenv("PATH") + pathToKuzyagraph.toAscii());
 }
 
 Compiler::~Compiler()
@@ -428,12 +431,12 @@ void Compiler::run(void)
     if (programPath.isEmpty()) return;
 
     QString prevPath = QDir::currentPath();
-    QDir::setCurrent(sourcePath);
-
-    QString pathToKuzyagraph = QDir::toNativeSeparators(QApplication::applicationDirPath());
+    QDir::setCurrent(sourcePath);    
 
 #ifdef Q_OS_WIN32
-    startDetached("cmd", QStringList() << "/C"<< "title "+programPath+"&&(set path=%path%;"+pathToKuzyagraph+ ")&&("+programPath+")&pause");
+    QStringList command;
+    command << "/C" << "title "+programPath+ "&&"+programPath;
+    startDetached("cmd", command);
 #endif /*Q_OS_WIN32*/
 
 #ifdef Q_OS_UNIX
@@ -548,5 +551,3 @@ void Compiler::readStdErr(void)
         }
     }
 }
-
-
