@@ -142,7 +142,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Thanks guys for your help...</string>
+            <string>Thanks for your help...</string>
            </property>
           </widget>
          </item>
@@ -160,6 +160,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#111a2d;&quot;&gt;Helena Kuibida&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#3b5998;&quot;&gt; - French translation &lt;/span&gt;&lt;img src=&quot;:/flags/images/flags/French.png&quot; /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#111a2d;&quot;&gt;Lytvyn Mariya&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#3b5998;&quot;&gt; - Arabic translation &lt;/span&gt;&lt;img src=&quot;:/flags/images/flags/Arabic.png&quot; /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#111a2d;&quot;&gt;Nikola Moskaljuk&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#3b5998;&quot;&gt; - Serbian translation &lt;/span&gt;&lt;img src=&quot;:/flags/images/flags/Serbian.png&quot; /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#111a2d;&quot;&gt;Svitlana Fitsak&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#3b5998;&quot;&gt; - German translation &lt;/span&gt;&lt;img src=&quot;:/flags/images/flags/German.png&quot; /&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Design:&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Volodymyr Shevchyk Jr. &lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#3b5998;&quot;&gt;- Stylish Icons &lt;/span&gt;&lt;img src=&quot;:/common/styling-small.png&quot; /&gt;&lt;/p&gt;
