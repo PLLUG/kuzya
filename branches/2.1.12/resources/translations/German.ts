@@ -699,7 +699,7 @@
     </message>
     <message>
         <source>Use auto-completion</source>
-        <translation>AutomatischesVervollständigen benutzen</translation>
+        <translation>Automatisches Vervollständigen benutzen</translation>
     </message>
     <message>
         <source>Colors and Fonts</source>
