@@ -65,10 +65,10 @@ unix {
 	kuzya_app_desktop
 }
 
-win32 { 
+win32 {
     TARGET = ../../bin/kuzya
-    LIBS += -L../../../3rdparty/QScintilla/win32/2.6/debug
-    INCLUDEPATH = ../../../3rdparty/QScintilla/win32/2.6/
+    LIBS += -L../3rdparty/QScintilla/win32/2.8.2/lib/msvc2010/debug
+    INCLUDEPATH = ../3rdparty/QScintilla/win32/2.8.2/include
 }
 
 mac {
