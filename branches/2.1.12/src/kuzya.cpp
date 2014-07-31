@@ -240,7 +240,7 @@ Kuzya::Kuzya(QWidget *parent)
 
 
 
-     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoRedoEnabled()));
+    connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoRedoEnabled()));
 
 
 
@@ -416,6 +416,7 @@ void Kuzya::openFile(QString FileName)
     settings->saveLastProjectName(fileName);
 
     refreshProfileSettings();
+    removeAllNotifications();
 }
 
 /**
@@ -578,25 +579,26 @@ void Kuzya::slotNew(void)
 **/
 void Kuzya::slotOpen(void)
 {
-    if(slotSaveChangesNotifier()==false) return;
-
-    //QString openedFileName = fileDialog->getOpenFileName(this, tr("Open File"), DefaultDir, filter, &currentFilter);
+    if(!slotSaveChangesNotifier())
+    {
+        return;
+    }
     refreshDialogSettings();
     fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
     fileDialog->setFileMode(QFileDialog::ExistingFile);
     fileDialog->setDirectory(DefaultDir);
     QString openedFileName;
-    if (fileDialog->exec())
+    if (QDialog::Accepted == fileDialog->exec())
+    {
         openedFileName = fileDialog->selectedFiles().at(0);
 
-    if ("" != openedFileName)
-    {
-        textEditor->markerDeleteAll();
-        notificationList->clear();
-        openFile(openedFileName);
-        //        refreshProfileSettings();
+        if ("" != openedFileName)
+        {
+            removeAllNotifications();
+            openFile(openedFileName);
+            setUndoRedoEnabled();
+        }
     }
-    setUndoRedoEnabled();
 }
 
 /**
@@ -687,7 +689,7 @@ void Kuzya::refreshProfileSettings()
 
     if (fileName.isEmpty()) return;
 
-    QStringList supportedList = compiler->getSupportedLanguages();    
+    QStringList supportedList = compiler->getSupportedLanguages();
     QString ex(fileName);
     ex = ex.remove(0, ex.lastIndexOf("."));
     ex = ex.toLower();
