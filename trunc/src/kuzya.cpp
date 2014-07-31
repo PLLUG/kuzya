@@ -50,7 +50,6 @@ Kuzya::Kuzya(QWidget *parent)
     setupUi(this);
     setObjectName("Kuzya");
     setWindowTitle("Kuzya");
-
     languageComboBox = new QComboBox(this);
     toolBar = addToolBar("General");
     toolBar->setObjectName("KuzyaToolBar");
@@ -236,6 +235,16 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionObjectMode, SIGNAL(triggered()), this,            SLOT(slotObjectMode()));
     connect(actionStaticLibMode, SIGNAL(triggered()), this,         SLOT(slotStaticLibMode()));
     connect(actionDynamicLibMode, SIGNAL(triggered()), this,        SLOT(slotDynamicLibMode()));
+
+
+
+
+
+     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoEnabled()));
+
+
+
+
 
     connect(textEditor,	SIGNAL(modificationChanged(bool)), this,SLOT(slotModificationChanged(bool)));
 
@@ -635,6 +644,14 @@ void Kuzya::slotSetFileSuffix(QString filter)
     suffix.truncate(suffix.indexOf(" "));
     fileDialog->setDefaultSuffix(suffix);
 }
+
+void Kuzya::setUndoEnabled()
+{
+    actionUndo->setEnabled(textEditor->isUndoAvailable());
+    actionRedo->setEnabled(textEditor->isRedoAvailable());
+}
+
+
 
 void Kuzya::refreshDialogSettings()
 {
@@ -1479,4 +1496,8 @@ void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
     actionStaticLibMode->setIconVisibleInMenu(isVisible);
     actionToggleFolds->setIconVisibleInMenu(isVisible);
     actionUndo->setIconVisibleInMenu(isVisible);
+
+
+
+
 }

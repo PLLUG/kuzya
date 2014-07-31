@@ -141,6 +141,11 @@ private slots:
         void slotModificationChanged(bool);
 
         void slotSetFileSuffix(QString);
+
+        void setUndoEnabled();
+        //void undo();
+        //void redo();
+
 protected:
         //*DRAG AND DROP
         void dragEnterEvent(QDragEnterEvent *event);
