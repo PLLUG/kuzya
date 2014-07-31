@@ -142,9 +142,8 @@ private slots:
 
         void slotSetFileSuffix(QString);
 
-        void setUndoEnabled();
-        //void undo();
-        //void redo();
+        void setUndoRedoEnabled();
+
 
 protected:
         //*DRAG AND DROP

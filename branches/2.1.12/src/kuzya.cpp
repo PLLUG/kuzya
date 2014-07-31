@@ -240,7 +240,7 @@ Kuzya::Kuzya(QWidget *parent)
 
 
 
-     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoEnabled()));
+     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoRedoEnabled()));
 
 
 
@@ -596,6 +596,7 @@ void Kuzya::slotOpen(void)
         openFile(openedFileName);
         //        refreshProfileSettings();
     }
+    setUndoRedoEnabled();
 }
 
 /**
@@ -645,7 +646,7 @@ void Kuzya::slotSetFileSuffix(QString filter)
     fileDialog->setDefaultSuffix(suffix);
 }
 
-void Kuzya::setUndoEnabled()
+void Kuzya::setUndoRedoEnabled()
 {
     actionUndo->setEnabled(textEditor->isUndoAvailable());
     actionRedo->setEnabled(textEditor->isRedoAvailable());
@@ -1148,6 +1149,7 @@ void Kuzya :: slotOpenRecentFile(QString FileName)
         RFileList->removeAt(RFileList->indexOf(FileName));
         slotUpdateRecentFileList();
     }
+    setUndoRedoEnabled();
 }
 /**
 *******************************************************************************************************
