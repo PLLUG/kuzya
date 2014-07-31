@@ -51,7 +51,6 @@ template <typename T> class QList;
 class Translator;
 class QsciLexer;
 class QFileDialog;
-class AboutDialog;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -142,6 +141,11 @@ private slots:
         void slotModificationChanged(bool);
 
         void slotSetFileSuffix(QString);
+
+        void setUndoEnabled();
+        //void undo();
+        //void redo();
+
 protected:
         //*DRAG AND DROP
         void dragEnterEvent(QDragEnterEvent *event);
@@ -200,7 +204,6 @@ private:
         QFileDialog *fileDialog;
 
         QToolBar *toolBar;
-        AboutDialog *mAboutDialog;
 };
 
 #endif

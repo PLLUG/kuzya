@@ -41,7 +41,8 @@
 #include "helpbrowser.h"
 #include "translator.h"
 #include "version.h"
-#include "aboutdialog.h"
+//#include "helpassistant.h"
+
 
 Kuzya::Kuzya(QWidget *parent)
     : QMainWindow(parent)
@@ -49,7 +50,6 @@ Kuzya::Kuzya(QWidget *parent)
     setupUi(this);
     setObjectName("Kuzya");
     setWindowTitle("Kuzya");
-
     languageComboBox = new QComboBox(this);
     toolBar = addToolBar("General");
     toolBar->setObjectName("KuzyaToolBar");
@@ -190,8 +190,6 @@ Kuzya::Kuzya(QWidget *parent)
     list << QUrl::fromLocalFile(DefaultDir);
     fileDialog->setSidebarUrls(list);
 
-    mAboutDialog = new AboutDialog(this);
-    mAboutDialog->setWindowModality(Qt::WindowModal);
     ///-------------------------------------------------------------------------------------------------------------------
 
     connect(actionNew,	SIGNAL(triggered()),this,		SLOT(slotNew()));
@@ -237,6 +235,16 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionObjectMode, SIGNAL(triggered()), this,            SLOT(slotObjectMode()));
     connect(actionStaticLibMode, SIGNAL(triggered()), this,         SLOT(slotStaticLibMode()));
     connect(actionDynamicLibMode, SIGNAL(triggered()), this,        SLOT(slotDynamicLibMode()));
+
+
+
+
+
+     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoEnabled()));
+
+
+
+
 
     connect(textEditor,	SIGNAL(modificationChanged(bool)), this,SLOT(slotModificationChanged(bool)));
 
@@ -637,6 +645,14 @@ void Kuzya::slotSetFileSuffix(QString filter)
     fileDialog->setDefaultSuffix(suffix);
 }
 
+void Kuzya::setUndoEnabled()
+{
+    actionUndo->setEnabled(textEditor->isUndoAvailable());
+    actionRedo->setEnabled(textEditor->isRedoAvailable());
+}
+
+
+
 void Kuzya::refreshDialogSettings()
 {
     QString filter;
@@ -1005,7 +1021,7 @@ void Kuzya::paintWarningMarkers(QList<Compiler::compilerWarning>* warningList)
 *******************************************************************************************************
 **/
 void Kuzya::slotAbout(void)
-{/*
+{
     QMessageBox *aboutBox= new QMessageBox( QMessageBox::Information,tr("About"),QString("\t  <big><b><centre> \t    The Kuzya %1 </centre> </b></big>  "
                                                                                          "\n  <p> Free Development Environment</p>\n\n"
                                                                                          "build on Jule 7 2010"
@@ -1028,8 +1044,6 @@ void Kuzya::slotAbout(void)
     aboutBox->setIconPixmap(QPixmap(":/common/Kuzya_about.png"));
     aboutBox->exec();
     delete aboutBox;
-    */
-    mAboutDialog->show();
 }
 
 /**
@@ -1482,4 +1496,8 @@ void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
     actionStaticLibMode->setIconVisibleInMenu(isVisible);
     actionToggleFolds->setIconVisibleInMenu(isVisible);
     actionUndo->setIconVisibleInMenu(isVisible);
+
+
+
+
 }
