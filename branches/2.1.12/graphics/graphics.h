@@ -41,35 +41,30 @@ class graphics: public QMainWindow, private Ui::graphicsForm
 		graphics(QWidget *parent = 0);
 		~graphics();
 
-	protected:
-       //         void mouseMoveEvent(QMouseEvent*);
-
 	private slots:
-                void processCommand(QString  command);
-
+        void processCommand(QString  command);
 
 	private:
 		Ui::graphicsForm ui;
 		void paintEvent(QPaintEvent *event);
 		void createPixmap(int width, int height);
-                void creatBGPixmap(int width, int height);
+        void creatBGPixmap(int width, int height);
 		QString getMethodName(QString command);
-                void setCurentBGColor(int curentBGColor);
-                void setCurentColor(int curentColor);
-                void setCurentFillColor(int curentFillColor);
-                void setFillPatern(int patern);
-                void drawFunc(int numOfPoints, double **arrayXY);
-                void setLineStyle(int lineStyle);
-
+        void setCurentBGColor(int curentBGColor);
+        void setCurentColor(int curentColor);
+        void setCurentFillColor(int curentFillColor);
+        void setFillPatern(int patern);
+        void drawFunc(int numOfPoints, double **arrayXY);
+        void setLineStyle(int lineStyle);
 
 	private:
 		int step;
 		int index;
 		int curentColor;
-                int curentBGColor;
-                int curentFillColor;
+        int curentBGColor;
+        int curentFillColor;
 		int textSize;
-                int textDirection;
+        int textDirection;
 		int lineThickness;
 		int lineStyle;
 		int x;
@@ -85,26 +80,26 @@ class graphics: public QMainWindow, private Ui::graphicsForm
 		int numOfPoints;
 		int indexOfSimbol;
 		int numberOf;
-                bool readKomands;
-                int fillPatern;
-                bool BGColorWasChanged;
-                double grid;
-                bool isTurtleGrpahics;
-                bool isTurtlePaint;
-                int turtleRotateAngle;
+        bool readKomands;
+        int fillPatern;
+        bool BGColorWasChanged;
+        double grid;
+        bool isTurtleGrpahics;
+        bool isTurtlePaint;
+        int turtleRotateAngle;
 	
 	private:
- 		QPixmap pix;
-                QPixmap pixBG;
-                QPixmap turtlePix;
-		QPainter p;
-		QString methodText;
-		QString textFont;
-		QPen pen;
-                ReadStdIn* rsi;
-                QBrush *fillBrush;
-                QLabel *mouseCoordinatsLabel;
-                QPoint *turtlePosition;
+        QPixmap pix;
+        QPixmap pixBG;
+        QPixmap turtlePix;
+        QPainter p;
+        QString methodText;
+        QString textFont;
+        QPen pen;
+        ReadStdIn* rsi;
+        QBrush *fillBrush;
+        QLabel *mouseCoordinatsLabel;
+        QPoint *turtlePosition;
 };
 
 #endif
