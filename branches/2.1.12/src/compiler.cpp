@@ -37,7 +37,7 @@ Compiler::Compiler(QObject *parent) : QProcess(parent)
     refreshSupported();
 
     QString pathToKuzyagraph = QDir::toNativeSeparators(QApplication::applicationDirPath());
-    qputenv("PATH",qgetenv("PATH") + pathToKuzyagraph.toAscii());
+    qputenv("PATH", qgetenv("PATH") + pathToKuzyagraph.toUtf8());
 }
 
 Compiler::~Compiler()

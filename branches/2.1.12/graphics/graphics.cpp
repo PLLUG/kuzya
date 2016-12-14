@@ -66,7 +66,7 @@ graphics::graphics(QWidget *parent)
         pixBG = QPixmap(width, height);
         pixBG.fill(Qt::white);
         pix.fill(Qt::transparent);
-        pix.alphaChannel();
+//        pix.alphaChannel();
 
         p.begin(&pix);
         fillBrush = new QBrush();

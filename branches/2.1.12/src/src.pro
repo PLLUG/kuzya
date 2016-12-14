@@ -1,11 +1,15 @@
+QT   += core gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
+
+QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder
+
 TEMPLATE = app
 
 FORMS += kuzya.ui \
     gotolinedialog.ui \
     optionsdialog.ui \
     finddialog.ui \
-    replacedialog.ui \
-    aboutdialog.ui
+    replacedialog.ui
 
 HEADERS += kuzya.h \
     gotolinedialog.h \
@@ -15,8 +19,7 @@ HEADERS += kuzya.h \
     replacedialog.h \
     helpbrowser.h \
     translator.h \
-    version.h \
-    aboutdialog.h
+    version.h
 
 SOURCES += kuzya.cpp \
     main.cpp \
@@ -25,8 +28,7 @@ SOURCES += kuzya.cpp \
     optionsdialog.cpp \
     finddialog.cpp \
     replacedialog.cpp \
-    translator.cpp \
-    aboutdialog.cpp
+    translator.cpp
 
 RESOURCES = images.qrc
 
@@ -65,10 +67,10 @@ unix {
 	kuzya_app_desktop
 }
 
-win32 {
+win32 { 
     TARGET = ../../bin/kuzya
-    LIBS += -L../3rdparty/QScintilla/win32/2.8.2/lib/msvc2010/debug
-    INCLUDEPATH = ../3rdparty/QScintilla/win32/2.8.2/include
+    LIBS += -L../../3rdparty/QScintilla/win32/2.4.5/debug
+    INCLUDEPATH = ../../3rdparty/QScintilla/win32/2.4.5/
 }
 
 mac {

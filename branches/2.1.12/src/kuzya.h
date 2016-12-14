@@ -140,7 +140,7 @@ private slots:
 
         void slotModificationChanged(bool);
 
-        void slotSetFileSuffix(QString);
+        void slotSetFileSuffix(QStringList);
 
         void setUndoRedoEnabled();
 

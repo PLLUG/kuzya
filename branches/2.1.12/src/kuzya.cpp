@@ -33,6 +33,11 @@
 #include <QPrintDialog>
 #include <QColor>
 #include <QDebug>
+#include <QToolBar>
+#include <QSplitter>
+#include <QFileDialog>
+#include <QMessageBox>
+
 #include "gotolinedialog.h"
 #include "finddialog.h"
 #include "replacedialog.h"
@@ -41,7 +46,6 @@
 #include "helpbrowser.h"
 #include "translator.h"
 #include "version.h"
-//#include "helpassistant.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -260,10 +264,10 @@ Kuzya::Kuzya(QWidget *parent)
     textEditorShortcut->setKey(Qt::CTRL+Qt::Key_Up);
     connect(textEditorShortcut, SIGNAL(activated()), textEditor, SLOT(setFocus()));
 
-    if (qApp->argc() > 1)
-    {
-        this->openFile(qApp->argv()[qApp->argc()-1]);
-    }
+//    if (qApp->argc() > 1)
+//    {
+//        this->openFile(qApp->argv()[qApp->argc()-1]);
+//    }
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
@@ -640,12 +644,11 @@ void Kuzya::slotDynamicLibMode()
     compiler->setCompilerMode(Compiler::DYNAMIC_LIB);
 }
 
-void Kuzya::slotSetFileSuffix(QString filter)
+void Kuzya::slotSetFileSuffix(QStringList filter)
 {
-    QString suffix(filter);
-    suffix.remove(0, 3+suffix.lastIndexOf("("));
-    suffix.truncate(suffix.indexOf(" "));
-    fileDialog->setDefaultSuffix(suffix);
+    if (filter.count() > 0) {
+        fileDialog->setDefaultSuffix(filter.at(0));
+    }
 }
 
 void Kuzya::setUndoRedoEnabled()
@@ -679,8 +682,8 @@ void Kuzya::refreshDialogSettings()
     if (!language.isEmpty()) currentFilter = language + " ("+compiler->getSupportedExtensions(language)+")";
     else currentFilter = "";
 
-    fileDialog->selectFilter(currentFilter);
-    slotSetFileSuffix(fileDialog->selectedFilter());
+    fileDialog->selectFile(currentFilter);
+    slotSetFileSuffix(fileDialog->selectedFiles());
 }
 
 void Kuzya::refreshProfileSettings()

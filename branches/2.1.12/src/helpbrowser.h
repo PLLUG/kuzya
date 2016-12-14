@@ -22,6 +22,9 @@
 #include <QtGui>
 #include <QObject>
 #include <QPushButton>
+#include <QTextBrowser>
+#include <QVBoxLayout>
+
 class HelpBrowser:public QWidget
 {
 		Q_OBJECT
