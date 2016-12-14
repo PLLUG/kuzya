@@ -137,6 +137,7 @@ Kuzya::Kuzya(QWidget *parent)
 
     cppLexer = new QsciLexerCPP(this);
     cppLexer->setFont(font);
+//    cppLexer->
     pascalLexer = new QsciLexerPascal(this);
     pascalLexer->setFont(font);
     fortranLexer = new QsciLexerFortran(this);
@@ -749,7 +750,7 @@ void Kuzya::refreshProfileSettings()
         loadTemplates(path+"/"+language+"/"+language+".ini");
 
         if ("pascal" == language) currentLexer = pascalLexer;
-        else if ("c++" == language) currentLexer = cppLexer;
+        else if ("c++" == language || "obj-c" == language) currentLexer = cppLexer;
         else if ("fortran" == language) currentLexer = fortranLexer;
         else if ("java" == language) currentLexer = javaLexer;
         else currentLexer = 0;
