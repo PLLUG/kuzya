@@ -17,4 +17,4 @@ script:
   - cd trunc/src
   - qmake "CONFIG+=release silent" 
   - make -j"$NPROC"
-  - make install
+  - sudo make install
