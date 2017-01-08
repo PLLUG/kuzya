@@ -1,5 +1,7 @@
 TEMPLATE = app
 
+QT += widgets
+
 FORMS += kuzya.ui \
     gotolinedialog.ui \
     optionsdialog.ui \
@@ -36,7 +38,7 @@ TRANSLATIONS = ../resources/translations/Ukrainian.ts \
 
 LIBS += -lqscintilla2
 
-unix { 
+unix {
 
     TARGET = ../bin/kuzya
     target.path = /usr/bin
@@ -58,11 +60,11 @@ unix {
         kuzya_profiles \
         kuzya_doc \
         kuzya_resources\
-	kuzya_icon\
-	kuzya_app_desktop
+    kuzya_icon\
+    kuzya_app_desktop
 }
 
-win32 { 
+win32 {
     TARGET = ../../bin/kuzya
     LIBS += -L../../3rdparty/QScintilla/win32/2.4.5/debug
     INCLUDEPATH = ../../3rdparty/QScintilla/win32/2.4.5/

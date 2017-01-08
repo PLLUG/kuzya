@@ -66,7 +66,9 @@ graphics::graphics(QWidget *parent)
         pixBG = QPixmap(width, height);
         pixBG.fill(Qt::white);
         pix.fill(Qt::transparent);
-        pix.alphaChannel();
+        //ISSUE #1: Deprecated method pix.alphaChannel();
+        //Deprecated method in Qt 5.7, use QPainter and QPainter::CompositionMode instead.
+        //pix.alphaChannel();
 
         p.begin(&pix);
         fillBrush = new QBrush();
