@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Kuzya
-Comment=Simple crossplatform IDE for people without experience in programming
-Exec=kuzya
-Icon=kuzya.png
-Terminal=0
-Type=Application
-Encoding=UTF-8
-Categories=Development;Education;Development;
