@@ -115,10 +115,6 @@ void graphics::processCommand(QString  command)
                 creatBGPixmap(width, height);
                 return;
         }
-        //setCurentFillColor(curentFillColor);
-        //setFillPatern(fillPatern);
-        //pen.setBrush(fillBrush);
-        //setCurentColor(curentColor);
         else if(getMethodName(command) == "arc")
         {
                 index = command.indexOf("(",0);
@@ -209,7 +205,7 @@ void graphics::processCommand(QString  command)
                 p.drawRect(x, y, x1-x, y1-y);
                 int a, c;
                 c = z;
-                a = (int) fabs(c / sqrt(2.0)); //Modified to avoid warning: passing `double' for converting 1 of `int abs(int)'
+                a = static_cast<int>(fabs(c / sqrt(2.0))); //Modified to avoid warning: passing `double' for converting 1 of `int abs(int)'
                 p.drawLine(x, y, x+a, y-a);
                 p.drawLine(x+a, y-a, x1+a, y-a);
                 p.drawLine(x1+a, y-a, x1+a, y1-a);
@@ -316,7 +312,7 @@ void graphics::processCommand(QString  command)
                     numberOf = indexOfSimbol - index;
                     arrayXY[1][i] = command.mid(index+1, numberOf-1).toDouble();
 
-                    polygon << QPoint(arrayXY[0][i], arrayXY[1][i]);
+                    polygon << QPoint(static_cast<int>(arrayXY[0][i]), static_cast<int>(arrayXY[1][i]));
                  }
 
                  index = indexOfSimbol;
@@ -329,7 +325,7 @@ void graphics::processCommand(QString  command)
                  numberOf = indexOfSimbol - index;
                  arrayXY[1][numOfPoints - 1] = command.mid(index+1, numberOf-1).toDouble();
 
-                 polygon << QPoint(arrayXY[0][numOfPoints - 1], arrayXY[1][numOfPoints - 1]);
+                 polygon << QPoint(static_cast<int>(arrayXY[0][numOfPoints - 1]), static_cast<int>(arrayXY[1][numOfPoints - 1]));
 
                  p.drawPolyline(polygon);
         }
@@ -529,11 +525,8 @@ void graphics::processCommand(QString  command)
 
 
                 QPainterPath myPath;
-                //myPath.arcTo(x1-r, y1-r, 2*r, 2*r, stAngle, endAngle);
-                //int sweepLenght = (PI * r * (endAngle - stAngle)) / 180;
                 QPointF center(x1, y1);
                 myPath.moveTo(center);
-                //myPath.arcTo(150, 150, 100, 100, 0, 300);
                 myPath.arcTo(x1 - r, y1 - r, 2 * r, 2 * r, stAngle, endAngle);
                 QBrush brush;
                 brush.setColor(fillBrush->color());
@@ -579,16 +572,7 @@ void graphics::processCommand(QString  command)
                 p.drawRect(x, y, x1-x, y1-y);
         }
         else if(getMethodName(command) == "save")
-        {/*
-            QByteArray bytes;
-            QBuffer buffer(&bytes);
-            buffer.open(QIODevice::ReadWrite);
-            pix.save(&buffer, "PNG");
-
-
-            bufferPix.loadFromData(bytes);
-           */
-
+        {
             QPixmap bufferPix = QPixmap(width, height);
             QPainter myPainter;
             myPainter.begin(&bufferPix);
@@ -794,8 +778,8 @@ void graphics::processCommand(QString  command)
             stepLenhgt = command.mid(index+1, numberOf-1).toInt(0,10);
 
 
-            x = x1 + (int)(stepLenhgt * sin(PI * turtleRotateAngle / 180));
-            y = y1 - (int)(stepLenhgt * cos(PI * turtleRotateAngle / 180));
+            x = x1 + static_cast<int>(stepLenhgt * sin(PI * turtleRotateAngle / 180));
+            y = y1 - static_cast<int>(stepLenhgt * cos(PI * turtleRotateAngle / 180));
 
             if (isTurtleGrpahics)
             {
@@ -818,8 +802,8 @@ void graphics::processCommand(QString  command)
             numberOf = indexOfSimbol - index;
             stepLenhgt = command.mid(index+1, numberOf-1).toInt(0,10);
 
-            x = x1 - (int)(stepLenhgt * sin(PI * turtleRotateAngle / 180));
-            y = y1 + (int)(stepLenhgt * cos(PI * turtleRotateAngle / 180));
+            x = x1 - static_cast<int>(stepLenhgt * sin(PI * turtleRotateAngle / 180));
+            y = y1 + static_cast<int>(stepLenhgt * cos(PI * turtleRotateAngle / 180));
 
             if (isTurtleGrpahics)
             {
@@ -937,22 +921,22 @@ void graphics::setCurentBGColor(int curentBGColor)
 
                 switch(curentBGColor)
                 {
-                        case 0: pixBG.fill(Qt::black); 				update();break;
-                        case 1: pixBG.fill(Qt::darkBlue);                       update();break;
-                        case 2: pixBG.fill(Qt::darkGreen);                      update();break;
-                        case 3: pixBG.fill(Qt::darkCyan);       		update();break;
-                        case 4: pixBG.fill(Qt::darkRed);			update();break;
-                        case 5: pixBG.fill(QColor(139, 0, 139));        	update();break;
-                        case 6: pixBG.fill(QColor(165, 42, 42));	 	update();break;
-                        case 7: pixBG.fill(Qt::gray);	 			update();break;
-                        case 8: pixBG.fill(Qt::darkGray);			update();break;
-                        case 9: pixBG.fill(Qt::blue);    			update();break;
-                        case 10:pixBG.fill(Qt::green);  			update();break;
-                        case 11:pixBG.fill(Qt::cyan);   			update();break;
-                        case 12:pixBG.fill(Qt::red); 	 			update();break;
-                        case 13:pixBG.fill(QColor(255, 0, 255));        	update();break;
-                        case 14:pixBG.fill(Qt::yellow);	 			update();break;
-                        case 15:pixBG.fill(Qt::white);   			update();break;
+                        case 0: pixBG.fill(Qt::black);          update();break;
+                        case 1: pixBG.fill(Qt::darkBlue);       update();break;
+                        case 2: pixBG.fill(Qt::darkGreen);      update();break;
+                        case 3: pixBG.fill(Qt::darkCyan);       update();break;
+                        case 4: pixBG.fill(Qt::darkRed);		update();break;
+                        case 5: pixBG.fill(QColor(139, 0, 139));update();break;
+                        case 6: pixBG.fill(QColor(165, 42, 42));update();break;
+                        case 7: pixBG.fill(Qt::gray);	 		update();break;
+                        case 8: pixBG.fill(Qt::darkGray);		update();break;
+                        case 9: pixBG.fill(Qt::blue);    		update();break;
+                        case 10:pixBG.fill(Qt::green);  		update();break;
+                        case 11:pixBG.fill(Qt::cyan);   		update();break;
+                        case 12:pixBG.fill(Qt::red); 	 		update();break;
+                        case 13:pixBG.fill(QColor(255, 0, 255));update();break;
+                        case 14:pixBG.fill(Qt::yellow);	 		update();break;
+                        case 15:pixBG.fill(Qt::white);   		update();break;
                 }
 }
 
@@ -964,15 +948,15 @@ void graphics::drawFunc(int numOfPoints, double **arrayXY)
     double minY;
     double maxX;
     double maxY;
-    double multiplierX;
-    double multiplierY;
-    double mirrorX;
-    double mirrorY;
+    double multiplierX = 1;
+    double multiplierY = 1;
+    double mirrorX = 0;
+    double mirrorY = 0;
     int stepX;
     int stepY;
-    int step;
-    double abscissa;
-    double ordinate;
+    int step = 1;
+    double abscissa = 1;
+    double ordinate = 1;
 
 /******************************************************/
 
@@ -998,27 +982,21 @@ void graphics::drawFunc(int numOfPoints, double **arrayXY)
 
 /**********************FindMultiplierAndMirror*************************/
 
-    if ((maxX - minX) !=0)
+    if ((maxX - minX) != 0.0)
     {
         multiplierX = (width - 2.0 * l) / (maxX - minX);
-    }
-    if ((minY - maxY) != 0)
-    {
-        multiplierY = (height - 2.0 * l) / (minY - maxY);
-    }
-    if ((minX - maxX) != 0)
-    {
         mirrorX = (width * minX - l * (minX + maxX)) / (minX - maxX);
     }
-    if ((minY - maxY) != 0)
+    if ((minY - maxY) != 0.0)
     {
+        multiplierY = (height - 2.0 * l) / (minY - maxY);
         mirrorY = (height * maxY - l * (minY + maxY)) / (maxY - minY);
     }
 
 /***********************FindStep***************************/
 
-    stepX = ((width + .0) - 2.0 * (l + .0)) / grid;
-    stepY = ((height + .0) - 2.0 * (l + .0)) / grid;
+    stepX = static_cast<int>(((width + .0) - 2.0 * (l + .0)) / grid);
+    stepY = static_cast<int>(((height + .0) - 2.0 * (l + .0)) / grid);
 
     if (stepX < stepY)
     {
@@ -1068,36 +1046,36 @@ void graphics::drawFunc(int numOfPoints, double **arrayXY)
     int X = 0;
 /**********************OX**************************/
 
-    OX = ceil(multiplierY * ordinate + mirrorY);
+    OX = static_cast<int>(ceil(multiplierY * ordinate + mirrorY));
 
     while ((OX - i * step) >= l)
     {
         Y = OX - i * step;
-        p.drawLine(l, Y, ceil((double)(width - l)), Y);
+        p.drawLine(l, Y, static_cast<int>(ceil(static_cast<double>(width - l))), Y);
         i++;
     }
     i = 0;
     while ((OX + i * step) <= (height - l))
     {
         Y = OX + i * step;
-        p.drawLine(l, Y, ceil((double)(width - l)), Y);
+        p.drawLine(l, Y, static_cast<int>(ceil(static_cast<double>(width - l))), Y);
         i++;
     }
 /***********************OY****************************/
     i = 0;
-    OY = ceil(multiplierX * abscissa + mirrorX);
+    OY = static_cast<int>(ceil(multiplierX * abscissa + mirrorX));
 
     while ((OY - i * step) >= l)
     {
         X = OY - i * step;
-        p.drawLine(X ,l, X, ceil((double)(height - l)));
+        p.drawLine(X ,l, X, static_cast<int>(ceil(static_cast<double>(height - l))));
         i++;
     }
     i = 0;
     while ((OY + i * step) <= (width - l))
     {
         X = OY + i * step;
-        p.drawLine(X ,l, X, ceil((double)(height - l)));
+        p.drawLine(X ,l, X, static_cast<int>(ceil(static_cast<double>(height - l))));
         i++;
     }
 
@@ -1111,11 +1089,11 @@ void graphics::drawFunc(int numOfPoints, double **arrayXY)
 /****************************DrawTextOY***********************************/
     int sum = 0.0;
     QString textSum = "";
-    OX = ceil(multiplierY * ordinate + mirrorY);
+    OX = static_cast<int>(ceil(multiplierY * ordinate + mirrorY));
     i = 0;
     while ((OX - i * step) >= l)
     {
-        sum = (-i * step) / multiplierY;
+        sum = static_cast<int>((-i * step) / multiplierY);
         textSum = QVariant(sum).toString();
         Y = OX - i * step;
         p.drawText(l - textSum.length() * 9, Y + 3, textSum);
@@ -1125,7 +1103,7 @@ void graphics::drawFunc(int numOfPoints, double **arrayXY)
     i = 0;
     while ((OX + i * step) <= (height - l))
     {
-        sum = (i * step) / multiplierY;
+        sum = static_cast<int>((i * step) / multiplierY);
         textSum = QVariant(sum).toString();
         Y = OX + i * step;
         p.drawText(l - textSum.length() * 9, Y + 3, textSum);
@@ -1134,12 +1112,12 @@ void graphics::drawFunc(int numOfPoints, double **arrayXY)
 /****************************DrawTextOX**************************/
     int h = 0;
     i = 0;
-    OY = ceil(multiplierX * abscissa + mirrorX);
+    OY = static_cast<int>(ceil(multiplierX * abscissa + mirrorX));
 
     while ((OY - i * step) >= l)
     {
         if (i % 2 == 0) h = 10;
-        sum = (-i * step) / multiplierX;
+        sum = static_cast<int>((-i * step) / multiplierX);
         textSum = QVariant(sum).toString();
         X = OY - i * step;
         p.drawText(X - textSum.length() * 4,l - h - 3, textSum);
@@ -1151,7 +1129,7 @@ void graphics::drawFunc(int numOfPoints, double **arrayXY)
     while ((OY + i * step) <= (width - l))
     {
         if (i % 2 == 0) h = 10;
-        sum = (i * step) / multiplierX;
+        sum = static_cast<int>((i * step) / multiplierX);
         textSum = QVariant(sum).toString();
         X = OY + i * step;
         p.drawText(X - textSum.length() * 4,l - h - 3, textSum);
@@ -1167,16 +1145,24 @@ void graphics::drawFunc(int numOfPoints, double **arrayXY)
     p.setPen(pen);
 
 
-    p.drawLine(l, ceil(multiplierY * ordinate + mirrorY), ceil((double)(width - l)), ceil(multiplierY * ordinate + mirrorY));
-    p.drawLine(ceil(multiplierX * abscissa + mirrorX),l, ceil(multiplierX * abscissa + mirrorX), ceil((double)(height - l)));
+    p.drawLine(l,
+               static_cast<int>(ceil(multiplierY * ordinate + mirrorY)),
+               static_cast<int>(ceil(static_cast<double>(width - l))),
+               static_cast<int>(ceil(multiplierY * ordinate + mirrorY)));
+    p.drawLine(static_cast<int>(ceil(multiplierX * abscissa + mirrorX)),
+               l,
+               static_cast<int>(ceil(multiplierX * abscissa + mirrorX)),
+               static_cast<int>(ceil(static_cast<double>(height - l))));
 
 /**************************DrawFunction********************************/
     setCurentColor(curentColor);
     for (int i = 0; i < numOfPoints - 1; ++i)
     {
         qDebug() << QVariant(arrayXY[1][i]).toString();
-        p.drawLine(ceil(multiplierX * arrayXY[0][i] + mirrorX), ceil(multiplierY * arrayXY[1][i] + mirrorY),
-                   ceil(multiplierX * arrayXY[0][i+1] + mirrorX), ceil(multiplierY * arrayXY[1][i+1] + mirrorY));
+        p.drawLine(static_cast<int>(ceil(multiplierX * arrayXY[0][i] + mirrorX)),
+                static_cast<int>(ceil(multiplierY * arrayXY[1][i] + mirrorY)),
+                static_cast<int>(ceil(multiplierX * arrayXY[0][i+1] + mirrorX)),
+                static_cast<int>(ceil(multiplierY * arrayXY[1][i+1] + mirrorY)));
     }
 
 }
@@ -1224,22 +1210,22 @@ void graphics::setCurentFillColor(int curentFillColor)
 {
     switch(curentFillColor)
                 {
-                        case 0: fillBrush->setColor(Qt::black);                  update();break;
-                        case 1: fillBrush->setColor(Qt::darkBlue);		update();break;
-                        case 2: fillBrush->setColor(Qt::darkGreen);		update();break;
-                        case 3: fillBrush->setColor(Qt::darkCyan);		update();break;
-                        case 4: fillBrush->setColor(Qt::darkRed);                update();break;
-                        case 5: fillBrush->setColor(QColor(139, 0, 139));        update();break;
+                        case 0: fillBrush->setColor(Qt::black);             update();break;
+                        case 1: fillBrush->setColor(Qt::darkBlue);          update();break;
+                        case 2: fillBrush->setColor(Qt::darkGreen);         update();break;
+                        case 3: fillBrush->setColor(Qt::darkCyan);          update();break;
+                        case 4: fillBrush->setColor(Qt::darkRed);           update();break;
+                        case 5: fillBrush->setColor(QColor(139, 0, 139));   update();break;
                         case 6: fillBrush->setColor(QColor(165, 42, 42)); 	update();break;
                         case 7: fillBrush->setColor(Qt::gray);           	update();break;
-                        case 8: fillBrush->setColor(Qt::darkGray);		update();break;
-                        case 9: fillBrush->setColor(Qt::blue);   		update();break;
-                        case 10:fillBrush->setColor(Qt::green);  		update();break;
-                        case 11:fillBrush->setColor(Qt::cyan);   		update();break;
-                        case 12:fillBrush->setColor(Qt::red);    		update();break;
+                        case 8: fillBrush->setColor(Qt::darkGray);          update();break;
+                        case 9: fillBrush->setColor(Qt::blue);              update();break;
+                        case 10:fillBrush->setColor(Qt::green);             update();break;
+                        case 11:fillBrush->setColor(Qt::cyan);              update();break;
+                        case 12:fillBrush->setColor(Qt::red);               update();break;
                         case 13:fillBrush->setColor(QColor(255, 0, 255));	update();break;
                         case 14:fillBrush->setColor(Qt::yellow);         	update();break;
-                        case 15:fillBrush->setColor(Qt::white);  		update();break;
+                        case 15:fillBrush->setColor(Qt::white);             update();break;
                 }
 }
 ///**********************seting fill patern***********************************************
@@ -1247,14 +1233,14 @@ void graphics::setFillPatern(int patern)
 {
     switch(patern)
                 {
-                        case 0: fillBrush->setStyle(Qt::NoBrush);               update();break;
+                        case 0: fillBrush->setStyle(Qt::NoBrush);           update();break;
                         case 1: fillBrush->setStyle(Qt::SolidPattern);		update();break;
                         case 2: fillBrush->setStyle(Qt::HorPattern);		update();break;
                         case 3: fillBrush->setStyle(Qt::BDiagPattern);		update();break;
-                        case 4: fillBrush->setStyle(Qt::BDiagPattern);          update();break;
-                        case 5: fillBrush->setStyle(Qt::FDiagPattern);          update();break;
+                        case 4: fillBrush->setStyle(Qt::BDiagPattern);      update();break;
+                        case 5: fillBrush->setStyle(Qt::FDiagPattern);      update();break;
                         case 6: fillBrush->setStyle(Qt::FDiagPattern);  	update();break;
-                        case 7: fillBrush->setStyle(Qt::Dense5Pattern);        	update();break;
+                        case 7: fillBrush->setStyle(Qt::Dense5Pattern);     update();break;
                         case 8: fillBrush->setStyle(Qt::Dense4Pattern);		update();break;
                         case 9: fillBrush->setStyle(Qt::VerPattern);   		update();break;
                         case 10:fillBrush->setStyle(Qt::Dense1Pattern); 	update();break;

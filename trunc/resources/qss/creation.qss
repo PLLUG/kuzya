@@ -27,7 +27,6 @@ QMenuBar
 QMenuBar::item::selected
 {
 	background-color:qlineargradient(spread:pad, x1:0.479, y1:0, x2:0.484, y2:0.994318, stop:0 rgba(227, 227, 227, 255), stop:1 rgba(209, 209, 209, 255));
-
 }
 QMenuBar::item::pressed
 {
@@ -39,6 +38,7 @@ QMenu::item::checked
 	background-color: lightgray;
 	
 }
+
 QMenu
 {
 
@@ -47,10 +47,9 @@ QMenu
   color:black;
   /*background-color:#FFDE7B*/
 }
-QMenu::item:selected
+QMenu::item:disabled
 {
-  color:white;
-  /*background-color:#FFC004;*/
+  color:lightgray;
 }
 QMenu::separator
 {
@@ -330,7 +329,7 @@ QPushButton
 	padding:3;
 	border: 2px groove grey;
 	border-radius:2;
-	
+	min-width: 40px;
 }
 QPushButton:hover
 {

@@ -9,9 +9,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>595</width>
+    <width>680</width>
     <height>529</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>680</width>
+    <height>529</height>
+   </size>
   </property>
   <property name="maximumSize">
    <size>
@@ -444,7 +456,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="mStackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_4">
@@ -707,6 +719,12 @@
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_9">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="font">
           <font>
            <pointsize>14</pointsize>
@@ -717,8 +735,8 @@
          <property name="title">
           <string>Compilation  settings</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_16">
-          <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
            <widget class="QGroupBox" name="groupBox_4">
             <property name="font">
              <font>
@@ -839,7 +857,7 @@ p, li { white-space: pre-wrap; }
             </layout>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item>
            <widget class="QGroupBox" name="groupBox_3">
             <property name="font">
              <font>
@@ -887,7 +905,7 @@ p, li { white-space: pre-wrap; }
             </layout>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item>
            <widget class="QGroupBox" name="groupBox_5">
             <property name="font">
              <font>
@@ -926,16 +944,10 @@ p, li { white-space: pre-wrap; }
             </layout>
            </widget>
           </item>
-          <item row="3" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,0,1">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,0,0">
             <item>
              <widget class="QPushButton" name="defaultUsePushButton">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>1</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
               <property name="font">
                <font>
                 <pointsize>10</pointsize>
@@ -949,13 +961,13 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <spacer name="horizontalSpacer_18">
+             <spacer name="horizontalSpacer_2">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>0</width>
                 <height>20</height>
                </size>
               </property>
@@ -963,12 +975,6 @@ p, li { white-space: pre-wrap; }
             </item>
             <item>
              <widget class="QPushButton" name="compilerResetPushButton">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>1</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
               <property name="font">
                <font>
                 <pointsize>10</pointsize>

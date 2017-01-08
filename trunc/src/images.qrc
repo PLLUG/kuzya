@@ -91,9 +91,11 @@
         <file>images/flags/French.png</file>
         <file>images/flags/Serbian.png</file>
         <file>images/flags/Arabic.png</file>
+        <file>images/flags/German.png</file>
     </qresource>
     <qresource prefix="/common">
         <file alias="Kuzya_about.png">images/Kuzya_about.png</file>
+        <file alias="styling-small.png">images/styling-small.png</file>
     </qresource>
     <qresource prefix="/tabicon">
         <file alias="Application.png">images/apllication.png</file>

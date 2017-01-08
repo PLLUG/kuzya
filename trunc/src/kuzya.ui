@@ -445,7 +445,7 @@
      <x>0</x>
      <y>0</y>
      <width>773</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -493,8 +493,8 @@
      <rect>
       <x>802</x>
       <y>104</y>
-      <width>155</width>
-      <height>86</height>
+      <width>193</width>
+      <height>92</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -627,6 +627,15 @@
    </property>
   </action>
   <action name="actionUndo">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="images.qrc">
      <normaloff>:/menu/images/undo.png</normaloff>:/menu/images/undo.png</iconset>
@@ -639,6 +648,12 @@
    </property>
   </action>
   <action name="actionRedo">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="images.qrc">
      <normaloff>:/menu/images/redo.png</normaloff>:/menu/images/redo.png</iconset>
