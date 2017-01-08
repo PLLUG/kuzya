@@ -1,0 +1,20 @@
+dist: trusty
+sudo: required
+language: c++
+      
+before_install:
+# Linux
+- sudo apt-add-repository ppa:beineri/opt-qt57-trusty -y
+- sudo apt-get update -qq
+- sudo apt-get install --force-yes -qq qt57base qt57tools libqt5scintilla2-dev
+- sudo ln -s /usr/include/qt5/Qsci /opt/qt57/include/Qsci
+- sudo ln -s /usr/share/qt5/mkspecs/features/qscintilla2.prf /opt/qt57/mkspecs/features/qscintilla2.prf     
+
+script:
+  - source /opt/qt57/bin/qt57-env.sh
+  - qmake --version
+  - which qmake
+  - cd trunc/src
+  - qmake "CONFIG+=release silent" 
+  - make -j"$NPROC"
+  - make install
