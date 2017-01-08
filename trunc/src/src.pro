@@ -39,10 +39,8 @@ TRANSLATIONS = ../resources/translations/Ukrainian.ts \
     ../resources/translations/Serbian.ts \
     ../resources/translations/Arabic.ts
 
-LIBS += -lqscintilla2
 
-unix { 
-
+unix {
     TARGET = ../bin/kuzya
     target.path = /usr/bin
     translations.path = /usr/share/kuzya/translations
@@ -63,14 +61,17 @@ unix {
         kuzya_profiles \
         kuzya_doc \
         kuzya_resources\
-	kuzya_icon\
-	kuzya_app_desktop
+    kuzya_icon\
+    kuzya_app_desktop
 }
 
-win32 { 
+CONFIG += qscintilla2
+
+win32 {
     TARGET = ../../bin/kuzya
     LIBS += -L../../3rdparty/QScintilla/win32/2.4.5/debug
     INCLUDEPATH = ../../3rdparty/QScintilla/win32/2.4.5/
+    LIBS += -lqscintilla2
 }
 
 mac {
