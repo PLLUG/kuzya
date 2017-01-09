@@ -909,7 +909,7 @@ void Kuzya::slotRun(void)
 {
     if (fileName.isEmpty())
     {
-        addNotification(FAILING, tr("No binary to run"));
+        addNotification(NTYPE_FAILING, tr("No binary to run"));
         return;
     }
     if (!srcRecompiled)
@@ -931,20 +931,20 @@ void Kuzya::slotCompile(void)
     textEditor->markerDeleteAll(currentMarker);
     if (fileName.isEmpty())
     {
-        addNotification(FAILING, tr("No source to compile"));
+        addNotification(NTYPE_FAILING, tr("No source to compile"));
         return;
     }
 
     textEditor->setReadOnly(true);
     if (compiler->isReady())
     {
-        addNotification(WAIT, tr("Compilling..."));
+        addNotification(NTYPE_WAIT, tr("Compilling..."));
         textEditor->setReadOnly(true);
         translator->retranslate();
         compiler->compile();
         srcRecompiled = true;
     }
-    else addNotification(FAILING, tr("Could not open compiler profile"));
+    else addNotification(NTYPE_FAILING, tr("Could not open compiler profile"));
 }
 
 Compiler* Kuzya::getCurrentCompiler(void)
@@ -959,22 +959,22 @@ void Kuzya::slotAfterCompile(int status)
 {
     textEditor->setReadOnly(false);
     notificationList->clear();
-    if (Compiler::NOERROR == status)
+    if (Compiler::STATUS_NOERROR == status)
     {
         paintWarningMarkers(compiler->getLastWarnings());
-        addNotification(SUCCESS, tr("Compiled successfuly!"));
+        addNotification(NTYPE_SUCCESS, tr("Compiled successfuly!"));
     }
     else
     {
-        if (Compiler::FAILED_TO_START == status)
+        if (Compiler::STATUS_FAILED_TO_START == status)
         {
-            addNotification(FAILING, tr("Unable to start compiler"));
+            addNotification(NTYPE_FAILING, tr("Unable to start compiler"));
         }
         else
         {
             paintErrorMarkers(compiler->getLastErrors());
             paintWarningMarkers(compiler->getLastWarnings());
-            addNotification(FAILING, tr("Compilation failed!"));
+            addNotification(NTYPE_FAILING, tr("Compilation failed!"));
         }
     }
 
@@ -996,11 +996,11 @@ void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
             if (0 == firstAttached) firstAttached = i;
             errCount++;
         }
-        else addNotification(COMPILER, errorList->at(i).description);
+        else addNotification(NTYPE_COMPILER, errorList->at(i).description);
     }
 
     QString str;
-    if (0 != errCount) addNotification(INFO, tr("Found errors (%2) in file %1").arg(fileName).arg(errCount));
+    if (0 != errCount) addNotification(NTYPE_INFO, tr("Found errors (%2) in file %1").arg(fileName).arg(errCount));
 
     notificationList->setCurrentItem(notificationList->item(firstAttached));
     notificationList->setFocus();
@@ -1016,12 +1016,12 @@ void Kuzya::paintWarningMarkers(QList<Compiler::compilerWarning>* warningList)
     {
         if (0 != warningList->at(i).line)
         {
-            addNotification(WARNING, warningList->at(i).description, true, warningList->at(i).line);
+            addNotification(NTYPE_WARNING, warningList->at(i).description, true, warningList->at(i).line);
             waCount++;
         }
-        else addNotification(COMPILER, warningList->at(i).description);
+        else addNotification(NTYPE_COMPILER, warningList->at(i).description);
     }
-    if (0 != waCount) addNotification(INFO, tr("Found warnings (%2) in file %1").arg(fileName).arg(waCount));
+    if (0 != waCount) addNotification(NTYPE_INFO, tr("Found warnings (%2) in file %1").arg(fileName).arg(waCount));
 }
 
 /**
@@ -1243,28 +1243,28 @@ void Kuzya::addNotification(int type, QString descr, bool attached, int line)
         textEditor->markerAdd(line-1, errorMarker);
         icon.addFile(":/notifications/error");
         break;
-    case WARNING:
+    case NTYPE_WARNING:
         str = tr("Compilation warning (line ")+QVariant(line).toString()+") "+descr;
         icon.addFile(":/notifications/warning");
         textEditor->markerAdd(line-1, warningMarker);
         break;
-    case SUCCESS:
+    case NTYPE_SUCCESS:
         icon.addFile(":/notifications/success");
         statusBar()->showMessage(descr, 3000);
         break;
-    case FAILING:
+    case NTYPE_FAILING:
         icon.addFile(":/notifications/failing");
         statusBar()->showMessage(descr, 3000);
         slotShowNotificationList(true);
         break;
-    case WAIT:
+    case NTYPE_WAIT:
         icon.addFile(":/notifications/wait");
         statusBar()->showMessage(descr, 3000);
         break;
-    case INFO:
+    case NTYPE_INFO:
         icon.addFile(":/notifications/info");
         break;
-    case COMPILER:
+    case NTYPE_COMPILER:
         icon.addFile(":/notifications/comment");
         break;
     }

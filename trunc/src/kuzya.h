@@ -62,7 +62,8 @@ public:
                                        lineRole = Qt::UserRole+2,
                                        descriptionRole = Qt::UserRole+3};
 
-    enum notificationTypeEnum {ERROR, WARNING, SUCCESS, FAILING, WAIT, INFO, COMPILER};
+    enum notificationTypeEnum {NTYPE_ERROR, NTYPE_WARNING, NTYPE_SUCCESS,
+                               NTYPE_FAILING, NTYPE_WAIT, NTYPE_INFO, NTYPE_COMPILER};
 
     Kuzya(QWidget *parent = 0);
     ~Kuzya();

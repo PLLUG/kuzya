@@ -1,7 +1,7 @@
 QT   += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
-QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder
+unix:QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder
 
 HEADERS += readstdin.h \
     graphics.h \

@@ -1,7 +1,8 @@
 QT   += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
+CONFIG += c++14
 
-QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder
+unix:QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder
 
 TEMPLATE = app
 
@@ -69,8 +70,8 @@ CONFIG += qscintilla2
 
 win32 {
     TARGET = ../../bin/kuzya
-    LIBS += -L../../3rdparty/QScintilla/win32/2.4.5/debug
-    INCLUDEPATH = ../../3rdparty/QScintilla/win32/2.4.5/
+    LIBS += -L../../3rdparty/QScintilla/2.9.4
+    INCLUDEPATH = ../../3rdparty/QScintilla/2.9.4
     LIBS += -lqscintilla2
 }
 

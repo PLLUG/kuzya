@@ -458,11 +458,11 @@ void Compiler::afterExit(int exitCode, QProcess::ExitStatus exitStatus)
 {
     int endSt;
 
-    if ((0 == exitCode)&&(0 == exitStatus)) endSt = NOERROR;
+    if ((0 == exitCode)&&(0 == exitStatus)) endSt = STATUS_NOERROR;
     else
     {
         programPath = QString::null;
-        endSt = ERROR;
+        endSt = STATUS_ERROR;
     }
 
     if (!outFile.isEmpty()) readStdErr();
@@ -474,8 +474,8 @@ void Compiler::compilerProcessError(QProcess::ProcessError error)
 {
     int endSt;
 
-    if (QProcess::FailedToStart == error) endSt = FAILED_TO_START;
-    else endSt = CRASHED;
+    if (QProcess::FailedToStart == error) endSt = STATUS_FAILED_TO_START;
+    else endSt = STATUS_CRASHED;
 
     programPath = QString::null;
 
