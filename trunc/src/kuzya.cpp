@@ -992,7 +992,7 @@ void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
     {
         if (0 != errorList->at(i).line)
         {
-            addNotification(ERROR, errorList->at(i).description, true, errorList->at(i).line);
+            addNotification(NTYPE_ERROR, errorList->at(i).description, true, errorList->at(i).line);
             if (0 == firstAttached) firstAttached = i;
             errCount++;
         }
@@ -1238,7 +1238,7 @@ void Kuzya::addNotification(int type, QString descr, bool attached, int line)
     QIcon icon;
 
     switch (type) {
-    case ERROR:
+    case NTYPE_ERROR:
         str = tr("Compilation error (line ")+QVariant(line).toString()+") "+descr;
         textEditor->markerAdd(line-1, errorMarker);
         icon.addFile(":/notifications/error");
