@@ -16,6 +16,8 @@ install:
     git submodule init
     
     git submodule update
+    
+    git lfs logs last
 
 build:
   verbosity: minimal
