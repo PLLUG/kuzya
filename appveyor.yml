@@ -20,7 +20,7 @@ build_script:
     
     qmake "CONFIG+=release silent"
     
-    %QT_INSTALL_ROOT%\..\Tools\QtCreator\bin\jom
+    %QT_INSTALL_ROOT%\..\..\Tools\QtCreator\bin\jom
     
 build:
   verbosity: minimal
