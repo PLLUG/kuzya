@@ -2,6 +2,7 @@
 
 [![GPLv3 https://opensource.org/licenses/gpl-3.0.html](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://opensource.org/licenses/gpl-3.0.html)
 [![status](https://travis-ci.org/PLLUG/kuzya.svg)](https://travis-ci.org/PLLUG/kuzya)
+[![Build status](https://ci.appveyor.com/api/projects/status/6fi6m0sy9asst006/branch/development?svg=true)](https://ci.appveyor.com/project/alexchmykhalo/kuzya/branch/development)
 [![Stories in Ready](https://badge.waffle.io/PLLUG/kuzya.svg?label=ready&title=Tasks Ready)](http://waffle.io/PLLUG/kuzya)
 
 ----
