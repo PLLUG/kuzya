@@ -1,5 +1,7 @@
 # Kuzya IDE
 
+[![Join the chat at https://gitter.im/PLLUG/kuzya](https://badges.gitter.im/PLLUG/kuzya.svg)](https://gitter.im/PLLUG/kuzya?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![GPLv3 https://opensource.org/licenses/gpl-3.0.html](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://opensource.org/licenses/gpl-3.0.html)
 [![status](https://travis-ci.org/PLLUG/kuzya.svg)](https://travis-ci.org/PLLUG/kuzya)
 [![Build status](https://ci.appveyor.com/api/projects/status/6fi6m0sy9asst006/branch/development?svg=true)](https://ci.appveyor.com/project/alexchmykhalo/kuzya/branch/development)
