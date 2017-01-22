@@ -19,10 +19,10 @@ build_script:
     qmake "CONFIG+=release silent"
     
     %QT_INSTALL_ROOT%\..\..\Tools\QtCreator\bin\jom
-	
-	cd %APPVEYOR_BUILD_FOLDER%\tools
-	
-	make-installer.bat
+    
+    cd %APPVEYOR_BUILD_FOLDER%\tools
+    
+    make-installer.bat
     
 build:
   verbosity: minimal
