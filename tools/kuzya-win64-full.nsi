@@ -102,7 +102,7 @@ SectionGroup "!MSYS2 + Compilers and Tools" SecGroupMSYS2
 	Section "MSYS2 Core Components" SecMSYS2Core
 		SectionIn 1
 		SetOutPath "$INSTDIR"
-		${KUZYA_BUILD_ROOT}\..\tools\post-install-msys2.sh
+		File ${KUZYA_BUILD_ROOT}\tools\post-install-msys2.sh
 		
 		SetOutPath "$INSTDIR\msys64"
 		File /r ${KUZYA_PACKAGE_ROOT}\msys64\*.*

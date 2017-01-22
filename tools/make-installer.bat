@@ -1,6 +1,5 @@
 rem ### Variables
-rem set KUZYA_BUILD_ROOT=c:\projects\kuzya
-set KUZYA_BUILD_ROOT=C:\kuzya-build\kuzya
+set KUZYA_BUILD_ROOT=c:\projects\kuzya
 set KUZYA_MSYS64_ROOT=c:\msys64
 set KUZYA_QSCINTILLA_VERSION=2.9.4
 set KUZYA_MSYS2_DISTRIB_PACKAGE_NAME=msys2-x86_64-latest.tar.xz
