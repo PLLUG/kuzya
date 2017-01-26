@@ -16,7 +16,7 @@ script:
   - source /opt/qt57/bin/qt57-env.sh
   - qmake --version
   - which qmake
-  - cd trunc/src
+  - cd src
   - qmake "CONFIG+=release silent" 
   - make -j"$NPROC"
   - sudo make install
