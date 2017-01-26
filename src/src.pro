@@ -69,9 +69,9 @@ unix {
 CONFIG += qscintilla2
 
 win32 {
-    TARGET = ../../bin/kuzya
-    LIBS += -L../../3rdparty/QScintilla/2.9.4
-    INCLUDEPATH = ../../3rdparty/QScintilla/2.9.4
+    TARGET = ../bin/kuzya
+    LIBS += -L../3rdparty/QScintilla/2.9.4
+    INCLUDEPATH = ../3rdparty/QScintilla/2.9.4
     LIBS += -lqscintilla2
 }
 
