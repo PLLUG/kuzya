@@ -14,7 +14,7 @@ build_script:
     
     "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64 
     
-    cd %APPVEYOR_BUILD_FOLDER%\trunc\src
+    cd %APPVEYOR_BUILD_FOLDER%\src
     
     qmake "CONFIG+=release silent"
     
