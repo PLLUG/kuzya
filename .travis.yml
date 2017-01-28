@@ -14,7 +14,7 @@ before_install:
 - sudo ln -s /usr/share/qt5/mkspecs/features/qscintilla2.prf /opt/qt58/mkspecs/features/qscintilla2.prf     
 
 script:
-  - source /opt/qt57/bin/qt57-env.sh
+  - source /opt/qt58/bin/qt58-env.sh
   - qmake --version
   - which qmake
   - cd src
