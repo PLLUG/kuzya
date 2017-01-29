@@ -669,20 +669,19 @@ void Kuzya::refreshDialogSettings()
     {
         filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
     }
-
     filter = filter+"All Files (*)";
 
     fileDialog->setNameFilter(filter);
-
     QList<QUrl> list = fileDialog->sidebarUrls();
-    list.removeLast();
+    if(!list.isEmpty())
+    {
+        list.removeLast();
+    }
     list << QUrl::fromLocalFile(DefaultDir);
     fileDialog->setSidebarUrls(list);
-
     QString currentFilter;
     if (!language.isEmpty()) currentFilter = language + " ("+compiler->getSupportedExtensions(language)+")";
     else currentFilter = "";
-
     fileDialog->selectFile(currentFilter);
     slotSetFileSuffix(fileDialog->selectedFiles());
 }
@@ -799,7 +798,6 @@ bool Kuzya::slotSave(void)
     QString newFileName;
     if (fileName.isEmpty())
     {
-
         // fileName = fileDialog->getSaveFileName(this, tr("Save as..."), DefaultDir, filter, &currentFilter);
         refreshDialogSettings();
         fileDialog->setAcceptMode(QFileDialog::AcceptSave);
