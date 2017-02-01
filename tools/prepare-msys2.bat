@@ -1,5 +1,6 @@
+@echo on
 curl -O %KUZYA_MSYS2_DISTRIB_PACKAGE_URL%/%KUZYA_MSYS2_DISTRIB_PACKAGE_NAME%
-call %KUZYA_MSYS64_ROOT%\msys2_shell -mingw64 -here bsdtar xf %KUZYA_MSYS2_DISTRIB_PACKAGE_NAME%
+call %KUZYA_MSYS64_ROOT%\msys2_shell.bat -mingw64 -here bsdtar xf %KUZYA_MSYS2_DISTRIB_PACKAGE_NAME%
 call %KUZYA_PACKAGE_ROOT%\msys64\msys2_shell.cmd exit
 echo Waiting 10 seconds to be sure that MSYS2 initialization finished...
 sleep 10
