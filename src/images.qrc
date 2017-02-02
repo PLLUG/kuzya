@@ -44,6 +44,8 @@
         <file alias="current_line">images/arrow.png</file>
     </qresource>
     <qresource prefix="/">
+        <file>BUILD.DAT</file>
+        <file>build_info.py</file>
         <file>images/pagefold/sizegrip.png</file>
         <file>images/pagefold/checkbox_unchecked.png</file>
         <file>images/pagefold/checkbox_unchecked_hover.png</file>

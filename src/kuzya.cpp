@@ -1027,9 +1027,17 @@ void Kuzya::paintWarningMarkers(QList<Compiler::compilerWarning>* warningList)
 **/
 void Kuzya::slotAbout(void)
 {
+
+//set build date and version
+    KuziaVersion kuziaversion;
+    BuildTime buildtime;
+    setAll(buildtime, kuziaversion);
+    QString KUZYA_VERSION = kuziaversion.getVersion();
+    QString BUILD_TIME = buildtime.getTime();
+
     QMessageBox *aboutBox= new QMessageBox( QMessageBox::Information,tr("About"),QString("\t  <big><b><centre> \t    The Kuzya %1 </centre> </b></big>  "
                                                                                          "\n  <p> Free Development Environment</p>\n\n"
-                                                                                         "build on Jule 7 2010"
+                                                                                         "build on %2"
                                                                                          "<p> Kuzya is simple crossplatform IDE for people who study  programming."
                                                                                          "Main idea of it is to concentrate attention  of the users only on learning the programming \n"
                                                                                          "\t language  but not on usage of IDE. For more information visit our official web site "
@@ -1045,7 +1053,7 @@ void Kuzya::slotAbout(void)
                                                                                          "\n              \n \t <centre>Alex Chmykhalo</centre> "
                                                                                          "\n <u>alexchmykhalo@users.sourceforge.net</u>"
                                                                                          "\n\n <b>Splashscreen Design:</b>      \n \t <centre>Oksana Rondyak</centre> "
-                                                                                         "\n <u>relax777@users.sourceforge.net</u> </pre>").arg(KUZYA_VERSION),QMessageBox::Ok,this,Qt::Dialog);
+                                                                                         "\n <u>relax777@users.sourceforge.net</u> </pre>").arg(KUZYA_VERSION, BUILD_TIME),QMessageBox::Ok,this,Qt::Dialog);
     aboutBox->setIconPixmap(QPixmap(":/common/Kuzya_about.png"));
     aboutBox->exec();
     delete aboutBox;
