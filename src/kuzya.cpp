@@ -1036,7 +1036,6 @@ void Kuzya::slotAbout(void)
 {
     const QString fileName = ":/AUTHORS.txt";
     QFile file (fileName);
-
     //checks file
     {
      if( ! QFile::exists(fileName))
@@ -1049,7 +1048,6 @@ void Kuzya::slotAbout(void)
             qCritical()<<"couldn't open file"<<fileName;
          }
     }
-
        QString textInf;
        QDialog* information = new QDialog;
        QVBoxLayout* layout = new QVBoxLayout(information);
