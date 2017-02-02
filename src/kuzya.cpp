@@ -1052,26 +1052,23 @@ void Kuzya::slotAbout(void)
 
        QString textInf;
        QDialog* information = new QDialog;
-       QVBoxLayout* layout = new QVBoxLayout;
+       QVBoxLayout* layout = new QVBoxLayout(information);
       information->setLayout(layout);
 
-       QLabel* textInfLabel = new QLabel;
-       QLabel* imgLabel = new QLabel;
+       QLabel* textInfLabel = new QLabel(information);
+       QLabel* imgLabel = new QLabel(information);
 
-       QTextStream in(&file);
-           while (!in.atEnd())
-           {
-               QString line = in.readLine();
-               textInf += line;
-           }
+       QTextStream in(&file);          
+       textInf  = in.readAll();
+
 
        textInfLabel->setText(textInf);
        imgLabel->setPixmap(QPixmap(":/common/Kuzya_about.png"));
        layout->addWidget(imgLabel);
-       QScrollArea* scrollAreaAuthors = new QScrollArea;
+       QScrollArea* scrollAreaAuthors = new QScrollArea(information);
        scrollAreaAuthors->setWidget(textInfLabel);
        layout->addWidget(scrollAreaAuthors);
-
+       information->setWindowIcon(QIcon(QDir::currentPath()+":/../../src/images/kuzya.png"));
 
        information->exec();
 
