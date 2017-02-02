@@ -1,4 +1,7 @@
 <RCC>
+	<qresource prefix="/">
+    		<file>AUTHORS.txt</file>
+	</qresource>
     <qresource prefix="/menu">
         <file>images/kuzya.png</file>
         <file>images/configure.png</file>
@@ -103,4 +106,5 @@
         <file alias="Styling.png">images/styling.png</file>
         <file alias="TextEditor.png">images/texteditor.png</file>
     </qresource>
+	
 </RCC>
