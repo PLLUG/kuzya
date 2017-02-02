@@ -72,8 +72,8 @@ win32 {
     TARGET = ../bin/kuzya
     LIBS += -L../3rdparty/QScintilla/2.9.4
     INCLUDEPATH = ../3rdparty/QScintilla/2.9.4
-   CONFIG(debug, debug|release):LIBS += -lqscintilla2d
-    else:                        LIBS += -lqscintilla2
+    CONFIG(debug, debug|release):LIBS += -lqscintilla2d
+    else: LIBS += -lqscintilla2
 }
 
 mac {
