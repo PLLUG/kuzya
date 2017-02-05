@@ -156,8 +156,6 @@ Function .onInstSuccess
 		FileOpen $0 $INSTDIR\run.txt w
 		FileWrite $0 '"cmd.exe" /C  "$INSTDIR\msys64\msys2_shell.cmd -mingw64 -where $INSTDIR  ./post-install-msys2.sh $MSYS_PACKAGES"'
 		FileClose $0
-		
-		RMDir /r "$INSTDIR\msys2-dist-repository"
 FunctionEnd
 ;--------------------------------
 ;Descriptions
