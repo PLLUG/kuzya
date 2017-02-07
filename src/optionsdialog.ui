@@ -453,6 +453,146 @@
    <bool>false</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
+   <item row="1" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="buttonLayout">
+     <item>
+      <widget class="QPushButton" name="defaultBtn">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>140</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Default All</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="spacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="okBtn">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Ok</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="applyBtn">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Apply</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="closeBtn">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Close</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0">
+    <widget class="QListWidget" name="mTabIconView">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>170</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>220</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>50</width>
+       <height>50</height>
+      </size>
+     </property>
+     <item>
+      <property name="text">
+       <string>General</string>
+      </property>
+      <property name="icon">
+       <iconset resource="images.qrc">
+        <normaloff>:/tabicon/Application.png</normaloff>:/tabicon/Application.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Compiler</string>
+      </property>
+      <property name="icon">
+       <iconset resource="images.qrc">
+        <normaloff>:/tabicon/Compiler.png</normaloff>:/tabicon/Compiler.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Text Editor</string>
+      </property>
+      <property name="icon">
+       <iconset resource="images.qrc">
+        <normaloff>:/tabicon/TextEditor.png</normaloff>:/tabicon/TextEditor.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Colors 
+and Fonts</string>
+      </property>
+      <property name="icon">
+       <iconset resource="images.qrc">
+        <normaloff>:/tabicon/Styling.png</normaloff>:/tabicon/Styling.png</iconset>
+      </property>
+     </item>
+    </widget>
+   </item>
    <item row="0" column="1">
     <widget class="QStackedWidget" name="mStackedWidget">
      <property name="currentIndex">
@@ -737,7 +877,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="QGroupBox" name="groupBox_4">
+           <widget class="QGroupBox" name="generalGroupBox">
             <property name="font">
              <font>
               <pointsize>10</pointsize>
@@ -748,35 +888,105 @@
             <property name="title">
              <string>General</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout_13">
-             <item row="0" column="0" colspan="2">
-              <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="1" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_7">
                <item>
-                <widget class="QLabel" name="label_29">
-                 <property name="font">
-                  <font>
-                   <pointsize>10</pointsize>
-                   <weight>50</weight>
-                   <bold>false</bold>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Programming language:</string>
-                 </property>
-                </widget>
+                <layout class="QHBoxLayout" name="horizontalLayout_8">
+                 <item>
+                  <widget class="QLabel" name="label">
+                   <property name="text">
+                    <string>Default language:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_2">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="pixmap">
+                    <pixmap resource="images.qrc">:/menu/images/help.png</pixmap>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
                <item>
-                <widget class="QComboBox" name="languageComboBox">
-                 <property name="font">
-                  <font>
-                   <pointsize>10</pointsize>
-                   <weight>50</weight>
-                   <bold>false</bold>
-                  </font>
+                <widget class="QComboBox" name="comboBox">
+                 <property name="editable">
+                  <bool>false</bool>
                  </property>
+                 <property name="currentText">
+                  <string>&lt;None&gt;</string>
+                 </property>
+                 <property name="currentIndex">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>&lt;None&gt;</string>
+                  </property>
+                 </item>
                 </widget>
                </item>
               </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="compilerOptionsGgroupBox">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="title">
+             <string>Compiler options</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_13">
+             <item row="2" column="0">
+              <spacer name="horizontalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>132</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="font">
+                <font>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Compiler options</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="compilerLocationLabel">
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Compiler location</string>
+               </property>
+              </widget>
              </item>
              <item row="1" column="0" colspan="2">
               <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -806,19 +1016,6 @@
                 </widget>
                </item>
               </layout>
-             </item>
-             <item row="2" column="0">
-              <spacer name="horizontalSpacer_4">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>132</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
              </item>
              <item row="2" column="1">
               <widget class="QLabel" name="compilerInfo">
@@ -854,23 +1051,36 @@ p, li { white-space: pre-wrap; }
                </property>
               </widget>
              </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QGroupBox" name="groupBox_3">
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="title">
-             <string>Compiler location</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout">
-             <item row="0" column="0">
+             <item row="0" column="0" colspan="2">
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item>
+                <widget class="QLabel" name="label_29">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Programming language:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="languageComboBox">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                  </font>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="4" column="0" colspan="2">
               <layout class="QHBoxLayout" name="horizontalLayout">
                <item>
                 <widget class="QLineEdit" name="compilerDirLineEdit">
@@ -902,23 +1112,7 @@ p, li { white-space: pre-wrap; }
                </item>
               </layout>
              </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QGroupBox" name="groupBox_5">
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="title">
-             <string>Compiler options</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_15">
-             <item row="0" column="0">
+             <item row="7" column="0" colspan="2">
               <widget class="QPlainTextEdit" name="compilerOptionsEdit">
                <property name="font">
                 <font>
@@ -941,53 +1135,53 @@ p, li { white-space: pre-wrap; }
                </property>
               </widget>
              </item>
+             <item row="8" column="0" colspan="2">
+              <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,0,0">
+               <item>
+                <widget class="QPushButton" name="defaultUsePushButton">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Use by default</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>0</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="compilerResetPushButton">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Reset settings</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
             </layout>
            </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,0,0">
-            <item>
-             <widget class="QPushButton" name="defaultUsePushButton">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-                <weight>50</weight>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Use by default</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="compilerResetPushButton">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-                <weight>50</weight>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Reset settings</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
           </item>
          </layout>
         </widget>
@@ -1492,146 +1686,6 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="buttonLayout">
-     <item>
-      <widget class="QPushButton" name="defaultBtn">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>140</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Default All</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="spacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="okBtn">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Ok</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="applyBtn">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Apply</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="closeBtn">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Close</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="0">
-    <widget class="QListWidget" name="mTabIconView">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>170</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>220</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>50</width>
-       <height>50</height>
-      </size>
-     </property>
-     <item>
-      <property name="text">
-       <string>General</string>
-      </property>
-      <property name="icon">
-       <iconset resource="images.qrc">
-        <normaloff>:/tabicon/Application.png</normaloff>:/tabicon/Application.png</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Compiler</string>
-      </property>
-      <property name="icon">
-       <iconset resource="images.qrc">
-        <normaloff>:/tabicon/Compiler.png</normaloff>:/tabicon/Compiler.png</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Text Editor</string>
-      </property>
-      <property name="icon">
-       <iconset resource="images.qrc">
-        <normaloff>:/tabicon/TextEditor.png</normaloff>:/tabicon/TextEditor.png</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Colors 
-and Fonts</string>
-      </property>
-      <property name="icon">
-       <iconset resource="images.qrc">
-        <normaloff>:/tabicon/Styling.png</normaloff>:/tabicon/Styling.png</iconset>
-      </property>
-     </item>
     </widget>
    </item>
   </layout>
