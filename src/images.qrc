@@ -1,7 +1,4 @@
 <RCC>
-	<qresource prefix="/">
-    		<file>AUTHORS.txt</file>
-	</qresource>
     <qresource prefix="/menu">
         <file>images/kuzya.png</file>
         <file>images/configure.png</file>

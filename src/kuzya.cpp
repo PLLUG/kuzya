@@ -1037,41 +1037,36 @@ void Kuzya::slotAbout(void)
     const QString fileName = ":/AUTHORS.txt";
     QFile file (fileName);
     //checks file
+    if( ! QFile::exists(fileName))
     {
-     if( ! QFile::exists(fileName))
-        {
-            qCritical()<< "File doesn't exist"<<fileName<<endl;
-
-        }
-         if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-         {
-            qCritical()<<"couldn't open file"<<fileName;
-         }
+        qCritical()<< "File doesn't exist"<<fileName<<endl;
     }
-       QString textInf;
-       QDialog* information = new QDialog;
-       QVBoxLayout* layout = new QVBoxLayout(information);
-      information->setLayout(layout);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qCritical()<<"couldn't open file"<<fileName;
+    }
 
-       QLabel* textInfLabel = new QLabel(information);
-       QLabel* imgLabel = new QLabel(information);
+    QString textInf;
+    QDialog* information {new QDialog};
+    QVBoxLayout* layout {new QVBoxLayout(information)};
+    information->setLayout(layout);
+    QLabel* textInfLabel {new QLabel(information)};
+    QLabel* imgLabel {new QLabel(information)};
 
-       QTextStream in(&file);          
-       textInf  = in.readAll();
+    QTextStream in(&file);
+    textInf  = in.readAll();
 
+    textInfLabel->setText(textInf);
+    imgLabel->setPixmap(QPixmap(":/common/Kuzya_about.png"));
+    layout->addWidget(imgLabel);
+    QScrollArea* scrollAreaAuthors = new QScrollArea(information);
+    scrollAreaAuthors->setWidget(textInfLabel);
+    layout->addWidget(scrollAreaAuthors);
+    information->setWindowIcon(QIcon(QDir::currentPath()+":/../../src/images/kuzya.png"));
 
-       textInfLabel->setText(textInf);
-       imgLabel->setPixmap(QPixmap(":/common/Kuzya_about.png"));
-       layout->addWidget(imgLabel);
-       QScrollArea* scrollAreaAuthors = new QScrollArea(information);
-       scrollAreaAuthors->setWidget(textInfLabel);
-       layout->addWidget(scrollAreaAuthors);
-       information->setWindowIcon(QIcon(QDir::currentPath()+":/../../src/images/kuzya.png"));
+    information->exec();
 
-       information->exec();
-
-       delete information;
-
+    delete information;
 }
 
 /**
