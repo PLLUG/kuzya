@@ -596,7 +596,7 @@ and Fonts</string>
    <item row="0" column="1">
     <widget class="QStackedWidget" name="mStackedWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_4">
@@ -913,7 +913,7 @@ and Fonts</string>
                 </layout>
                </item>
                <item>
-                <widget class="QComboBox" name="comboBox">
+                <widget class="QComboBox" name="defaultLanguageComboBox">
                  <property name="editable">
                   <bool>false</bool>
                  </property>
@@ -926,6 +926,21 @@ and Fonts</string>
                  <item>
                   <property name="text">
                    <string>&lt;None&gt;</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>c++</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>obj-c</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>pascal</string>
                   </property>
                  </item>
                 </widget>
