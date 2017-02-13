@@ -31,7 +31,8 @@ SOURCES += kuzya.cpp \
     replacedialog.cpp \
     translator.cpp
 
-RESOURCES = images.qrc
+RESOURCES = images.qrc \
+           ../auth.qrc
 
 TRANSLATIONS = ../resources/translations/Ukrainian.ts \
     ../resources/translations/English.ts \
