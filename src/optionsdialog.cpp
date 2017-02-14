@@ -181,7 +181,6 @@ void OptionsDialog::writeSettings(void)
     settings->beginGroup("compilation_settings");
     settings->setValue("defaultLanguage/text",defaultLanguageComboBox->currentText());
     settings->setValue("defaultLanguage/index", defaultLanguageComboBox->currentIndex());
-    qDebug()<<defaultLanguageComboBox->currentText()<<" "<< defaultLanguageComboBox->currentIndex();
     QString val = languageComboBox->currentText()+"/"+compilerComboBox->currentText();
     QString location = compilerDirLineEdit->text().replace("/", QDir::separator());
     if (!location.isEmpty())

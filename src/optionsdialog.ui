@@ -596,7 +596,7 @@ and Fonts</string>
    <item row="0" column="1">
     <widget class="QStackedWidget" name="mStackedWidget">
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_4">
@@ -881,8 +881,8 @@ and Fonts</string>
             <property name="font">
              <font>
               <pointsize>10</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="title">
@@ -895,6 +895,12 @@ and Fonts</string>
                 <layout class="QHBoxLayout" name="horizontalLayout_8">
                  <item>
                   <widget class="QLabel" name="label">
+                   <property name="font">
+                    <font>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                    </font>
+                   </property>
                    <property name="text">
                     <string>Default language:</string>
                    </property>
@@ -902,6 +908,12 @@ and Fonts</string>
                  </item>
                  <item>
                   <widget class="QLabel" name="label_2">
+                   <property name="font">
+                    <font>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                    </font>
+                   </property>
                    <property name="text">
                     <string/>
                    </property>
@@ -914,6 +926,12 @@ and Fonts</string>
                </item>
                <item>
                 <widget class="QComboBox" name="defaultLanguageComboBox">
+                 <property name="font">
+                  <font>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                  </font>
+                 </property>
                  <property name="editable">
                   <bool>false</bool>
                  </property>
