@@ -16,6 +16,8 @@ build_script:
     
     cd %APPVEYOR_BUILD_FOLDER%\src
     
+    python generate.py -v 2.1.12
+    
     qmake "CONFIG+=release silent"
     
     %QT_INSTALL_ROOT%\..\..\Tools\QtCreator\bin\jom
