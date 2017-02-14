@@ -37,6 +37,12 @@
 #include <QSplitter>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QScrollArea>
+#include <QTextStream>
+#include <QFile>
+#include <QVBoxLayout>
+#include <QDialog>
+
 
 #include "gotolinedialog.h"
 #include "finddialog.h"
@@ -46,6 +52,7 @@
 #include "helpbrowser.h"
 #include "translator.h"
 #include "version.h"
+
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -1027,36 +1034,44 @@ void Kuzya::paintWarningMarkers(QList<Compiler::compilerWarning>* warningList)
 **/
 void Kuzya::slotAbout(void)
 {
+    const QString fileName = ":/AUTHORS.txt";
+    QFile file (fileName);
+    //checks file
+    if(!QFile::exists(fileName))
+    {
+        qCritical()<< "File doesn't exist"<<fileName<<endl;
+    }
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qCritical()<<"couldn't open file"<<fileName;
+    }
 
-//set build date and version
-    KuziaVersion kuziaversion;
-    BuildTime buildtime;
-    setAll(buildtime, kuziaversion);
-    QString KUZYA_VERSION = kuziaversion.getVersion();
-    QString BUILD_TIME = buildtime.getTime();
+    QString textInf;
+    QDialog* information {new QDialog};
+    QVBoxLayout* layout {new QVBoxLayout(information)};
+    information->setLayout(layout);
+    QLabel* textInfLabel {new QLabel(information)};
+    QLabel* imgLabel {new QLabel(information)};
 
-    QMessageBox *aboutBox= new QMessageBox( QMessageBox::Information,tr("About"),QString("\t  <big><b><centre> \t    The Kuzya %1 </centre> </b></big>  "
-                                                                                         "\n  <p> Free Development Environment</p>\n\n"
-                                                                                         "build on %2"
-                                                                                         "<p> Kuzya is simple crossplatform IDE for people who study  programming."
-                                                                                         "Main idea of it is to concentrate attention  of the users only on learning the programming \n"
-                                                                                         "\t language  but not on usage of IDE. For more information visit our official web site "
-                                                                                         "<a href= http://kuzya.sourceforge.net>http://kuzya.sourceforge.net</a> \n\n </p>"
-                                                                                         "<pre> <b>Idea:</b> \n \t <centre>Grygoriy Zlobin</centre>"
-                                                                                         "\n <u>zlobin@electronics.wups.lviv.ua</u> "
-                                                                                         "\n\n <b>Team leader:</b> \n \t <centre>Andriy Shevchyk</centre> "
-                                                                                         "\n <u>shevchyk@users.sourceforge.net</u> "
-                                                                                         "\n\n <b>Developers:</b>      \n \t <centre>Volodymyr Shevchyk</centre> "
-                                                                                         "\n <u>volder@users.sourceforge.net</u>"
-                                                                                         "\n              \n \t <centre>Victor Sklyar</centre> "
-                                                                                         "\n <u>bouyantgrambler@users.sourceforge.net</u>"
-                                                                                         "\n              \n \t <centre>Alex Chmykhalo</centre> "
-                                                                                         "\n <u>alexchmykhalo@users.sourceforge.net</u>"
-                                                                                         "\n\n <b>Splashscreen Design:</b>      \n \t <centre>Oksana Rondyak</centre> "
-                                                                                         "\n <u>relax777@users.sourceforge.net</u> </pre>").arg(KUZYA_VERSION, BUILD_TIME),QMessageBox::Ok,this,Qt::Dialog);
-    aboutBox->setIconPixmap(QPixmap(":/common/Kuzya_about.png"));
-    aboutBox->exec();
-    delete aboutBox;
+    QTextStream in(&file);
+    textInf  = in.readAll();
+
+//set Kuzia version and build date
+    QVersionNumber verKuzia(MAJORVER, MINORVER, REVISION);
+    QDate buildDate(BUILD_YEAR, BUILD_MONTH, BUILD_DAY);
+    textInfLabel->setText(textInf.arg(verKuzia.toString(), buildDate.toString("MMMM d yyyy")));
+
+
+    imgLabel->setPixmap(QPixmap(":/common/Kuzya_about.png"));
+    layout->addWidget(imgLabel);
+    QScrollArea* scrollAreaAuthors = new QScrollArea(information);
+    scrollAreaAuthors->setWidget(textInfLabel);
+    layout->addWidget(scrollAreaAuthors);
+    information->setWindowIcon(QIcon(QDir::currentPath()+":/../../src/images/kuzya.png"));
+
+    information->exec();
+
+    delete information;
 }
 
 /**
