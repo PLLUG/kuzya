@@ -1,6 +1,6 @@
-The Kuzya
+The Kuzya %1
 Free Development Environment
-build on Jule 7 2010
+build on %2
 
 Kuzya is simple crossplatform IDE for people who study  programming.
 Main idea of it is to concentrate attention  of the users only on learning the programming

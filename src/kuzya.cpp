@@ -37,11 +37,11 @@
 #include <QSplitter>
 #include <QFileDialog>
 #include <QMessageBox>
-# include <QScrollArea>
-# include <QTextStream>
-# include <QFile>
-# include <QVBoxLayout>
-# include <QDialog>
+#include <QScrollArea>
+#include <QTextStream>
+#include <QFile>
+#include <QVBoxLayout>
+#include <QDialog>
 
 
 #include "gotolinedialog.h"
@@ -1037,7 +1037,7 @@ void Kuzya::slotAbout(void)
     const QString fileName = ":/AUTHORS.txt";
     QFile file (fileName);
     //checks file
-    if( ! QFile::exists(fileName))
+    if(!QFile::exists(fileName))
     {
         qCritical()<< "File doesn't exist"<<fileName<<endl;
     }
@@ -1056,7 +1056,12 @@ void Kuzya::slotAbout(void)
     QTextStream in(&file);
     textInf  = in.readAll();
 
-    textInfLabel->setText(textInf);
+//set Kuzia version and build date
+    QVersionNumber verKuzia(MAJORVER, MINORVER, REVISION);
+    QDate buildDate(BUILD_YEAR, BUILD_MONTH, BUILD_DAY);
+    textInfLabel->setText(textInf.arg(verKuzia.toString(), buildDate.toString("MMMM d yyyy")));
+
+
     imgLabel->setPixmap(QPixmap(":/common/Kuzya_about.png"));
     layout->addWidget(imgLabel);
     QScrollArea* scrollAreaAuthors = new QScrollArea(information);

@@ -32,7 +32,8 @@ SOURCES += kuzya.cpp \
     translator.cpp
 
 RESOURCES = images.qrc \
-           ../auth.qrc
+           ../auth.qrc \
+    ../script.qrc
 
 TRANSLATIONS = ../resources/translations/Ukrainian.ts \
     ../resources/translations/English.ts \
