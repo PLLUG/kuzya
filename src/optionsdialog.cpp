@@ -180,6 +180,8 @@ void OptionsDialog::writeSettings(void)
     settings->endGroup();
     ///-----PROGRAMING--LANGUAGE---------------------------------------------------
     settings->beginGroup("compilation_settings");
+    settings->setValue("defaultLanguage/text",defaultLanguageComboBox->currentText());
+    settings->setValue("defaultLanguage/index", defaultLanguageComboBox->currentIndex());
     QString val = languageComboBox->currentText()+"/"+compilerComboBox->currentText();
     QString location = compilerDirLineEdit->text().replace("/", QDir::separator());
     if (!location.isEmpty())
@@ -502,6 +504,7 @@ void OptionsDialog::slotLoadCompilerOptions(QString comp)
     QString info = mw->getCurrentCompiler()->getCompilerInfo(lang, comp);
     compilerInfo->setText(info);
     settings->beginGroup("compilation_settings");
+    defaultLanguageComboBox->setCurrentIndex(settings->value("defaultLanguage/index").toString().toInt());
     QString val = languageComboBox->currentText()+"/"+compilerComboBox->currentText();
     compilerDirLineEdit->setText(settings->value(val+"/location", "").toString());
     compilerOptionsEdit->setPlainText(settings->value(val+"/options", "").toString());
