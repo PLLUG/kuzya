@@ -27,6 +27,7 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QLocale>
+#include <QTemporaryFile>
 #include "optionsdialog.h"
 
 OptionsDialog::OptionsDialog(QWidget *parent)
@@ -544,6 +545,45 @@ QString OptionsDialog::readCompilerOptions(QString lang, QString comp)
     QString options = settings->value(lang+"/"+comp+"/options", "").toString();
     settings->endGroup();
     return options;
+}
+
+void OptionsDialog::writeTemporaryFileState()
+{
+    QTemporaryFile tFile;
+    tFile.setAutoRemove(false);
+    tFile.open();
+    QTextStream stream(&tFile);
+    QsciScintilla* mwTextEditor = mw->getTextEditorPointer();
+    stream << mwTextEditor->text();
+    tFile.close();
+
+    QCursor kuzyaCursour = mwTextEditor->cursor();
+    int line;
+    int index;
+    mwTextEditor->getCursorPosition(&line, &index);
+
+    settings->beginGroup("temp_file");
+    settings->setValue("file", tFile.fileName());
+    settings->setValue("cursor_pos/x", line);
+    settings->setValue("cursor_pos/y", index);
+    settings->endGroup();
+    settings->sync();
+}
+
+void OptionsDialog::readTemporaryFileState()
+{
+    settings->beginGroup("temp_file");
+    QFile tFile;
+    tFile.setFileName(settings->value("file").toString());
+    if(tFile.open(QIODevice::ReadOnly))
+    {
+        QsciScintilla* mwTextEditor = mw->getTextEditorPointer();
+        mwTextEditor->setText(tFile.readAll());
+        int line = settings->value("cursor_pos/x").toInt();
+        int index = settings->value("cursor_pos/y").toInt();
+        mwTextEditor->setCursorPosition(line,index);
+    }
+    settings->endGroup();
 }
 
 void OptionsDialog::slotDefaultCompiler()

@@ -59,6 +59,9 @@ public:
     QString readCompilerLocation(QString lang, QString comp);
     QString readCompilerOptions(QString lang, QString comp);
 
+    void writeTemporaryFileState();
+    void readTemporaryFileState();
+
 public slots:
     void slotCommOptions(void);
 

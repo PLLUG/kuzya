@@ -193,6 +193,10 @@ Kuzya::Kuzya(QWidget *parent)
     settings->readODWSettings();
     settings->openLastProject();
     settings->readMainWindowState();
+    if(true) //there will be settings "reopen file on kuzya start"
+    {
+        settings->readTemporaryFileState();
+    }
     ActOpenRecentFileVector.clear();
 
     srcRecompiled = false;
@@ -1183,12 +1187,19 @@ void Kuzya :: slotOpenRecentFile(QString FileName)
 **/
 void Kuzya::closeEvent(QCloseEvent *event)
 {
-
+    qDebug() << "Pos: " << getTextEditorPointer()->pos();
     settings->writeSettings();
     settings->writeMainWindowState();
-    if(slotSaveChangesNotifier()==false)
+    if(false) // there will be checbox settings. Will added after merging pull request #23
     {
-        event->ignore();
+        if(slotSaveChangesNotifier()==false)
+        {
+            event->ignore();
+        }
+    }
+    else
+    {
+        settings->writeTemporaryFileState();
     }
 
 
