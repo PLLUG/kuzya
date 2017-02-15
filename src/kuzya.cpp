@@ -193,7 +193,7 @@ Kuzya::Kuzya(QWidget *parent)
     settings->readODWSettings();
     settings->openLastProject();
     settings->readMainWindowState();
-    if(true) //there will be settings "reopen file on kuzya start"
+    if(settings->isReopenFile) //there will be settings "reopen file on kuzya start"
     {
         settings->readTemporaryFileState();
     }
@@ -1190,7 +1190,7 @@ void Kuzya::closeEvent(QCloseEvent *event)
     qDebug() << "Pos: " << getTextEditorPointer()->pos();
     settings->writeSettings();
     settings->writeMainWindowState();
-    if(false) // there will be checbox settings. Will added after merging pull request #23
+    if(!settings->isReopenFile)
     {
         if(slotSaveChangesNotifier()==false)
         {

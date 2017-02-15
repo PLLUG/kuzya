@@ -102,6 +102,7 @@ private:
     QStringList localizationLanguageFilters;
 public:	
     bool isLineMarginVisible;
+    bool isReopenFile;
 };
 
 #endif
