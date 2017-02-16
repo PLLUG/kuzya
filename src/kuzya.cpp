@@ -193,7 +193,7 @@ Kuzya::Kuzya(QWidget *parent)
     settings->readODWSettings();
     settings->openLastProject();
     settings->readMainWindowState();
-    if(settings->isReopenFile) //there will be settings "reopen file on kuzya start"
+    if(settings->isReopenFile)
     {
         settings->readTemporaryFileState();
     }
