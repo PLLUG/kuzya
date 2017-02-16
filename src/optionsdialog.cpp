@@ -558,6 +558,15 @@ QString OptionsDialog::readCompilerOptions(QString lang, QString comp)
 void OptionsDialog::writeTemporaryFileState()
 {
     QTemporaryFile tFile;
+    settings->beginGroup("temp_file");
+    QString tFileName = settings->value("file").toString();
+    if(!tFileName.isEmpty())
+    {
+        tFile.setFileName(tFileName);
+    }
+    QString fileExtenstion = mw->getCurrentCompiler()->getSupportedExtensions(languageComboBox->currentText());
+    if(!fileExtenstion.isEmpty())
+    tFile.setFileName(tFile.fileName().append(".").append(fileExtenstion));
     tFile.setAutoRemove(false);
     tFile.open();
     QTextStream stream(&tFile);
@@ -570,10 +579,9 @@ void OptionsDialog::writeTemporaryFileState()
     int index;
     mwTextEditor->getCursorPosition(&line, &index);
 
-    settings->beginGroup("temp_file");
     settings->setValue("file", tFile.fileName());
-    settings->setValue("cursor_pos/x", line);
-    settings->setValue("cursor_pos/y", index);
+    settings->setValue("cursor_pos/line", line);
+    settings->setValue("cursor_pos/index", index);
     settings->endGroup();
     settings->sync();
 }
@@ -586,9 +594,9 @@ void OptionsDialog::readTemporaryFileState()
     if(tFile.open(QIODevice::ReadOnly))
     {
         QsciScintilla* mwTextEditor = mw->getTextEditorPointer();
-        mwTextEditor->setText(tFile.readAll());
-        int line = settings->value("cursor_pos/x").toInt();
-        int index = settings->value("cursor_pos/y").toInt();
+        mw->openFile(tFile.fileName());
+        int line = settings->value("cursor_pos/line").toInt();
+        int index = settings->value("cursor_pos/index").toInt();
         mwTextEditor->setCursorPosition(line,index);
     }
     settings->endGroup();

@@ -146,6 +146,7 @@ private slots:
         void setUndoRedoEnabled();
 
 
+
 protected:
         //*DRAG AND DROP
         void dragEnterEvent(QDragEnterEvent *event);

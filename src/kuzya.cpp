@@ -1187,7 +1187,6 @@ void Kuzya :: slotOpenRecentFile(QString FileName)
 **/
 void Kuzya::closeEvent(QCloseEvent *event)
 {
-    qDebug() << "Pos: " << getTextEditorPointer()->pos();
     settings->writeSettings();
     settings->writeMainWindowState();
     if(!settings->isReopenFile)
@@ -1201,8 +1200,6 @@ void Kuzya::closeEvent(QCloseEvent *event)
     {
         settings->writeTemporaryFileState();
     }
-
-
     //        if (!fileName.isEmpty())
     //            settings->saveLastProjectName(fileName);
 }
