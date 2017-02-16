@@ -193,9 +193,9 @@ Kuzya::Kuzya(QWidget *parent)
     settings->readODWSettings();
     settings->openLastProject();
     settings->readMainWindowState();
-    if(settings->isReopenFile)
+    if(settings->getIsFileReopenEnabled())
     {
-        settings->readTemporaryFileState();
+        readTemporaryFileState();
     }
     ActOpenRecentFileVector.clear();
 
@@ -1189,7 +1189,7 @@ void Kuzya::closeEvent(QCloseEvent *event)
 {
     settings->writeSettings();
     settings->writeMainWindowState();
-    if(!settings->isReopenFile)
+    if(!settings->getIsFileReopenEnabled())
     {
         if(slotSaveChangesNotifier()==false)
         {
@@ -1198,7 +1198,7 @@ void Kuzya::closeEvent(QCloseEvent *event)
     }
     else
     {
-        settings->writeTemporaryFileState();
+        writeTemporaryFileState();
     }
     //        if (!fileName.isEmpty())
     //            settings->saveLastProjectName(fileName);
@@ -1537,4 +1537,50 @@ void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
 
 
 
+}
+
+void Kuzya::writeTemporaryFileState()
+{
+    QSettings* settings = new QSettings(QApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat);
+    QTemporaryFile tFile;
+    settings->beginGroup("temp_file");
+    QString tFileName = settings->value("file").toString();
+    if(!tFileName.isEmpty())
+    {
+        tFile.setFileName(tFileName);
+    }
+    QString fileExtenstion = compiler->getSupportedExtensions(languageComboBox->currentText());
+    if(!fileExtenstion.isEmpty())
+    tFile.setFileName(tFile.fileName().append(".").append(fileExtenstion));
+    tFile.setAutoRemove(false);
+    tFile.open();
+    QTextStream stream(&tFile);
+    stream << textEditor->text();
+    tFile.close();
+
+    int line;
+    int index;
+    textEditor->getCursorPosition(&line, &index);
+
+    settings->setValue("file", tFile.fileName());
+    settings->setValue("cursor_pos/line", line);
+    settings->setValue("cursor_pos/index", index);
+    settings->endGroup();
+    settings->sync();
+}
+
+void Kuzya::readTemporaryFileState()
+{
+    QSettings* settings = new QSettings(QApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat);
+    settings->beginGroup("temp_file");
+    QFile tFile;
+    tFile.setFileName(settings->value("file").toString());
+    if(tFile.open(QIODevice::ReadOnly))
+    {
+        openFile(tFile.fileName());
+        int line = settings->value("cursor_pos/line").toInt();
+        int index = settings->value("cursor_pos/index").toInt();
+        textEditor->setCursorPosition(line,index);
+    }
+    settings->endGroup();
 }

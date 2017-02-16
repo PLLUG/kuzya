@@ -163,6 +163,8 @@ private:
         void refreshCompileModes();
         void refreshDialogSettings();
         void setAllIconsVisibleInMenu(bool isVisible);
+        void writeTemporaryFileState();
+        void readTemporaryFileState();
 
 private:
         QFile *file;

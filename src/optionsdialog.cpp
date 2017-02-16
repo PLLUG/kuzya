@@ -553,51 +553,9 @@ QString OptionsDialog::readCompilerOptions(QString lang, QString comp)
     return options;
 }
 
-void OptionsDialog::writeTemporaryFileState()
+bool OptionsDialog::getIsFileReopenEnabled() const
 {
-    QTemporaryFile tFile;
-    settings->beginGroup("temp_file");
-    QString tFileName = settings->value("file").toString();
-    if(!tFileName.isEmpty())
-    {
-        tFile.setFileName(tFileName);
-    }
-    QString fileExtenstion = mw->getCurrentCompiler()->getSupportedExtensions(languageComboBox->currentText());
-    if(!fileExtenstion.isEmpty())
-    tFile.setFileName(tFile.fileName().append(".").append(fileExtenstion));
-    tFile.setAutoRemove(false);
-    tFile.open();
-    QTextStream stream(&tFile);
-    QsciScintilla* mwTextEditor = mw->getTextEditorPointer();
-    stream << mwTextEditor->text();
-    tFile.close();
-
-    QCursor kuzyaCursour = mwTextEditor->cursor();
-    int line;
-    int index;
-    mwTextEditor->getCursorPosition(&line, &index);
-
-    settings->setValue("file", tFile.fileName());
-    settings->setValue("cursor_pos/line", line);
-    settings->setValue("cursor_pos/index", index);
-    settings->endGroup();
-    settings->sync();
-}
-
-void OptionsDialog::readTemporaryFileState()
-{
-    settings->beginGroup("temp_file");
-    QFile tFile;
-    tFile.setFileName(settings->value("file").toString());
-    if(tFile.open(QIODevice::ReadOnly))
-    {
-        QsciScintilla* mwTextEditor = mw->getTextEditorPointer();
-        mw->openFile(tFile.fileName());
-        int line = settings->value("cursor_pos/line").toInt();
-        int index = settings->value("cursor_pos/index").toInt();
-        mwTextEditor->setCursorPosition(line,index);
-    }
-    settings->endGroup();
+    return isReopenFile;
 }
 
 void OptionsDialog::slotDefaultCompiler()

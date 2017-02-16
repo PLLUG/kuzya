@@ -61,6 +61,7 @@ public:
 
     void writeTemporaryFileState();
     void readTemporaryFileState();
+    bool getIsFileReopenEnabled()const;
 
 public slots:
     void slotCommOptions(void);
@@ -100,9 +101,9 @@ private:
     QDir localizationLanguageDir;
     QStringList styleFilters;
     QStringList localizationLanguageFilters;
+    bool isReopenFile;
 public:	
     bool isLineMarginVisible;
-    bool isReopenFile;
 };
 
 #endif
