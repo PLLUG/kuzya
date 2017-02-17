@@ -199,13 +199,12 @@ Kuzya::Kuzya(QWidget *parent)
     }
     else if(settings->getDefaultLanguage() != "<None>")
     {
-        QTemporaryFile tFile;
-        tFile.setAutoRemove(false);
+        tFile = new QTemporaryFile;
         QString extesnion = compiler->getSupportedExtensions(settings->getDefaultLanguage());
-        tFile.setFileName(tr("%1.%2").arg(std::tmpnam(nullptr)).arg(extesnion)); //create file in %TMP%
-        tFile.open(); //create file
-        tFile.close(); //close file in order to let Kuzya open it successfully
-        openFile(tFile.fileName()); //open it
+        tFile->setFileName(tr("%1.%2").arg(std::tmpnam(nullptr)).arg(extesnion)); //create file in %TMP%
+        tFile->open(); //create file
+        tFile->close(); //close file in order to let Kuzya open it successfully
+        openFile(tFile->fileName()); //open it
     }
     ActOpenRecentFileVector.clear();
 
@@ -1210,6 +1209,8 @@ void Kuzya::closeEvent(QCloseEvent *event)
     {
         writeTemporaryFileState();
     }
+    delete tFile; // destructor will delete file from temp;
+
     //        if (!fileName.isEmpty())
     //            settings->saveLastProjectName(fileName);
 }

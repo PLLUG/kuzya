@@ -51,6 +51,7 @@ template <typename T> class QList;
 class Translator;
 class QsciLexer;
 class QFileDialog;
+class QTemporaryFile;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -207,6 +208,7 @@ private:
         QFileDialog *fileDialog;
 
         QToolBar *toolBar;
+        QTemporaryFile* tFile; //used to create file with default language
 };
 
 #endif
