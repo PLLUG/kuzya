@@ -558,6 +558,11 @@ bool OptionsDialog::getIsFileReopenEnabled() const
     return isReopenFile;
 }
 
+QString OptionsDialog::getDefaultLanguage() const
+{
+    return defaultLanguageComboBox->currentText();
+}
+
 void OptionsDialog::slotDefaultCompiler()
 {
     QString lang = languageComboBox->currentText();

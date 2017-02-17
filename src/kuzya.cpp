@@ -197,6 +197,16 @@ Kuzya::Kuzya(QWidget *parent)
     {
         readTemporaryFileState();
     }
+    else if(settings->getDefaultLanguage() != "<None>")
+    {
+        QTemporaryFile tFile;
+        tFile.setAutoRemove(false);
+        QString extesnion = compiler->getSupportedExtensions(settings->getDefaultLanguage());
+        tFile.setFileName(tr("%1.%2").arg(std::tmpnam(nullptr)).arg(extesnion)); //create file in %TMP%
+        tFile.open(); //create file
+        tFile.close(); //close file in order to let Kuzya open it successfully
+        openFile(tFile.fileName()); //open it
+    }
     ActOpenRecentFileVector.clear();
 
     srcRecompiled = false;

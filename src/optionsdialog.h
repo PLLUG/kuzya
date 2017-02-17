@@ -59,6 +59,7 @@ public:
     QString readCompilerLocation(QString lang, QString comp);
     QString readCompilerOptions(QString lang, QString comp);
     bool getIsFileReopenEnabled()const;
+    QString getDefaultLanguage()const;
 
 public slots:
     void slotCommOptions(void);
