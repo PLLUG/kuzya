@@ -58,9 +58,6 @@ public:
     QString readDefaultCompiler(QString lang);
     QString readCompilerLocation(QString lang, QString comp);
     QString readCompilerOptions(QString lang, QString comp);
-
-    void writeTemporaryFileState();
-    void readTemporaryFileState();
     bool getIsFileReopenEnabled()const;
 
 public slots:

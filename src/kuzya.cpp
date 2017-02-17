@@ -1554,6 +1554,7 @@ void Kuzya::writeTemporaryFileState()
     tFile.setFileName(tFile.fileName().append(".").append(fileExtenstion));
     tFile.setAutoRemove(false);
     tFile.open();
+    tFile.resize(0);
     QTextStream stream(&tFile);
     stream << textEditor->text();
     tFile.close();
