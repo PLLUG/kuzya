@@ -193,13 +193,13 @@ Kuzya::Kuzya(QWidget *parent)
     settings->readODWSettings();
     settings->openLastProject();
     settings->readMainWindowState();
+    tFile = new QTemporaryFile;
     if(settings->getIsFileReopenEnabled())
     {
         readTemporaryFileState();
     }
     else if(settings->getDefaultLanguage() != "<None>")
     {
-        tFile = new QTemporaryFile;
         QString extesnion = compiler->getSupportedExtensions(settings->getDefaultLanguage());
         tFile->setFileName(tr("%1.%2").arg(std::tmpnam(nullptr)).arg(extesnion)); //create file in %TMP%
         tFile->open(); //create file
@@ -1131,7 +1131,9 @@ void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers)
 **/
 bool Kuzya::slotSaveChangesNotifier(void)
 {
-    if (textEditor->isModified())
+    QString tfname = tFile->fileName();
+    QString rfname = file->fileName();
+    if (textEditor->isModified() || tfname == rfname)
     {
         QMessageBox *msgBox= new QMessageBox();
         msgBox->setIcon(QMessageBox::Warning);
@@ -1204,12 +1206,15 @@ void Kuzya::closeEvent(QCloseEvent *event)
         {
             event->ignore();
         }
+        else
+        {
+            delete tFile; // destructor will delete file from temp;
+        }
     }
     else
     {
         writeTemporaryFileState();
     }
-    delete tFile; // destructor will delete file from temp;
 
     //        if (!fileName.isEmpty())
     //            settings->saveLastProjectName(fileName);
