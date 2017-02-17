@@ -260,7 +260,8 @@ Kuzya::Kuzya(QWidget *parent)
 
     connect(textEditor,	SIGNAL(modificationChanged(bool)), this,SLOT(slotModificationChanged(bool)));
 
-    connect(fileDialog, SIGNAL(filterSelected(QString)), this,      SLOT(slotSetFileSuffix(QString)));
+    connect(fileDialog, SIGNAL(filterSelected(QString)), this,      SLOT(slotSetFileSuffix(QStringList)));
+                    /* implicit cast QString to QStrinList by QStringList(const QString &str) constucrtor */
 
     statusBar()->showMessage(tr("Ready"));
 
