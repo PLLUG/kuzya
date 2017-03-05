@@ -37,6 +37,9 @@
 #include <QSplitter>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QVersionNumber>
+#include <QDate>
+#include <QString>
 
 
 #include "gotolinedialog.h"
@@ -47,7 +50,7 @@
 #include "helpbrowser.h"
 #include "translator.h"
 #include "version.h"
-#include "kuzyaabout.hpp"
+#include "aboutkuzya.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -1029,11 +1032,10 @@ void Kuzya::paintWarningMarkers(QList<Compiler::compilerWarning>* warningList)
 **/
 void Kuzya::slotAbout(void)
 {
-    KuzyaAbout kuzya;
-    kuzya.checkFile();
-    kuzya.readAuthors();
-    kuzya.setVerAndDate();
-    kuzya.fillWindow();
+    QVersionNumber verKuzia(MAJORVER, MINORVER, REVISION);
+    QDate buildDate(BUILD_YEAR, BUILD_MONTH, BUILD_DAY);
+    QString fileName = ":/AUTHORS.txt";
+    AboutKuzya kuzya(nullptr, &verKuzia, &buildDate, &fileName);
 }
 
 /**
