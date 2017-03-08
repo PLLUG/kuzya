@@ -20,7 +20,6 @@ RequestExecutionLevel user
 ;--------------------------------
 ;Variables
 Var /GLOBAL KUZYA_DIR
-Var /GLOBAL MSYS_PACKAGES
 Var /GLOBAL MSYS_REPO_UNIX_PATH
 
 Var StartMenuFolder
@@ -101,18 +100,8 @@ SectionGroup "!MSYS2 + Compilers and Tools" SecGroupMSYS2
 
 	Section "MSYS2 Core Components" SecMSYS2Core
 		SectionIn 1
-		SetOutPath "$INSTDIR"
-		File ${KUZYA_BUILD_ROOT}\tools\post-install-msys2.sh
-		
 		SetOutPath "$INSTDIR\msys64"
 		File /r ${KUZYA_PACKAGE_ROOT}\msys64\*.*
-		SetOutPath "$INSTDIR\msys2-dist-repository"
-		File /r ${KUZYA_PACKAGE_ROOT}\msys2-dist-repository\*.*
-	SectionEnd
-	
-	Section "GCC C and C++ Compiler" SecMSYS2GCC
-		SectionIn 1
-		StrCpy $MSYS_PACKAGES "$MSYS_PACKAGES mingw-w64-x86_64-gcc"
 	SectionEnd
 
 SectionGroupEnd	
@@ -145,19 +134,6 @@ Function .onInstSuccess
 		FileWrite $0 "$\r$\npascal\fpc\options=-O2 -g -Ci -Co -Cr -Ct"
 		FileWrite $0 "$\r$\npascal\bpc\options=-$G+ -$N+ -$Q+ -$R+ -U..\\UNITS"
 		FileClose $0 
-		
-		FileOpen $0 $INSTDIR\pacman.conf w
-		FileWrite $0 "[custom]"
-		FileWrite $0 "$\r$\nServer = file:///$MSYS_REPO_UNIX_PATH"
-		FileClose $0
-		
-		nsExec::Exec '"cmd.exe" /C  "$INSTDIR\msys64\msys2_shell.cmd -mingw64 -where $INSTDIR  ./post-install-msys2.sh $MSYS_PACKAGES"'
-		
-		FileOpen $0 $INSTDIR\run.txt w
-		FileWrite $0 '"cmd.exe" /C  "$INSTDIR\msys64\msys2_shell.cmd -mingw64 -where $INSTDIR  ./post-install-msys2.sh $MSYS_PACKAGES"'
-		FileClose $0
-		
-		RMDir /r "$INSTDIR\msys2-dist-repository"
 FunctionEnd
 ;--------------------------------
 ;Descriptions
