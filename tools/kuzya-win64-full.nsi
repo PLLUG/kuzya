@@ -65,19 +65,19 @@ Section "!Kuzya IDE 2.1.12" SecKuzya
 	File ${KUZYA_BUILD_ROOT}\LICENSE
 
 	SetOutPath "$INSTDIR\IDE\bin"
-	File ${KUZYA_BUILD_ROOT}\trunc\bin\*.*
+	File ${KUZYA_BUILD_ROOT}\src\bin\*.*
 	
 	SetOutPath "$INSTDIR\IDE\resources"
-	File /r ${KUZYA_BUILD_ROOT}\trunc\resources\*.*
+	File /r ${KUZYA_BUILD_ROOT}\resources\*.*
 	
 	SetOutPath "$INSTDIR\IDE\profiles"
-	File /r ${KUZYA_BUILD_ROOT}\trunc\profiles\*.*
+	File /r ${KUZYA_BUILD_ROOT}\profiles\*.*
 	
 	SetOutPath "$INSTDIR\IDE\graphics"
-	File /r ${KUZYA_BUILD_ROOT}\trunc\graphics\*.*
+	File /r ${KUZYA_BUILD_ROOT}\graphics\*.*
 	
 	SetOutPath "$INSTDIR\IDE\doc"
-	File /r ${KUZYA_BUILD_ROOT}\trunc\doc\*.*
+	File /r ${KUZYA_BUILD_ROOT}\doc\*.*
 	
   ;Store installation folder
   ;WriteRegStr HKCU "Software\Modern UI Test" "" $INSTDIR
