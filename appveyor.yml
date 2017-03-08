@@ -46,5 +46,5 @@ deploy:
   prerelease: false
   description: ''
   on:
-    branch: feature/37-kuzya-installer-script
+    branch: development
     appveyor_repo_tag: false
