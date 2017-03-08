@@ -129,8 +129,9 @@ FunctionEnd
 Function .onInstSuccess
 		FileOpen $0 $INSTDIR\IDE\bin\settings.ini a
 		FileSeek $0 0 END
-		FileWrite $0 "$\r$\nc%2B%2B\bcc\options=-1 -2 -N -O2 -v -y -wall"
+		FileWrite $0 "$\r$\nc%2B%2B\g%2B%2B\location=$KUZYA_DIR\\msys64\\mingw64\\bin"
 		FileWrite $0 "$\r$\nc%2B%2B\g%2B%2B\options=-O2 --static -I $KUZYA_DIR\\IDE\\graphics\\c"
+		FileWrite $0 "$\r$\nc%2B%2B\bcc\options=-1 -2 -N -O2 -v -y -wall"
 		FileWrite $0 "$\r$\npascal\fpc\options=-O2 -g -Ci -Co -Cr -Ct"
 		FileWrite $0 "$\r$\npascal\bpc\options=-$G+ -$N+ -$Q+ -$R+ -U..\\UNITS"
 		FileClose $0 
