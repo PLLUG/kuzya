@@ -12,9 +12,9 @@ mkdir %KUZYA_PACKAGE_ROOT%
 cd %KUZYA_PACKAGE_ROOT%
 
 rem ### Copy QScintilla DLL
-xcopy %KUZYA_BUILD_ROOT%\3rdparty\QScintilla\%KUZYA_QSCINTILLA_VERSION%\qscintilla2.dll %KUZYA_BUILD_ROOT%\trunc\bin
+xcopy %KUZYA_BUILD_ROOT%\3rdparty\QScintilla\%KUZYA_QSCINTILLA_VERSION%\qscintilla2.dll %KUZYA_BUILD_ROOT%\bin
 
-windeployqt --release --compiler-runtime --angle %KUZYA_BUILD_ROOT%\trunc\bin
+windeployqt --release --compiler-runtime --angle %KUZYA_BUILD_ROOT%\bin
 
 rem ### Preparing MSYS2 for distribution
 call %KUZYA_BUILD_ROOT%\tools\prepare-msys2.bat
