@@ -65,7 +65,7 @@ Section "!Kuzya IDE 2.1.12" SecKuzya
 	File ${KUZYA_BUILD_ROOT}\LICENSE
 
 	SetOutPath "$INSTDIR\IDE\bin"
-	File ${KUZYA_BUILD_ROOT}\src\bin\*.*
+	File /r ${KUZYA_BUILD_ROOT}\src\bin\*.*
 	
 	SetOutPath "$INSTDIR\IDE\resources"
 	File /r ${KUZYA_BUILD_ROOT}\resources\*.*
