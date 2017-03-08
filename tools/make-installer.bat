@@ -18,5 +18,5 @@ windeployqt --release --compiler-runtime --angle %KUZYA_BUILD_ROOT%\src\bin
 echo Preparing MSYS2 for distribution
 call %KUZYA_BUILD_ROOT%\tools\prepare-msys2.bat
 
-echo Prepare installing package
+echo Prepare install package
 "%KUZYA_NSIS_ROOT%\makensis.exe" /X"SetCompressor /SOLID /FINAL lzma" /DKUZYA_BUILD_ROOT=%KUZYA_BUILD_ROOT% /DKUZYA_PACKAGE_ROOT=%KUZYA_PACKAGE_ROOT% %KUZYA_BUILD_ROOT%/tools/kuzya-win64-full.nsi
