@@ -12,7 +12,7 @@ mkdir %KUZYA_PACKAGE_ROOT%
 cd %KUZYA_PACKAGE_ROOT%
 
 echo Copy QScintilla DLL
-xcopy %KUZYA_BUILD_ROOT%\3rdparty\QScintilla\%KUZYA_QSCINTILLA_VERSION%\qscintilla2.dll %KUZYA_BUILD_ROOT%\bin
+xcopy %KUZYA_BUILD_ROOT%\3rdparty\QScintilla\%KUZYA_QSCINTILLA_VERSION%\qscintilla2.dll %KUZYA_BUILD_ROOT%\bin\qscintilla2.dll
 
 windeployqt --release --compiler-runtime --angle %KUZYA_BUILD_ROOT%\bin
 
