@@ -35,7 +35,7 @@ build:
 
 artifacts:
 - path: c:\projects\kuzya\tools\kuzya-2.1.12-win64-full.exe
-    name: kuzya-installer
+  name: kuzya-installer
 
 deploy:
 - provider: GitHub
