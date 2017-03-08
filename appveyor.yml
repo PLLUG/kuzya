@@ -34,7 +34,7 @@ build:
   verbosity: minimal
 
 artifacts:
-- path: c:\projects\kuzya\tools\kuzya-2.1.12-win64-full.exe
+- path: tools\kuzya-2.1.12-win64-full.exe
   name: kuzya-installer
 
 deploy:
@@ -46,5 +46,5 @@ deploy:
   prerelease: false
   description: ''
   on:
-    branch: development
+    branch: feature/37-kuzya-installer-script
     appveyor_repo_tag: false

@@ -1,4 +1,4 @@
-@echo on
+@echo off
 curl -O %KUZYA_MSYS2_DISTRIB_PACKAGE_URL%/%KUZYA_MSYS2_DISTRIB_PACKAGE_NAME%
 "C:\Program Files\7-Zip\7z.exe" x %KUZYA_MSYS2_DISTRIB_PACKAGE_NAME% -so | 7z x -aoa -si -ttar
 call %KUZYA_PACKAGE_ROOT%\msys64\msys2_shell exit
