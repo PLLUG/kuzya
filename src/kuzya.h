@@ -208,7 +208,7 @@ private:
         QFileDialog *fileDialog;
 
         QToolBar *toolBar;
-        QTemporaryFile* tFile; //used to create file with default language
+        QTemporaryFile* mTemporaryFile; //used to create file with default language
 };
 
 #endif
