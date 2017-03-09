@@ -260,7 +260,10 @@ Kuzya::Kuzya(QWidget *parent)
 
     connect(textEditor,	SIGNAL(modificationChanged(bool)), this,SLOT(slotModificationChanged(bool)));
 
-    connect(fileDialog, SIGNAL(filterSelected(QString)), this,      SLOT(slotSetFileSuffix(QString)));
+    connect(fileDialog, &QFileDialog::fileSelected, this, [this](const QString& suffix)
+    {
+        slotSetFileSuffix(QStringList() << suffix);
+    });
 
     statusBar()->showMessage(tr("Ready"));
 
@@ -657,11 +660,6 @@ void Kuzya::slotSetFileSuffix(QStringList filter)
     if (filter.count() > 0) {
         fileDialog->setDefaultSuffix(filter.at(0));
     }
-}
-
-void Kuzya::slotSetFileSuffix(QString suffix)
-{   //this methods explicitly converts QString to QstrinList. Using by singals/slot connection
-    slotSetFileSuffix(static_cast<QStringList>(suffix));
 }
 
 void Kuzya::setUndoRedoEnabled()
