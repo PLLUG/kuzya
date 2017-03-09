@@ -193,18 +193,18 @@ Kuzya::Kuzya(QWidget *parent)
     settings->readODWSettings();
     settings->openLastProject();
     settings->readMainWindowState();
-    tFile = new QTemporaryFile;
-    if(settings->getIsFileReopenEnabled())
+    mTemporaryFile = new QTemporaryFile;
+    if(settings->isFileReopenEnabled())
     {
         readTemporaryFileState();
     }
     else if(settings->getDefaultLanguage() != "<None>")
     {
         QString extesnion = compiler->getSupportedExtensions(settings->getDefaultLanguage());
-        tFile->setFileName(tr("%1.%2").arg(std::tmpnam(nullptr)).arg(extesnion)); //create file in %TMP%
-        tFile->open(); //create file
-        tFile->close(); //close file in order to let Kuzya open it successfully
-        openFile(tFile->fileName()); //open it
+        mTemporaryFile->setFileName(tr("%1.%2").arg(std::tmpnam(nullptr)).arg(extesnion)); //create file in %TMP%
+        mTemporaryFile->open(); //create file
+        mTemporaryFile->close(); //close file in order to let Kuzya open it successfully
+        openFile(mTemporaryFile->fileName()); //open it
     }
     ActOpenRecentFileVector.clear();
 
@@ -1131,9 +1131,9 @@ void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers)
 **/
 bool Kuzya::slotSaveChangesNotifier(void)
 {
-    QString tfname = tFile->fileName();
-    QString rfname = file->fileName();
-    if (textEditor->isModified() || tfname == rfname)
+    QString tempFileName = mTemporaryFile->fileName();
+    QString realFileName = file->fileName();
+    if (textEditor->isModified() || tempFileName == realFileName)
     {
         QMessageBox *msgBox= new QMessageBox();
         msgBox->setIcon(QMessageBox::Warning);
@@ -1200,7 +1200,7 @@ void Kuzya::closeEvent(QCloseEvent *event)
 {
     settings->writeSettings();
     settings->writeMainWindowState();
-    if(!settings->getIsFileReopenEnabled())
+    if(!settings->isFileReopenEnabled())
     {
         if(slotSaveChangesNotifier()==false)
         {
@@ -1208,7 +1208,7 @@ void Kuzya::closeEvent(QCloseEvent *event)
         }
         else
         {
-            delete tFile; // destructor will delete file from temp;
+            delete mTemporaryFile; // destructor will delete file from temp;
         }
     }
     else

@@ -553,7 +553,7 @@ QString OptionsDialog::readCompilerOptions(QString lang, QString comp)
     return options;
 }
 
-bool OptionsDialog::getIsFileReopenEnabled() const
+bool OptionsDialog::isFileReopenEnabled() const
 {
     return isReopenFile;
 }
