@@ -17,7 +17,7 @@ class AboutKuzya : public QDialog
   Q_OBJECT
 
 public:
-  explicit AboutKuzya(QWidget *parent = 0, QVersionNumber *verKuzia = 0, QDate *buildDate = 0, QString *fileName = 0);
+  AboutKuzya(QVersionNumber verKuzia, QDate buildDate, QString fileName, QWidget *parent = 0);
   ~AboutKuzya();
 
 private:

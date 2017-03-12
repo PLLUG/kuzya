@@ -1035,7 +1035,8 @@ void Kuzya::slotAbout(void)
     QVersionNumber verKuzia(MAJORVER, MINORVER, REVISION);
     QDate buildDate(BUILD_YEAR, BUILD_MONTH, BUILD_DAY);
     QString fileName = ":/AUTHORS.txt";
-    AboutKuzya kuzya(nullptr, &verKuzia, &buildDate, &fileName);
+    AboutKuzya kuzya(verKuzia, buildDate, fileName);
+    kuzya.exec();
 }
 
 /**

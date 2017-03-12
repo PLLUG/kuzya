@@ -4,22 +4,17 @@
 #include <QDebug>
 #include <QDir>
 
-AboutKuzya::AboutKuzya(QWidget *parent, QVersionNumber *verKuzia, QDate *buildDate, QString *fileName) :
-  QDialog(parent), mVerKuzia(verKuzia), mBuildDate(buildDate), mFileName(fileName),
+AboutKuzya::AboutKuzya(QVersionNumber verKuzia, QDate buildDate, QString fileName, QWidget *parent) :
+  mVerKuzia(&verKuzia), mBuildDate(&buildDate), mFileName(&fileName), QDialog(parent),
   ui(new Ui::AboutKuzya)
 {
   ui->setupUi(this);
 
-  ui->layout = new QVBoxLayout(this);
-  this->setLayout(ui->layout);
   ui->textInfLabel = new QLabel(this);
-  ui->imgLabel = new QLabel(this);
 
   checkFile();
   readAuthors();
   setVerAndDate();
-
-  exec();
 }
 
 //checks file
@@ -29,11 +24,11 @@ void AboutKuzya::checkFile()
 
   if(!QFile::exists(*mFileName))
   {
-      qCritical()<< "File doesn't exist"<<*mFileName<<endl;
+      return;
   }
   if (!mFile->open(QIODevice::ReadOnly | QIODevice::Text))
   {
-      qCritical()<<"couldn't open file"<<*mFileName;
+      return;
     }
 }
 

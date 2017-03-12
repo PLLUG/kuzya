@@ -17,8 +17,8 @@
    <iconset resource="images.qrc">
     <normaloff>:/menu/images/kuzya.png</normaloff>:/menu/images/kuzya.png</iconset>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
     <widget class="QWidget" name="label" native="true">
      <layout class="QVBoxLayout" name="layout">
       <item>
@@ -48,15 +48,19 @@
            <height>352</height>
           </rect>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QLabel" name="textInfLabel">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QLabel" name="textInfLabel">
+          <property name="geometry">
+           <rect>
+            <x>9</x>
+            <y>9</y>
+            <width>16</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
         </widget>
        </widget>
       </item>
