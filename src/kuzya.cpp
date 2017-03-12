@@ -260,7 +260,10 @@ Kuzya::Kuzya(QWidget *parent)
 
     connect(textEditor,	SIGNAL(modificationChanged(bool)), this,SLOT(slotModificationChanged(bool)));
 
-    connect(fileDialog, SIGNAL(filterSelected(QString)), this,      SLOT(slotSetFileSuffix(QString)));
+    connect(fileDialog, &QFileDialog::fileSelected, this, [this](const QString& suffix)
+    {
+        slotSetFileSuffix(QStringList() << suffix);
+    });
 
     statusBar()->showMessage(tr("Ready"));
 
