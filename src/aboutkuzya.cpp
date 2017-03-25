@@ -1,56 +1,38 @@
 #include "aboutkuzya.h"
-#include "ui_AboutKuzya.h"
+#include "ui_aboutkuzya.h"
 
 #include <QDebug>
 #include <QDir>
 
 AboutKuzya::AboutKuzya(QVersionNumber verKuzia, QDate buildDate, QString fileName, QWidget *parent) :
-  mVerKuzia(&verKuzia), mBuildDate(&buildDate), mFileName(&fileName), QDialog(parent),
-  ui(new Ui::AboutKuzya)
+    QDialog(parent),
+    ui(new Ui::AboutKuzya)
 {
-  ui->setupUi(this);
+    ui->setupUi(this);
 
-  ui->textInfLabel = new QLabel(this);
+    ui->textInfLabel = new QLabel(this);
 
-  checkFile();
-  readAuthors();
-  setVerAndDate();
-}
+    QFile mFile(fileName);
 
-//checks file
-void AboutKuzya::checkFile()
-{
-  mFile = new QFile (*mFileName);
+    //checks file
+    if(QFile::exists(fileName) && mFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        //reading AUTHORS file
+        QTextStream mIn(&mFile);
+        QString mTextInf;
+        mTextInf  = mIn.readAll();
 
-  if(!QFile::exists(*mFileName))
-  {
-      return;
-  }
-  if (!mFile->open(QIODevice::ReadOnly | QIODevice::Text))
-  {
-      return;
+        //set Kuzia version and build date
+        ui->textInfLabel->setText(mTextInf.arg(verKuzia.toString(), buildDate.toString("MMMM d yyyy")));
+        ui->scrollAreaAuthors->setWidget(ui->textInfLabel);
     }
-}
-
-//reading AUTHORS file
-void AboutKuzya::readAuthors()
-{
-  mIn = new QTextStream(mFile);
-  mTextInf = new QString;
-  *mTextInf  = mIn->readAll();
-}
-
-//set Kuzia version and build date
-void AboutKuzya::setVerAndDate()
-{
-  ui->textInfLabel->setText(mTextInf->arg(mVerKuzia->toString(), mBuildDate->toString("MMMM d yyyy")));
-  ui->scrollAreaAuthors->setWidget(ui->textInfLabel);
+    else
+    {
+        exit(-1);
+    }
 }
 
 AboutKuzya::~AboutKuzya()
 {
-  delete mTextInf;
-  delete mIn;
-  delete mFile;
-  delete ui;
+    delete ui;
 }
