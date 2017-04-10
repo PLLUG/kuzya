@@ -60,6 +60,7 @@ public:
     QString readCompilerOptions(QString lang, QString comp);
     bool isFileReopenEnabled()const;
     QString getDefaultLanguage()const;
+    QSettings* getSettings()const;
 
 public slots:
     void slotCommOptions(void);

@@ -563,6 +563,11 @@ QString OptionsDialog::getDefaultLanguage() const
     return defaultLanguageComboBox->currentText();
 }
 
+QSettings *OptionsDialog::getSettings() const
+{
+    return settings;
+}
+
 void OptionsDialog::slotDefaultCompiler()
 {
     QString lang = languageComboBox->currentText();

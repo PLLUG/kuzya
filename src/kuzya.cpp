@@ -1557,10 +1557,10 @@ void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
 
 void Kuzya::writeTemporaryFileState()
 {
-    QSettings* settings = new QSettings(QApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat);
+    QSettings* settingsWrite = this->settings->getSettings();
     QTemporaryFile tFile;
-    settings->beginGroup("temp_file");
-    QString tFileName = settings->value("file").toString();
+    settingsWrite->beginGroup("temp_file");
+    QString tFileName = settingsWrite->value("file").toString();
     if(!tFileName.isEmpty())
     {
         tFile.setFileName(tFileName);
@@ -1579,11 +1579,11 @@ void Kuzya::writeTemporaryFileState()
     int index;
     textEditor->getCursorPosition(&line, &index);
 
-    settings->setValue("file", tFile.fileName());
-    settings->setValue("cursor_pos/line", line);
-    settings->setValue("cursor_pos/index", index);
-    settings->endGroup();
-    settings->sync();
+    settingsWrite->setValue("file", tFile.fileName());
+    settingsWrite->setValue("cursor_pos/line", line);
+    settingsWrite->setValue("cursor_pos/index", index);
+    settingsWrite->endGroup();
+    settingsWrite->sync();
 }
 
 void Kuzya::readTemporaryFileState()
