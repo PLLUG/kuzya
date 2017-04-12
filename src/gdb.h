@@ -29,6 +29,7 @@ public:
     void clearBreakPoint(unsigned int line);
     void stepIn();
     void stepOut();
+    void stepContinue();
     int getCurrentLine();
     void updateBreakpointsList();
     std::vector<Breakpoint> getBreakpoints()const;

@@ -89,6 +89,11 @@ void Gdb::stepOut()
     write(QByteArray("finish"));
 }
 
+void Gdb::stepContinue()
+{   //continue normal executing to the next breakpoint or end of the programm
+    write(QByteArray("c"));
+}
+
 int Gdb::getCurrentLine()
 {   //returns current line of code or -1 if any aerror occured
     /*
@@ -109,7 +114,7 @@ int Gdb::getCurrentLine()
 }
 
 void Gdb::updateBreakpointsList()
-{   //update std::vector<Breakpoint>  mBreakpointsList with relevant info
+{   //update std::vector<Breakpoint> mBreakpointsList with relevant info
     /*
         &"info b\n"
         ~"Num     Type           Disp Enb Address    What\n"
