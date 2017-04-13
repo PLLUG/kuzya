@@ -5,7 +5,6 @@
 
 Variable::Variable()
 {
-
 }
 
 Variable::Variable(QString name, QString type, QString content):
@@ -16,8 +15,7 @@ Variable::Variable(QString name, QString type, QString content):
 }
 
 QStringList Variable::getSubVariables() const
-{  // returns QStringList consists from nested variable's names (only first level)
-   //  {digit = {real = 3, imaginary = 4}}
+{  // returns list of nested variables in first level
     QRegExp isPointerMatch("\\*");
     if(isPointerMatch.indexIn(mType) != -1) // if it is pointer
     {
@@ -70,12 +68,6 @@ QStringList Variable::getNestedStructures() const
 {
     QString nestedType = this->getContent();
     QStringList res;
-//    do
-//    {
-//        nestedType = this->readNestedStruct(nestedType);
-//        res << nestedType;
-//    }
-//    while(!nestedType.isEmpty());
     return res;
 
 }
@@ -117,13 +109,12 @@ QStringList Variable::readNestedStruct(const QString &vec) const
             capture = true;
             if(key.isEmpty() && value.isEmpty())
             {
-                return res;
+                break;
             }
             else if(!key.isEmpty() && !value.isEmpty())
             {
                 value[0] = ' ';
                 value[1] = ' ';
-//                value.append('}');
                 value = value.trimmed();
                 res << QString("%1|%2").arg(key).arg(value);
             }
