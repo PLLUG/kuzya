@@ -18,11 +18,20 @@ Gdb::Gdb(QString gdbPath)
 
 void Gdb::start(const QStringList &arguments, QIODevice::OpenMode mode)
 {   //starts QPRocess, opens $mGdbFile.fileName()$ and passes $arguments$ as arguments
+    if(!QFile::exists(mGdbFile.fileName()))
+    {
+        QString message = tr("Gdb not found at %1").arg(mGdbFile.fileName());
+        throw std::exception(message.toStdString().c_str());
+    }
     QProcess::start(mGdbFile.fileName(), arguments, mode);
 }
 
 void Gdb::write(QByteArray &command)
 {   //wrtie command to GDB. You shouldn't pass command with '\n' It will appended here.
+    if(this->state() == QProcess::NotRunning)
+    {
+        throw std::exception("Gdb are not running");
+    }
     QByteArray enter("\n");
     command.append(enter);
     QProcess::write(command);
@@ -87,6 +96,11 @@ void Gdb::stepIn()
 void Gdb::stepOut()
 {   //step out of current function\method
     write(QByteArray("finish"));
+}
+
+void Gdb::stopExecuting()
+{   //stop executing of target
+    write(QByteArray("kill"));
 }
 
 void Gdb::stepContinue()
@@ -258,6 +272,11 @@ void Gdb::globalUpdate()
     mVariablesList.clear(); // clear old info
     updateBreakpointsList();
     updateCertainVariables(getVariablesFrom(QStringList() << "local" << "arg"));
+}
+
+void Gdb::setGdbPath(const QString &path)
+{
+    mGdbFile.setFileName(path);
 }
 
 void Gdb::slotReadStdOutput()

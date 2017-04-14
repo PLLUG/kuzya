@@ -29,6 +29,7 @@ public:
     void clearBreakPoint(unsigned int line);
     void stepIn();
     void stepOut();
+    void stopExecuting();
     void stepContinue();
     int getCurrentLine();
     void updateBreakpointsList();
@@ -40,6 +41,7 @@ public:
     QStringList getVariablesFrom(QStringList frame);
     QStringList getVariableList(const QString& frames);
     void globalUpdate();
+    void setGdbPath(const QString& path);
 public slots:
     void slotReadStdOutput();
     void slotReadErrOutput();
