@@ -179,11 +179,6 @@ QString Gdb::getVarContent(const QString& var)
     */
     write(QByteArray("print ").append(var));
     QProcess::waitForReadyRead(1000);
-//    QRegExp errorMatch("\\^done");
-//    if(errorMatch.indexIn(mBuffer) == -1)
-//    {
-//        //throw std::exception("Error while var reading");
-//    }
     QRegExp content("=\\s.*\\^done"); // match string beginning with '= ' and ending with '^done'
     QRegExp clean("[\\\\|\|\"|~]"); // find all garbage characters '\', '"', '~'
     QRegExp pointerMatch("\\(.*\\s*\\)\\s0x[\\d+abcdef]+"); // try to regonize pointer content
@@ -228,7 +223,7 @@ QString Gdb::getVarType(const QString &variable)
 }
 
 void Gdb::updateCertainVariables(QStringList varList)
-{   //pipulates mVariableList by variables from $varList$
+{   //populates mVariableList with variables from $varList$
     for(auto i : varList)
     {
         Variable var(i, getVarType(i), getVarContent(i));
