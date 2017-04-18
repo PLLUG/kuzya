@@ -180,7 +180,7 @@ QString Gdb::getVarContent(const QString& var)
     write(QByteArray("print ").append(var));
     QProcess::waitForReadyRead(1000);
     QRegExp content("=\\s.*\\^done"); // match string beginning with '= ' and ending with '^done'
-    QRegExp clean("[\\\\|\|\"|~]"); // find all garbage characters '\', '"', '~'
+    QRegExp clean("[\\\\\"|~]"); // find all garbage characters '\', '"', '~'
     QRegExp pointerMatch("\\(.*\\s*\\)\\s0x[\\d+abcdef]+"); // try to regonize pointer content
                                                             // (SOME_TYPE *) 0x6743hf2
     if(pointerMatch.indexIn(mBuffer) != -1)
@@ -211,7 +211,7 @@ QString Gdb::getVarType(const QString &variable)
     */
     write(QByteArray("whatis ").append(variable));
     QProcess::waitForReadyRead(1000);
-    QRegExp findType("type\\s=\\s[\\w:\\*\\s\<\>\,]+"); // find string after 'type = ' included only characters,
+    QRegExp findType("type\\s\\=\\s[\\w:\\*\\s\\<\\>\\,]+"); // find string after 'type = ' included only characters,
                                                  // digits, uderscores, '*' and whitespaces
     if(findType.indexIn(mBuffer) == -1) // if not found
     {
