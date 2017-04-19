@@ -6,7 +6,6 @@
 
 Gdb::Gdb()
 {
-
 }
 
 Gdb::Gdb(QString gdbPath)
@@ -28,19 +27,18 @@ void Gdb::start(const QStringList &arguments, QIODevice::OpenMode mode)
 
 void Gdb::write(QByteArray &command)
 {   //wrtie command to GDB. You shouldn't pass command with '\n' It will appended here.
-    if(this->state() == QProcess::NotRunning)
-    {
-        throw std::exception("Gdb are not running");
-    }
     QByteArray enter("\n");
     command.append(enter);
-    QProcess::write(command);
+    int writeResult = QProcess::write(command);
+    if(writeResult == -1)
+    {
+        emit signalErrorOccured(tr("Error while writing to GDB. Command didn't write"));
+    }
 }
 
 void Gdb::readStdOutput()
 {   //Reads all standart output from GDB
     mBuffer = QProcess::readAll();
-    //^error,msg="The program is not being run."
     QRegExp errorMatch("\\^error");
     if(errorMatch.indexIn(mBuffer) != -1)
     {
