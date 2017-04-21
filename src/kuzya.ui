@@ -438,28 +438,14 @@
    <iconset resource="images.qrc">
     <normaloff>:/menu/images/kuzya.png</normaloff>:/menu/images/kuzya.png</iconset>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QCommandLinkButton" name="commandLinkButton">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>500</y>
-      <width>187</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>CommandLinkButton</string>
-    </property>
-   </widget>
-  </widget>
+  <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>773</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -505,10 +491,10 @@
    <widget class="QMenu" name="menuBuild">
     <property name="geometry">
      <rect>
-      <x>605</x>
-      <y>116</y>
-      <width>209</width>
-      <height>132</height>
+      <x>802</x>
+      <y>104</y>
+      <width>193</width>
+      <height>92</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -528,7 +514,6 @@
     </property>
     <addaction name="actionCompile"/>
     <addaction name="actionRun"/>
-    <addaction name="actionRunDebugMode"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -752,7 +737,8 @@
   <action name="actionGoToLine">
    <property name="icon">
     <iconset>
-     <normaloff>.</normaloff>.</iconset>
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
     <string>Go to line...</string>
@@ -956,15 +942,6 @@
    </property>
    <property name="text">
     <string>Alternative</string>
-   </property>
-  </action>
-  <action name="actionRunDebugMode">
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/menu/start_debug</normaloff>:/menu/start_debug</iconset>
-   </property>
-   <property name="text">
-    <string>Run in Debug Mode</string>
    </property>
   </action>
  </widget>

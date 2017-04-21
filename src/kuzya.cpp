@@ -52,7 +52,7 @@
 #include "helpbrowser.h"
 #include "translator.h"
 #include "version.h"
-#include "gdb.h"
+//#include "gdb.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -91,7 +91,6 @@ Kuzya::Kuzya(QWidget *parent)
 #endif
     toolBar->addAction(actionCompile);
     toolBar->addAction(actionRun);
-    toolBar->addAction(actionRunDebugMode);
 #ifdef Q_OS_MAC
 #else
     toolBar->addSeparator();
@@ -110,8 +109,6 @@ Kuzya::Kuzya(QWidget *parent)
     menuTemplates->setDisabled(true);
     actionCompile->setDisabled(false);
     actionRun->setDisabled(true);
-    actionRunDebugMode->setDisabled(true);
-    actionAbout->setDisabled(true);
 
     statusLabel = new QLabel(this);
     statusBar()->addPermanentWidget(statusLabel);
@@ -254,6 +251,7 @@ Kuzya::Kuzya(QWidget *parent)
 
 
 
+
     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoRedoEnabled()));
 
 
@@ -281,15 +279,12 @@ Kuzya::Kuzya(QWidget *parent)
 //    {
 //        this->openFile(qApp->argv()[qApp->argc()-1]);
 //    }
-    QString comp = settings->readDefaultCompiler(language);
-    QString compDir = settings->readCompilerLocation(language, comp);
-    QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
-    qDebug() << "GDB path: " << gdbDir;
-    qDebug() << "Gdb file exist: " << QFile::exists(gdbDir);
-    mGdbDebugger = new Gdb(gdbDir);
-    connect(actionRunDebugMode, SIGNAL(triggered()), this, SLOT(slotRunDebugMode()));
-    connect(mGdbDebugger, SIGNAL(signalErrorOccured(QString)), this, SLOT(slotDebugErrorProcessing(QString)));
-
+//    QString comp = settings->readDefaultCompiler(language);
+//    QString compDir = settings->readCompilerLocation(language, comp);
+//    QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
+//    qDebug() << "Gdb file: " << gdbDir;
+//    qDebug() << "File exists: " << QFile::exists(gdbDir);
+//    mGdbDebugger = new Gdb(gdbDir);
 
 
 #ifdef Q_OS_MAC
@@ -596,7 +591,6 @@ void Kuzya::slotNew(void)
     menuTemplates->setDisabled(true);
     actionCompile->setDisabled(false);
     actionRun->setDisabled(false);
-    actionRunDebugMode->setDisabled(false);
     languageComboBoxAction->setVisible(false);
 
     srcRecompiled  = false;
@@ -681,33 +675,6 @@ void Kuzya::setUndoRedoEnabled()
     actionRedo->setEnabled(textEditor->isRedoAvailable());
 }
 
-void Kuzya::slotRunDebugMode()
-{
-    if (fileName.isEmpty())
-    {
-        addNotification(NTYPE_FAILING, tr("No binary to run"));
-        return;
-    }
-    if (!srcRecompiled)
-    {
-        slotCompile();
-        compiler->waitForFinished(15000);
-    }
-    QString programParh = tr("%1.exe").arg(compiler->getProgramPath());
-    programParh = programParh.replace("\\", "/");
-    mGdbDebugger->start();
-    qDebug() << mGdbDebugger->state();
-//    mGdbDebugger->waitForBytesWritten(2000);
-    mGdbDebugger->openProject(programParh);
-    //mGdbDebugger->waitForBytesWritten(2000);
-    mGdbDebugger->run();
-}
-
-void Kuzya::slotDebugErrorProcessing(QString error)
-{
-    qDebug() << "Error while GDB processing: " << error;
-}
-
 
 
 void Kuzya::refreshDialogSettings()
@@ -774,7 +741,6 @@ void Kuzya::refreshProfileSettings()
         refreshCompileModes();
         actionCompile->setDisabled(false);
         actionRun->setDisabled(false);
-        actionRunDebugMode->setDisabled(false);
 
         srcRecompiled = false;
 
@@ -1562,7 +1528,6 @@ void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
     actionRedo->setIconVisibleInMenu(isVisible);
     actionReplace->setIconVisibleInMenu(isVisible);
     actionRun->setIconVisibleInMenu(isVisible);
-    actionRunDebugMode->setIconVisibleInMenu(isVisible);
     actionSave->setIconVisibleInMenu(isVisible);
     actionSave_as->setIconVisibleInMenu(isVisible);
     actionSelect_all->setIconVisibleInMenu(isVisible);

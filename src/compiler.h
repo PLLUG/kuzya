@@ -60,7 +60,6 @@ public:
         void run(void);
         QList<compilerError>* getLastErrors(void);
         QList<compilerWarning>* getLastWarnings(void);
-        QString getProgramPath()const;
 
 signals:
         void compileEnded(int status);

@@ -51,7 +51,7 @@ template <typename T> class QList;
 class Translator;
 class QsciLexer;
 class QFileDialog;
-class Gdb;
+//class Gdb;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -146,9 +146,6 @@ private slots:
 
         void setUndoRedoEnabled();
 
-        void slotRunDebugMode();
-        void slotDebugErrorProcessing(QString error);
-
 
 protected:
         //*DRAG AND DROP
@@ -208,8 +205,7 @@ private:
         QFileDialog *fileDialog;
 
         QToolBar *toolBar;
-        Gdb* mGdbDebugger;
+//        Gdb* mGdbDebugger;
 };
 
 #endif
-

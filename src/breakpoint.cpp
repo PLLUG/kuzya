@@ -13,7 +13,8 @@ void Breakpoint::parse(const QString &line)
       QRegExp errorMatch("(keep|del)");
       if(errorMatch.indexIn(line) == -1)
       {
-          throw std::exception("Format exception");
+//          throw std::exception("Format exception");
+          throw 0;
       }
       QRegExp disposition(" keep ");
       QRegExp enabled(" y ");
