@@ -52,7 +52,7 @@
 #include "helpbrowser.h"
 #include "translator.h"
 #include "version.h"
-
+//#include "gdb.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -279,6 +279,13 @@ Kuzya::Kuzya(QWidget *parent)
 //    {
 //        this->openFile(qApp->argv()[qApp->argc()-1]);
 //    }
+//    QString comp = settings->readDefaultCompiler(language);
+//    QString compDir = settings->readCompilerLocation(language, comp);
+//    QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
+//    qDebug() << "Gdb file: " << gdbDir;
+//    qDebug() << "File exists: " << QFile::exists(gdbDir);
+//    mGdbDebugger = new Gdb(gdbDir);
+
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);

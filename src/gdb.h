@@ -18,7 +18,7 @@ public:
     Gdb(QString gdbPath);
     void start(const QStringList &arguments = QStringList() << "--interpreter=mi",
                 QProcess::OpenMode mode = QIODevice::ReadWrite);
-    void write(QByteArray &command);
+    void write(QByteArray command);
     void readStdOutput();
     void readErrOutput();
     const QString& getOutput()const;
