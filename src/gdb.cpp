@@ -149,7 +149,7 @@ void Gdb::updateBreakpointsList()
             currentBreakpoint.parse(currentLine); // full breakpoint from $currentLine$
             mBreakpointsList.push_back(currentBreakpoint); // write relevant breakpoint to vector
         }
-        catch(int)
+        catch(std::exception)
         {   //split breakpoint, if there are some error while processing $currentLine$
         }
     }
