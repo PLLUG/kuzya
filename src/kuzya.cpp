@@ -52,7 +52,7 @@
 #include "helpbrowser.h"
 #include "translator.h"
 #include "version.h"
-
+#include "gdb.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -91,6 +91,7 @@ Kuzya::Kuzya(QWidget *parent)
 #endif
     toolBar->addAction(actionCompile);
     toolBar->addAction(actionRun);
+    toolBar->addAction(actionRunDebugMode);
 #ifdef Q_OS_MAC
 #else
     toolBar->addSeparator();
@@ -109,6 +110,8 @@ Kuzya::Kuzya(QWidget *parent)
     menuTemplates->setDisabled(true);
     actionCompile->setDisabled(false);
     actionRun->setDisabled(true);
+    actionRunDebugMode->setDisabled(true);
+    actionAbout->setDisabled(true);
 
     statusLabel = new QLabel(this);
     statusBar()->addPermanentWidget(statusLabel);
@@ -279,6 +282,14 @@ Kuzya::Kuzya(QWidget *parent)
 //    {
 //        this->openFile(qApp->argv()[qApp->argc()-1]);
 //    }
+    QString comp = settings->readDefaultCompiler(language);
+    QString compDir = settings->readCompilerLocation(language, comp);
+    QString gdbDir = tr("%1\\%2").arg(compDir).arg("gdb\\gdb.exe");
+//    qDebug() << "GDB path: " << gdbDir;
+//    qDebug() << "Gdb file exist: " << QFile::exists(tr("%1/%2").arg(compDir).arg("gdb/gdb.exe"));
+    mGdbDebugger = new Gdb(gdbDir);
+
+
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
@@ -584,6 +595,7 @@ void Kuzya::slotNew(void)
     menuTemplates->setDisabled(true);
     actionCompile->setDisabled(false);
     actionRun->setDisabled(false);
+    actionRunDebugMode->setDisabled(false);
     languageComboBoxAction->setVisible(false);
 
     srcRecompiled  = false;
@@ -734,6 +746,7 @@ void Kuzya::refreshProfileSettings()
         refreshCompileModes();
         actionCompile->setDisabled(false);
         actionRun->setDisabled(false);
+        actionRunDebugMode->setDisabled(false);
 
         srcRecompiled = false;
 
@@ -1521,6 +1534,7 @@ void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
     actionRedo->setIconVisibleInMenu(isVisible);
     actionReplace->setIconVisibleInMenu(isVisible);
     actionRun->setIconVisibleInMenu(isVisible);
+    actionRunDebugMode->setIconVisibleInMenu(isVisible);
     actionSave->setIconVisibleInMenu(isVisible);
     actionSave_as->setIconVisibleInMenu(isVisible);
     actionSelect_all->setIconVisibleInMenu(isVisible);

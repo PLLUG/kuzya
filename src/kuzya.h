@@ -51,6 +51,7 @@ template <typename T> class QList;
 class Translator;
 class QsciLexer;
 class QFileDialog;
+class Gdb;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -204,6 +205,7 @@ private:
         QFileDialog *fileDialog;
 
         QToolBar *toolBar;
+        Gdb* mGdbDebugger;
 };
 
 #endif
