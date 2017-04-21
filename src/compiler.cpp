@@ -492,6 +492,11 @@ QList<Compiler::compilerWarning>* Compiler::getLastWarnings(void)
     return &warningList;
 }
 
+QString Compiler::getProgramPath() const
+{
+    return programPath;
+}
+
 void Compiler::readStdErr(void)
 {
     Compiler::compilerError ce;

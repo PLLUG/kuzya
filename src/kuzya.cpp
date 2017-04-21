@@ -254,7 +254,6 @@ Kuzya::Kuzya(QWidget *parent)
 
 
 
-
     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoRedoEnabled()));
 
 
@@ -284,10 +283,12 @@ Kuzya::Kuzya(QWidget *parent)
 //    }
     QString comp = settings->readDefaultCompiler(language);
     QString compDir = settings->readCompilerLocation(language, comp);
-    QString gdbDir = tr("%1\\%2").arg(compDir).arg("gdb\\gdb.exe");
-//    qDebug() << "GDB path: " << gdbDir;
-//    qDebug() << "Gdb file exist: " << QFile::exists(tr("%1/%2").arg(compDir).arg("gdb/gdb.exe"));
+    QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
+    qDebug() << "GDB path: " << gdbDir;
+    qDebug() << "Gdb file exist: " << QFile::exists(gdbDir);
     mGdbDebugger = new Gdb(gdbDir);
+    connect(actionRunDebugMode, SIGNAL(triggered()), this, SLOT(slotRunDebugMode()));
+    connect(mGdbDebugger, SIGNAL(signalErrorOccured(QString)), this, SLOT(slotDebugErrorProcessing(QString)));
 
 
 
@@ -678,6 +679,33 @@ void Kuzya::setUndoRedoEnabled()
 {
     actionUndo->setEnabled(textEditor->isUndoAvailable());
     actionRedo->setEnabled(textEditor->isRedoAvailable());
+}
+
+void Kuzya::slotRunDebugMode()
+{
+    if (fileName.isEmpty())
+    {
+        addNotification(NTYPE_FAILING, tr("No binary to run"));
+        return;
+    }
+    if (!srcRecompiled)
+    {
+        slotCompile();
+        compiler->waitForFinished(15000);
+    }
+    QString programParh = tr("%1.exe").arg(compiler->getProgramPath());
+    programParh = programParh.replace("\\", "/");
+    mGdbDebugger->start();
+    qDebug() << mGdbDebugger->state();
+//    mGdbDebugger->waitForBytesWritten(2000);
+    mGdbDebugger->openProject(programParh);
+    //mGdbDebugger->waitForBytesWritten(2000);
+    mGdbDebugger->run();
+}
+
+void Kuzya::slotDebugErrorProcessing(QString error)
+{
+    qDebug() << "Error while GDB processing: " << error;
 }
 
 
