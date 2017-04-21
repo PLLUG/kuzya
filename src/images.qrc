@@ -75,6 +75,7 @@
         <file>images/pagefold/radiobutton_unchecked_pressed.png</file>
         <file>images/pagefold/radiobutton_checked_pressed.png</file>
         <file>images/pagefold/pagefold.png</file>
+        <file>images/start_debug.png</file>
     </qresource>
     <qresource prefix="/styles">
         <file>images/styles/arrow_d.png</file>

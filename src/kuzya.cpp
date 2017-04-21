@@ -52,7 +52,7 @@
 #include "helpbrowser.h"
 #include "translator.h"
 #include "version.h"
-//#include "gdb.h"
+#include "gdb.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -91,6 +91,7 @@ Kuzya::Kuzya(QWidget *parent)
 #endif
     toolBar->addAction(actionCompile);
     toolBar->addAction(actionRun);
+    toolBar->addAction(actionRunDebugMode);
 #ifdef Q_OS_MAC
 #else
     toolBar->addSeparator();
@@ -109,6 +110,7 @@ Kuzya::Kuzya(QWidget *parent)
     menuTemplates->setDisabled(true);
     actionCompile->setDisabled(false);
     actionRun->setDisabled(true);
+    actionRunDebugMode->setDisabled(true);
 
     statusLabel = new QLabel(this);
     statusBar()->addPermanentWidget(statusLabel);
@@ -219,6 +221,7 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionGoToLine, SIGNAL(triggered()), goToLine, 		SLOT(slotGoToLine()));
     connect(actionGoToMatchingBracket, SIGNAL(triggered()),textEditor ,SLOT(moveToMatchingBrace()));
     connect(actionCompile, 	SIGNAL(triggered()), this, 		SLOT(slotCompile()));
+    connect(actionRunDebugMode, SIGNAL(triggered(bool)), this, SLOT(slotRunDebugMode()));
     connect(actionRun, 	SIGNAL(triggered()),this,		SLOT(slotRun()));
     connect(actionCommon,	SIGNAL(triggered()), settings, 		SLOT(slotCommOptions()));
     connect(actionAbout, 	SIGNAL(triggered()),this,		SLOT(slotAbout()));
@@ -279,12 +282,13 @@ Kuzya::Kuzya(QWidget *parent)
 //    {
 //        this->openFile(qApp->argv()[qApp->argc()-1]);
 //    }
-//    QString comp = settings->readDefaultCompiler(language);
-//    QString compDir = settings->readCompilerLocation(language, comp);
-//    QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
-//    qDebug() << "Gdb file: " << gdbDir;
-//    qDebug() << "File exists: " << QFile::exists(gdbDir);
-//    mGdbDebugger = new Gdb(gdbDir);
+    QString comp = settings->readDefaultCompiler(language);
+    QString compDir = settings->readCompilerLocation(language, comp);
+    QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
+    qDebug() << "Gdb file: " << gdbDir;
+    qDebug() << "File exists: " << QFile::exists(gdbDir);
+    mGdbDebugger = new Gdb(gdbDir);
+    connect(mGdbDebugger, SIGNAL(signalErrorOccured(QString)), this, SLOT(slotDebugErrorProcessing(QString)));
 
 
 #ifdef Q_OS_MAC
@@ -591,6 +595,7 @@ void Kuzya::slotNew(void)
     menuTemplates->setDisabled(true);
     actionCompile->setDisabled(false);
     actionRun->setDisabled(false);
+    actionRunDebugMode->setDisabled(false);
     languageComboBoxAction->setVisible(false);
 
     srcRecompiled  = false;
@@ -675,6 +680,32 @@ void Kuzya::setUndoRedoEnabled()
     actionRedo->setEnabled(textEditor->isRedoAvailable());
 }
 
+void Kuzya::slotRunDebugMode()
+{
+    if(recompile())
+    {
+        try
+        {
+            mGdbDebugger->start();
+            QString programPath = compiler->getProgramPath();
+            QString fullProgramPath = tr("%1.exe").arg(programPath);
+            fullProgramPath = fullProgramPath.replace("\\", "/");
+            mGdbDebugger->openProject(fullProgramPath);
+            mGdbDebugger->run();
+        }
+        catch(std::domain_error error)
+        {
+            notificationList->setVisible(true);
+            addNotification(NTYPE_FAILING, error.what());
+        }
+    }
+}
+
+void Kuzya::slotDebugErrorProcessing(QString error)
+{
+    qDebug() << "Debug error: " << error;
+}
+
 
 
 void Kuzya::refreshDialogSettings()
@@ -741,6 +772,7 @@ void Kuzya::refreshProfileSettings()
         refreshCompileModes();
         actionCompile->setDisabled(false);
         actionRun->setDisabled(false);
+        actionRunDebugMode->setDisabled(false);
 
         srcRecompiled = false;
 
@@ -922,17 +954,10 @@ void Kuzya::slotExit(void)
 **/
 void Kuzya::slotRun(void)
 {
-    if (fileName.isEmpty())
+    if(recompile())
     {
-        addNotification(NTYPE_FAILING, tr("No binary to run"));
-        return;
+        compiler->run();
     }
-    if (!srcRecompiled)
-    {
-        slotCompile();
-        compiler->waitForFinished(15000);
-    }
-    compiler->run();
 }
 
 /**
@@ -1528,6 +1553,7 @@ void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
     actionRedo->setIconVisibleInMenu(isVisible);
     actionReplace->setIconVisibleInMenu(isVisible);
     actionRun->setIconVisibleInMenu(isVisible);
+    actionRunDebugMode->setIconVisibleInMenu(isVisible);
     actionSave->setIconVisibleInMenu(isVisible);
     actionSave_as->setIconVisibleInMenu(isVisible);
     actionSelect_all->setIconVisibleInMenu(isVisible);
@@ -1539,4 +1565,19 @@ void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
 
 
 
+}
+
+bool Kuzya::recompile()
+{
+    if (fileName.isEmpty())
+    {
+        addNotification(NTYPE_FAILING, tr("No binary to run"));
+        return false;
+    }
+    if (!srcRecompiled)
+    {
+        slotCompile();
+        compiler->waitForFinished(15000);
+    }
+    return true;
 }
