@@ -1110,21 +1110,31 @@ void Kuzya::slotUpdateWindowName(bool m)
 void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers modifier)
 {
     if(modifier == Qt::KeyboardModifier::AltModifier)
-    {
-        qDebug() << "Try to add breakpoint:" << textEditor->markerAdd(line, breakpointMarker);
-        qDebug() << "Breakpoint at " << textEditor->markerLine(breakpointMarker) << "line";
-    }
-    if ((0 != textEditor->markersAtLine(line)) && (1 == margin))
-    {
-        auto listError = notificationList->findItems(QString(" %1)").arg(line+1), Qt::MatchContains);
-        if(!listError.isEmpty())
+    { // breakpoints section
+        int bitMask = textEditor->markersAtLine(line);
+        if(bitMask & 1<<3)  //1<<3 = 0x4 - mask for breakpoint margin
         {
-            QListWidgetItem *item = listError.at(0);
-            textEditor->markerDeleteAll(currentMarker);
-            textEditor->markerAdd(line,currentMarker);
-            notificationList->setCurrentItem(item);
-            notificationList->setFocus();
-            statusBar()->showMessage(item->data(Kuzya::descriptionRole).toString());
+            textEditor->markerDelete(line, breakpointMarker);
+        }
+        else
+        {
+            textEditor->markerAdd(line, breakpointMarker);
+        }
+    }
+    else
+    { // errors section
+        if ((0 != textEditor->markersAtLine(line)) && (1 == margin))
+        {
+            auto listError = notificationList->findItems(QString(" %1)").arg(line+1), Qt::MatchContains);
+            if(!listError.isEmpty())
+            {
+                QListWidgetItem *item = listError.at(0);
+                textEditor->markerDeleteAll(currentMarker);
+                textEditor->markerAdd(line,currentMarker);
+                notificationList->setCurrentItem(item);
+                notificationList->setFocus();
+                statusBar()->showMessage(item->data(Kuzya::descriptionRole).toString());
+            }
         }
     }
 }
