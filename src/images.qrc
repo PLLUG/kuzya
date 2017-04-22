@@ -26,6 +26,7 @@
         <file alias="templates_menu">images/bricks.png</file>
         <file>images/help.png</file>
         <file>images/escape.png</file>
+        <file alias="start_debug">images/start_debug.png</file>
     </qresource>
     <qresource prefix="/notifications">
         <file alias="success">images/accept.png</file>
@@ -74,6 +75,7 @@
         <file>images/pagefold/radiobutton_unchecked_pressed.png</file>
         <file>images/pagefold/radiobutton_checked_pressed.png</file>
         <file>images/pagefold/pagefold.png</file>
+        <file>images/start_debug.png</file>
     </qresource>
     <qresource prefix="/styles">
         <file>images/styles/arrow_d.png</file>

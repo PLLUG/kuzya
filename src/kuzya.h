@@ -51,6 +51,7 @@ template <typename T> class QList;
 class Translator;
 class QsciLexer;
 class QFileDialog;
+class Gdb;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -144,7 +145,7 @@ private slots:
         void slotSetFileSuffix(QStringList);
 
         void setUndoRedoEnabled();
-
+        void slotRunDebugMode();
 
 protected:
         //*DRAG AND DROP
@@ -162,6 +163,7 @@ private:
         void refreshCompileModes();
         void refreshDialogSettings();
         void setAllIconsVisibleInMenu(bool isVisible);
+        bool recompile();
 
 private:
         QFile *file;
@@ -204,7 +206,7 @@ private:
         QFileDialog *fileDialog;
 
         QToolBar *toolBar;
+        Gdb* mGdbDebugger;
 };
 
 #endif
-
