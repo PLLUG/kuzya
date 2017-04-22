@@ -160,13 +160,12 @@ Kuzya::Kuzya(QWidget *parent)
     textEditor->setSelectionBackgroundColor(QColor(100, 100, 200));
     textEditor->setUtf8(true);
 
+    /* Number of ecah marker is importent. MarginMarkerMasks uses it */
+    warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor), 0);
+    errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor), 1);
+    currentMarker = textEditor->markerDefine(QPixmap(":/markers/current_line","",Qt::AutoColor), 2);
+    breakpointMarker = textEditor->markerDefine(QPixmap(":/markers/breakpoint_line","",Qt::AutoColor), 3);
 
-    warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor));
-    errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
-    currentMarker = textEditor->markerDefine(QPixmap(":/markers/current_line","",Qt::AutoColor));
-    breakpointMarker = textEditor->markerDefine(QPixmap(":/markers/breakpoint_line","",Qt::AutoColor));
-#pragma ff
-    qDebug() << (1<<2);
     textEditor->setMarginMarkerMask(1,ERROR_MARK | WARNING_MARK);
     textEditor->setMarginMarkerMask(2,CURRENT_MARK);
     textEditor->setMarginMarkerMask(0,BREAKPOINT_MARK);
@@ -1008,8 +1007,7 @@ void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
     {
         if (0 != errorList->at(i).line)
         {
-#pragma dd
-            addNotification(NTYPE_ERROR, errorList->at(i).description, true, errorList->at(i).line);
+            addNotification(NTYPE_WARNING, errorList->at(i).description, true, errorList->at(i).line);
             if (0 == firstAttached) firstAttached = i;
             errCount++;
         }
