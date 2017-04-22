@@ -164,13 +164,20 @@ Kuzya::Kuzya(QWidget *parent)
     warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor));
     errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
     currentMarker = textEditor->markerDefine(QPixmap(":/markers/current_line","",Qt::AutoColor));
+    breakpointMarker = textEditor->markerDefine(QPixmap(":/markers/breakpoint_line","",Qt::AutoColor));
 
-    textEditor->setMarginMarkerMask(1,3);
-    textEditor->setMarginMarkerMask(2,4);
+    textEditor->setMarginMarkerMask(1,1<<1);
+    textEditor->setMarginMarkerMask(2,1<<2);
+    textEditor->setMarginMarkerMask(0,1<<3);
     textEditor->setMarginWidth(1, 15);
     textEditor->setMarginWidth(2, 20);
+    textEditor->setMarginWidth(0, 10);
+    textEditor->setMarginLineNumbers(0, false);
 
+    textEditor->setMarginSensitivity(0, true);
     textEditor->setMarginSensitivity(1, true);
+    textEditor->setMarginSensitivity(2, true);
+    textEditor->setMarginSensitivity(3, true);
     //textEditor->setMarginsBackgroundColor(QColor(190, 178, 157,255));
 
     file = new QFile();
@@ -1100,16 +1107,25 @@ void Kuzya::slotUpdateWindowName(bool m)
 /**
 *******************************************************************************************************
 **/
-void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers)
+void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers modifier)
 {
+    if(modifier == Qt::KeyboardModifier::AltModifier)
+    {
+        qDebug() << "Try to add breakpoint:" << textEditor->markerAdd(line, breakpointMarker);
+        qDebug() << "Breakpoint at " << textEditor->markerLine(breakpointMarker) << "line";
+    }
     if ((0 != textEditor->markersAtLine(line)) && (1 == margin))
     {
-        QListWidgetItem *item = notificationList->findItems(QString(" %1)").arg(line+1), Qt::MatchContains).at(0);
-        textEditor->markerDeleteAll(currentMarker);
-        textEditor->markerAdd(line,currentMarker);
-        notificationList->setCurrentItem(item);
-        notificationList->setFocus();
-        statusBar()->showMessage(item->data(Kuzya::descriptionRole).toString());
+        auto listError = notificationList->findItems(QString(" %1)").arg(line+1), Qt::MatchContains);
+        if(!listError.isEmpty())
+        {
+            QListWidgetItem *item = listError.at(0);
+            textEditor->markerDeleteAll(currentMarker);
+            textEditor->markerAdd(line,currentMarker);
+            notificationList->setCurrentItem(item);
+            notificationList->setFocus();
+            statusBar()->showMessage(item->data(Kuzya::descriptionRole).toString());
+        }
     }
 }
 

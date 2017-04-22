@@ -176,6 +176,7 @@ private:
         Compiler *compiler;
         QLabel* statusLabel;
         int errorMarker, warningMarker, currentMarker;
+        int breakpointMarker;
         QVector <QAction*> ActOpenRecentFileVector;
         QSignalMapper *signalMapper;
         int MaxCount_RFileList;
