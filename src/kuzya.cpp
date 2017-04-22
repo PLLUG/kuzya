@@ -286,8 +286,6 @@ Kuzya::Kuzya(QWidget *parent)
     QString compDir = settings->readCompilerLocation(language, comp);
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
     mGdbDebugger = new Gdb(gdbDir);
-    connect(mGdbDebugger, SIGNAL(signalErrorOccured(QString)), this, SLOT(slotDebugErrorProcessing(QString)));
-
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
@@ -698,12 +696,6 @@ void Kuzya::slotRunDebugMode()
         }
     }
 }
-
-void Kuzya::slotDebugErrorProcessing(QString error)
-{
-    qDebug() << "Debug error: " << error;
-}
-
 
 
 void Kuzya::refreshDialogSettings()

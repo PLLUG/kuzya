@@ -146,7 +146,6 @@ private slots:
 
         void setUndoRedoEnabled();
         void slotRunDebugMode();
-        void slotDebugErrorProcessing(QString error);
 
 protected:
         //*DRAG AND DROP
