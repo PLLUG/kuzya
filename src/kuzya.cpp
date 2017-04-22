@@ -1007,7 +1007,7 @@ void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
     {
         if (0 != errorList->at(i).line)
         {
-            addNotification(NTYPE_WARNING, errorList->at(i).description, true, errorList->at(i).line);
+            addNotification(NTYPE_ERROR, errorList->at(i).description, true, errorList->at(i).line);
             if (0 == firstAttached) firstAttached = i;
             errCount++;
         }
