@@ -165,10 +165,11 @@ Kuzya::Kuzya(QWidget *parent)
     errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
     currentMarker = textEditor->markerDefine(QPixmap(":/markers/current_line","",Qt::AutoColor));
     breakpointMarker = textEditor->markerDefine(QPixmap(":/markers/breakpoint_line","",Qt::AutoColor));
-
-    textEditor->setMarginMarkerMask(1,1<<1);
-    textEditor->setMarginMarkerMask(2,1<<2);
-    textEditor->setMarginMarkerMask(0,1<<3);
+#pragma ff
+    qDebug() << (1<<2);
+    textEditor->setMarginMarkerMask(1,ERROR_MARK | WARNING_MARK);
+    textEditor->setMarginMarkerMask(2,CURRENT_MARK);
+    textEditor->setMarginMarkerMask(0,BREAKPOINT_MARK);
     textEditor->setMarginWidth(1, 15);
     textEditor->setMarginWidth(2, 20);
     textEditor->setMarginWidth(0, 10);
@@ -1007,6 +1008,7 @@ void Kuzya::paintErrorMarkers(QList<Compiler::compilerError>* errorList)
     {
         if (0 != errorList->at(i).line)
         {
+#pragma dd
             addNotification(NTYPE_ERROR, errorList->at(i).description, true, errorList->at(i).line);
             if (0 == firstAttached) firstAttached = i;
             errCount++;
