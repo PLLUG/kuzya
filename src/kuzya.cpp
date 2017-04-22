@@ -293,6 +293,7 @@ Kuzya::Kuzya(QWidget *parent)
     QString compDir = settings->readCompilerLocation(language, comp);
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
     mGdbDebugger = new Gdb(gdbDir);
+    mGdbDebugger->start();
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
@@ -689,11 +690,53 @@ void Kuzya::slotRunDebugMode()
     {
         try
         {
-            mGdbDebugger->start();
+            //mGdbDebugger = new Gdb(mGdbDebugger->mGdbFile.fileName());
+            //mGdbDebugger->start();
+            mGdbDebugger->stopExecuting();
+            mGdbDebugger->waitForReadyRead(3000);
+            mGdbDebugger->write(QByteArray("clear"));
+
             QString programPath = compiler->getProgramPath();
             QString fullProgramPath = tr("%1.exe").arg(programPath);
             fullProgramPath = fullProgramPath.replace("\\", "/");
             mGdbDebugger->openProject(fullProgramPath);
+            mGdbDebugger->write(QByteArray("clear"));
+            mGdbDebugger->write(QByteArray("info b"));
+            mGdbDebugger->globalUpdate();
+            QMessageBox msg;
+            auto brks = mGdbDebugger->getBreakpoints();
+            QString res = "Old breakpoints:";
+            for(Breakpoint i : brks)
+            {
+                res.append(tr("\nStop at line: %1").arg(i.getLine()));
+                mGdbDebugger->clearBreakPoint(i.getLine());
+            }
+            msg.setText(res);
+//            msg.exec();
+//            mGdbDebugger->globalUpdate();
+//            std::vector<Breakpoint> brksLocal = mGdbDebugger->getBreakpoints();
+//            qDebug() << "deleting " << brksLocal.size() << "brks";
+//            for(Breakpoint i : brksLocal)
+//            {
+//                mGdbDebugger->clearBreakPoint(i.getLine());
+//                qDebug() << i.getLine();
+//            }
+            int breakpoinLine = 0;
+            res.clear();
+            res = "New breakpoints: \n";
+            do
+            {
+                breakpoinLine = textEditor->markerFindNext(breakpoinLine+1, BREAKPOINT_MARK);
+                if(breakpoinLine != -1)
+                {
+                    mGdbDebugger->setBreakPoint(breakpoinLine);
+                    res.append(tr("\n line: %1").arg(QString::number(breakpoinLine)));
+                }
+            }
+            while(breakpoinLine != -1);
+            msg.setText(res);
+//            msg.exec();
+            mGdbDebugger->write(QByteArray("info b"));
             mGdbDebugger->run();
         }
         catch(std::domain_error error)
