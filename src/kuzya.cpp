@@ -1331,7 +1331,9 @@ void Kuzya::addNotification(int type, QString descr, bool attached, int line)
 ///***********************************************************************************************************///
 void Kuzya::removeAllNotifications()
 {
-    textEditor->markerDeleteAll();
+    textEditor->markerDeleteAll(errorMarker);
+    textEditor->markerDeleteAll(warningMarker);
+    textEditor->markerDeleteAll(currentMarker);
     notificationList->clear();
 }
 ///***********************************************************************************************************///
