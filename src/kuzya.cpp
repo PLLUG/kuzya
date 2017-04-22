@@ -285,8 +285,6 @@ Kuzya::Kuzya(QWidget *parent)
     QString comp = settings->readDefaultCompiler(language);
     QString compDir = settings->readCompilerLocation(language, comp);
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
-    qDebug() << "Gdb file: " << gdbDir;
-    qDebug() << "File exists: " << QFile::exists(gdbDir);
     mGdbDebugger = new Gdb(gdbDir);
     connect(mGdbDebugger, SIGNAL(signalErrorOccured(QString)), this, SLOT(slotDebugErrorProcessing(QString)));
 
