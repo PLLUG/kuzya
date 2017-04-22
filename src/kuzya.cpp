@@ -162,17 +162,24 @@ Kuzya::Kuzya(QWidget *parent)
     textEditor->setSelectionBackgroundColor(QColor(100, 100, 200));
     textEditor->setUtf8(true);
 
+    /* Number of ecah marker is importent. MarginMarkerMasks uses it */
+    warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor), 0);
+    errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor), 1);
+    currentMarker = textEditor->markerDefine(QPixmap(":/markers/current_line","",Qt::AutoColor), 2);
+    breakpointMarker = textEditor->markerDefine(QPixmap(":/markers/breakpoint_line","",Qt::AutoColor), 3);
 
-    warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor));
-    errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
-    currentMarker = textEditor->markerDefine(QPixmap(":/markers/current_line","",Qt::AutoColor));
-
-    textEditor->setMarginMarkerMask(1,3);
-    textEditor->setMarginMarkerMask(2,4);
+    textEditor->setMarginMarkerMask(1,ERROR_MARK | WARNING_MARK);
+    textEditor->setMarginMarkerMask(2,CURRENT_MARK);
+    textEditor->setMarginMarkerMask(0,BREAKPOINT_MARK);
     textEditor->setMarginWidth(1, 15);
     textEditor->setMarginWidth(2, 20);
+    textEditor->setMarginWidth(0, 10);
+    textEditor->setMarginLineNumbers(0, false);
 
+    textEditor->setMarginSensitivity(0, true);
     textEditor->setMarginSensitivity(1, true);
+    textEditor->setMarginSensitivity(2, true);
+    textEditor->setMarginSensitivity(3, true);
     //textEditor->setMarginsBackgroundColor(QColor(190, 178, 157,255));
 
     file = new QFile();
@@ -1122,16 +1129,35 @@ void Kuzya::slotUpdateWindowName(bool m)
 /**
 *******************************************************************************************************
 **/
-void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers)
+void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers modifier)
 {
-    if ((0 != textEditor->markersAtLine(line)) && (1 == margin))
-    {
-        QListWidgetItem *item = notificationList->findItems(QString(" %1)").arg(line+1), Qt::MatchContains).at(0);
-        textEditor->markerDeleteAll(currentMarker);
-        textEditor->markerAdd(line,currentMarker);
-        notificationList->setCurrentItem(item);
-        notificationList->setFocus();
-        statusBar()->showMessage(item->data(Kuzya::descriptionRole).toString());
+    if(modifier == Qt::KeyboardModifier::AltModifier)
+    { // breakpoints section
+        int bitMask = textEditor->markersAtLine(line);
+        if(bitMask & 1<<3)  //1<<3 = 0x4 - mask for breakpoint margin
+        {
+            textEditor->markerDelete(line, breakpointMarker);
+        }
+        else
+        {
+            textEditor->markerAdd(line, breakpointMarker);
+        }
+    }
+    else
+    { // errors section
+        if ((0 != textEditor->markersAtLine(line)) && (1 == margin))
+        {
+            auto listError = notificationList->findItems(QString(" %1)").arg(line+1), Qt::MatchContains);
+            if(!listError.isEmpty())
+            {
+                QListWidgetItem *item = listError.at(0);
+                textEditor->markerDeleteAll(currentMarker);
+                textEditor->markerAdd(line,currentMarker);
+                notificationList->setCurrentItem(item);
+                notificationList->setFocus();
+                statusBar()->showMessage(item->data(Kuzya::descriptionRole).toString());
+            }
+        }
     }
 }
 
@@ -1327,7 +1353,9 @@ void Kuzya::addNotification(int type, QString descr, bool attached, int line)
 ///***********************************************************************************************************///
 void Kuzya::removeAllNotifications()
 {
-    textEditor->markerDeleteAll();
+    textEditor->markerDeleteAll(errorMarker);
+    textEditor->markerDeleteAll(warningMarker);
+    textEditor->markerDeleteAll(currentMarker);
     notificationList->clear();
 }
 ///***********************************************************************************************************///

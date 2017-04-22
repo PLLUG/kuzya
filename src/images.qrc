@@ -43,6 +43,7 @@
         <file alias="bug_line">images/bullet_red.png</file>
         <file alias="warning_line">images/bullet_orange.png</file>
         <file alias="current_line">images/arrow.png</file>
+        <file alias="breakpoint_line">images/breakpoint.png</file>
     </qresource>
     <qresource prefix="/">
         <file>images/pagefold/sizegrip.png</file>

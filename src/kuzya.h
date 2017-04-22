@@ -65,6 +65,10 @@ public:
 
     enum notificationTypeEnum {NTYPE_ERROR, NTYPE_WARNING, NTYPE_SUCCESS,
                                NTYPE_FAILING, NTYPE_WAIT, NTYPE_INFO, NTYPE_COMPILER};
+    enum marginMarkerMaskTypeEnum {WARNING_MARK = 0x1,
+                                ERROR_MARK = 0x2,
+                                CURRENT_MARK = 0x4,
+                                BREAKPOINT_MARK = 0x8};
 
     Kuzya(QWidget *parent = 0);
     ~Kuzya();
@@ -178,6 +182,7 @@ private:
         Compiler *compiler;
         QLabel* statusLabel;
         int errorMarker, warningMarker, currentMarker;
+        int breakpointMarker;
         QVector <QAction*> ActOpenRecentFileVector;
         QSignalMapper *signalMapper;
         int MaxCount_RFileList;
