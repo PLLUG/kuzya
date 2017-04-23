@@ -20,7 +20,10 @@ HEADERS += kuzya.h \
     replacedialog.h \
     helpbrowser.h \
     translator.h \
-    version.h
+    version.h \
+    breakpoint.h \
+    gdb.h \
+    variable.h
 
 SOURCES += kuzya.cpp \
     main.cpp \
@@ -29,7 +32,10 @@ SOURCES += kuzya.cpp \
     optionsdialog.cpp \
     finddialog.cpp \
     replacedialog.cpp \
-    translator.cpp
+    translator.cpp \
+    gdb.cpp \
+    breakpoint.cpp \
+    variable.cpp
 
 RESOURCES = images.qrc \
            ../auth.qrc \

@@ -445,7 +445,7 @@
      <x>0</x>
      <y>0</y>
      <width>773</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -491,10 +491,10 @@
    <widget class="QMenu" name="menuBuild">
     <property name="geometry">
      <rect>
-      <x>802</x>
-      <y>104</y>
-      <width>193</width>
-      <height>92</height>
+      <x>605</x>
+      <y>116</y>
+      <width>209</width>
+      <height>132</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -514,6 +514,7 @@
     </property>
     <addaction name="actionCompile"/>
     <addaction name="actionRun"/>
+    <addaction name="actionRunDebugMode"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -737,8 +738,7 @@
   <action name="actionGoToLine">
    <property name="icon">
     <iconset>
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Go to line...</string>
@@ -942,6 +942,15 @@
    </property>
    <property name="text">
     <string>Alternative</string>
+   </property>
+  </action>
+  <action name="actionRunDebugMode">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/menu/start_debug</normaloff>:/menu/start_debug</iconset>
+   </property>
+   <property name="text">
+    <string>Run in Debug Mode</string>
    </property>
   </action>
  </widget>

@@ -42,7 +42,7 @@
 #include <QFile>
 #include <QVBoxLayout>
 #include <QDialog>
-
+#include <QTreeWidget>
 
 #include "gotolinedialog.h"
 #include "finddialog.h"
@@ -52,7 +52,7 @@
 #include "helpbrowser.h"
 #include "translator.h"
 #include "version.h"
-
+#include "gdb.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -91,6 +91,7 @@ Kuzya::Kuzya(QWidget *parent)
 #endif
     toolBar->addAction(actionCompile);
     toolBar->addAction(actionRun);
+    toolBar->addAction(actionRunDebugMode);
 #ifdef Q_OS_MAC
 #else
     toolBar->addSeparator();
@@ -109,6 +110,7 @@ Kuzya::Kuzya(QWidget *parent)
     menuTemplates->setDisabled(true);
     actionCompile->setDisabled(false);
     actionRun->setDisabled(true);
+    actionRunDebugMode->setDisabled(true);
 
     statusLabel = new QLabel(this);
     statusBar()->addPermanentWidget(statusLabel);
@@ -120,14 +122,28 @@ Kuzya::Kuzya(QWidget *parent)
     textEditor = new QsciScintilla(this);
     textEditor->setEolMode(QsciScintilla::EolUnix);
 
+    tabWidget= new QTabWidget(this);
+
     notificationList = new QListWidget(this);
     notificationList->setObjectName("notificationList");
     notificationList->setVisible(false);
+    tabWidget->addTab(notificationList, "Output");
+    tabWidget->setVisible(false);
+    //adds debug tab to tabWidget
+    QLabel *innerLabel = new QLabel(this);
+    QVBoxLayout *innerLabelLayout = new QVBoxLayout(this);
+    innerLabel->setLayout(innerLabelLayout);
+    QToolBar *debugButtons = new QToolBar(this);
+    mTreeViewWidget = new QTreeWidget(this);
+    innerLabelLayout->addWidget(debugButtons);
+    innerLabelLayout->addWidget(mTreeViewWidget);
+    tabWidget->addTab(innerLabel, "Debug");
+
 
     QSplitter *splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);
     splitter->addWidget(textEditor);
-    splitter->addWidget(notificationList);
+    splitter->addWidget(tabWidget);
     splitter->setChildrenCollapsible(false);
     splitter->setStretchFactor(0, 5);
     splitter->setStretchFactor(1, 2);
@@ -160,17 +176,24 @@ Kuzya::Kuzya(QWidget *parent)
     textEditor->setSelectionBackgroundColor(QColor(100, 100, 200));
     textEditor->setUtf8(true);
 
+    /* Number of ecah marker is importent. MarginMarkerMasks uses it */
+    warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor), 0);
+    errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor), 1);
+    currentMarker = textEditor->markerDefine(QPixmap(":/markers/current_line","",Qt::AutoColor), 2);
+    breakpointMarker = textEditor->markerDefine(QPixmap(":/markers/breakpoint_line","",Qt::AutoColor), 3);
 
-    warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor));
-    errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
-    currentMarker = textEditor->markerDefine(QPixmap(":/markers/current_line","",Qt::AutoColor));
-
-    textEditor->setMarginMarkerMask(1,3);
-    textEditor->setMarginMarkerMask(2,4);
+    textEditor->setMarginMarkerMask(1,ERROR_MARK | WARNING_MARK);
+    textEditor->setMarginMarkerMask(2,CURRENT_MARK);
+    textEditor->setMarginMarkerMask(0,BREAKPOINT_MARK);
     textEditor->setMarginWidth(1, 15);
     textEditor->setMarginWidth(2, 20);
+    textEditor->setMarginWidth(0, 10);
+    textEditor->setMarginLineNumbers(0, false);
 
+    textEditor->setMarginSensitivity(0, true);
     textEditor->setMarginSensitivity(1, true);
+    textEditor->setMarginSensitivity(2, true);
+    textEditor->setMarginSensitivity(3, true);
     //textEditor->setMarginsBackgroundColor(QColor(190, 178, 157,255));
 
     file = new QFile();
@@ -219,6 +242,7 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionGoToLine, SIGNAL(triggered()), goToLine, 		SLOT(slotGoToLine()));
     connect(actionGoToMatchingBracket, SIGNAL(triggered()),textEditor ,SLOT(moveToMatchingBrace()));
     connect(actionCompile, 	SIGNAL(triggered()), this, 		SLOT(slotCompile()));
+    connect(actionRunDebugMode, SIGNAL(triggered(bool)), this, SLOT(slotRunDebugMode()));
     connect(actionRun, 	SIGNAL(triggered()),this,		SLOT(slotRun()));
     connect(actionCommon,	SIGNAL(triggered()), settings, 		SLOT(slotCommOptions()));
     connect(actionAbout, 	SIGNAL(triggered()),this,		SLOT(slotAbout()));
@@ -279,6 +303,10 @@ Kuzya::Kuzya(QWidget *parent)
 //    {
 //        this->openFile(qApp->argv()[qApp->argc()-1]);
 //    }
+    QString comp = settings->readDefaultCompiler(language);
+    QString compDir = settings->readCompilerLocation(language, comp);
+    QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
+    mGdbDebugger = new Gdb(gdbDir);
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
@@ -584,6 +612,7 @@ void Kuzya::slotNew(void)
     menuTemplates->setDisabled(true);
     actionCompile->setDisabled(false);
     actionRun->setDisabled(false);
+    actionRunDebugMode->setDisabled(false);
     languageComboBoxAction->setVisible(false);
 
     srcRecompiled  = false;
@@ -668,6 +697,26 @@ void Kuzya::setUndoRedoEnabled()
     actionRedo->setEnabled(textEditor->isRedoAvailable());
 }
 
+void Kuzya::slotRunDebugMode()
+{
+    if(recompile())
+    {
+        try
+        {
+            mGdbDebugger->start();
+            QString programPath = compiler->getProgramPath();
+            QString fullProgramPath = tr("%1.exe").arg(programPath);
+            fullProgramPath = fullProgramPath.replace("\\", "/");
+            mGdbDebugger->openProject(fullProgramPath);
+            mGdbDebugger->run();
+        }
+        catch(std::domain_error error)
+        {
+            tabWidget->setVisible(true);
+            addNotification(NTYPE_FAILING, error.what());
+        }
+    }
+}
 
 
 void Kuzya::refreshDialogSettings()
@@ -734,6 +783,7 @@ void Kuzya::refreshProfileSettings()
         refreshCompileModes();
         actionCompile->setDisabled(false);
         actionRun->setDisabled(false);
+        actionRunDebugMode->setDisabled(false);
 
         srcRecompiled = false;
 
@@ -915,17 +965,10 @@ void Kuzya::slotExit(void)
 **/
 void Kuzya::slotRun(void)
 {
-    if (fileName.isEmpty())
+    if(recompile())
     {
-        addNotification(NTYPE_FAILING, tr("No binary to run"));
-        return;
+        compiler->run();
     }
-    if (!srcRecompiled)
-    {
-        slotCompile();
-        compiler->waitForFinished(15000);
-    }
-    compiler->run();
 }
 
 /**
@@ -1100,16 +1143,35 @@ void Kuzya::slotUpdateWindowName(bool m)
 /**
 *******************************************************************************************************
 **/
-void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers)
+void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers modifier)
 {
-    if ((0 != textEditor->markersAtLine(line)) && (1 == margin))
-    {
-        QListWidgetItem *item = notificationList->findItems(QString(" %1)").arg(line+1), Qt::MatchContains).at(0);
-        textEditor->markerDeleteAll(currentMarker);
-        textEditor->markerAdd(line,currentMarker);
-        notificationList->setCurrentItem(item);
-        notificationList->setFocus();
-        statusBar()->showMessage(item->data(Kuzya::descriptionRole).toString());
+    if(modifier == Qt::KeyboardModifier::AltModifier)
+    { // breakpoints section
+        int bitMask = textEditor->markersAtLine(line);
+        if(bitMask & 1<<3)  //1<<3 = 0x4 - mask for breakpoint margin
+        {
+            textEditor->markerDelete(line, breakpointMarker);
+        }
+        else
+        {
+            textEditor->markerAdd(line, breakpointMarker);
+        }
+    }
+    else
+    { // errors section
+        if ((0 != textEditor->markersAtLine(line)) && (1 == margin))
+        {
+            auto listError = notificationList->findItems(QString(" %1)").arg(line+1), Qt::MatchContains);
+            if(!listError.isEmpty())
+            {
+                QListWidgetItem *item = listError.at(0);
+                textEditor->markerDeleteAll(currentMarker);
+                textEditor->markerAdd(line,currentMarker);
+                notificationList->setCurrentItem(item);
+                notificationList->setFocus();
+                statusBar()->showMessage(item->data(Kuzya::descriptionRole).toString());
+            }
+        }
     }
 }
 
@@ -1305,12 +1367,15 @@ void Kuzya::addNotification(int type, QString descr, bool attached, int line)
 ///***********************************************************************************************************///
 void Kuzya::removeAllNotifications()
 {
-    textEditor->markerDeleteAll();
+    textEditor->markerDeleteAll(errorMarker);
+    textEditor->markerDeleteAll(warningMarker);
+    textEditor->markerDeleteAll(currentMarker);
     notificationList->clear();
 }
 ///***********************************************************************************************************///
 void Kuzya::slotShowNotificationList(bool visible)
 {
+    tabWidget->setVisible(visible);
     notificationList->setVisible(visible);
     actionNotificationList->setChecked(visible);
 }
@@ -1521,6 +1586,7 @@ void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
     actionRedo->setIconVisibleInMenu(isVisible);
     actionReplace->setIconVisibleInMenu(isVisible);
     actionRun->setIconVisibleInMenu(isVisible);
+    actionRunDebugMode->setIconVisibleInMenu(isVisible);
     actionSave->setIconVisibleInMenu(isVisible);
     actionSave_as->setIconVisibleInMenu(isVisible);
     actionSelect_all->setIconVisibleInMenu(isVisible);
@@ -1532,4 +1598,19 @@ void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
 
 
 
+}
+
+bool Kuzya::recompile()
+{
+    if (fileName.isEmpty())
+    {
+        addNotification(NTYPE_FAILING, tr("No binary to run"));
+        return false;
+    }
+    if (!srcRecompiled)
+    {
+        slotCompile();
+        compiler->waitForFinished(15000);
+    }
+    return true;
 }
