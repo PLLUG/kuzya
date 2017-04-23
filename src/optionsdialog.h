@@ -83,6 +83,7 @@ private slots:
     void slotResetCompilerOptions();
     void slotChangsLocalizationLanguage(QString);
     void slotChangeOptionPage(int);
+    void slotChangeDebuggerLocation();
 
 private:
     QTranslator* trans_ua;
