@@ -686,6 +686,7 @@ void Kuzya::setUndoRedoEnabled()
 
 void Kuzya::slotRunDebugMode()
 {
+    compiler->setCompilerMode(Compiler::DEBUG);
     if(recompile())
     {
         try
