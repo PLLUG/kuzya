@@ -126,7 +126,6 @@ Kuzya::Kuzya(QWidget *parent)
 
     notificationList = new QListWidget(this);
     notificationList->setObjectName("notificationList");
-    notificationList->setVisible(false);
     mOutputTabWidget->addTab(notificationList, "Output");
     mOutputTabWidget->setVisible(false);
     //adds debug tab to tabWidget
