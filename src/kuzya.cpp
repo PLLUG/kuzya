@@ -122,14 +122,18 @@ Kuzya::Kuzya(QWidget *parent)
     textEditor = new QsciScintilla(this);
     textEditor->setEolMode(QsciScintilla::EolUnix);
 
+    tabWidget= new QTabWidget(this);
+
     notificationList = new QListWidget(this);
     notificationList->setObjectName("notificationList");
     notificationList->setVisible(false);
+    tabWidget->addTab(notificationList, "Output");
+    tabWidget->setVisible(false);
 
     QSplitter *splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);
     splitter->addWidget(textEditor);
-    splitter->addWidget(notificationList);
+    splitter->addWidget(tabWidget);
     splitter->setChildrenCollapsible(false);
     splitter->setStretchFactor(0, 5);
     splitter->setStretchFactor(1, 2);
@@ -698,7 +702,7 @@ void Kuzya::slotRunDebugMode()
         }
         catch(std::domain_error error)
         {
-            notificationList->setVisible(true);
+            tabWidget->setVisible(true);
             addNotification(NTYPE_FAILING, error.what());
         }
     }
@@ -1361,6 +1365,8 @@ void Kuzya::removeAllNotifications()
 ///***********************************************************************************************************///
 void Kuzya::slotShowNotificationList(bool visible)
 {
+    qDebug()<<"output panel";
+    tabWidget->setVisible(visible);
     notificationList->setVisible(visible);
     actionNotificationList->setChecked(visible);
 }
