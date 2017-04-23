@@ -42,7 +42,7 @@
 #include <QFile>
 #include <QVBoxLayout>
 #include <QDialog>
-
+#include <QTreeWidget>
 
 #include "gotolinedialog.h"
 #include "finddialog.h"
@@ -122,14 +122,27 @@ Kuzya::Kuzya(QWidget *parent)
     textEditor = new QsciScintilla(this);
     textEditor->setEolMode(QsciScintilla::EolUnix);
 
+    mOutputTabWidget= new QTabWidget(this);
+
     notificationList = new QListWidget(this);
     notificationList->setObjectName("notificationList");
-    notificationList->setVisible(false);
+    mOutputTabWidget->addTab(notificationList, "Output");
+    mOutputTabWidget->setVisible(false);
+    //adds debug tab to tabWidget
+    QLabel *innerLabel = new QLabel(this);
+    QVBoxLayout *innerLabelLayout = new QVBoxLayout(this);
+    innerLabel->setLayout(innerLabelLayout);
+    QToolBar *debugButtons = new QToolBar(this);
+    mWatchLocalsWidget = new QTreeWidget(this);
+    innerLabelLayout->addWidget(debugButtons);
+    innerLabelLayout->addWidget(mWatchLocalsWidget);
+    mOutputTabWidget->addTab(innerLabel, "Debug");
+
 
     QSplitter *splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);
     splitter->addWidget(textEditor);
-    splitter->addWidget(notificationList);
+    splitter->addWidget(mOutputTabWidget);
     splitter->setChildrenCollapsible(false);
     splitter->setStretchFactor(0, 5);
     splitter->setStretchFactor(1, 2);
@@ -698,7 +711,7 @@ void Kuzya::slotRunDebugMode()
         }
         catch(std::domain_error error)
         {
-            notificationList->setVisible(true);
+            mOutputTabWidget->setVisible(true);
             addNotification(NTYPE_FAILING, error.what());
         }
     }
@@ -1361,7 +1374,7 @@ void Kuzya::removeAllNotifications()
 ///***********************************************************************************************************///
 void Kuzya::slotShowNotificationList(bool visible)
 {
-    notificationList->setVisible(visible);
+    mOutputTabWidget->setVisible(visible);
     actionNotificationList->setChecked(visible);
 }
 ///***********************************************************************************************************///

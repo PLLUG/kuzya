@@ -52,6 +52,8 @@ class Translator;
 class QsciLexer;
 class QFileDialog;
 class Gdb;
+class QTabWidget;
+class QTreeWidget;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -173,6 +175,8 @@ private:
         QFile *file;
         QString language; //curren programing language
         QsciScintilla* textEditor;
+        QTabWidget *mOutputTabWidget;
+        QTreeWidget* mWatchLocalsWidget;
         QListWidget* notificationList;
         QString fileName;
         QString DefaultDir;
