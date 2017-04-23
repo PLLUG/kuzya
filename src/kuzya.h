@@ -175,8 +175,8 @@ private:
         QFile *file;
         QString language; //curren programing language
         QsciScintilla* textEditor;
-        QTabWidget *tabWidget;
-        QTreeWidget* mTreeViewWidget;
+        QTabWidget *mOutputTabWidget;
+        QTreeWidget* mWatchLocalsWidget;
         QListWidget* notificationList;
         QString fileName;
         QString DefaultDir;

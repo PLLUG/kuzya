@@ -122,28 +122,28 @@ Kuzya::Kuzya(QWidget *parent)
     textEditor = new QsciScintilla(this);
     textEditor->setEolMode(QsciScintilla::EolUnix);
 
-    tabWidget= new QTabWidget(this);
+    mOutputTabWidget= new QTabWidget(this);
 
     notificationList = new QListWidget(this);
     notificationList->setObjectName("notificationList");
     notificationList->setVisible(false);
-    tabWidget->addTab(notificationList, "Output");
-    tabWidget->setVisible(false);
+    mOutputTabWidget->addTab(notificationList, "Output");
+    mOutputTabWidget->setVisible(false);
     //adds debug tab to tabWidget
     QLabel *innerLabel = new QLabel(this);
     QVBoxLayout *innerLabelLayout = new QVBoxLayout(this);
     innerLabel->setLayout(innerLabelLayout);
     QToolBar *debugButtons = new QToolBar(this);
-    mTreeViewWidget = new QTreeWidget(this);
+    mWatchLocalsWidget = new QTreeWidget(this);
     innerLabelLayout->addWidget(debugButtons);
-    innerLabelLayout->addWidget(mTreeViewWidget);
-    tabWidget->addTab(innerLabel, "Debug");
+    innerLabelLayout->addWidget(mWatchLocalsWidget);
+    mOutputTabWidget->addTab(innerLabel, "Debug");
 
 
     QSplitter *splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);
     splitter->addWidget(textEditor);
-    splitter->addWidget(tabWidget);
+    splitter->addWidget(mOutputTabWidget);
     splitter->setChildrenCollapsible(false);
     splitter->setStretchFactor(0, 5);
     splitter->setStretchFactor(1, 2);
@@ -712,7 +712,7 @@ void Kuzya::slotRunDebugMode()
         }
         catch(std::domain_error error)
         {
-            tabWidget->setVisible(true);
+            mOutputTabWidget->setVisible(true);
             addNotification(NTYPE_FAILING, error.what());
         }
     }
@@ -1375,8 +1375,7 @@ void Kuzya::removeAllNotifications()
 ///***********************************************************************************************************///
 void Kuzya::slotShowNotificationList(bool visible)
 {
-    tabWidget->setVisible(visible);
-    notificationList->setVisible(visible);
+    mOutputTabWidget->setVisible(visible);
     actionNotificationList->setChecked(visible);
 }
 ///***********************************************************************************************************///
