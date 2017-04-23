@@ -321,6 +321,9 @@ QString Compiler::getCompilerParams()
     case DYNAMIC_LIB:
         param = compilerProfile->value("dynamic_lib","").toString();
         break;
+    case DEBUG:
+        param = compilerProfile->value("debug", "").toString();
+        break;
     default:
         param = "";
     }

@@ -306,6 +306,7 @@ Kuzya::Kuzya(QWidget *parent)
     QString compDir = settings->readCompilerLocation(language, comp);
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
     mGdbDebugger = new Gdb(gdbDir);
+    mGdbDebugger->start();
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
@@ -698,15 +699,33 @@ void Kuzya::setUndoRedoEnabled()
 
 void Kuzya::slotRunDebugMode()
 {
+    compiler->setCompilerMode(Compiler::DEBUG);
     if(recompile())
     {
         try
         {
-            mGdbDebugger->start();
+            mGdbDebugger->stopExecuting();
+            mGdbDebugger->waitForReadyRead(3000);
             QString programPath = compiler->getProgramPath();
             QString fullProgramPath = tr("%1.exe").arg(programPath);
             fullProgramPath = fullProgramPath.replace("\\", "/");
             mGdbDebugger->openProject(fullProgramPath);
+            mGdbDebugger->globalUpdate();   //update to get relevant breakpoints
+            auto oldBreakpoints = mGdbDebugger->getBreakpoints();
+            for(Breakpoint i : oldBreakpoints)
+            { // remove all breakpoints from gdb
+                mGdbDebugger->clearBreakPoint(i.getLine());
+            }
+            int breakpoinLine = 0;
+            do
+            { // set new breakpoints
+                breakpoinLine = textEditor->markerFindNext(breakpoinLine+1, BREAKPOINT_MARK);
+                if(breakpoinLine != -1)
+                { // BE CAREFULL! set breakpoints to -1 may cause undefined behaviour, breakpoints may be everywhere
+                    mGdbDebugger->setBreakPoint(breakpoinLine+1);
+                }
+            }
+            while(breakpoinLine != -1);
             mGdbDebugger->run();
         }
         catch(std::domain_error error)
