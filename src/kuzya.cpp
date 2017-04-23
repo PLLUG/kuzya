@@ -836,6 +836,12 @@ void Kuzya::refreshProfileSettings()
     }
 }
 
+void Kuzya::updateDebugger(const QString &debuggerLocation)
+{
+    mGdbDebugger->kill();
+    mGdbDebugger->setGdbPath(debuggerLocation);
+}
+
 /**
 *******************************************************************************************************
 **/

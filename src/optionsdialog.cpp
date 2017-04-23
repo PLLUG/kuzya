@@ -216,6 +216,10 @@ void OptionsDialog::writeSettings(void)
     settings->endGroup();
     settings->endGroup();
     settings->sync();
+    ///-----------------------------DEBUGGER_SETTINGS-------------------------------------
+    settings->beginGroup("debugger_settings");
+    settings->setValue("debugger_location", debuggerFileLocation->text());
+    settings->endGroup();
 }
 
 
@@ -362,8 +366,9 @@ void OptionsDialog::readODWSettings()
     settings->endGroup();
     ///--------------------------DEBUGGER_SETTING------------------------------------------
     settings->beginGroup("debugger_settings");
-    QString debuggerLocation = settings->value("debugger_location", false).toString();
-    debuggerFileLocation->setText(debuggerLocation);
+    QString debuggerLocationValue = settings->value("debugger_location", false).toString();
+    debuggerLocationValue = debuggerLocationValue == "false" ? QString() : debuggerLocationValue;
+    debuggerFileLocation->setText(debuggerLocationValue);
     settings->endGroup();
 
     ///-------------------------------------------------------------------------------------
@@ -425,12 +430,11 @@ void OptionsDialog::slotApply(void)
     writeSettings();
     readODWSettings();
     mw->refreshProfileSettings();
+    mw->updateDebugger(debuggerFileLocation->text());
 }
 void OptionsDialog::slotOk(void)
 {
-    writeSettings();
-    readODWSettings();
-    mw->refreshProfileSettings();
+    slotApply();
     close();
 }
 void OptionsDialog::slotDefaultAll(void)
@@ -610,5 +614,9 @@ void OptionsDialog::slotChangeOptionPage(int pIndex)
 void OptionsDialog::slotChangeDebuggerLocation()
 {
     QString filter = "*.exe";
-    QFileDialog::getOpenFileName(this, "Select debugger...", QString(), filter, &filter);
+    QString newLocation = QFileDialog::getOpenFileName(this, "Select debugger...", QString(), filter, &filter, QFileDialog::DontResolveSymlinks);
+    if(!newLocation.isEmpty())
+    {
+        debuggerFileLocation->setText(newLocation);
+    }
 }

@@ -20,6 +20,10 @@ void Gdb::start(const QStringList &arguments, QIODevice::OpenMode mode)
     if(!QFile::exists(mGdbFile.fileName()))
     {
         QString message = tr("Gdb not found at %1").arg(mGdbFile.fileName());
+        if(mGdbFile.fileName().isEmpty())
+        {
+            message = "Gdb is not configurated";
+        }
         throw std::domain_error(message.toStdString());
     }
     QProcess::start(mGdbFile.fileName(), arguments, mode);

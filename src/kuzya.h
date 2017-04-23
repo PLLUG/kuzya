@@ -106,6 +106,7 @@ public:
 
         void refreshProfileSettings();
         void LoadTemplates(QString);
+        void updateDebugger(const QString& debuggerLocation);
 
 protected:
 
