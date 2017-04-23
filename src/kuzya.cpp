@@ -285,15 +285,10 @@ Kuzya::Kuzya(QWidget *parent)
     textEditorShortcut->setKey(Qt::CTRL+Qt::Key_Up);
     connect(textEditorShortcut, SIGNAL(activated()), textEditor, SLOT(setFocus()));
 
-//    if (qApp->argc() > 1)
-//    {
-//        this->openFile(qApp->argv()[qApp->argc()-1]);
-//    }
     QString comp = settings->readDefaultCompiler(language);
     QString compDir = settings->readCompilerLocation(language, comp);
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
     mGdbDebugger = new Gdb(gdbDir);
-    mGdbDebugger->start();
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
@@ -691,6 +686,10 @@ void Kuzya::slotRunDebugMode()
     {
         try
         {
+            if(mGdbDebugger->state() == QProcess::NotRunning)
+            {
+                mGdbDebugger->start();
+            }
             mGdbDebugger->stopExecuting();
             mGdbDebugger->waitForReadyRead(3000);
             QString programPath = compiler->getProgramPath();
