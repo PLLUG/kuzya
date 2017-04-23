@@ -51,6 +51,9 @@ template <typename T> class QList;
 class Translator;
 class QsciLexer;
 class QFileDialog;
+class Gdb;
+class QTabWidget;
+class QTreeWidget;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -64,6 +67,10 @@ public:
 
     enum notificationTypeEnum {NTYPE_ERROR, NTYPE_WARNING, NTYPE_SUCCESS,
                                NTYPE_FAILING, NTYPE_WAIT, NTYPE_INFO, NTYPE_COMPILER};
+    enum marginMarkerMaskTypeEnum {WARNING_MARK = 0x1,
+                                ERROR_MARK = 0x2,
+                                CURRENT_MARK = 0x4,
+                                BREAKPOINT_MARK = 0x8};
 
     Kuzya(QWidget *parent = 0);
     ~Kuzya();
@@ -144,7 +151,7 @@ private slots:
         void slotSetFileSuffix(QStringList);
 
         void setUndoRedoEnabled();
-
+        void slotRunDebugMode();
 
 protected:
         //*DRAG AND DROP
@@ -162,11 +169,14 @@ private:
         void refreshCompileModes();
         void refreshDialogSettings();
         void setAllIconsVisibleInMenu(bool isVisible);
+        bool recompile();
 
 private:
         QFile *file;
         QString language; //curren programing language
         QsciScintilla* textEditor;
+        QTabWidget *mOutputTabWidget;
+        QTreeWidget* mWatchLocalsWidget;
         QListWidget* notificationList;
         QString fileName;
         QString DefaultDir;
@@ -176,6 +186,7 @@ private:
         Compiler *compiler;
         QLabel* statusLabel;
         int errorMarker, warningMarker, currentMarker;
+        int breakpointMarker;
         QVector <QAction*> ActOpenRecentFileVector;
         QSignalMapper *signalMapper;
         int MaxCount_RFileList;
@@ -204,7 +215,7 @@ private:
         QFileDialog *fileDialog;
 
         QToolBar *toolBar;
+        Gdb* mGdbDebugger;
 };
 
 #endif
-
