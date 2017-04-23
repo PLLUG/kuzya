@@ -53,6 +53,7 @@ class QsciLexer;
 class QFileDialog;
 class Gdb;
 class QTabWidget;
+class QTreeWidget;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -175,6 +176,7 @@ private:
         QString language; //curren programing language
         QsciScintilla* textEditor;
         QTabWidget *tabWidget;
+        QTreeWidget* mTreeViewWidget;
         QListWidget* notificationList;
         QString fileName;
         QString DefaultDir;

@@ -42,7 +42,7 @@
 #include <QFile>
 #include <QVBoxLayout>
 #include <QDialog>
-
+# include <QTreeWidget>
 
 #include "gotolinedialog.h"
 #include "finddialog.h"
@@ -129,6 +129,16 @@ Kuzya::Kuzya(QWidget *parent)
     notificationList->setVisible(false);
     tabWidget->addTab(notificationList, "Output");
     tabWidget->setVisible(false);
+
+    QLabel *innerLabel = new QLabel(this);
+    QVBoxLayout *innerLabelLayout = new QVBoxLayout(this);
+    innerLabel->setLayout(innerLabelLayout);
+    QToolBar *debugButtons = new QToolBar(this);
+    mTreeViewWidget = new QTreeWidget(this);
+    innerLabelLayout->addWidget(debugButtons);
+    innerLabelLayout->addWidget(mTreeViewWidget);
+    tabWidget->addTab(innerLabel, "Debug");
+
 
     QSplitter *splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);
