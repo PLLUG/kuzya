@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>680</width>
-    <height>529</height>
+    <height>553</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -27,8 +27,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>680</width>
-    <height>530</height>
+    <width>724</width>
+    <height>606</height>
    </size>
   </property>
   <property name="palette">
@@ -994,19 +994,6 @@ and Fonts</string>
                </property>
               </spacer>
              </item>
-             <item row="5" column="0">
-              <widget class="QLabel" name="label_3">
-               <property name="font">
-                <font>
-                 <weight>50</weight>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string>Compiler options</string>
-               </property>
-              </widget>
-             </item>
              <item row="3" column="0">
               <widget class="QLabel" name="compilerLocationLabel">
                <property name="font">
@@ -1021,34 +1008,18 @@ and Fonts</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="0" colspan="2">
-              <layout class="QHBoxLayout" name="horizontalLayout_6">
-               <item>
-                <widget class="QLabel" name="label_30">
-                 <property name="font">
-                  <font>
-                   <pointsize>10</pointsize>
-                   <weight>50</weight>
-                   <bold>false</bold>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Compiler  :</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="compilerComboBox">
-                 <property name="font">
-                  <font>
-                   <pointsize>10</pointsize>
-                   <weight>50</weight>
-                   <bold>false</bold>
-                  </font>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+             <item row="7" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="font">
+                <font>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Compiler options</string>
+               </property>
+              </widget>
              </item>
              <item row="2" column="1">
               <widget class="QLabel" name="compilerInfo">
@@ -1083,6 +1054,35 @@ p, li { white-space: pre-wrap; }
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
+             </item>
+             <item row="1" column="0" colspan="2">
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QLabel" name="label_30">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Compiler  :</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="compilerComboBox">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                  </font>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
              <item row="0" column="0" colspan="2">
               <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -1145,7 +1145,7 @@ p, li { white-space: pre-wrap; }
                </item>
               </layout>
              </item>
-             <item row="7" column="0" colspan="2">
+             <item row="9" column="0" colspan="2">
               <widget class="QPlainTextEdit" name="compilerOptionsEdit">
                <property name="font">
                 <font>
@@ -1168,7 +1168,7 @@ p, li { white-space: pre-wrap; }
                </property>
               </widget>
              </item>
-             <item row="8" column="0" colspan="2">
+             <item row="10" column="0" colspan="2">
               <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,0,0">
                <item>
                 <widget class="QPushButton" name="defaultUsePushButton">
@@ -1208,6 +1208,26 @@ p, li { white-space: pre-wrap; }
                  </property>
                  <property name="text">
                   <string>Reset settings</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="6" column="0" colspan="2">
+              <layout class="QHBoxLayout" name="horizontalLayout_9">
+               <item>
+                <widget class="QLineEdit" name="debuggerFileLocation"/>
+               </item>
+               <item>
+                <widget class="QToolButton" name="toolButton">
+                 <property name="font">
+                  <font>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>...</string>
                  </property>
                 </widget>
                </item>
