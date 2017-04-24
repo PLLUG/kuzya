@@ -281,15 +281,16 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionObjectMode, SIGNAL(triggered()), this,            SLOT(slotObjectMode()));
     connect(actionStaticLibMode, SIGNAL(triggered()), this,         SLOT(slotStaticLibMode()));
     connect(actionDynamicLibMode, SIGNAL(triggered()), this,        SLOT(slotDynamicLibMode()));
-
-
+    connect(actionStartDebugging, SIGNAL(triggered(bool)), this, SLOT(slotRunDebugMode()));
+    connect(actionStepOver, SIGNAL(triggered(bool)), mGdbDebugger, SLOT(stepOver()));
+    connect(actionStepIn, SIGNAL(triggered(bool)), mGdbDebugger, SLOT(stepIn()));
+    connect(actionStepOut, SIGNAL(triggered(bool)), mGdbDebugger, SLOT(stepOut());
+    connect(actionContinueDebugging, SIGNAL(triggered(bool)), mGdbDebugger, SLOT(stepContinue()));
+    connect(actionStopDebugging, SIGNAL(triggered(bool)), mGdbDebugger, SLOT(stopExecuting()));
 
 
 
     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoRedoEnabled()));
-
-
-
 
 
     connect(textEditor,	SIGNAL(modificationChanged(bool)), this,SLOT(slotModificationChanged(bool)));
@@ -858,6 +859,12 @@ void Kuzya::refreshProfileSettings()
         connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
         languageComboBoxAction->setVisible(true);
     }
+}
+
+void Kuzya::updateDebugger(const QString &debuggerLocation)
+{
+    mGdbDebugger->kill();
+    mGdbDebugger->setGdbPath(debuggerLocation);
 }
 
 /**
