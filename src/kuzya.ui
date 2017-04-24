@@ -558,12 +558,26 @@
     <addaction name="separator"/>
     <addaction name="actionNotificationList"/>
    </widget>
+   <widget class="QMenu" name="menuDebug">
+    <property name="title">
+     <string>Debug</string>
+    </property>
+    <addaction name="actionStartDebugging"/>
+    <addaction name="separator"/>
+    <addaction name="actionStepOver"/>
+    <addaction name="actionStepIn"/>
+    <addaction name="actionStepOut"/>
+    <addaction name="actionContinueDebugging"/>
+    <addaction name="separator"/>
+    <addaction name="actionStopDebugging"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
    <addaction name="menuTemplates"/>
    <addaction name="menuSettings"/>
    <addaction name="menuBuild"/>
+   <addaction name="menuDebug"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -951,6 +965,60 @@
    </property>
    <property name="text">
     <string>Run in Debug Mode</string>
+   </property>
+  </action>
+  <action name="actionStartDebugging">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/menu/start_debug</normaloff>:/menu/start_debug</iconset>
+   </property>
+   <property name="text">
+    <string>Start Debugging</string>
+   </property>
+  </action>
+  <action name="actionStepOver">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/debug/images/step_out.png</normaloff>:/debug/images/step_out.png</iconset>
+   </property>
+   <property name="text">
+    <string>Step Over</string>
+   </property>
+  </action>
+  <action name="actionStepIn">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/debug/images/step_in.png</normaloff>:/debug/images/step_in.png</iconset>
+   </property>
+   <property name="text">
+    <string>Step In</string>
+   </property>
+  </action>
+  <action name="actionStepOut">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/debug/images/step_out.png</normaloff>:/debug/images/step_out.png</iconset>
+   </property>
+   <property name="text">
+    <string>Step Out</string>
+   </property>
+  </action>
+  <action name="actionContinueDebugging">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/debug/images/continue_debug.png</normaloff>:/debug/images/continue_debug.png</iconset>
+   </property>
+   <property name="text">
+    <string>Continue Debugging</string>
+   </property>
+  </action>
+  <action name="actionStopDebugging">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/debug/images/stop_debug.png</normaloff>:/debug/images/stop_debug.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stop Debugging</string>
    </property>
   </action>
  </widget>

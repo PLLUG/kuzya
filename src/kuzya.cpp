@@ -122,7 +122,7 @@ Kuzya::Kuzya(QWidget *parent)
     textEditor = new QsciScintilla(this);
     textEditor->setEolMode(QsciScintilla::EolUnix);
 
-    mOutputTabWidget= new QTabWidget(this);
+    mOutputTabWidget = new QTabWidget(this);
 
     notificationList = new QListWidget(this);
     notificationList->setObjectName("notificationList");
@@ -130,6 +130,7 @@ Kuzya::Kuzya(QWidget *parent)
     mOutputTabWidget->setVisible(false);
     //adds debug tab to tabWidget
     QLabel *innerLabel = new QLabel(this);
+    innerLabel->setAutoFillBackground(true);
     QVBoxLayout *innerLabelLayout = new QVBoxLayout(this);
     innerLabel->setLayout(innerLabelLayout);
     QToolBar *debugButtons = new QToolBar(this);
@@ -137,6 +138,17 @@ Kuzya::Kuzya(QWidget *parent)
     innerLabelLayout->addWidget(debugButtons);
     innerLabelLayout->addWidget(mWatchLocalsWidget);
     mOutputTabWidget->addTab(innerLabel, "Debug");
+
+    debugButtons->setIconSize(QSize(15,15));
+    debugButtons->addAction(actionStartDebugging);
+    debugButtons->addSeparator();
+    debugButtons->addAction(actionStepOver);
+    debugButtons->addAction(actionStepIn);
+    debugButtons->addAction(actionStepOut);
+    debugButtons->addAction(actionContinueDebugging);
+    debugButtons->addSeparator();
+    debugButtons->addAction(actionStopDebugging);
+    debugButtons->setAutoFillBackground(true);
 
 
     QSplitter *splitter = new QSplitter(this);
