@@ -46,6 +46,11 @@ void Gdb::readStdOutput()
 {   //Reads all standart output from GDB
     mBuffer = QProcess::readAll();
     QRegExp errorMatch("\\^error");
+    QRegExp hitBreakpoint("\\*stopped,reason=\"breakpoint-hit\"");
+    if(hitBreakpoint.indexIn(mBuffer) != -1)
+    {
+        emit signalHitBreakpoint(getCurrentLine());
+    }
     if(errorMatch.indexIn(mBuffer) != -1)
     {
         QRegExp errorMsg("msg=[\\w\\s\"]+");
