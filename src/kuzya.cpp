@@ -273,8 +273,6 @@ Kuzya::Kuzya(QWidget *parent)
 
 
 
-
-
     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoRedoEnabled()));
 
 
@@ -847,6 +845,12 @@ void Kuzya::refreshProfileSettings()
         connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
         languageComboBoxAction->setVisible(true);
     }
+}
+
+void Kuzya::updateDebugger(const QString &debuggerLocation)
+{
+    mGdbDebugger->kill();
+    mGdbDebugger->setGdbPath(debuggerLocation);
 }
 
 /**
