@@ -1151,7 +1151,7 @@ void Kuzya::slotUpdateWindowName(bool m)
 **/
 void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers modifier)
 {
-    if(modifier == Qt::KeyboardModifier::AltModifier && line+1 < textEditor->lines())
+    if(modifier == Qt::KeyboardModifier::AltModifier)
     { // breakpoints section
         int bitMask = textEditor->markersAtLine(line);
         if(bitMask & 1<<3)  //1<<3 = 0x4 - mask for breakpoint margin
