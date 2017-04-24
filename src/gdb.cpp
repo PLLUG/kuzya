@@ -53,13 +53,9 @@ void Gdb::readStdOutput()
         int line = -1;
         if(lineMacth.indexIn(mBuffer) != -1)
         {
-            QString lineString = lineMacth.cap();
-            qDebug() << "Captured string, which must cntain line number: " << lineString;
-            QStringList splittedLine = lineString.split("\"");
-            QString lineNumber = splittedLine[1];
-            line = lineNumber.toInt();
+            QString lineString = lineMacth.cap(); // line="$_SOME_LINE_$"
+            line = lineString.split("\"")[1].toInt(); // gets line number
         }
-
         emit signalHitBreakpoint(line);
     }
     if(errorMatch.indexIn(mBuffer) != -1)
