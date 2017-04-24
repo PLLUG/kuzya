@@ -216,7 +216,7 @@ void Compiler::loadProfile(QString lang, QString profile)
     if (QString::Null() == profPath) return;
 
     compilerProfile = new QSettings(profPath, QSettings::IniFormat);
-    compileMode = DEFAULT;
+//    compileMode = DEFAULT;
 }
 
 void Compiler::setOptions(QString str)

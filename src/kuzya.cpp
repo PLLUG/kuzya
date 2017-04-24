@@ -634,7 +634,7 @@ void Kuzya::slotOpen(void)
 void Kuzya::refreshCompileModes()
 {
     actionDefaultMode->setChecked(true);
-    compiler->setCompilerMode(Compiler::DEFAULT);
+//    compiler->setCompilerMode(Compiler::DEFAULT);
     actionAlternativeMode->setVisible(compiler->isModeAvailable(Compiler::ALTERNATIVE));
     actionObjectMode->setVisible(compiler->isModeAvailable(Compiler::OBJECT));
     actionStaticLibMode->setVisible(compiler->isModeAvailable(Compiler::STATIC_LIB));
@@ -682,6 +682,12 @@ void Kuzya::setUndoRedoEnabled()
 void Kuzya::slotRunDebugMode()
 {
     compiler->setCompilerMode(Compiler::DEBUG);
+    if(!srcRecompiled)
+    {
+        addNotification(NTYPE_WAIT, "Terminating program...");
+        mGdbDebugger->stopExecuting();
+        mGdbDebugger->waitForReadyRead();
+    }
     if(recompile())
     {
         try
@@ -690,7 +696,6 @@ void Kuzya::slotRunDebugMode()
             {
                 mGdbDebugger->start();
             }
-            mGdbDebugger->stopExecuting();
             mGdbDebugger->waitForReadyRead(3000);
             QString programPath = compiler->getProgramPath();
             QString fullProgramPath = tr("%1.exe").arg(programPath);
@@ -705,6 +710,7 @@ void Kuzya::slotRunDebugMode()
                 if(breakpoinLine != -1)
                 { // BE CAREFULL! set breakpoints to -1 may cause undefined behaviour, breakpoints may be everywhere
                     mGdbDebugger->setBreakPoint(breakpoinLine+1);
+                    mGdbDebugger->waitForReadyRead();
                 }
             }
             while(breakpoinLine != -1);
