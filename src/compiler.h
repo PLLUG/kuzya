@@ -32,7 +32,7 @@ class Compiler : public QProcess
 	Q_OBJECT
 public:
         enum endStatusEnum{STATUS_NOERROR, STATUS_ERROR, STATUS_FAILED_TO_START, STATUS_CRASHED};
-        enum compileModeEnum{DEFAULT, ALTERNATIVE, OBJECT, STATIC_LIB, DYNAMIC_LIB};
+        enum compileModeEnum{DEFAULT, ALTERNATIVE, OBJECT, STATIC_LIB, DYNAMIC_LIB, DEBUG};
 
 	struct compilerError
 	{
