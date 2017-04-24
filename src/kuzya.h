@@ -153,6 +153,7 @@ private slots:
 
         void setUndoRedoEnabled();
         void slotRunDebugMode();
+        void slotDebuggerHittedBreakpoint(int line);
 
 protected:
         //*DRAG AND DROP

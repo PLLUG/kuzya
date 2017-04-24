@@ -305,6 +305,8 @@ Kuzya::Kuzya(QWidget *parent)
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
     mGdbDebugger = new Gdb(gdbDir);
 
+    connect(mGdbDebugger, SIGNAL(signalHitBreakpoint(int)), this, SLOT(slotDebuggerHittedBreakpoint(int)));
+
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
     setUnifiedTitleAndToolBarOnMac(true);
@@ -713,6 +715,13 @@ void Kuzya::slotRunDebugMode()
             addNotification(NTYPE_FAILING, error.what());
         }
     }
+}
+
+void Kuzya::slotDebuggerHittedBreakpoint(int line)
+{
+    QMessageBox msg;
+    msg.setText(tr("Debugger hitted breakpoint at line: %1").arg(QString::number(line)));
+    msg.exec();
 }
 
 
