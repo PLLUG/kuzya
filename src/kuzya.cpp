@@ -281,12 +281,7 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionObjectMode, SIGNAL(triggered()), this,            SLOT(slotObjectMode()));
     connect(actionStaticLibMode, SIGNAL(triggered()), this,         SLOT(slotStaticLibMode()));
     connect(actionDynamicLibMode, SIGNAL(triggered()), this,        SLOT(slotDynamicLibMode()));
-    connect(actionStartDebugging, SIGNAL(triggered(bool)), this, SLOT(slotRunDebugMode()));
-    connect(actionStepOver, SIGNAL(triggered(bool)), mGdbDebugger, SLOT(stepOver()));
-    connect(actionStepIn, SIGNAL(triggered(bool)), mGdbDebugger, SLOT(stepIn()));
-    connect(actionStepOut, SIGNAL(triggered(bool)), mGdbDebugger, SLOT(stepOut()));
-    connect(actionContinueDebugging, SIGNAL(triggered(bool)), mGdbDebugger, SLOT(stepContinue()));
-    connect(actionStopDebugging, SIGNAL(triggered(bool)), mGdbDebugger, SLOT(stopExecuting()));
+    connect(actionStartDebugging, SIGNAL(triggered()), this, SLOT(slotRunDebugMode()));
 
 
 
@@ -318,6 +313,13 @@ Kuzya::Kuzya(QWidget *parent)
     QString compDir = settings->readCompilerLocation(language, comp);
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
     mGdbDebugger = new Gdb(gdbDir);
+
+    /* connect debug actions */
+    connect(actionStepOver, SIGNAL(triggered()), mGdbDebugger, SLOT(stepOver()));
+    connect(actionStepIn, SIGNAL(triggered()), mGdbDebugger, SLOT(stepIn()));
+    connect(actionStepOut, SIGNAL(triggered()), mGdbDebugger, SLOT(stepOut()));
+    connect(actionContinueDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stepContinue()));
+    connect(actionStopDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stopExecuting()));
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
