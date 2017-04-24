@@ -48,6 +48,7 @@ public slots:
 signals:
     void signalLocalVarRecieved(const QString&);
     void signalErrorOccured(const QString&);
+    void signalHitBreakpoint(int line);
 private:
     QFile mGdbFile;
     QString mErrorMessage;
