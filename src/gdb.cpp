@@ -49,7 +49,18 @@ void Gdb::readStdOutput()
     QRegExp hitBreakpoint("\\*stopped,reason=\"breakpoint-hit\"");
     if(hitBreakpoint.indexIn(mBuffer) != -1)
     {
-        emit signalHitBreakpoint(getCurrentLine());
+        QRegExp lineMacth("line=\"\\d+\"");
+        int line = -1;
+        if(lineMacth.indexIn(mBuffer) != -1)
+        {
+            QString lineString = lineMacth.cap();
+            qDebug() << "Captured string, which must cntain line number: " << lineString;
+            QStringList splittedLine = lineString.split("\"");
+            QString lineNumber = splittedLine[1];
+            line = lineNumber.toInt();
+        }
+
+        emit signalHitBreakpoint(line);
     }
     if(errorMatch.indexIn(mBuffer) != -1)
     {
