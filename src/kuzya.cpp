@@ -139,7 +139,7 @@ Kuzya::Kuzya(QWidget *parent)
     innerLabelLayout->addWidget(mWatchLocalsWidget);
     mOutputTabWidget->addTab(innerLabel, "Debug");
 
-    debugButtons->setIconSize(QSize(15,15));
+    debugButtons->setIconSize(QSize(30,15));
     debugButtons->addAction(actionStartDebugging);
     debugButtons->addSeparator();
     debugButtons->addAction(actionStepOver);
@@ -149,7 +149,6 @@ Kuzya::Kuzya(QWidget *parent)
     debugButtons->addSeparator();
     debugButtons->addAction(actionStopDebugging);
     debugButtons->setAutoFillBackground(true);
-
 
     QSplitter *splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);
