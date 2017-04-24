@@ -260,8 +260,6 @@ Kuzya::Kuzya(QWidget *parent)
 
 
 
-
-
     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoRedoEnabled()));
 
 
