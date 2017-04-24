@@ -296,10 +296,6 @@ Kuzya::Kuzya(QWidget *parent)
     textEditorShortcut->setKey(Qt::CTRL+Qt::Key_Up);
     connect(textEditorShortcut, SIGNAL(activated()), textEditor, SLOT(setFocus()));
 
-//    if (qApp->argc() > 1)
-//    {
-//        this->openFile(qApp->argv()[qApp->argc()-1]);
-//    }
     QString comp = settings->readDefaultCompiler(language);
     QString compDir = settings->readCompilerLocation(language, comp);
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
@@ -649,7 +645,7 @@ void Kuzya::slotOpen(void)
 void Kuzya::refreshCompileModes()
 {
     actionDefaultMode->setChecked(true);
-    compiler->setCompilerMode(Compiler::DEFAULT);
+//    compiler->setCompilerMode(Compiler::DEFAULT);
     actionAlternativeMode->setVisible(compiler->isModeAvailable(Compiler::ALTERNATIVE));
     actionObjectMode->setVisible(compiler->isModeAvailable(Compiler::OBJECT));
     actionStaticLibMode->setVisible(compiler->isModeAvailable(Compiler::STATIC_LIB));
@@ -696,15 +692,39 @@ void Kuzya::setUndoRedoEnabled()
 
 void Kuzya::slotRunDebugMode()
 {
+    compiler->setCompilerMode(Compiler::DEBUG);
+    if(!srcRecompiled)
+    {
+        addNotification(NTYPE_WAIT, "Terminating program...");
+        mGdbDebugger->stopExecuting();
+        mGdbDebugger->waitForReadyRead();
+    }
     if(recompile())
     {
         try
         {
-            mGdbDebugger->start();
+            if(mGdbDebugger->state() == QProcess::NotRunning)
+            {
+                mGdbDebugger->start();
+            }
+            mGdbDebugger->waitForReadyRead(3000);
             QString programPath = compiler->getProgramPath();
             QString fullProgramPath = tr("%1.exe").arg(programPath);
             fullProgramPath = fullProgramPath.replace("\\", "/");
             mGdbDebugger->openProject(fullProgramPath);
+            mGdbDebugger->write(QByteArray("delete")); //remove all breakpoints
+            mGdbDebugger->waitForReadyRead();
+            int breakpoinLine = 0;
+            do
+            { // set new breakpoints
+                breakpoinLine = textEditor->markerFindNext(breakpoinLine+1, BREAKPOINT_MARK);
+                if(breakpoinLine != -1)
+                { // BE CAREFULL! set breakpoints to -1 may cause undefined behaviour, breakpoints may be everywhere
+                    mGdbDebugger->setBreakPoint(breakpoinLine+1);
+                    mGdbDebugger->waitForReadyRead();
+                }
+            }
+            while(breakpoinLine != -1);
             mGdbDebugger->run();
         }
         catch(std::domain_error error)

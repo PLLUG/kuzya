@@ -216,7 +216,7 @@ void Compiler::loadProfile(QString lang, QString profile)
     if (QString::Null() == profPath) return;
 
     compilerProfile = new QSettings(profPath, QSettings::IniFormat);
-    compileMode = DEFAULT;
+//    compileMode = DEFAULT;
 }
 
 void Compiler::setOptions(QString str)
@@ -320,6 +320,9 @@ QString Compiler::getCompilerParams()
         break;
     case DYNAMIC_LIB:
         param = compilerProfile->value("dynamic_lib","").toString();
+        break;
+    case DEBUG:
+        param = compilerProfile->value("debug", "").toString();
         break;
     default:
         param = "";
