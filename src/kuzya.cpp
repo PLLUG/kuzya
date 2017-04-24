@@ -283,8 +283,6 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionDynamicLibMode, SIGNAL(triggered()), this,        SLOT(slotDynamicLibMode()));
     connect(actionStartDebugging, SIGNAL(triggered()), this, SLOT(slotRunDebugMode()));
 
-
-
     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoRedoEnabled()));
 
 

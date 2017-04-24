@@ -58,6 +58,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
     connect(compilerResetPushButton, SIGNAL(clicked()) ,this, SLOT(slotResetCompilerOptions()));
     connect(localizationLanguageCBox,SIGNAL(activated(QString)),this,SLOT(slotChangsLocalizationLanguage(QString)));
     connect(mTabIconView,SIGNAL(currentRowChanged(int)),this,SLOT(slotChangeOptionPage(int)));
+    connect(browseDebuggerFileLocationToolBtn, SIGNAL(clicked()), this, SLOT(slotChangeDebuggerLocation()));
     ///-----------------------------Fonts and Colors-------------------------------------------------------
     styleCBox->addItems(QStyleFactory::keys());
 
@@ -215,6 +216,10 @@ void OptionsDialog::writeSettings(void)
     settings->endGroup();
     settings->endGroup();
     settings->sync();
+    ///-----------------------------DEBUGGER_SETTINGS-------------------------------------
+    settings->beginGroup("debugger_settings");
+    settings->setValue("debugger_location", debuggerFileLocation->text());
+    settings->endGroup();
 }
 
 
@@ -359,6 +364,12 @@ void OptionsDialog::readODWSettings()
     textEditor->setBackspaceUnindents(BkspaceIndentCHB->isChecked());
     settings->endGroup();
     settings->endGroup();
+    ///--------------------------DEBUGGER_SETTING------------------------------------------
+    settings->beginGroup("debugger_settings");
+    QString debuggerLocationValue = settings->value("debugger_location", false).toString();
+    debuggerLocationValue = debuggerLocationValue == "false" ? QString() : debuggerLocationValue;
+    debuggerFileLocation->setText(debuggerLocationValue);
+    settings->endGroup();
 
     ///-------------------------------------------------------------------------------------
 }
@@ -419,12 +430,11 @@ void OptionsDialog::slotApply(void)
     writeSettings();
     readODWSettings();
     mw->refreshProfileSettings();
+    mw->updateDebugger(debuggerFileLocation->text());
 }
 void OptionsDialog::slotOk(void)
 {
-    writeSettings();
-    readODWSettings();
-    mw->refreshProfileSettings();
+    slotApply();
     close();
 }
 void OptionsDialog::slotDefaultAll(void)
@@ -599,4 +609,14 @@ void OptionsDialog::slotChangsLocalizationLanguage(QString langName)
 void OptionsDialog::slotChangeOptionPage(int pIndex)
 {
     mStackedWidget->setCurrentIndex(pIndex);
+}
+
+void OptionsDialog::slotChangeDebuggerLocation()
+{
+    QString filter = "*.exe";
+    QString newLocation = QFileDialog::getOpenFileName(this, "Select debugger...", QString(), filter, &filter, QFileDialog::DontResolveSymlinks);
+    if(!newLocation.isEmpty())
+    {
+        debuggerFileLocation->setText(newLocation);
+    }
 }

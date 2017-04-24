@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <iostream>
 #include <QRegExp>
+#include <QFileInfo>
 
 Gdb::Gdb()
 {
@@ -17,9 +18,14 @@ Gdb::Gdb(QString gdbPath)
 
 void Gdb::start(const QStringList &arguments, QIODevice::OpenMode mode)
 {   //starts QPRocess, opens $mGdbFile.fileName()$ and passes $arguments$ as arguments
-    if(!QFile::exists(mGdbFile.fileName()))
+    QFileInfo checkFile(mGdbFile.fileName());
+    if(!(checkFile.exists() && checkFile.isFile()))
     {
         QString message = tr("Gdb not found at %1").arg(mGdbFile.fileName());
+        if(mGdbFile.fileName().isEmpty())
+        {
+            message = "Gdb is not configurated";
+        }
         throw std::domain_error(message.toStdString());
     }
     QProcess::start(mGdbFile.fileName(), arguments, mode);
