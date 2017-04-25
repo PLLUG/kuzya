@@ -166,6 +166,8 @@ private slots:
                           Variable var, QString prefix, bool drfPointer = false);
 
         void moidifyTreeItemPointer(QTreeWidgetItem* itemPointer);
+
+        void slotItemExpanded(QTreeWidgetItem* item);
         /* end section */
 
 protected:

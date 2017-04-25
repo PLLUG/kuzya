@@ -302,7 +302,10 @@ Kuzya::Kuzya(QWidget *parent)
     mGdbDebugger = new Gdb(gdbDir);
 
     connect(mGdbDebugger, SIGNAL(signalHitBreakpoint(int)), this, SLOT(slotDebuggerHitBreakpoint(int)));
-    connect(mGdbDebugger, SIGNAL(signalUpdated()), this, SLOT(slotDebuggerUpdated()));
+//    connect(mGdbDebugger, SIGNAL(signalUpdated()), this, SLOT(slotDebuggerUpdated()));
+    connect(mWatchLocalsWidget, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(slotItemExpanded(QTreeWidgetItem*)), Qt::UniqueConnection);
+    connect(actionUpdate, SIGNAL(triggered()), this, SLOT(slotDebuggerUpdated()), Qt::UniqueConnection);
+    mWatchLocalsWidget->setColumnCount(2);
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
@@ -746,15 +749,13 @@ void Kuzya::slotDebuggerHitBreakpoint(int line)
 
 void Kuzya::slotDebuggerUpdated()
 {
+    mWatchLocalsWidget->clear();
+    mGdbDebugger->globalUpdate();
     auto vars = mGdbDebugger->getLocalVariables();
-    QMessageBox msg;
-    QString mess;
     for(auto i : vars)
     {
-        mess.append(tr("%1\n").arg(i.getName()));
+        addTreeRoot(i);
     }
-    msg.setText(mess.isEmpty() ? "Nothing..." : mess);
-    msg.exec();
 }
 
 void Kuzya::addTreeRoot(Variable var)
@@ -826,6 +827,16 @@ void Kuzya::moidifyTreeItemPointer(QTreeWidgetItem *itemPointer)
         return;
     }
     addTreeChildren(itemPointer, drfPointer, "", true);   //append dereferenced pointer to node with addres
+}
+
+void Kuzya::slotItemExpanded(QTreeWidgetItem *item)
+{
+    auto foundIterator = mPointersName.find(item);
+    if(foundIterator != mPointersName.end())
+    {
+            moidifyTreeItemPointer(item);
+            mPointersName.erase(foundIterator);
+    }
 }
 
 

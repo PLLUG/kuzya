@@ -494,7 +494,7 @@
       <x>605</x>
       <y>116</y>
       <width>209</width>
-      <height>132</height>
+      <height>156</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -515,6 +515,7 @@
     <addaction name="actionCompile"/>
     <addaction name="actionRun"/>
     <addaction name="actionRunDebugMode"/>
+    <addaction name="actionUpdate"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -951,6 +952,11 @@
    </property>
    <property name="text">
     <string>Run in Debug Mode</string>
+   </property>
+  </action>
+  <action name="actionUpdate">
+   <property name="text">
+    <string>Update</string>
    </property>
   </action>
  </widget>

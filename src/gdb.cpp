@@ -52,17 +52,6 @@ void Gdb::readStdOutput()
     QRegExp errorMatch("\\^error");
     QRegExp hitBreakpoint("\\*stopped,reason=\"breakpoint-hit\"");
     QRegExp updateMatch("info\\s");
-    if(updateMatch.indexIn(mBuffer) != -1 && waitForLocals)
-    {
-        qDebug() << "Here may be updating";
-        QStringList varList = getVarListFromContext(mBuffer);
-        updateCertainVariables(varList);
-        --updateCount;
-        if(updateCount <= 0)
-        {
-            emit signalUpdated();
-        }
-    }
     if(hitBreakpoint.indexIn(mBuffer) != -1)
     {
         QRegExp lineMacth("line=\"\\d+\"");
