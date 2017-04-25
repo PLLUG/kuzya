@@ -302,6 +302,7 @@ Kuzya::Kuzya(QWidget *parent)
     mGdbDebugger = new Gdb(gdbDir);
 
     connect(mGdbDebugger, SIGNAL(signalHitBreakpoint(int)), this, SLOT(slotDebuggerHitBreakpoint(int)));
+    connect(mGdbDebugger, SIGNAL(signalUpdated()), this, SLOT(slotDebuggerUpdated()));
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
@@ -739,8 +740,20 @@ void Kuzya::slotRunDebugMode()
 
 void Kuzya::slotDebuggerHitBreakpoint(int line)
 {
+    mGdbDebugger->globalUpdate();
+
+}
+
+void Kuzya::slotDebuggerUpdated()
+{
+    auto vars = mGdbDebugger->getLocalVariables();
     QMessageBox msg;
-    msg.setText(tr("Debugger hit breakpoint at line: %1").arg(QString::number(line)));
+    QString mess;
+    for(auto i : vars)
+    {
+        mess.append(tr("%1\n").arg(i.getName()));
+    }
+    msg.setText(mess.isEmpty() ? "Nothing..." : mess);
     msg.exec();
 }
 

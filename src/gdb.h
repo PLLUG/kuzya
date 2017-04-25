@@ -9,6 +9,7 @@
 
 #include "breakpoint.h"
 #include "variable.h"
+#include "debugform.h"
 
 class Gdb : public QProcess
 {
@@ -40,6 +41,7 @@ public:
     void updateCertainVariables(QStringList varList);
     QStringList getVariablesFrom(QStringList frame);
     QStringList getVariableList(const QString& frames);
+    QStringList getVarListFromContext(const QString& context);
     void globalUpdate();
     void setGdbPath(const QString& path);
 public slots:
@@ -49,12 +51,17 @@ signals:
     void signalLocalVarRecieved(const QString&);
     void signalErrorOccured(const QString&);
     void signalHitBreakpoint(int line);
+    void signalUpdated();
 private:
     QFile mGdbFile;
     QString mErrorMessage;
     QString mBuffer;
     std::vector<Breakpoint> mBreakpointsList;
     std::vector<Variable> mVariablesList;
+    DebugForm debug;
+
+    bool waitForLocals;
+    int updateCount;
 };
 
 #endif // GDB_H

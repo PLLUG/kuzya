@@ -4,6 +4,7 @@
 #include <iostream>
 #include <QRegExp>
 #include <QFileInfo>
+#include <QMessageBox>
 
 Gdb::Gdb()
 {
@@ -14,6 +15,8 @@ Gdb::Gdb(QString gdbPath)
     mGdbFile.setFileName(gdbPath);
     connect(this, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadStdOutput()), Qt::UniqueConnection);
     connect(this, SIGNAL(readyReadStandardError()), this, SLOT(slotReadErrOutput()), Qt::UniqueConnection);
+    waitForLocals = false;
+    debug.show();
 }
 
 void Gdb::start(const QStringList &arguments, QIODevice::OpenMode mode)
@@ -45,8 +48,21 @@ void Gdb::write(QByteArray command)
 void Gdb::readStdOutput()
 {   //Reads all standart output from GDB
     mBuffer = QProcess::readAll();
+    debug.getOutput()->appendPlainText(mBuffer.toStdString().c_str());
     QRegExp errorMatch("\\^error");
     QRegExp hitBreakpoint("\\*stopped,reason=\"breakpoint-hit\"");
+    QRegExp updateMatch("info\\s");
+    if(updateMatch.indexIn(mBuffer) != -1 && waitForLocals)
+    {
+        qDebug() << "Here may be updating";
+        QStringList varList = getVarListFromContext(mBuffer);
+        updateCertainVariables(varList);
+        --updateCount;
+        if(updateCount <= 0)
+        {
+            emit signalUpdated();
+        }
+    }
     if(hitBreakpoint.indexIn(mBuffer) != -1)
     {
         QRegExp lineMacth("line=\"\\d+\"");
@@ -278,8 +294,29 @@ QStringList Gdb::getVariableList(const QString &frame)
     return varList;
 }
 
+QStringList Gdb::getVarListFromContext(const QString &context)
+{
+    QRegExp varMatch("\"\\w+\\s="); // find substring from '"' to '=' included only characters,
+                                    // digits and whitespaces (it's a var name)
+    int pos = 0;
+    QStringList varList;
+    while(pos != -1)// reads all matches
+    {
+        pos = varMatch.indexIn(context, pos+1);//find next matches
+        QRegExp clean("\"|\\s|=");// find all garbage characters
+        QString varName = varMatch.cap().replace(clean, "").trimmed();// clean garbage and whitespaces
+        if(!varName.isEmpty())
+        {
+            varList << varName;
+        }
+    }
+    return varList;
+}
+
 void Gdb::globalUpdate()
 {   // update all informations
+    waitForLocals = true;
+    updateCount = 2;
     mVariablesList.clear(); // clear old info
     updateBreakpointsList();
     updateCertainVariables(getVariablesFrom(QStringList() << "local" << "arg"));
