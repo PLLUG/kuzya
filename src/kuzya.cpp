@@ -757,6 +757,77 @@ void Kuzya::slotDebuggerUpdated()
     msg.exec();
 }
 
+void Kuzya::addTreeRoot(Variable var)
+{
+    QTreeWidgetItem *treeItem = new QTreeWidgetItem(mWatchLocalsWidget);
+
+    // QTreeWidgetItem::setText(int column, const QString & text)
+    treeItem->setText(0, var.getName());
+    QString varContent = var.getContent();
+    varContent.append(" (%1)");
+    varContent = varContent.arg(var.getType());
+    treeItem->setText(1, varContent);
+    addTreeChildren(treeItem, var, "");
+}
+
+void Kuzya::addTreeChild(QTreeWidgetItem *parent, Variable var, QString prefix, bool internal = false)
+{
+    QTreeWidgetItem *treeItem = new QTreeWidgetItem();
+    QString plainName = var.getName().split('.').last();
+    treeItem->setText(0, plainName);
+    treeItem->setText(1, var.getContent().append(" (%1)").arg(var.getType()));
+    if(!internal)
+    {
+        addTreeChildren(treeItem, var, prefix);
+    }
+    else
+    {
+        treeItem->setHidden(true);
+    }
+    parent->addChild(treeItem);
+}
+
+void Kuzya::addTreeChildren(QTreeWidgetItem *parrent, Variable var, QString prefix, bool drfPointer)
+{
+    std::vector<Variable> nestedTypes = var.getNestedTypes();
+    if(drfPointer && nestedTypes.size() ==0)
+    {
+        addTreeChild(parrent, var, "", false);
+    }
+    if(var.isPointer())
+    {
+        QString dereferencedVarName = QString("*(%1)").arg(var.getName());
+        addTreeChild(parrent, var, "", true);   //create fake node to enable expanding parent
+        mPointersName[parrent] = var;   //Add pointer's node to map and attach to this node pointer
+    }
+    for(auto i : nestedTypes)
+    {
+        QString likelyType = mGdbDebugger->getVarType(i.getName());
+        i.setType(likelyType.isEmpty() ? "<No info>" : likelyType);
+        addTreeChild(parrent, i, prefix, false);
+    }
+}
+
+void Kuzya::moidifyTreeItemPointer(QTreeWidgetItem *itemPointer)
+{   //remove helper node and attachs content of dereferenced pointer
+    Variable pointer = mPointersName[itemPointer];
+
+    QString drfName = tr("(*%1)").arg(pointer.getName());
+    QString drfAddressContent = mGdbDebugger->getVarContent(drfName);
+    QString drfAddressType = mGdbDebugger->getVarType(drfName);
+    Variable drfPointer(drfName, drfAddressType, drfAddressContent);
+
+    QTreeWidgetItem* child = itemPointer->child(0); //Pointer's node always has ony one shils so it's index is '0'
+    itemPointer->removeChild(child);    //remove internal node in tree
+    if(drfPointer.getNestedTypes().size() == 0 && !drfPointer.isPointer())
+    {
+        addTreeChild(itemPointer, drfPointer, "", false);
+        qDebug() << "drfPointer has only one nested type && it's not pointer";
+        return;
+    }
+    addTreeChildren(itemPointer, drfPointer, "", true);   //append dereferenced pointer to node with addres
+}
+
 
 void Kuzya::refreshDialogSettings()
 {
