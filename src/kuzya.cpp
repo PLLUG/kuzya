@@ -780,8 +780,6 @@ void Kuzya::slotDebuggerUpdated()
 {
     mWatchLocalsWidget->clear();
     mGdbDebugger->globalUpdate();
-    mGdbDebugger->waitForBytesWritten();
-    mGdbDebugger->waitForReadyRead();
     auto vars = mGdbDebugger->getLocalVariables();
     for(auto i : vars)
     {
