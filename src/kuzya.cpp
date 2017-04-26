@@ -138,9 +138,11 @@ Kuzya::Kuzya(QWidget *parent)
 //                                                              "border-image: url(:/treeView/expand);"
 //                                                          "}");
     mWatchLocalsWidget->setStyleSheet(
-                                      "QTreeView::branch:!has-children:!has-siblings:adjoins-item {"
-                                          "border-image: none;"
-                                      "}"
+                "QTreeView::branch:!has-children:!has-siblings:adjoins-item,"
+                "QTreeView::branch:has-siblings:adjoins-item,"
+                "QTreeView::branch:has-siblings:!adjoins-item {"
+                    "border-image: url(:/treeView/empty);"
+                "}"
                 "QTreeView::branch:open:has-children:!has-siblings,"
                 "QTreeView::branch:open:has-children:has-siblings  {"
                         "border-image: none;"

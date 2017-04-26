@@ -109,5 +109,6 @@
     <qresource prefix="/treeView">
         <file alias="expand">images/expand.png</file>
         <file alias="hide">images/hide.png</file>
+        <file alias="empty">images/empty.png</file>
     </qresource>
 </RCC>
