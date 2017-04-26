@@ -333,7 +333,7 @@ Kuzya::Kuzya(QWidget *parent)
 //    connect(mGdbDebugger, SIGNAL(signalUpdated()), this, SLOT(slotDebuggerUpdated()));
     connect(mWatchLocalsWidget, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(slotItemExpanded(QTreeWidgetItem*)), Qt::UniqueConnection);
     connect(actionUpdate, SIGNAL(triggered()), this, SLOT(slotDebuggerUpdated()), Qt::UniqueConnection);
-    mWatchLocalsWidget->setColumnCount(2);
+    mWatchLocalsWidget->setColumnCount(3);
     mWatchLocalsWidget->setStyleSheet("QTreeView::branch:has-children: {border-image: url(branch_closed.png) 0;}");
 
 #ifdef Q_OS_MAC
@@ -780,6 +780,8 @@ void Kuzya::slotDebuggerUpdated()
 {
     mWatchLocalsWidget->clear();
     mGdbDebugger->globalUpdate();
+    mGdbDebugger->waitForBytesWritten();
+    mGdbDebugger->waitForReadyRead();
     auto vars = mGdbDebugger->getLocalVariables();
     for(auto i : vars)
     {
@@ -794,9 +796,10 @@ void Kuzya::addTreeRoot(Variable var)
     // QTreeWidgetItem::setText(int column, const QString & text)
     treeItem->setText(0, var.getName());
     QString varContent = var.getContent();
-    varContent.append(" (%1)");
-    varContent = varContent.arg(var.getType());
+//    varContent.append(" (%1)");
+//    varContent = varContent.arg(var.getType());
     treeItem->setText(1, varContent);
+    treeItem->setText(2, var.getType());
     addTreeChildren(treeItem, var, "");
 }
 
@@ -805,7 +808,8 @@ void Kuzya::addTreeChild(QTreeWidgetItem *parent, Variable var, QString prefix, 
     QTreeWidgetItem *treeItem = new QTreeWidgetItem();
     QString plainName = var.getName().split('.').last();
     treeItem->setText(0, plainName);
-    treeItem->setText(1, var.getContent().append(" (%1)").arg(var.getType()));
+    treeItem->setText(1, var.getContent());
+    treeItem->setText(2, var.getType());
     if(!internal)
     {
         addTreeChildren(treeItem, var, prefix);
@@ -830,6 +834,10 @@ void Kuzya::addTreeChildren(QTreeWidgetItem *parrent, Variable var, QString pref
         addTreeChild(parrent, var, "", true);   //create fake node to enable expanding parent
         mPointersName[parrent] = var;   //Add pointer's node to map and attach to this node pointer
         parrent->setIcon(0, QIcon(QPixmap(":/treeView/pointer")));
+    }
+    else
+    {
+        parrent->setIcon(0, QIcon(QPixmap(":/treeView/variable")));
     }
     for(auto i : nestedTypes)
     {
@@ -880,7 +888,7 @@ void Kuzya::slotItemExpanded(QTreeWidgetItem *item)
 
 void Kuzya::slotExpandVariable(QTreeWidgetItem *item, int column)
 {
-    item->setExpanded(true);
+    item->setExpanded(!item->isExpanded());
 }
 
 void Kuzya::slotTest()
