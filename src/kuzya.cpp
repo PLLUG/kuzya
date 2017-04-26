@@ -134,9 +134,24 @@ Kuzya::Kuzya(QWidget *parent)
     innerLabel->setLayout(innerLabelLayout);
     QToolBar *debugButtons = new QToolBar(this);
     mWatchLocalsWidget = new QTreeWidget(this);
-    mWatchLocalsWidget->setStyleSheet("QTreeView::branch:has-children{"
-                                                              "border-image: url(:/markers/warning_line);"
-                                                          "}");
+//    mWatchLocalsWidget->setStyleSheet("QTreeView::branch:has-children{"
+//                                                              "border-image: url(:/treeView/expand);"
+//                                                          "}");
+    mWatchLocalsWidget->setStyleSheet(
+                                      "QTreeView::branch:!has-children:!has-siblings:adjoins-item {"
+                                          "border-image: none;"
+                                      "}"
+                "QTreeView::branch:open:has-children:!has-siblings,"
+                "QTreeView::branch:open:has-children:has-siblings  {"
+                        "border-image: none;"
+                        "image: url(:/treeView/expand);"
+                "}"
+                "QTreeView::branch:has-children:!has-siblings:closed,"
+                "QTreeView::branch:closed:has-children:has-siblings {"
+                        "border-image: none;"
+                        "image: url(:/treeView/hide);"
+                "}"
+                                      );
     QLabel* l = new QLabel(this);
     l->setPixmap(QPixmap(":/markers/warning_line"));
     mOutputTabWidget->setStyleSheet(mWatchLocalsWidget->styleSheet());
@@ -306,7 +321,7 @@ Kuzya::Kuzya(QWidget *parent)
     QString comp = settings->readDefaultCompiler(language);
     QString compDir = settings->readCompilerLocation(language, comp);
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
-    mGdbDebugger = new Gdb(gdbDir);
+    mGdbDebugger = new Gdb("D:/Studying/Programming/Qt/PLLUG/kuzya/msys64/mingw64/bin/bin/gdb.exe");
 
     connect(mGdbDebugger, SIGNAL(signalHitBreakpoint(int)), this, SLOT(slotDebuggerHitBreakpoint(int)));
 //    connect(mGdbDebugger, SIGNAL(signalUpdated()), this, SLOT(slotDebuggerUpdated()));
