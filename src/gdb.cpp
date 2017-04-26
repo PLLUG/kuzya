@@ -204,6 +204,8 @@ QString Gdb::getVarContent(const QString& var)
     QRegExp clean("[\\\\\"|~]"); // find all garbage characters '\', '"', '~'
     QRegExp pointerMatch("\\(.*\\s*\\)\\s0x[\\d+abcdef]+"); // try to regonize pointer content
                                                             // (SOME_TYPE *) 0x6743hf2
+    QRegExp memmoryError("Cannot access memory at address 0x[\\dabcdef]+");
+    //if(memmoryError-)
     if(pointerMatch.indexIn(mBuffer) != -1)
     {
         QString addres = pointerMatch.cap().split(' ').last();  // get only hex addres

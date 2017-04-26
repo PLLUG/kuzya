@@ -110,5 +110,7 @@
         <file alias="expand">images/expand.png</file>
         <file alias="hide">images/hide.png</file>
         <file alias="empty">images/empty.png</file>
+        <file alias="nullptr">images/nullptr_error.png</file>
+        <file alias="pointer">images/pointer.png</file>
     </qresource>
 </RCC>

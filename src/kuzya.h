@@ -169,7 +169,7 @@ private slots:
 
         void slotItemExpanded(QTreeWidgetItem* item);
         /* end section */
-
+        void slotExpandVariable(QTreeWidgetItem* item, int column);
         void slotTest();
 
 protected:

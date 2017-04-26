@@ -134,6 +134,7 @@ Kuzya::Kuzya(QWidget *parent)
     innerLabel->setLayout(innerLabelLayout);
     QToolBar *debugButtons = new QToolBar(this);
     mWatchLocalsWidget = new QTreeWidget(this);
+    connect(mWatchLocalsWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(slotExpandVariable(QTreeWidgetItem*,int)), Qt::UniqueConnection);
 //    mWatchLocalsWidget->setStyleSheet("QTreeView::branch:has-children{"
 //                                                              "border-image: url(:/treeView/expand);"
 //                                                          "}");
@@ -156,8 +157,8 @@ Kuzya::Kuzya(QWidget *parent)
                 "QTreeView::item:hover{background-color:#EEFFFF;}"
                                       );
     mWatchLocalsWidget->setSelectionMode(QAbstractItemView::NoSelection);
-    mOutputTabWidget->setStyleSheet(mWatchLocalsWidget->styleSheet());
     mWatchLocalsWidget->setFocusPolicy(Qt::NoFocus);
+    mOutputTabWidget->setStyleSheet(mWatchLocalsWidget->styleSheet());
     qDebug() << mWatchLocalsWidget->styleSheet();
     innerLabelLayout->addWidget(debugButtons);
     innerLabelLayout->addWidget(mWatchLocalsWidget);
@@ -828,6 +829,7 @@ void Kuzya::addTreeChildren(QTreeWidgetItem *parrent, Variable var, QString pref
         QString dereferencedVarName = QString("*(%1)").arg(var.getName());
         addTreeChild(parrent, var, "", true);   //create fake node to enable expanding parent
         mPointersName[parrent] = var;   //Add pointer's node to map and attach to this node pointer
+        parrent->setIcon(0, QIcon(QPixmap(":/treeView/pointer")));
     }
     for(auto i : nestedTypes)
     {
@@ -850,6 +852,15 @@ void Kuzya::moidifyTreeItemPointer(QTreeWidgetItem *itemPointer)
     itemPointer->removeChild(child);    //remove internal node in tree
     if(drfPointer.getNestedTypes().size() == 0 && !drfPointer.isPointer())
     {
+        if(drfPointer.getContent().isEmpty())
+        {
+            QTreeWidgetItem* error = new QTreeWidgetItem();
+            error->setText(0, "nullptr");
+            error->setText(1, "Cannot accses to this memory");
+            error->setIcon(0, QIcon(QPixmap(":/treeView/nullptr")));
+            itemPointer->addChild(error);
+            return;
+        }
         addTreeChild(itemPointer, drfPointer, "", false);
         qDebug() << "drfPointer has only one nested type && it's not pointer";
         return;
@@ -865,6 +876,11 @@ void Kuzya::slotItemExpanded(QTreeWidgetItem *item)
             moidifyTreeItemPointer(item);
             mPointersName.erase(foundIterator);
     }
+}
+
+void Kuzya::slotExpandVariable(QTreeWidgetItem *item, int column)
+{
+    item->setExpanded(true);
 }
 
 void Kuzya::slotTest()
