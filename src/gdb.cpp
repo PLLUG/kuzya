@@ -16,7 +16,6 @@ Gdb::Gdb(QString gdbPath)
     connect(this, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadStdOutput()), Qt::UniqueConnection);
     connect(this, SIGNAL(readyReadStandardError()), this, SLOT(slotReadErrOutput()), Qt::UniqueConnection);
     waitForLocals = false;
-    debug.show();
 }
 
 void Gdb::start(const QStringList &arguments, QIODevice::OpenMode mode)
@@ -48,7 +47,6 @@ void Gdb::write(QByteArray command)
 void Gdb::readStdOutput()
 {   //Reads all standart output from GDB
     mBuffer = QProcess::readAll();
-    debug.getOutput()->appendPlainText(mBuffer.toStdString().c_str());
     QRegExp errorMatch("\\^error");
     QRegExp hitBreakpoint("\\*stopped,reason=\"breakpoint-hit\"");
     QRegExp updateMatch("info\\s");

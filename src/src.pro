@@ -11,7 +11,6 @@ FORMS += kuzya.ui \
     optionsdialog.ui \
     finddialog.ui \
     replacedialog.ui \
-    debugform.ui
 
 HEADERS += kuzya.h \
     gotolinedialog.h \
@@ -25,7 +24,6 @@ HEADERS += kuzya.h \
     breakpoint.h \
     gdb.h \
     variable.h \
-    debugform.h
 
 SOURCES += kuzya.cpp \
     main.cpp \
@@ -38,7 +36,6 @@ SOURCES += kuzya.cpp \
     gdb.cpp \
     breakpoint.cpp \
     variable.cpp \
-    debugform.cpp
 
 RESOURCES = images.qrc \
            ../auth.qrc \

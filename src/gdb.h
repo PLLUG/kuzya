@@ -9,7 +9,6 @@
 
 #include "breakpoint.h"
 #include "variable.h"
-#include "debugform.h"
 
 class Gdb : public QProcess
 {
@@ -58,7 +57,6 @@ private:
     QString mBuffer;
     std::vector<Breakpoint> mBreakpointsList;
     std::vector<Variable> mVariablesList;
-    DebugForm debug;
 
     bool waitForLocals;
     int updateCount;
