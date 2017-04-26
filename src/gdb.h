@@ -57,9 +57,6 @@ private:
     QString mBuffer;
     std::vector<Breakpoint> mBreakpointsList;
     std::vector<Variable> mVariablesList;
-
-    bool waitForLocals;
-    int updateCount;
 };
 
 #endif // GDB_H

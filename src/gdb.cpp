@@ -15,7 +15,6 @@ Gdb::Gdb(QString gdbPath)
     mGdbFile.setFileName(gdbPath);
     connect(this, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadStdOutput()), Qt::UniqueConnection);
     connect(this, SIGNAL(readyReadStandardError()), this, SLOT(slotReadErrOutput()), Qt::UniqueConnection);
-    waitForLocals = false;
 }
 
 void Gdb::start(const QStringList &arguments, QIODevice::OpenMode mode)
@@ -304,8 +303,6 @@ QStringList Gdb::getVarListFromContext(const QString &context)
 
 void Gdb::globalUpdate()
 {   // update all informations
-    waitForLocals = true;
-    updateCount = 2;
     mVariablesList.clear(); // clear old info
     updateBreakpointsList();
     updateCertainVariables(getVariablesFrom(QStringList() << "local" << "arg"));

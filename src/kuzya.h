@@ -159,18 +159,17 @@ private slots:
         void slotDebuggerHitBreakpoint(int line);
         void slotDebuggerUpdated();
         /* update watch section */
-        void addTreeRoot(Variable var);
-        void addTreeChild(QTreeWidgetItem *parent,
+        void addTreeRootVariable(Variable var);
+        void AddVariableAsChild(QTreeWidgetItem *parent,
                           Variable var, QString prefix, bool internal);
-        void addTreeChildren(QTreeWidgetItem* parrent,
+        void addVariableChildren(QTreeWidgetItem* parrent,
                           Variable var, QString prefix, bool drfPointer = false);
 
-        void moidifyTreeItemPointer(QTreeWidgetItem* itemPointer);
+        void dereferencePointerItem(QTreeWidgetItem* itemPointer);
 
-        void slotItemExpanded(QTreeWidgetItem* item);
+        void slotItemVariableExpanded(QTreeWidgetItem* item);
         /* end section */
         void slotExpandVariable(QTreeWidgetItem* item, int column);
-        void slotTest();
 
 protected:
         //*DRAG AND DROP
@@ -235,7 +234,7 @@ private:
 
         QToolBar *toolBar;
         Gdb* mGdbDebugger;
-        std::map<QTreeWidgetItem*, Variable> mPointersName;
+        std::map<QTreeWidgetItem*, Variable> mPointerItems;
 };
 
 #endif
