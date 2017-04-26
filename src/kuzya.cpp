@@ -153,14 +153,17 @@ Kuzya::Kuzya(QWidget *parent)
                         "border-image: none;"
                         "image: url(:/treeView/hide);"
                 "}"
+                "QTreeView::item:hover{background-color:#EEFFFF;}"
                                       );
-    QLabel* l = new QLabel(this);
-    l->setPixmap(QPixmap(":/markers/warning_line"));
+    mWatchLocalsWidget->setSelectionMode(QAbstractItemView::NoSelection);
     mOutputTabWidget->setStyleSheet(mWatchLocalsWidget->styleSheet());
+    mWatchLocalsWidget->setFocusPolicy(Qt::NoFocus);
     qDebug() << mWatchLocalsWidget->styleSheet();
     innerLabelLayout->addWidget(debugButtons);
     innerLabelLayout->addWidget(mWatchLocalsWidget);
     mOutputTabWidget->addTab(innerLabel, "Debug");
+
+    connect(mWatchLocalsWidget, SIGNAL(viewportEntered()), this, SLOT(slotTest()), Qt::UniqueConnection);
 
 
     QSplitter *splitter = new QSplitter(this);
@@ -862,6 +865,11 @@ void Kuzya::slotItemExpanded(QTreeWidgetItem *item)
             moidifyTreeItemPointer(item);
             mPointersName.erase(foundIterator);
     }
+}
+
+void Kuzya::slotTest()
+{
+    qDebug() << "Teste slot!";
 }
 
 

@@ -170,6 +170,8 @@ private slots:
         void slotItemExpanded(QTreeWidgetItem* item);
         /* end section */
 
+        void slotTest();
+
 protected:
         //*DRAG AND DROP
         void dragEnterEvent(QDragEnterEvent *event);
