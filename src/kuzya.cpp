@@ -134,6 +134,13 @@ Kuzya::Kuzya(QWidget *parent)
     innerLabel->setLayout(innerLabelLayout);
     QToolBar *debugButtons = new QToolBar(this);
     mWatchLocalsWidget = new QTreeWidget(this);
+    mWatchLocalsWidget->setStyleSheet("QTreeView::branch:has-children{"
+                                                              "border-image: url(:/markers/warning_line);"
+                                                          "}");
+    QLabel* l = new QLabel(this);
+    l->setPixmap(QPixmap(":/markers/warning_line"));
+    mOutputTabWidget->setStyleSheet(mWatchLocalsWidget->styleSheet());
+    qDebug() << mWatchLocalsWidget->styleSheet();
     innerLabelLayout->addWidget(debugButtons);
     innerLabelLayout->addWidget(mWatchLocalsWidget);
     mOutputTabWidget->addTab(innerLabel, "Debug");
@@ -306,6 +313,7 @@ Kuzya::Kuzya(QWidget *parent)
     connect(mWatchLocalsWidget, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(slotItemExpanded(QTreeWidgetItem*)), Qt::UniqueConnection);
     connect(actionUpdate, SIGNAL(triggered()), this, SLOT(slotDebuggerUpdated()), Qt::UniqueConnection);
     mWatchLocalsWidget->setColumnCount(2);
+    mWatchLocalsWidget->setStyleSheet("QTreeView::branch:has-children: {border-image: url(branch_closed.png) 0;}");
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
