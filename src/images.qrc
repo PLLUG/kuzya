@@ -114,4 +114,12 @@
         <file alias="pointer">images/pointer.png</file>
         <file alias="variable">images/variable.png</file>
     </qresource>
+    <qresource prefix="/debug">
+        <file>images/continue_debug.png</file>
+        <file>images/step_in.png</file>
+        <file>images/step_out.png</file>
+        <file>images/step_over.png</file>
+        <file>images/stop_debug.png</file>
+        <file alias="update">images/update.png</file>
+    </qresource>
 </RCC>

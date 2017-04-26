@@ -122,7 +122,7 @@ Kuzya::Kuzya(QWidget *parent)
     textEditor = new QsciScintilla(this);
     textEditor->setEolMode(QsciScintilla::EolUnix);
 
-    mOutputTabWidget= new QTabWidget(this);
+    mOutputTabWidget = new QTabWidget(this);
 
     notificationList = new QListWidget(this);
     notificationList->setObjectName("notificationList");
@@ -130,11 +130,13 @@ Kuzya::Kuzya(QWidget *parent)
     mOutputTabWidget->setVisible(false);
     //adds debug tab to tabWidget
     QLabel *innerLabel = new QLabel(this);
+    innerLabel->setAutoFillBackground(true);
     QVBoxLayout *innerLabelLayout = new QVBoxLayout(this);
     innerLabel->setLayout(innerLabelLayout);
     QToolBar *debugButtons = new QToolBar(this);
     mWatchLocalsWidget = new QTreeWidget(this);
     connect(mWatchLocalsWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(slotExpandVariable(QTreeWidgetItem*,int)), Qt::UniqueConnection);
+    connect(mWatchLocalsWidget, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(slotItemVariableExpanded(QTreeWidgetItem*)), Qt::UniqueConnection);
     mWatchLocalsWidget->setStyleSheet(
                 "QTreeView::branch:!has-children:!has-siblings:adjoins-item,"
                 "QTreeView::branch:has-siblings:adjoins-item,"
@@ -161,8 +163,18 @@ Kuzya::Kuzya(QWidget *parent)
     innerLabelLayout->addWidget(mWatchLocalsWidget);
     mOutputTabWidget->addTab(innerLabel, "Debug");
 
-    connect(mWatchLocalsWidget, SIGNAL(viewportEntered()), this, SLOT(slotTest()), Qt::UniqueConnection);
-
+    debugButtons->setIconSize(QSize(30,15));
+    debugButtons->addAction(actionStartDebugging);
+    debugButtons->addSeparator();
+    debugButtons->addAction(actionStepOver);
+    debugButtons->addAction(actionStepIn);
+    debugButtons->addAction(actionStepOut);
+    debugButtons->addAction(actionContinueDebugging);
+    debugButtons->addSeparator();
+    debugButtons->addAction(actionStopDebugging);
+    debugButtons->addSeparator();
+    debugButtons->addAction(actionUpdateLocals);
+    debugButtons->setAutoFillBackground(true);
 
     QSplitter *splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);
@@ -294,13 +306,10 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionObjectMode, SIGNAL(triggered()), this,            SLOT(slotObjectMode()));
     connect(actionStaticLibMode, SIGNAL(triggered()), this,         SLOT(slotStaticLibMode()));
     connect(actionDynamicLibMode, SIGNAL(triggered()), this,        SLOT(slotDynamicLibMode()));
-
+    connect(actionStartDebugging, SIGNAL(triggered()), this, SLOT(slotRunDebugMode()));
 
 
     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoRedoEnabled()));
-
-
-
 
 
     connect(textEditor,	SIGNAL(modificationChanged(bool)), this,SLOT(slotModificationChanged(bool)));
@@ -328,9 +337,16 @@ Kuzya::Kuzya(QWidget *parent)
     connect(mGdbDebugger, SIGNAL(signalHitBreakpoint(int)), this, SLOT(slotDebuggerHitBreakpoint(int)));
 //    connect(mGdbDebugger, SIGNAL(signalUpdated()), this, SLOT(slotDebuggerUpdated()));
     connect(mWatchLocalsWidget, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(slotItemVariableExpanded(QTreeWidgetItem*)), Qt::UniqueConnection);
-    connect(actionUpdate, SIGNAL(triggered()), this, SLOT(slotDebuggerUpdated()), Qt::UniqueConnection);
+    connect(actionUpdateLocals, SIGNAL(triggered()), this, SLOT(slotUpdateLocals()), Qt::UniqueConnection);
     mWatchLocalsWidget->setColumnCount(3);
     mWatchLocalsWidget->setStyleSheet("QTreeView::branch:has-children: {border-image: url(branch_closed.png) 0;}");
+
+    /* connect debug actions */
+    connect(actionStepOver, SIGNAL(triggered()), mGdbDebugger, SLOT(stepOver()));
+    connect(actionStepIn, SIGNAL(triggered()), mGdbDebugger, SLOT(stepIn()));
+    connect(actionStepOut, SIGNAL(triggered()), mGdbDebugger, SLOT(stepOut()));
+    connect(actionContinueDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stepContinue()));
+    connect(actionStopDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stopExecuting()));
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
@@ -772,7 +788,7 @@ void Kuzya::slotDebuggerHitBreakpoint(int line)
 
 }
 
-void Kuzya::slotDebuggerUpdated()
+void Kuzya::slotUpdateLocals()
 {
     mWatchLocalsWidget->clear();
     mGdbDebugger->globalUpdate();

@@ -157,7 +157,18 @@ private slots:
         void setUndoRedoEnabled();
         void slotRunDebugMode();
         void slotDebuggerHitBreakpoint(int line);
-        void slotDebuggerUpdated();
+        void slotUpdateLocals();
+        void slotExpandVariable(QTreeWidgetItem* item, int column);
+        void slotItemVariableExpanded(QTreeWidgetItem* item);
+
+protected:
+        //*DRAG AND DROP
+        void dragEnterEvent(QDragEnterEvent *event);
+        void dropEvent(QDropEvent *event);
+        void closeEvent(QCloseEvent *event);
+//	void keyPressEvent(QKeyEvent *event);
+private:
+
         /* update watch section */
         void addTreeRootVariable(Variable var);
         void AddVariableAsChild(QTreeWidgetItem *parent,
@@ -167,17 +178,8 @@ private slots:
 
         void dereferencePointerItem(QTreeWidgetItem* itemPointer);
 
-        void slotItemVariableExpanded(QTreeWidgetItem* item);
         /* end section */
-        void slotExpandVariable(QTreeWidgetItem* item, int column);
 
-protected:
-        //*DRAG AND DROP
-        void dragEnterEvent(QDragEnterEvent *event);
-        void dropEvent(QDropEvent *event);
-        void closeEvent(QCloseEvent *event);
-//	void keyPressEvent(QKeyEvent *event);
-private:
         void paintErrorMarkers(QList<Compiler::compilerError>* errorList);
         void paintWarningMarkers(QList<Compiler::compilerWarning>* warningList);
         void addNotification(int type, QString descr, bool attached = false, int line = -1);
