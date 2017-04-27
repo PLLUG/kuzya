@@ -4,6 +4,7 @@
 #include <iostream>
 #include <QRegExp>
 #include <QFileInfo>
+#include <QMessageBox>
 
 Gdb::Gdb()
 {
@@ -47,6 +48,7 @@ void Gdb::readStdOutput()
     mBuffer = QProcess::readAll();
     QRegExp errorMatch("\\^error");
     QRegExp hitBreakpoint("\\*stopped,reason=\"breakpoint-hit\"");
+    QRegExp updateMatch("info\\s");
     if(hitBreakpoint.indexIn(mBuffer) != -1)
     {
         QRegExp lineMacth("line=\"\\d+\"");
@@ -199,12 +201,41 @@ QString Gdb::getVarContent(const QString& var)
     QRegExp clean("[\\\\\"|~]"); // find all garbage characters '\', '"', '~'
     QRegExp pointerMatch("\\(.*\\s*\\)\\s0x[\\d+abcdef]+"); // try to regonize pointer content
                                                             // (SOME_TYPE *) 0x6743hf2
+    QRegExp memmoryError("Cannot access memory at address 0x[\\dabcdef]+");
+    //if(memmoryError-)
     if(pointerMatch.indexIn(mBuffer) != -1)
     {
         QString addres = pointerMatch.cap().split(' ').last();  // get only hex addres
         return addres;
     }
     content.indexIn(mBuffer);
+    QString res = content.cap().replace(clean, "").replace("^done", "").trimmed();
+    res.resize(res.size()-1); // last character is garbate too
+    /* Removed all line breaks */
+    auto lst = res.split('\n');
+    for(QString& i : lst)
+    {
+        i = i.trimmed();
+    }
+    QString withoutLines = lst.join(""); // complete one QString again
+    withoutLines.remove(0, 2); // first two charactes are garbage too '= '
+    return withoutLines;
+}
+
+QString Gdb::getVarContentFromContext(const QString &context)
+{
+    QRegExp content("=\\s.*\\^done"); // match string beginning with '= ' and ending with '^done'
+    QRegExp clean("[\\\\\"|~]"); // find all garbage characters '\', '"', '~'
+    QRegExp pointerMatch("\\(.*\\s*\\)\\s0x[\\d+abcdef]+"); // try to regonize pointer content
+                                                            // (SOME_TYPE *) 0x6743hf2
+    QRegExp memmoryError("Cannot access memory at address 0x[\\dabcdef]+");
+    //if(memmoryError-)
+    if(pointerMatch.indexIn(context) != -1)
+    {
+        QString addres = pointerMatch.cap().split(' ').last();  // get only hex addres
+        return addres;
+    }
+    content.indexIn(context);
     QString res = content.cap().replace(clean, "").replace("^done", "").trimmed();
     res.resize(res.size()-1); // last character is garbate too
     /* Removed all line breaks */
@@ -263,11 +294,68 @@ QStringList Gdb::getVariableList(const QString &frame)
     QProcess::waitForReadyRead(1000);
     QRegExp varMatch("\"\\w+\\s="); // find substring from '"' to '=' included only characters,
                                     // digits and whitespaces (it's a var name)
+
+
+    bool read = false;
+    int pos = 0;
+    QStringList varList;
+    int lastpos = 0;
+    QRegExp clean("~|\"|\\s|=");// find all garbage characters
+    while(pos != -1)// reads all matches
+    {
+        pos = varMatch.indexIn(mBuffer, pos+1);//find next matches
+        QString varName = varMatch.cap().replace(clean, "").trimmed();// clean garbage and whitespaces
+        if(!varName.isEmpty())
+        {
+            varList << varName;
+            qDebug() << "Var " << varName << " - ";
+            qDebug() << mBuffer.mid(lastpos, pos);
+            read = true;
+            mVariablesList.clear();
+        }
+        lastpos = pos+1;
+    }
+    QStringList vars = mBuffer.split("\\n");
+    qDebug() << vars.size() << " vars";
+    for(auto i : vars)
+    {
+        //qDebug() << i;
+        QStringList broke = i.split(" = ");
+        QString value;
+        bool appendBr = broke.size() > 2;
+        for(int i=1;i<broke.size();++i)
+        {
+            value.append(broke[i]);
+            if(i+1 != broke.size())
+            {
+                value.append(" = ");
+            }
+        }
+        value = value.prepend(" = ");
+        value = value.append("^done");
+        qDebug() << broke[0].replace(clean, "") << " - "  << value << "-" << getVarContentFromContext(value);
+        QString content = getVarContentFromContext(value);
+        if(read && !content.isEmpty())
+        {
+            if(appendBr)
+            {
+                content.append("}");
+            }
+            mVariablesList.emplace_back(broke[0].replace(clean, ""), getVarType(broke[0].replace(clean, "")), content);
+        }
+    }
+    return varList;
+}
+
+QStringList Gdb::getVarListFromContext(const QString &context)
+{
+    QRegExp varMatch("\"\\w+\\s="); // find substring from '"' to '=' included only characters,
+                                    // digits and whitespaces (it's a var name)
     int pos = 0;
     QStringList varList;
     while(pos != -1)// reads all matches
     {
-        pos = varMatch.indexIn(mBuffer, pos+1);//find next matches
+        pos = varMatch.indexIn(context, pos+1);//find next matches
         QRegExp clean("\"|\\s|=");// find all garbage characters
         QString varName = varMatch.cap().replace(clean, "").trimmed();// clean garbage and whitespaces
         if(!varName.isEmpty())
