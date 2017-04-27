@@ -28,6 +28,9 @@ public:
     std::vector<Breakpoint> getBreakpoints()const;
     std::vector<Variable> getLocalVariables()const;
     QString getVarContent(const QString& var);
+
+    QString getVarContentFromContext(const QString& context);
+
     QString getVarType(const QString& variable);
     void updateCertainVariables(QStringList varList);
     QStringList getVariablesFrom(QStringList frame);

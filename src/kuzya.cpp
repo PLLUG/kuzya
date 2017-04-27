@@ -791,7 +791,8 @@ void Kuzya::slotDebuggerHitBreakpoint(int line)
 void Kuzya::slotUpdateLocals()
 {
     mWatchLocalsWidget->clear();
-    mGdbDebugger->globalUpdate();
+    //mGdbDebugger->globalUpdate();
+    mGdbDebugger->getVariableList("local");
     auto vars = mGdbDebugger->getLocalVariables();
     for(auto i : vars)
     {
