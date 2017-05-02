@@ -339,6 +339,7 @@ Kuzya::Kuzya(QWidget *parent)
     connect(mWatchLocalsWidget, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(slotItemVariableExpanded(QTreeWidgetItem*)), Qt::UniqueConnection);
     connect(actionUpdateLocals, SIGNAL(triggered()), this, SLOT(slotUpdateLocals()), Qt::UniqueConnection);
     mWatchLocalsWidget->setColumnCount(3);
+    mWatchLocalsWidget->setHeaderLabels(QStringList() << "Name" << "Content" << "Type");
     mWatchLocalsWidget->setStyleSheet("QTreeView::branch:has-children: {border-image: url(branch_closed.png) 0;}");
 
     /* connect debug actions */
@@ -846,7 +847,7 @@ void Kuzya::addVariableChildren(QTreeWidgetItem *parrent, Variable var, QString 
         mPointerItems[parrent] = var;   //Add pointer's node to map and attach to this node pointer
         parrent->setIcon(0, QIcon(QPixmap(":/treeView/pointer")));
     }
-    else
+    else if(!drfPointer)
     {
         parrent->setIcon(0, QIcon(QPixmap(":/treeView/variable")));
     }
