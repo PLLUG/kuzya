@@ -799,9 +799,9 @@ void Kuzya::slotDebuggerHitBreakpoint(int line)
 void Kuzya::slotUpdateLocals()
 {
     mWatchLocalsWidget->clear();
-    //mGdbDebugger->globalUpdate();
-    mGdbDebugger->getVariableList("local");
+    mGdbDebugger->updateAllVariable32x();
     auto vars = mGdbDebugger->getLocalVariables();
+    qDebug() << "[KUZYA] Total vars: " << vars.size();
     for(auto i : vars)
     {
         addTreeRootVariable(i);

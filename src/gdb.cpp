@@ -136,13 +136,13 @@ int Gdb::getCurrentLine()
     write(QByteArray("frame"));
     QProcess::waitForReadyRead();
     QRegExp rx(":\\d+"); //finds ':46'
-    qDebug() << "[CURRENT LINE]:" << mBuffer;
     if(rx.indexIn(mBuffer) == -1)
     {
         return -1; //not found
     }
     QStringList lst = rx.capturedTexts(); //found :46
     QString line = lst[0];// first matches
+    qDebug() << "[CURRENT LINE]:" << line.split(':').last().toInt();// (int)"46"
     return line.split(':').last().toInt();// (int)"46"
 }
 
@@ -238,7 +238,7 @@ QString Gdb::getVarContentFromContext(const QString &context)
     }
     content.indexIn(context);
     QString res = content.cap().replace(clean, "").replace("^done", "").trimmed();
-    res.resize(res.size()-1); // last character is garbate too
+    //res.resize(res.size()-1); // last character is garbate too
     /* Removed all line breaks */
     auto lst = res.split('\n');
     for(QString& i : lst)
@@ -334,18 +334,66 @@ QStringList Gdb::getVariableList(const QString &frame)
         }
         value = value.prepend(" = ");
         value = value.append("^done");
-//        qDebug() << broke[0].replace(clean, "") << " - "  << value << "-" << getVarContentFromContext(value);
+        qDebug() << broke[0].replace(clean, "") << " - "  << value << "-" << getVarContentFromContext(value);
         QString content = getVarContentFromContext(value);
         if(read && !content.isEmpty())
         {
             if(appendBr)
             {
-                content.append("}");
+           //     content.append("}");
             }
             mVariablesList.emplace_back(broke[0].replace(clean, ""), getVarType(broke[0].replace(clean, "")), content);
         }
     }
     return varList;
+}
+
+void Gdb::updateVariablesInFrame32x(const QString &frame)
+{
+    write(QByteArray("info ").append(frame));
+    QProcess::waitForReadyRead(1000);
+    QRegExp varMatch("\"\\w+\\s="); // find substring from '"' to '=' included only characters,
+                                    // digits and whitespaces (it's a var name)
+
+
+    QRegExp clean("~|\"|\\s|=");// find all garbage character
+
+    QStringList vars = mBuffer.split("\\n");
+//    qDebug() << vars.size() << " vars";
+    for(auto i : vars)
+    {
+        //qDebug() << i;
+        QStringList broke = i.split(" = ");
+        QString value;
+        bool appendBr = broke.size() > 2;
+        for(int i=1;i<broke.size();++i)
+        {
+            value.append(broke[i]);
+            if(i+1 != broke.size())
+            {
+                value.append(" = ");
+            }
+        }
+        value = value.prepend(" = ");
+        value = value.append("^done");
+        qDebug() << broke[0].replace(clean, "") << " - "  << value << "-" << getVarContentFromContext(value);
+        QString content = getVarContentFromContext(value);
+        if(!content.isEmpty())
+        {
+            if(appendBr)
+            {
+           //     content.append("}");
+            }
+            mVariablesList.emplace_back(broke[0].replace(clean, ""), getVarType(broke[0].replace(clean, "")), content);
+        }
+    }
+}
+
+void Gdb::updateAllVariable32x()
+{
+    mVariablesList.clear();
+    updateVariablesInFrame32x("local");
+    updateVariablesInFrame32x("arg");
 }
 
 QStringList Gdb::getVarListFromContext(const QString &context)
@@ -371,7 +419,7 @@ void Gdb::globalUpdate()
 {   // update all informations
     mVariablesList.clear(); // clear old info
     updateBreakpointsList();
-    updateCertainVariables(getVariablesFrom(QStringList() << "local" << "arg"));
+ //   updateCertainVariables(getVariablesFrom(QStringList() << "local" << "arg"));
 }
 
 void Gdb::setGdbPath(const QString &path)
