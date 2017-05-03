@@ -33,16 +33,15 @@ public:
 
     QString getVarType(const QString& variable);
     void updateCertainVariables(QStringList varList);
-    QStringList getVariablesFrom(QStringList frame);
-    QStringList getVariableList(const QString& frames);
+//    QStringList getVariablesFrom(QStringList frame);
+//    QStringList getVariableList(const QString& frames);
 
     void updateVariablesInFrame32x(const QString &frame);
     void updateAllVariable32x();
 
-    QStringList getVarListFromContext(const QString& context);
+//    QStringList getVarListFromContext(const QString& context);
     void globalUpdate();
     void setGdbPath(const QString& path);
-    std::vector<Variable> mVariablesList;
 public slots:
     void slotReadStdOutput();
     void slotReadErrOutput();
@@ -64,6 +63,7 @@ private:
     QString mErrorMessage;
     QString mBuffer;
     std::vector<Breakpoint> mBreakpointsList;
+    std::vector<Variable> mVariablesList;
 };
 
 #endif // GDB_H
