@@ -350,6 +350,7 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionStopDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stopExecuting()));
 
     connect(mGdbDebugger, SIGNAL(signalHitBreakpoint(int)), this, SLOT(slotStoppedAtLine(int)));
+    connect(actionStepOver, SIGNAL(triggered()), this, SLOT(slotMoveCurrentMarker()));
     connect(actionStepIn, SIGNAL(triggered()), this, SLOT(slotMoveCurrentMarker()));
     connect(actionStepOut, SIGNAL(triggered()), this, SLOT(slotMoveCurrentMarker()));
     connect(actionContinueDebugging, SIGNAL(triggered()), this, SLOT(slotRemoveCurrentMarker()));

@@ -136,6 +136,7 @@ int Gdb::getCurrentLine()
     write(QByteArray("frame"));
     QProcess::waitForReadyRead();
     QRegExp rx(":\\d+"); //finds ':46'
+    qDebug() << "[CURRENT LINE]:" << mBuffer;
     if(rx.indexIn(mBuffer) == -1)
     {
         return -1; //not found
@@ -308,15 +309,15 @@ QStringList Gdb::getVariableList(const QString &frame)
         if(!varName.isEmpty())
         {
             varList << varName;
-            qDebug() << "Var " << varName << " - ";
-            qDebug() << mBuffer.mid(lastpos, pos);
+//            qDebug() << "Var " << varName << " - ";
+//            qDebug() << mBuffer.mid(lastpos, pos);
             read = true;
             mVariablesList.clear();
         }
         lastpos = pos+1;
     }
     QStringList vars = mBuffer.split("\\n");
-    qDebug() << vars.size() << " vars";
+//    qDebug() << vars.size() << " vars";
     for(auto i : vars)
     {
         //qDebug() << i;
@@ -333,7 +334,7 @@ QStringList Gdb::getVariableList(const QString &frame)
         }
         value = value.prepend(" = ");
         value = value.append("^done");
-        qDebug() << broke[0].replace(clean, "") << " - "  << value << "-" << getVarContentFromContext(value);
+//        qDebug() << broke[0].replace(clean, "") << " - "  << value << "-" << getVarContentFromContext(value);
         QString content = getVarContentFromContext(value);
         if(read && !content.isEmpty())
         {
