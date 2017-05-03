@@ -48,7 +48,6 @@ void Gdb::readStdOutput()
     mBuffer = QProcess::readAll();
     QRegExp errorMatch("\\^error");
     QRegExp hitBreakpoint("\\*stopped,reason=\"breakpoint-hit\"");
-    QRegExp updateMatch("info\\s");
     if(hitBreakpoint.indexIn(mBuffer) != -1)
     {
         QRegExp lineMacth("line=\"\\d+\"");
@@ -142,7 +141,6 @@ int Gdb::getCurrentLine()
     }
     QStringList lst = rx.capturedTexts(); //found :46
     QString line = lst[0];// first matches
-    qDebug() << "[CURRENT LINE]:" << line.split(':').last().toInt();// (int)"46"
     return line.split(':').last().toInt();// (int)"46"
 }
 
@@ -202,8 +200,6 @@ QString Gdb::getVarContent(const QString& var)
     QRegExp clean("[\\\\\"|~]"); // find all garbage characters '\', '"', '~'
     QRegExp pointerMatch("\\(.*\\s*\\)\\s0x[\\d+abcdef]+"); // try to regonize pointer content
                                                             // (SOME_TYPE *) 0x6743hf2
-    QRegExp memmoryError("Cannot access memory at address 0x[\\dabcdef]+");
-    //if(memmoryError-)
     if(pointerMatch.indexIn(mBuffer) != -1)
     {
         QString addres = pointerMatch.cap().split(' ').last();  // get only hex addres
@@ -224,13 +220,11 @@ QString Gdb::getVarContent(const QString& var)
 }
 
 QString Gdb::getVarContentFromContext(const QString &context)
-{
+{   // Produces variable value by GDB output
     QRegExp content("=\\s.*\\^done"); // match string beginning with '= ' and ending with '^done'
     QRegExp clean("[\\\\\"|~]"); // find all garbage characters '\', '"', '~'
     QRegExp pointerMatch("\\(.*\\s*\\)\\s0x[\\d+abcdef]+"); // try to regonize pointer content
                                                             // (SOME_TYPE *) 0x6743hf2
-    QRegExp memmoryError("Cannot access memory at address 0x[\\dabcdef]+");
-    //if(memmoryError-)
     if(pointerMatch.indexIn(context) != -1)
     {
         QString addres = pointerMatch.cap().split(' ').last();  // get only hex addres
@@ -238,7 +232,6 @@ QString Gdb::getVarContentFromContext(const QString &context)
     }
     content.indexIn(context);
     QString res = content.cap().replace(clean, "").replace("^done", "").trimmed();
-    //res.resize(res.size()-1); // last character is garbate too
     /* Removed all line breaks */
     auto lst = res.split('\n');
     for(QString& i : lst)
@@ -280,7 +273,7 @@ void Gdb::updateCertainVariables(QStringList varList)
 }
 
 void Gdb::updateVariablesInFrame32x(const QString &frame)
-{
+{   // Read variables from frame $frame$
     write(QByteArray("info ").append(frame));
     QProcess::waitForReadyRead(1000);
     QRegExp clean("~|\"|\\s|=");// find all garbage character
@@ -300,7 +293,6 @@ void Gdb::updateVariablesInFrame32x(const QString &frame)
         }
         value = value.prepend(" = ");
         value = value.append("^done");
-        qDebug() << broke[0].replace(clean, "") << " - "  << value << "-" << getVarContentFromContext(value);
         QString content = getVarContentFromContext(value);
         if(!content.isEmpty())
         {
@@ -310,7 +302,7 @@ void Gdb::updateVariablesInFrame32x(const QString &frame)
 }
 
 void Gdb::updateAllVariable32x()
-{
+{   // Updates variables from local and arg
     mVariablesList.clear();
     updateVariablesInFrame32x("local");
     updateVariablesInFrame32x("arg");

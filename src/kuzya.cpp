@@ -802,7 +802,6 @@ void Kuzya::slotUpdateLocals()
     mWatchLocalsWidget->clear();
     mGdbDebugger->updateAllVariable32x();
     auto vars = mGdbDebugger->getLocalVariables();
-    qDebug() << "[KUZYA] Total vars: " << vars.size();
     for(auto i : vars)
     {
         addTreeRootVariable(i);
@@ -810,21 +809,17 @@ void Kuzya::slotUpdateLocals()
 }
 
 void Kuzya::addTreeRootVariable(Variable var)
-{
+{   // Adds variables to root of mWatchLocalsWidget and adds recursive all nested types as a subtree
     QTreeWidgetItem *treeItem = new QTreeWidgetItem(mWatchLocalsWidget);
-
-    // QTreeWidgetItem::setText(int column, const QString & text)
     treeItem->setText(0, var.getName());
     QString varContent = var.getContent();
-//    varContent.append(" (%1)");
-//    varContent = varContent.arg(var.getType());
     treeItem->setText(1, varContent);
     treeItem->setText(2, var.getType());
     addVariableChildren(treeItem, var, "");
 }
 
 void Kuzya::AddVariableAsChild(QTreeWidgetItem *parent, Variable var, QString prefix, bool internal = false)
-{
+{   // Adds all nested types of $var$ to parent
     QTreeWidgetItem *treeItem = new QTreeWidgetItem();
     QString plainName = var.getName().split('.').last();
     treeItem->setText(0, plainName);
@@ -841,29 +836,29 @@ void Kuzya::AddVariableAsChild(QTreeWidgetItem *parent, Variable var, QString pr
     parent->addChild(treeItem);
 }
 
-void Kuzya::addVariableChildren(QTreeWidgetItem *parrent, Variable var, QString prefix, bool drfPointer)
-{
+void Kuzya::addVariableChildren(QTreeWidgetItem *parent, Variable var, QString prefix, bool drfPointer)
+{   // Adds certain variable to parent
     std::vector<Variable> nestedTypes = var.getNestedTypes();
     if(drfPointer && nestedTypes.size() ==0)
     {
-        AddVariableAsChild(parrent, var, "", false);
+        AddVariableAsChild(parent, var, "", false);
     }
     if(var.isPointer())
     {
         QString dereferencedVarName = QString("*(%1)").arg(var.getName());
-        AddVariableAsChild(parrent, var, "", true);   //create fake node to enable expanding parent
-        mPointerItems[parrent] = var;   //Add pointer's node to map and attach to this node pointer
-        parrent->setIcon(0, QIcon(QPixmap(":/treeView/pointer")));
+        AddVariableAsChild(parent, var, "", true);   //create fake node to enable expanding parent
+        mPointerItems[parent] = var;   //Add pointer's node to map and attach to this node pointer
+        parent->setIcon(0, QIcon(QPixmap(":/treeView/pointer")));
     }
     else if(!drfPointer)
     {
-        parrent->setIcon(0, QIcon(QPixmap(":/treeView/variable")));
+        parent->setIcon(0, QIcon(QPixmap(":/treeView/variable")));
     }
     for(auto i : nestedTypes)
     {
         QString likelyType = mGdbDebugger->getVarType(i.getName());
         i.setType(likelyType.isEmpty() ? "<No info>" : likelyType);
-        AddVariableAsChild(parrent, i, prefix, false);
+        AddVariableAsChild(parent, i, prefix, false);
     }
 }
 
