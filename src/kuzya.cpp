@@ -234,6 +234,7 @@ Kuzya::Kuzya(QWidget *parent)
     file = new QFile();
     goToLine = new GoToLineDialog(textEditor);
     compiler = new Compiler(this);
+    compiler->setCompilerMode(Compiler::DEFAULT);
     translator = new Translator(this);
     settings = new OptionsDialog(this);
 
