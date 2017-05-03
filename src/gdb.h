@@ -28,19 +28,14 @@ public:
     std::vector<Breakpoint> getBreakpoints()const;
     std::vector<Variable> getLocalVariables()const;
     QString getVarContent(const QString& var);
-
-    QString getVarContentFromContext(const QString& context);
-
     QString getVarType(const QString& variable);
     void updateCertainVariables(QStringList varList);
-//    QStringList getVariablesFrom(QStringList frame);
-//    QStringList getVariableList(const QString& frames);
 
+    QString getVarContentFromContext(const QString& context);
     void updateVariablesInFrame32x(const QString &frame);
     void updateAllVariable32x();
 
-//    QStringList getVarListFromContext(const QString& context);
-    void globalUpdate();
+    void updateBreakpoints();
     void setGdbPath(const QString& path);
 public slots:
     void slotReadStdOutput();

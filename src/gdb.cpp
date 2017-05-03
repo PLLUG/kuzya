@@ -279,43 +279,6 @@ void Gdb::updateCertainVariables(QStringList varList)
     }
 }
 
-//QStringList Gdb::getVariablesFrom(QStringList frames)
-//{   //returns variables name in some frames $frames$
-//    QStringList allVariables;
-//    for(auto i : frames)
-//    {
-//        allVariables << getVariableList(i);
-//    }
-//    return allVariables;
-//}
-
-//QStringList Gdb::getVariableList(const QString &frame)
-//{   //returns variables name in certain frame $frame$
-//    write(QByteArray("info ").append(frame));
-//    QProcess::waitForReadyRead(1000);
-//    QRegExp varMatch("\"\\w+\\s="); // find substring from '"' to '=' included only characters,
-//                                    // digits and whitespaces (it's a var name)
-
-
-//    int pos = 0;
-//    QStringList varList;
-//    QRegExp clean("~|\"|\\s|=");// find all garbage characters
-//    while(pos != -1)// reads all matches
-//    {
-//        pos = varMatch.indexIn(mBuffer, pos+1);//find next matches
-//        QString varName = varMatch.cap().replace(clean, "").trimmed();// clean garbage and whitespaces
-//        if(!varName.isEmpty())
-//        {
-//            varList << varName;
-////            qDebug() << "Var " << varName << " - ";
-////            qDebug() << mBuffer.mid(lastpos, pos);
-//            read = true;
-//            mVariablesList.clear();
-//        }
-//    }
-//    return varList;
-//}
-
 void Gdb::updateVariablesInFrame32x(const QString &frame)
 {
     write(QByteArray("info ").append(frame));
@@ -353,30 +316,10 @@ void Gdb::updateAllVariable32x()
     updateVariablesInFrame32x("arg");
 }
 
-//QStringList Gdb::getVarListFromContext(const QString &context)
-//{
-//    QRegExp varMatch("\"\\w+\\s="); // find substring from '"' to '=' included only characters,
-//                                    // digits and whitespaces (it's a var name)
-//    int pos = 0;
-//    QStringList varList;
-//    while(pos != -1)// reads all matches
-//    {
-//        pos = varMatch.indexIn(context, pos+1);//find next matches
-//        QRegExp clean("\"|\\s|=");// find all garbage characters
-//        QString varName = varMatch.cap().replace(clean, "").trimmed();// clean garbage and whitespaces
-//        if(!varName.isEmpty())
-//        {
-//            varList << varName;
-//        }
-//    }
-//    return varList;
-//}
-
-void Gdb::globalUpdate()
+void Gdb::updateBreakpoints()
 {   // update all informations
     mVariablesList.clear(); // clear old info
     updateBreakpointsList();
- //   updateCertainVariables(getVariablesFrom(QStringList() << "local" << "arg"));
 }
 
 void Gdb::setGdbPath(const QString &path)

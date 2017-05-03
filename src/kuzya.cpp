@@ -792,7 +792,7 @@ void Kuzya::slotRunDebugMode()
 
 void Kuzya::slotDebuggerHitBreakpoint(int line)
 {
-    mGdbDebugger->globalUpdate();
+    mGdbDebugger->updateBreakpoints();
 
 }
 
