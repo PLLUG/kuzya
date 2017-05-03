@@ -349,6 +349,12 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionContinueDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stepContinue()));
     connect(actionStopDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stopExecuting()));
 
+    connect(mGdbDebugger, SIGNAL(signalHitBreakpoint(int)), this, SLOT(slotStoppedAtLine(int)));
+    connect(actionStepIn, SIGNAL(triggered()), this, SLOT(slotMoveCurrentMarker()));
+    connect(actionStepOut, SIGNAL(triggered()), this, SLOT(slotMoveCurrentMarker()));
+    connect(actionContinueDebugging, SIGNAL(triggered()), this, SLOT(slotRemoveCurrentMarker()));
+    connect(actionStopDebugging, SIGNAL(triggered()), this, SLOT(slotRemoveCurrentMarker()));
+
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
     setUnifiedTitleAndToolBarOnMac(true);
@@ -896,6 +902,22 @@ void Kuzya::slotItemVariableExpanded(QTreeWidgetItem *item)
             dereferencePointerItem(item);
             mPointerItems.erase(foundIterator);
     }
+}
+
+void Kuzya::slotStoppedAtLine(int line)
+{
+    textEditor->markerDeleteAll(currentMarker);
+    textEditor->markerAdd(line-1, currentMarker);
+}
+
+void Kuzya::slotMoveCurrentMarker()
+{
+    slotStoppedAtLine(mGdbDebugger->getCurrentLine());
+}
+
+void Kuzya::slotRemoveCurrentMarker()
+{
+    textEditor->markerDeleteAll(currentMarker);
 }
 
 void Kuzya::slotExpandVariable(QTreeWidgetItem *item, int column)

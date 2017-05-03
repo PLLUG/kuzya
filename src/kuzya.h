@@ -160,6 +160,9 @@ private slots:
         void slotUpdateLocals();
         void slotExpandVariable(QTreeWidgetItem* item, int column);
         void slotItemVariableExpanded(QTreeWidgetItem* item);
+        void slotStoppedAtLine(int line);
+        void slotMoveCurrentMarker();
+        void slotRemoveCurrentMarker();
 
 protected:
         //*DRAG AND DROP
