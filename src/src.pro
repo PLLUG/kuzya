@@ -24,6 +24,7 @@ HEADERS += kuzya.h \
     breakpoint.h \
     gdb.h \
     variable.h \
+    watchwindow.h
 
 SOURCES += kuzya.cpp \
     main.cpp \
@@ -36,6 +37,7 @@ SOURCES += kuzya.cpp \
     gdb.cpp \
     breakpoint.cpp \
     variable.cpp \
+    watchwindow.cpp
 
 RESOURCES = images.qrc \
            ../auth.qrc \

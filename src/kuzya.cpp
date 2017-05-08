@@ -53,7 +53,7 @@
 #include "translator.h"
 #include "version.h"
 #include "gdb.h"
-
+#include "watchwindow.h"
 
 Kuzya::Kuzya(QWidget *parent)
     : QMainWindow(parent)
@@ -129,52 +129,19 @@ Kuzya::Kuzya(QWidget *parent)
     mOutputTabWidget->addTab(notificationList, "Output");
     mOutputTabWidget->setVisible(false);
     //adds debug tab to tabWidget
-    QLabel *innerLabel = new QLabel(this);
-    innerLabel->setAutoFillBackground(true);
-    QVBoxLayout *innerLabelLayout = new QVBoxLayout(this);
-    innerLabel->setLayout(innerLabelLayout);
-    QToolBar *debugButtons = new QToolBar(this);
-    mWatchLocalsWidget = new QTreeWidget(this);
-    connect(mWatchLocalsWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(slotExpandVariable(QTreeWidgetItem*,int)), Qt::UniqueConnection);
-    connect(mWatchLocalsWidget, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(slotItemVariableExpanded(QTreeWidgetItem*)), Qt::UniqueConnection);
-    mWatchLocalsWidget->setStyleSheet(
-                "QTreeView::branch:!has-children:!has-siblings:adjoins-item,"
-                "QTreeView::branch:has-siblings:adjoins-item,"
-                "QTreeView::branch:has-siblings:!adjoins-item {"
-                    "border-image: url(:/treeView/empty);"
-                "}"
-                "QTreeView::branch:open:has-children:!has-siblings,"
-                "QTreeView::branch:open:has-children:has-siblings  {"
-                        "border-image: none;"
-                        "image: url(:/treeView/expand);"
-                "}"
-                "QTreeView::branch:has-children:!has-siblings:closed,"
-                "QTreeView::branch:closed:has-children:has-siblings {"
-                        "border-image: none;"
-                        "image: url(:/treeView/hide);"
-                "}"
-                "QTreeView::item:hover{background-color:#EEFFFF;}"
-                                      );
-    mWatchLocalsWidget->setSelectionMode(QAbstractItemView::NoSelection);
-    mWatchLocalsWidget->setFocusPolicy(Qt::NoFocus);
-    mOutputTabWidget->setStyleSheet(mWatchLocalsWidget->styleSheet());
-    qDebug() << mWatchLocalsWidget->styleSheet();
-    innerLabelLayout->addWidget(debugButtons);
-    innerLabelLayout->addWidget(mWatchLocalsWidget);
-    mOutputTabWidget->addTab(innerLabel, "Debug");
-
-    debugButtons->setIconSize(QSize(30,15));
-    debugButtons->addAction(actionStartDebugging);
-    debugButtons->addSeparator();
-    debugButtons->addAction(actionStepOver);
-    debugButtons->addAction(actionStepIn);
-    debugButtons->addAction(actionStepOut);
-    debugButtons->addAction(actionContinueDebugging);
-    debugButtons->addSeparator();
-    debugButtons->addAction(actionStopDebugging);
-    debugButtons->addSeparator();
-    debugButtons->addAction(actionUpdateLocals);
-    debugButtons->setAutoFillBackground(true);
+    auto debug = new WatchWindow(this);
+    mOutputTabWidget->addTab(debug, "Debug");
+    debug->debugButtons->addAction(actionStartDebugging);
+    debug->debugButtons->addSeparator();
+    debug->debugButtons->addAction(actionStepOver);
+    debug->debugButtons->addAction(actionStepIn);
+    debug->debugButtons->addAction(actionStepOut);
+    debug->debugButtons->addAction(actionContinueDebugging);
+    debug->debugButtons->addSeparator();
+    debug->debugButtons->addAction(actionStopDebugging);
+    debug->debugButtons->addSeparator();
+    debug->debugButtons->addAction(actionUpdateLocals);
+    debug->debugButtons->setAutoFillBackground(true);
 
     QSplitter *splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);
@@ -307,7 +274,6 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionObjectMode, SIGNAL(triggered()), this,            SLOT(slotObjectMode()));
     connect(actionStaticLibMode, SIGNAL(triggered()), this,         SLOT(slotStaticLibMode()));
     connect(actionDynamicLibMode, SIGNAL(triggered()), this,        SLOT(slotDynamicLibMode()));
-    connect(actionStartDebugging, SIGNAL(triggered()), this, SLOT(slotRunDebugMode()));
 
 
     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoRedoEnabled()));
@@ -333,24 +299,18 @@ Kuzya::Kuzya(QWidget *parent)
     QString comp = settings->readDefaultCompiler(language);
     QString compDir = settings->readCompilerLocation(language, comp);
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
-    mGdbDebugger = new Gdb("D:/Studying/Programming/Qt/PLLUG/kuzya/msys64/mingw64/bin/bin/gdb.exe");
+    mGdbDebugger = new Gdb("D:/Studying/Programming/Qt/PLLUG/kuzya/msys64/gdb/gdb.exe");
+    debug->setDebugger(mGdbDebugger);
 
-    connect(mGdbDebugger, SIGNAL(signalHitBreakpoint(int)), this, SLOT(slotDebuggerHitBreakpoint(int)));
-//    connect(mGdbDebugger, SIGNAL(signalUpdated()), this, SLOT(slotDebuggerUpdated()));
-    connect(mWatchLocalsWidget, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(slotItemVariableExpanded(QTreeWidgetItem*)), Qt::UniqueConnection);
-    connect(actionUpdateLocals, SIGNAL(triggered()), this, SLOT(slotUpdateLocals()), Qt::UniqueConnection);
-    mWatchLocalsWidget->setColumnCount(3);
-    mWatchLocalsWidget->setHeaderLabels(QStringList() << "Name" << "Content" << "Type");
-    mWatchLocalsWidget->setStyleSheet("QTreeView::branch:has-children: {border-image: url(branch_closed.png) 0;}");
 
     /* connect debug actions */
+    connect(actionStartDebugging, SIGNAL(triggered()), this, SLOT(slotRunDebugMode()));
     connect(actionStepOver, SIGNAL(triggered()), mGdbDebugger, SLOT(stepOver()));
     connect(actionStepIn, SIGNAL(triggered()), mGdbDebugger, SLOT(stepIn()));
     connect(actionStepOut, SIGNAL(triggered()), mGdbDebugger, SLOT(stepOut()));
     connect(actionContinueDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stepContinue()));
     connect(actionStopDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stopExecuting()));
 
-    connect(mGdbDebugger, SIGNAL(signalHitBreakpoint(int)), this, SLOT(slotStoppedAtLine(int)));
     connect(actionStepOver, SIGNAL(triggered()), this, SLOT(slotMoveCurrentMarker()));
     connect(actionStepIn, SIGNAL(triggered()), this, SLOT(slotMoveCurrentMarker()));
     connect(actionStepOut, SIGNAL(triggered()), this, SLOT(slotMoveCurrentMarker()));
@@ -785,6 +745,7 @@ void Kuzya::slotRunDebugMode()
         }
         catch(std::domain_error error)
         {
+            qDebug() << "error";
             mOutputTabWidget->setVisible(true);
             addNotification(NTYPE_FAILING, error.what());
         }
@@ -793,111 +754,17 @@ void Kuzya::slotRunDebugMode()
 
 void Kuzya::slotDebuggerHitBreakpoint(int line)
 {
-    mGdbDebugger->updateBreakpoints();
-
+    mGdbDebugger->updateBreakpointsList();
 }
 
 void Kuzya::slotUpdateLocals()
 {
-    mWatchLocalsWidget->clear();
-    mGdbDebugger->updateAllVariable32x();
+//    mWatchLocalsWidget->clear();
+    mGdbDebugger->updateVariable64x();
     auto vars = mGdbDebugger->getLocalVariables();
     for(auto i : vars)
     {
-        addTreeRootVariable(i);
-    }
-}
-
-void Kuzya::addTreeRootVariable(Variable var)
-{   // Adds variables to root of mWatchLocalsWidget and adds recursive all nested types as a subtree
-    QTreeWidgetItem *treeItem = new QTreeWidgetItem(mWatchLocalsWidget);
-    treeItem->setText(0, var.getName());
-    QString varContent = var.getContent();
-    treeItem->setText(1, varContent);
-    treeItem->setText(2, var.getType());
-    addVariableChildren(treeItem, var, "");
-}
-
-void Kuzya::AddVariableAsChild(QTreeWidgetItem *parent, Variable var, QString prefix, bool internal = false)
-{   // Adds all nested types of $var$ to parent
-    QTreeWidgetItem *treeItem = new QTreeWidgetItem();
-    QString plainName = var.getName().split('.').last();
-    treeItem->setText(0, plainName);
-    treeItem->setText(1, var.getContent());
-    treeItem->setText(2, var.getType());
-    if(!internal)
-    {
-        addVariableChildren(treeItem, var, prefix);
-    }
-    else
-    {
-        treeItem->setHidden(true);
-    }
-    parent->addChild(treeItem);
-}
-
-void Kuzya::addVariableChildren(QTreeWidgetItem *parent, Variable var, QString prefix, bool drfPointer)
-{   // Adds certain variable to parent
-    std::vector<Variable> nestedTypes = var.getNestedTypes();
-    if(drfPointer && nestedTypes.size() ==0)
-    {
-        AddVariableAsChild(parent, var, "", false);
-    }
-    if(var.isPointer())
-    {
-        QString dereferencedVarName = QString("*(%1)").arg(var.getName());
-        AddVariableAsChild(parent, var, "", true);   //create fake node to enable expanding parent
-        mPointerItems[parent] = var;   //Add pointer's node to map and attach to this node pointer
-        parent->setIcon(0, QIcon(QPixmap(":/treeView/pointer")));
-    }
-    else if(!drfPointer)
-    {
-        parent->setIcon(0, QIcon(QPixmap(":/treeView/variable")));
-    }
-    for(auto i : nestedTypes)
-    {
-        QString likelyType = mGdbDebugger->getVarType(i.getName());
-        i.setType(likelyType.isEmpty() ? "<No info>" : likelyType);
-        AddVariableAsChild(parent, i, prefix, false);
-    }
-}
-
-void Kuzya::dereferencePointerItem(QTreeWidgetItem *itemPointer)
-{   //remove helper node and attachs content of dereferenced pointer
-    Variable pointer = mPointerItems[itemPointer];
-
-    QString drfName = tr("(*%1)").arg(pointer.getName());
-    QString drfAddressContent = mGdbDebugger->getVarContent(drfName);
-    QString drfAddressType = mGdbDebugger->getVarType(drfName);
-    Variable drfPointer(drfName, drfAddressType, drfAddressContent);
-
-    QTreeWidgetItem* child = itemPointer->child(0); //Pointer's node always has ony one shils so it's index is '0'
-    itemPointer->removeChild(child);    //remove internal node in tree
-    if(drfPointer.getNestedTypes().size() == 0 && !drfPointer.isPointer())
-    {
-        if(drfPointer.getContent().isEmpty())
-        {
-            QTreeWidgetItem* error = new QTreeWidgetItem();
-            error->setText(0, "nullptr");
-            error->setText(1, "Cannot accses to this memory");
-            error->setIcon(0, QIcon(QPixmap(":/treeView/nullptr")));
-            itemPointer->addChild(error);
-            return;
-        }
-        AddVariableAsChild(itemPointer, drfPointer, "", false);
-        qDebug() << "drfPointer has only one nested type && it's not pointer";
-        return;
-    }
-    addVariableChildren(itemPointer, drfPointer, "", true);   //append dereferenced pointer to node with addres
-}
-
-void Kuzya::slotItemVariableExpanded(QTreeWidgetItem *item)
-{
-    auto foundIterator = mPointerItems.find(item);
-    if(foundIterator != mPointerItems.end())
-    {
-            dereferencePointerItem(item);
-            mPointerItems.erase(foundIterator);
+//        addTreeRootVariable(i);
     }
 }
 

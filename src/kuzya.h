@@ -159,7 +159,6 @@ private slots:
         void slotDebuggerHitBreakpoint(int line);
         void slotUpdateLocals();
         void slotExpandVariable(QTreeWidgetItem* item, int column);
-        void slotItemVariableExpanded(QTreeWidgetItem* item);
         void slotStoppedAtLine(int line);
         void slotMoveCurrentMarker();
         void slotRemoveCurrentMarker();
@@ -171,17 +170,6 @@ protected:
         void closeEvent(QCloseEvent *event);
 //	void keyPressEvent(QKeyEvent *event);
 private:
-
-        /* update watch section */
-        void addTreeRootVariable(Variable var);
-        void AddVariableAsChild(QTreeWidgetItem *parent,
-                          Variable var, QString prefix, bool internal);
-        void addVariableChildren(QTreeWidgetItem* parrent,
-                          Variable var, QString prefix, bool drfPointer = false);
-
-        void dereferencePointerItem(QTreeWidgetItem* itemPointer);
-
-        /* end section */
 
         void paintErrorMarkers(QList<Compiler::compilerError>* errorList);
         void paintWarningMarkers(QList<Compiler::compilerWarning>* warningList);

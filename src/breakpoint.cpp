@@ -31,15 +31,7 @@ void Breakpoint::parse(const QString &line)
       mEnabled = enabled.indexIn(line) == -1 ? false : true;
       lineRegex.indexIn(line);
       QString lineFrame = lineRegex.cap();
-      QStringList splitted = lineFrame.split(':');
-      if(splitted.length() > 1)
-      {
-        mLine = splitted[1].toInt();
-      }
-      else
-      {
-          mLine = -1;
-      }
+      mLine = lineFrame.split(':')[1].toInt();
       frame.indexIn(line);
       mWhat = frame.cap().trimmed();
 }
