@@ -156,10 +156,12 @@ private slots:
         void slotSetFileSuffix(QStringList);
 
         void setUndoRedoEnabled();
+
         void slotRunDebugMode();
         void slotStoppedAtLine(int line);
         void slotMoveCurrentMarker();
         void slotClearDebugInformation();
+        void slotDebugEnded(int code);
 
 protected:
         //*DRAG AND DROP

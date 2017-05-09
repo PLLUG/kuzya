@@ -313,6 +313,8 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionStopDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stopExecuting()));
     /* markers action */
     connect(mGdbDebugger, SIGNAL(signalGdbStopped(int)), this, SLOT(slotStoppedAtLine(int)), Qt::UniqueConnection);
+    connect(mGdbDebugger, SIGNAL(signalDebugEnded(int)), this, SLOT(slotDebugEnded(int)));
+    connect(actionStopDebugging, &QAction::triggered, [&](){slotDebugEnded(0);});
     connect(actionContinueDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
     connect(actionStopDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
 
@@ -718,6 +720,8 @@ void Kuzya::slotRunDebugMode()
     {
         try
         {
+            mOutputTabWidget->setCurrentIndex(1);
+            mOutputTabWidget->setVisible(true);
             if(mGdbDebugger->state() == QProcess::NotRunning)
             {
                 mGdbDebugger->start();
@@ -744,8 +748,7 @@ void Kuzya::slotRunDebugMode()
         }
         catch(std::domain_error error)
         {
-            qDebug() << "error";
-            mOutputTabWidget->setVisible(true);
+            mOutputTabWidget->setCurrentIndex(0);
             addNotification(NTYPE_FAILING, error.what());
         }
     }
@@ -766,6 +769,21 @@ void Kuzya::slotClearDebugInformation()
 {
     textEditor->markerDeleteAll(currentMarker);
     debugTab->clearWatch();
+}
+
+void Kuzya::slotDebugEnded(int code)
+{
+    if(code == 0)
+    {
+        mOutputTabWidget->setVisible(false);
+        addNotification(NTYPE_SUCCESS, tr("Programm finished with code %1").arg(QString::number(code)));
+    }
+    else
+    {
+        addNotification(NTYPE_FAILING, tr("Programm finished with code %1").arg(QString::number(code)));
+        mOutputTabWidget->setVisible(true);
+        mOutputTabWidget->setCurrentIndex(0);
+    }
 }
 
 void Kuzya::refreshDialogSettings()
