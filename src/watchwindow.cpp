@@ -66,9 +66,6 @@ void WatchWindow::addTreeChild(QTreeWidgetItem *parent, Variable var, QString pr
     {
         mGdbDebugger->getVarType(var);
     }
-
-
-
     QString plainName = var.getName().split('.').last();
     if(plainName != var.getName())
     {
@@ -88,7 +85,7 @@ void WatchWindow::addTreeChild(QTreeWidgetItem *parent, Variable var, QString pr
     parent->addChild(treeItem);
 }
 
-void WatchWindow::addTreeChildren(QTreeWidgetItem *parrent, Variable var, QString prefix, bool drfPointer)
+void WatchWindow::  addTreeChildren(QTreeWidgetItem *parrent, Variable var, QString prefix, bool drfPointer)
 {
     std::vector<Variable> nestedTypes = var.getNestedTypes();
     if(drfPointer && nestedTypes.size() ==0)
@@ -97,7 +94,7 @@ void WatchWindow::addTreeChildren(QTreeWidgetItem *parrent, Variable var, QStrin
     }
     else if(var.isPointer())
     {
-                QString dereferencedVarName = QString("*(%1)").arg(var.getName());
+        QString dereferencedVarName = QString("*(%1)").arg(var.getName());
         addTreeChild(parrent, var, "", true);   //create fake node to enable expanding parent
         mPointersName[parrent] = var;   //Add pointer's node to map and attach to this node pointer
     }
@@ -111,9 +108,6 @@ void WatchWindow::addTreeChildren(QTreeWidgetItem *parrent, Variable var, QStrin
     }
     for(auto i : nestedTypes)
     {
-    //        throw;
-    //        QString likelyType;/* = mGdbDebugger->getVarType(i.getName());*/
-    //        i.setType(likelyType.isEmpty() ? "<No info>" : likelyType);
         addTreeChild(parrent, i, prefix, false);
     }
 }
@@ -175,24 +169,16 @@ void WatchWindow::slotTypeUpdated(Variable var)
         QTreeWidgetItem* itemPointer = iterator->second;
         if(var.isPointer())
         {
-            var.setContent(var.getContent().replace(tr("(%1)").arg(var.getType()), ""));
+            var.setContent(var.getContent().replace(tr("(%1)").arg(var.getType()), "")); //removed extra information about type in content
         }
         if(var.getContent().isEmpty())
         {
-             QTreeWidgetItem* error = new QTreeWidgetItem();
-             error->setText(0, itemPointer->text(1));
-             error->setText(1, "Cannot accses to this memory");
-             error->setIcon(0, QIcon(QPixmap(":/treeView/nullptr")));
-             itemPointer->addChild(error);
-             return;
-        }
-        auto nestedTypes = var.getNestedTypes();
-        bool isNotPointer = !var.isPointer();
-        if(nestedTypes.size() == 0 && isNotPointer)
-        {
-                addTreeChild(itemPointer, var, "", false);
-                mPointersContent.erase(iterator);
-                return;
+            QTreeWidgetItem* error = new QTreeWidgetItem();
+            error->setText(0, itemPointer->text(1));
+            error->setText(1, "Cannot accses to this memory");
+            error->setIcon(0, QIcon(QPixmap(":/treeView/nullptr")));
+            itemPointer->addChild(error);
+            return;
         }
         addTreeChildren(itemPointer, var, "", true);   //append dereferenced pointer to node with addres
         mPointersContent.erase(iterator);
@@ -204,7 +190,6 @@ void WatchWindow::slotTypeUpdated(Variable var)
         if(var.isPointer())
         {
             item->setIcon(0, QPixmap(":/treeView/pointer"));
-            QString dereferencedVarName = QString("*(%1)").arg(var.getName());
             addTreeChild(item, var, "", true);   //create fake node to enable expanding parent
             mPointersName[item] = var;   //Add pointer's node to map and attach to this node pointer
         }
