@@ -168,7 +168,8 @@ bool Variable::isPointer() const
 {   // check is las character is a star - pointer character
     int lastStar = mType.lastIndexOf(QString("*"));
     int lastCharacter = mType.length()-1;
-    return  lastStar == lastCharacter && lastStar != -1;
+    QString afterStar = mType.right(lastStar);
+    return  lastStar != -1 && (lastStar == lastCharacter || afterStar == " * const");
 }
 
 void Variable::setContent(const QString &content)

@@ -151,6 +151,10 @@ void Gdb::readType(const QString &varName)
             QString nameStr = findName.cap();
             QString bareName = nameStr.split(' ')[1].trimmed();
             auto var = find_if(mVariableTypeQueue.begin(), mVariableTypeQueue.end(), [&](Variable var){return var.getName() == bareName;});
+            if(var == mVariableTypeQueue.end())
+            {
+                return;
+            }
             var->setType(bareType);
             emit signalTypeUpdated(*var);
             mVariableTypeQueue.erase(var);
