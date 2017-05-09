@@ -29,6 +29,8 @@
 #include "optionsdialog.h"
 #include "ui_kuzya.h"
 #include "compiler.h"
+#include "variable.h"
+#include <map>
 
 class QListWidget;
 class QSplitter;
@@ -54,6 +56,7 @@ class QFileDialog;
 class Gdb;
 class QTabWidget;
 class QTreeWidget;
+class QTreeWidgetItem;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -154,6 +157,11 @@ private slots:
         void setUndoRedoEnabled();
         void slotRunDebugMode();
         void slotDebuggerHitBreakpoint(int line);
+        void slotUpdateLocals();
+        void slotExpandVariable(QTreeWidgetItem* item, int column);
+        void slotStoppedAtLine(int line);
+        void slotMoveCurrentMarker();
+        void slotRemoveCurrentMarker();
 
 protected:
         //*DRAG AND DROP
@@ -162,6 +170,7 @@ protected:
         void closeEvent(QCloseEvent *event);
 //	void keyPressEvent(QKeyEvent *event);
 private:
+
         void paintErrorMarkers(QList<Compiler::compilerError>* errorList);
         void paintWarningMarkers(QList<Compiler::compilerWarning>* warningList);
         void addNotification(int type, QString descr, bool attached = false, int line = -1);
@@ -218,6 +227,7 @@ private:
 
         QToolBar *toolBar;
         Gdb* mGdbDebugger;
+        std::map<QTreeWidgetItem*, Variable> mPointerItems;
 };
 
 #endif
