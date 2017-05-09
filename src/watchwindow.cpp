@@ -121,3 +121,13 @@ void WatchWindow::setDebugger(Gdb *debugger)
 {
     mGdbDebugger = debugger;
 }
+
+void WatchWindow::slotUpdateVariables()
+{
+    mGdbDebugger->updateVariable64x();
+}
+
+void WatchWindow::slotShowVariables()
+{
+
+}

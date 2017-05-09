@@ -299,7 +299,7 @@ Kuzya::Kuzya(QWidget *parent)
     QString comp = settings->readDefaultCompiler(language);
     QString compDir = settings->readCompilerLocation(language, comp);
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
-    mGdbDebugger = new Gdb("D:/Studying/Programming/Qt/PLLUG/kuzya/msys64/gdb/gdb.exe");
+    mGdbDebugger = new Gdb("D:/Studying/Programming/Qt/PLLUG/kuzya/msys64/mingw64/bin/bin/gdb.exe");
     debug->setDebugger(mGdbDebugger);
 
 

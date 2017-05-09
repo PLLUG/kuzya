@@ -30,7 +30,10 @@ public:
 
     void moidifyTreeItemPointer(QTreeWidgetItem* itemPointer);
     void setDebugger(Gdb* debugger);
+    void slotUpdateVariables();
     QToolBar* debugButtons;
+public slots:
+    void slotShowVariables();
 private:
     Gdb* mGdbDebugger;
     QTreeWidget* mWatchLocalsWidget;

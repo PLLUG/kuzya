@@ -34,7 +34,7 @@ void Gdb::start(const QStringList &arguments, QIODevice::OpenMode mode)
     QProcess::start(mGdbFile.fileName(), arguments, mode);
 }
 
-void Gdb::write(QByteArray &command)
+void Gdb::write(QByteArray command)
 {   //wrtie command to GDB. You shouldn't pass command with '\n' It will appended here.
     QByteArray enter("\n");
     command.append(enter);
