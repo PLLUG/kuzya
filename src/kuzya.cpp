@@ -716,12 +716,12 @@ void Kuzya::slotRunDebugMode()
         mGdbDebugger->stopExecuting();
         mGdbDebugger->waitForReadyRead();
     }
-    if(recompile())
+    mOutputTabWidget->setVisible(true);
+    if(recompile() && compiler->getCompileStatus() == Compiler::STATUS_NOERROR)
     {
         try
         {
             mOutputTabWidget->setCurrentIndex(1);
-            mOutputTabWidget->setVisible(true);
             if(mGdbDebugger->state() == QProcess::NotRunning)
             {
                 mGdbDebugger->start();
@@ -748,9 +748,14 @@ void Kuzya::slotRunDebugMode()
         }
         catch(std::domain_error error)
         {
+            mOutputTabWidget->setVisible(true);
             mOutputTabWidget->setCurrentIndex(0);
             addNotification(NTYPE_FAILING, error.what());
         }
+    }
+    else
+    {
+        mOutputTabWidget->setCurrentIndex(0);
     }
 }
 
@@ -773,6 +778,7 @@ void Kuzya::slotClearDebugInformation()
 
 void Kuzya::slotDebugEnded(int code)
 {
+    qDebug() << tr("Ended with code %1").arg(QString::number(code));
     if(code == 0)
     {
         mOutputTabWidget->setVisible(false);
