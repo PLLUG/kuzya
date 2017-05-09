@@ -32,11 +32,12 @@ public:
     void setDebugger(Gdb* debugger);
     void slotUpdateVariables();
     QToolBar* getDebugButtonPanel()const;
+    void clearWatch();
 public slots:
     void slotShowVariables();
     void slotTypeUpdated(Variable var);
     void slotDereferenceVar(Variable var);
-    void slotBreakpointHit(int line);
+    void slotDebuggerStopped(int line);
     void slotUpdateLocals();
     void slotPointerItemExpanded(QTreeWidgetItem* item);
 private:

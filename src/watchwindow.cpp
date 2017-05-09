@@ -122,7 +122,7 @@ void WatchWindow::setDebugger(Gdb *debugger)
     connect(mGdbDebugger, SIGNAL(signalUpdatedVariables()), this, SLOT(slotShowVariables()), Qt::UniqueConnection);
     connect(mGdbDebugger, SIGNAL(signalTypeUpdated(Variable)), this, SLOT(slotTypeUpdated(Variable)), Qt::UniqueConnection);
     connect(mGdbDebugger, SIGNAL(signalContentUpdated(Variable)), this, SLOT(slotDereferenceVar(Variable)), Qt::UniqueConnection);
-    connect(mGdbDebugger, SIGNAL(signalBreakpointHit(int)), this, SLOT(slotBreakpointHit(int)), Qt::UniqueConnection);
+    connect(mGdbDebugger, SIGNAL(signalGdbStopped(int)), this, SLOT(slotDebuggerStopped(int)), Qt::UniqueConnection);
 }
 
 void WatchWindow::slotUpdateVariables()
@@ -133,6 +133,11 @@ void WatchWindow::slotUpdateVariables()
 QToolBar *WatchWindow::getDebugButtonPanel() const
 {
     return mDebugButtons;
+}
+
+void WatchWindow::clearWatch()
+{
+    mWatchLocalsWidget->clear();
 }
 
 void WatchWindow::slotShowVariables()
@@ -193,11 +198,8 @@ void WatchWindow::slotDereferenceVar(Variable var)
     mGdbDebugger->getVarType(var);
 }
 
-void WatchWindow::slotBreakpointHit(int line)
+void WatchWindow::slotDebuggerStopped(int line)
 {
-//    QMessageBox msg;
-//    msg.setText(tr("Programm hit breakpoint at %1 line").arg(QString::number(line)));
-//    msg.exec();
     slotUpdateLocals();
 }
 

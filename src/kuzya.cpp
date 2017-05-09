@@ -129,9 +129,9 @@ Kuzya::Kuzya(QWidget *parent)
     mOutputTabWidget->addTab(notificationList, "Output");
     mOutputTabWidget->setVisible(false);
     //adds debug tab to tabWidget
-    auto debug = new WatchWindow(this);
-    mOutputTabWidget->addTab(debug, "Debug");
-    auto debugPanel = debug->getDebugButtonPanel();
+    debugTab = new WatchWindow(this);
+    mOutputTabWidget->addTab(debugTab, "Debug");
+    auto debugPanel = debugTab->getDebugButtonPanel();
     debugPanel->addAction(actionStartDebugging);
     debugPanel->addSeparator();
     debugPanel->addAction(actionStepOver);
@@ -301,7 +301,7 @@ Kuzya::Kuzya(QWidget *parent)
     QString compDir = settings->readCompilerLocation(language, comp);
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
     mGdbDebugger = new Gdb("D:/Studying/Programming/Qt/PLLUG/kuzya/msys64/mingw64/bin/bin/gdb.exe");
-    debug->setDebugger(mGdbDebugger);
+    debugTab->setDebugger(mGdbDebugger);
 
 
     /* connect debug actions */
@@ -311,12 +311,10 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionStepOut, SIGNAL(triggered()), mGdbDebugger, SLOT(stepOut()));
     connect(actionContinueDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stepContinue()));
     connect(actionStopDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stopExecuting()));
-
-    connect(actionStepOver, SIGNAL(triggered()), this, SLOT(slotMoveCurrentMarker()));
-    connect(actionStepIn, SIGNAL(triggered()), this, SLOT(slotMoveCurrentMarker()));
-    connect(actionStepOut, SIGNAL(triggered()), this, SLOT(slotMoveCurrentMarker()));
-    connect(actionContinueDebugging, SIGNAL(triggered()), this, SLOT(slotRemoveCurrentMarker()));
-    connect(actionStopDebugging, SIGNAL(triggered()), this, SLOT(slotRemoveCurrentMarker()));
+    /* markers action */
+    connect(mGdbDebugger, SIGNAL(signalGdbStopped(int)), this, SLOT(slotStoppedAtLine(int)), Qt::UniqueConnection);
+    connect(actionContinueDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
+    connect(actionStopDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
@@ -753,22 +751,6 @@ void Kuzya::slotRunDebugMode()
     }
 }
 
-void Kuzya::slotDebuggerHitBreakpoint(int line)
-{
-    mGdbDebugger->updateBreakpointsList();
-}
-
-void Kuzya::slotUpdateLocals()
-{
-//    mWatchLocalsWidget->clear();
-    mGdbDebugger->updateVariable64x();
-    auto vars = mGdbDebugger->getLocalVariables();
-    for(auto i : vars)
-    {
-//        addTreeRootVariable(i);
-    }
-}
-
 void Kuzya::slotStoppedAtLine(int line)
 {
     textEditor->markerDeleteAll(currentMarker);
@@ -780,16 +762,11 @@ void Kuzya::slotMoveCurrentMarker()
     slotStoppedAtLine(mGdbDebugger->getCurrentLine());
 }
 
-void Kuzya::slotRemoveCurrentMarker()
+void Kuzya::slotClearDebugInformation()
 {
     textEditor->markerDeleteAll(currentMarker);
+    debugTab->clearWatch();
 }
-
-void Kuzya::slotExpandVariable(QTreeWidgetItem *item, int column)
-{
-    item->setExpanded(!item->isExpanded());
-}
-
 
 void Kuzya::refreshDialogSettings()
 {

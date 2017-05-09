@@ -57,6 +57,7 @@ class Gdb;
 class QTabWidget;
 class QTreeWidget;
 class QTreeWidgetItem;
+class WatchWindow;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -156,12 +157,9 @@ private slots:
 
         void setUndoRedoEnabled();
         void slotRunDebugMode();
-        void slotDebuggerHitBreakpoint(int line);
-        void slotUpdateLocals();
-        void slotExpandVariable(QTreeWidgetItem* item, int column);
         void slotStoppedAtLine(int line);
         void slotMoveCurrentMarker();
-        void slotRemoveCurrentMarker();
+        void slotClearDebugInformation();
 
 protected:
         //*DRAG AND DROP
@@ -187,7 +185,6 @@ private:
         QString language; //curren programing language
         QsciScintilla* textEditor;
         QTabWidget *mOutputTabWidget;
-        QTreeWidget* mWatchLocalsWidget;
         QListWidget* notificationList;
         QString fileName;
         QString DefaultDir;
@@ -227,7 +224,7 @@ private:
 
         QToolBar *toolBar;
         Gdb* mGdbDebugger;
-        std::map<QTreeWidgetItem*, Variable> mPointerItems;
+        WatchWindow* debugTab;
 };
 
 #endif

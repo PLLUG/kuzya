@@ -53,17 +53,17 @@ void Gdb::readStdOutput()
     QRegExp doneOrError("\\^done|\\^error"); // match '^done' or '^error' literally
     QRegExp whatis("whatis\\s"); // match 'whatis ' literally
     QRegExp printRegex("print\\s"); // match 'print ' literally
-    QRegExp breakpoint("\\*stopped,reason=\"breakpoint-hit\""); // match breakpoint stops
+    QRegExp stop("\\*stopped,reason="); // match stops
     QRegExp line("line=\"\\d+\""); // match line='$_digits_$'
 
-    if(breakpoint.indexIn(mBuffer) != -1)
+    if(stop.indexIn(mBuffer) != -1)
     {   // if GDB matches breakpoint
         line.indexIn(mBuffer);
         QString lineStr = line.cap(); // line="123"
         int firstQuote = lineStr.indexOf(tr("\""));
         int lastQuote = lineStr.indexOf("\"", firstQuote+1);
         QString bareLine = lineStr.mid(firstQuote+1, lastQuote-firstQuote-1);
-        emit signalBreakpointHit(bareLine.toInt());
+        emit signalGdbStopped(bareLine.toInt());
     }
 
     /*print capturing section*/
