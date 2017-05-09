@@ -131,17 +131,18 @@ Kuzya::Kuzya(QWidget *parent)
     //adds debug tab to tabWidget
     auto debug = new WatchWindow(this);
     mOutputTabWidget->addTab(debug, "Debug");
-    debug->debugButtons->addAction(actionStartDebugging);
-    debug->debugButtons->addSeparator();
-    debug->debugButtons->addAction(actionStepOver);
-    debug->debugButtons->addAction(actionStepIn);
-    debug->debugButtons->addAction(actionStepOut);
-    debug->debugButtons->addAction(actionContinueDebugging);
-    debug->debugButtons->addSeparator();
-    debug->debugButtons->addAction(actionStopDebugging);
-    debug->debugButtons->addSeparator();
-    debug->debugButtons->addAction(actionUpdateLocals);
-    debug->debugButtons->setAutoFillBackground(true);
+    auto debugPanel = debug->getDebugButtonPanel();
+    debugPanel->addAction(actionStartDebugging);
+    debugPanel->addSeparator();
+    debugPanel->addAction(actionStepOver);
+    debugPanel->addAction(actionStepIn);
+    debugPanel->addAction(actionStepOut);
+    debugPanel->addAction(actionContinueDebugging);
+    debugPanel->addSeparator();
+    debugPanel->addAction(actionStopDebugging);
+    debugPanel->addSeparator();
+    debugPanel->addAction(actionUpdateLocals);
+    debugPanel->setAutoFillBackground(true);
 
     QSplitter *splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);

@@ -10,7 +10,7 @@ WatchWindow::WatchWindow(QWidget* parent):
         this->setAutoFillBackground(true);
         QVBoxLayout *innerLabelLayout = new QVBoxLayout(this);
         this->setLayout(innerLabelLayout);
-        debugButtons = new QToolBar(this);
+        mDebugButtons = new QToolBar(this);
         mWatchLocalsWidget = new QTreeWidget(this);
         mWatchLocalsWidget->setColumnCount(3);
         connect(mWatchLocalsWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(slotExpandVariable(QTreeWidgetItem*,int)), Qt::UniqueConnection);
@@ -38,14 +38,13 @@ WatchWindow::WatchWindow(QWidget* parent):
         mWatchLocalsWidget->setColumnCount(3);
         mWatchLocalsWidget->setHeaderLabels(QStringList() << "Name" << "Content" << "Type");
         qDebug() << mWatchLocalsWidget->styleSheet();
-        innerLabelLayout->addWidget(debugButtons);
+        innerLabelLayout->addWidget(mDebugButtons);
         innerLabelLayout->addWidget(mWatchLocalsWidget);
 
-        debugButtons->setIconSize(QSize(30,15));
+        mDebugButtons->setIconSize(QSize(30,15));
 
-        //mWatchLocalsWidget
-//        addTreeRoot(Variable("a", "int", "3"));
-
+        connect(mWatchLocalsWidget, SIGNAL(itemExpanded(QTreeWidgetItem*)), this,
+                SLOT(slotPointerItemExpanded(QTreeWidgetItem*)), Qt::UniqueConnection);
 }
 
 void WatchWindow::addTreeRoot(Variable var)
@@ -120,6 +119,10 @@ void WatchWindow::moidifyTreeItemPointer(QTreeWidgetItem *itemPointer)
 void WatchWindow::setDebugger(Gdb *debugger)
 {
     mGdbDebugger = debugger;
+    connect(mGdbDebugger, SIGNAL(signalUpdatedVariables()), this, SLOT(slotShowVariables()), Qt::UniqueConnection);
+    connect(mGdbDebugger, SIGNAL(signalTypeUpdated(Variable)), this, SLOT(slotTypeUpdated(Variable)), Qt::UniqueConnection);
+    connect(mGdbDebugger, SIGNAL(signalContentUpdated(Variable)), this, SLOT(slotDereferenceVar(Variable)), Qt::UniqueConnection);
+    connect(mGdbDebugger, SIGNAL(signalBreakpointHit(int)), this, SLOT(slotBreakpointHit(int)), Qt::UniqueConnection);
 }
 
 void WatchWindow::slotUpdateVariables()
@@ -127,7 +130,88 @@ void WatchWindow::slotUpdateVariables()
     mGdbDebugger->updateVariable64x();
 }
 
+QToolBar *WatchWindow::getDebugButtonPanel() const
+{
+    return mDebugButtons;
+}
+
 void WatchWindow::slotShowVariables()
 {
+    auto locals = mGdbDebugger->getLocalVariables();
+    mWatchLocalsWidget->clear();
+    for(auto i : locals)
+    {
+        addTreeRoot(i);
+    }
+}
 
+void WatchWindow::slotTypeUpdated(Variable var)
+{
+    auto iterator = (find_if(mPointersContent.begin(), mPointersContent.end(),
+                                    [&](auto item)
+                            {
+                                return (var.getName() == item.first.getName());
+                            }));
+    if(iterator != mPointersContent.end())
+    {
+        QTreeWidgetItem* itemPointer = (find_if(mPointersContent.begin(), mPointersContent.end(),
+                                    [&](auto item)
+                            {
+                                return (var.getName() == item.first.getName());
+                            })->second);
+        if(var.isPointer())
+        {
+            var.setContent(var.getContent().replace(tr("(%1)").arg(var.getType()), ""));
+        }
+        auto nestedTypes = var.getNestedTypes();
+        bool isNotPointer = !var.isPointer();
+        if(nestedTypes.size() == 0 && isNotPointer)
+        {
+                addTreeChild(itemPointer, var, "", false);
+                mPointersContent.erase(iterator);
+                return;
+        }
+        addTreeChildren(itemPointer, var, "", true);   //append dereferenced pointer to node with addres
+        mPointersContent.erase(iterator);
+    }
+    else
+    {
+        QTreeWidgetItem* item = mTypeVar[var];
+        item->setText(2, var.getType());
+        if(var.isPointer())
+        {
+            QString dereferencedVarName = QString("*(%1)").arg(var.getName());
+            addTreeChild(item, var, "", true);   //create fake node to enable expanding parent
+            mPointersName[item] = var;   //Add pointer's node to map and attach to this node pointer
+        }
+    }
+
+}
+
+void WatchWindow::slotDereferenceVar(Variable var)
+{
+    mGdbDebugger->getVarType(var);
+}
+
+void WatchWindow::slotBreakpointHit(int line)
+{
+//    QMessageBox msg;
+//    msg.setText(tr("Programm hit breakpoint at %1 line").arg(QString::number(line)));
+//    msg.exec();
+    slotUpdateLocals();
+}
+
+void WatchWindow::slotUpdateLocals()
+{
+    mGdbDebugger->updateVariable64x();
+}
+
+void WatchWindow::slotPointerItemExpanded(QTreeWidgetItem *item)
+{
+    auto foundIterator = mPointersName.find(item);
+    if(foundIterator != mPointersName.end())
+    {
+            moidifyTreeItemPointer(item);
+            mPointersName.erase(foundIterator);
+    }
 }
