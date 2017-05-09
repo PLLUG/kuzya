@@ -70,6 +70,10 @@ void WatchWindow::addTreeChild(QTreeWidgetItem *parent, Variable var, QString pr
 
 
     QString plainName = var.getName().split('.').last();
+    if(plainName != var.getName())
+    {
+        plainName = plainName.remove(tr(")"));
+    }
     treeItem->setText(0, plainName);
     treeItem->setText(1, var.getContent());
     treeItem->setText(2, var.getType());
@@ -168,11 +172,7 @@ void WatchWindow::slotTypeUpdated(Variable var)
                             }));
     if(iterator != mPointersContent.end())
     {
-        QTreeWidgetItem* itemPointer = (find_if(mPointersContent.begin(), mPointersContent.end(),
-                                    [&](std::pair<Variable, QTreeWidgetItem*> item)
-                            {
-                                return (var.getName() == item.first.getName());
-                            })->second);
+        QTreeWidgetItem* itemPointer = iterator->second;
         if(var.isPointer())
         {
             var.setContent(var.getContent().replace(tr("(%1)").arg(var.getType()), ""));
