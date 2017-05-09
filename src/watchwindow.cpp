@@ -148,14 +148,14 @@ void WatchWindow::slotShowVariables()
 void WatchWindow::slotTypeUpdated(Variable var)
 {
     auto iterator = (find_if(mPointersContent.begin(), mPointersContent.end(),
-                                    [&](auto item)
+                                    [&](std::pair<Variable, QTreeWidgetItem*> item)
                             {
                                 return (var.getName() == item.first.getName());
                             }));
     if(iterator != mPointersContent.end())
     {
         QTreeWidgetItem* itemPointer = (find_if(mPointersContent.begin(), mPointersContent.end(),
-                                    [&](auto item)
+                                    [&](std::pair<Variable, QTreeWidgetItem*> item)
                             {
                                 return (var.getName() == item.first.getName());
                             })->second);
