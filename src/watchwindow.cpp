@@ -66,6 +66,10 @@ void WatchWindow::addTreeChild(QTreeWidgetItem *parent, Variable var, QString pr
     {
         mGdbDebugger->getVarType(var);
     }
+    if(var.isPointer())
+    {
+        treeItem->setIcon(0, QPixmap(":/treeView/pointer"));
+    }
 
 
     QString plainName = var.getName().split('.').last();
@@ -167,6 +171,7 @@ void WatchWindow::slotTypeUpdated(Variable var)
         if(var.isPointer())
         {
             var.setContent(var.getContent().replace(tr("(%1)").arg(var.getType()), ""));
+
         }
         auto nestedTypes = var.getNestedTypes();
         bool isNotPointer = !var.isPointer();
@@ -185,6 +190,7 @@ void WatchWindow::slotTypeUpdated(Variable var)
         item->setText(2, var.getType());
         if(var.isPointer())
         {
+            item->setIcon(0, QPixmap(":/treeView/pointer"));
             QString dereferencedVarName = QString("*(%1)").arg(var.getName());
             addTreeChild(item, var, "", true);   //create fake node to enable expanding parent
             mPointersName[item] = var;   //Add pointer's node to map and attach to this node pointer

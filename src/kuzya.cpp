@@ -314,7 +314,7 @@ Kuzya::Kuzya(QWidget *parent)
     /* markers action */
     connect(mGdbDebugger, SIGNAL(signalGdbStopped(int)), this, SLOT(slotStoppedAtLine(int)), Qt::UniqueConnection);
     connect(mGdbDebugger, SIGNAL(signalDebugEnded(int)), this, SLOT(slotDebugEnded(int)));
-    connect(actionStopDebugging, &QAction::triggered, [&](){slotDebugEnded(0);});
+    connect(actionStopDebugging, &QAction::triggered, [&](){slotDebugEnded(-1);});
     connect(actionContinueDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
     connect(actionStopDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
 
