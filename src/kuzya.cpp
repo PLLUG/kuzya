@@ -118,7 +118,7 @@ Kuzya::Kuzya(QWidget *parent)
     QGridLayout *gridLayout;
     gridLayout = new QGridLayout(centralwidget);
     gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-`
+
     textEditor = new QsciScintilla(this);
     textEditor->setEolMode(QsciScintilla::EolUnix);
 
