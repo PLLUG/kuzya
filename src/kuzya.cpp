@@ -118,7 +118,7 @@ Kuzya::Kuzya(QWidget *parent)
     QGridLayout *gridLayout;
     gridLayout = new QGridLayout(centralwidget);
     gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-
+`
     textEditor = new QsciScintilla(this);
     textEditor->setEolMode(QsciScintilla::EolUnix);
 
@@ -140,7 +140,6 @@ Kuzya::Kuzya(QWidget *parent)
     debugPanel->addAction(actionContinueDebugging);
     debugPanel->addSeparator();
     debugPanel->addAction(actionStopDebugging);
-    debugPanel->addSeparator();
     debugPanel->setAutoFillBackground(true);
 
     QSplitter *splitter = new QSplitter(this);
