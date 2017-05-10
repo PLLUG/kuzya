@@ -141,7 +141,6 @@ Kuzya::Kuzya(QWidget *parent)
     debugPanel->addSeparator();
     debugPanel->addAction(actionStopDebugging);
     debugPanel->addSeparator();
-    debugPanel->addAction(actionUpdateLocals);
     debugPanel->setAutoFillBackground(true);
 
     QSplitter *splitter = new QSplitter(this);
@@ -275,7 +274,6 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionObjectMode, SIGNAL(triggered()), this,            SLOT(slotObjectMode()));
     connect(actionStaticLibMode, SIGNAL(triggered()), this,         SLOT(slotStaticLibMode()));
     connect(actionDynamicLibMode, SIGNAL(triggered()), this,        SLOT(slotDynamicLibMode()));
-
 
     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoRedoEnabled()));
 
@@ -709,6 +707,7 @@ void Kuzya::setUndoRedoEnabled()
 
 void Kuzya::slotRunDebugMode()
 {
+    notificationList->clear();
     compiler->setCompilerMode(Compiler::DEBUG);
     if(!srcRecompiled)
     {
@@ -778,15 +777,20 @@ void Kuzya::slotClearDebugInformation()
 
 void Kuzya::slotDebugEnded(int code)
 {
-    qDebug() << tr("Ended with code %1").arg(QString::number(code));
+    mOutputTabWidget->setCurrentIndex(0);
     if(code == 0)
     {
         mOutputTabWidget->setVisible(false);
-        addNotification(NTYPE_SUCCESS, tr("Programm finished with code %1").arg(QString::number(code)));
+        addNotification(NTYPE_SUCCESS, tr("Program finished with code %1").arg(QString::number(code)));
+    }
+    else if(code == -1)
+    {
+        mOutputTabWidget->setVisible(false);
+        addNotification(NTYPE_SUCCESS, tr("Program aborted"));
     }
     else
     {
-        addNotification(NTYPE_FAILING, tr("Programm finished with code %1").arg(QString::number(code)));
+        addNotification(NTYPE_FAILING, tr("Program finished with code %1").arg(QString::number(code)));
         mOutputTabWidget->setVisible(true);
         mOutputTabWidget->setCurrentIndex(0);
     }

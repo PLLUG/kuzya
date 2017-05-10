@@ -13,8 +13,6 @@ WatchWindow::WatchWindow(QWidget* parent):
         mDebugButtons = new QToolBar(this);
         mWatchLocalsWidget = new QTreeWidget(this);
         mWatchLocalsWidget->setColumnCount(3);
-        connect(mWatchLocalsWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(slotExpandVariable(QTreeWidgetItem*,int)), Qt::UniqueConnection);
-        connect(mWatchLocalsWidget, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(slotItemVariableExpanded(QTreeWidgetItem*)), Qt::UniqueConnection);
         mWatchLocalsWidget->setStyleSheet(
                     "QTreeView::branch:!has-children:!has-siblings:adjoins-item,"
                     "QTreeView::branch:has-siblings:adjoins-item,"
@@ -37,7 +35,6 @@ WatchWindow::WatchWindow(QWidget* parent):
         mWatchLocalsWidget->setFocusPolicy(Qt::NoFocus);
         mWatchLocalsWidget->setColumnCount(3);
         mWatchLocalsWidget->setHeaderLabels(QStringList() << "Name" << "Content" << "Type");
-        qDebug() << mWatchLocalsWidget->styleSheet();
         innerLabelLayout->addWidget(mDebugButtons);
         innerLabelLayout->addWidget(mWatchLocalsWidget);
 
@@ -194,7 +191,6 @@ void WatchWindow::slotTypeUpdated(Variable var)
             mPointersName[item] = var;   //Add pointer's node to map and attach to this node pointer
         }
     }
-
 }
 
 void WatchWindow::slotDereferenceVar(Variable var)

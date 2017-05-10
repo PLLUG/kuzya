@@ -56,18 +56,18 @@ void Gdb::readStdOutput()
     QRegExp stop("\\*stopped,reason="); // match stops
     QRegExp line("line=\"\\d+\""); // match line='$_digits_$'
     QRegExp exit("exit-code=\"\\d+\"");
-    if(exit.indexIn(mBuffer) != -1)
-    {
-        QString codeStr = exit.cap();
-        int firstQuote = codeStr.indexOf(tr("\""));
-        int lastQuote = codeStr.indexOf("\"", firstQuote+1);
-        QString codeLine = codeStr.mid(firstQuote+1, lastQuote-firstQuote-1);
-        emit signalDebugEnded(codeLine.toInt());
-    }
-    else if(stop.indexIn(mBuffer) != -1)
+
+    if(stop.indexIn(mBuffer) != -1)
     {   // if GDB matches breakpoint
         line.indexIn(mBuffer);
         QString lineStr = line.cap(); // line="123"
+        if(lineStr.isEmpty())
+        {
+            exit.indexIn(mBuffer);
+            QString codeStr = exit.cap();
+            codeStr = codeStr.replace("[\\w\"=]+", QString());
+            emit signalDebugEnded(codeStr.toInt());
+        }
         int firstQuote = lineStr.indexOf(tr("\""));
         int lastQuote = lineStr.indexOf("\"", firstQuote+1);
         QString bareLine = lineStr.mid(firstQuote+1, lastQuote-firstQuote-1);

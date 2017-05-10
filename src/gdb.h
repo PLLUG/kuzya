@@ -39,7 +39,6 @@ public:
     void updateVariable64x();
     void updateVariableFromBuffer();
     QString getVarContentFromContext(const QString& context);
-
 public slots:
     void run();
     void stepOver();
@@ -67,7 +66,6 @@ private:
     QString mBuffer;
     std::vector<Breakpoint> mBreakpointsList;
     std::vector<Variable> mVariablesList;
-
 
     QString temp;
     bool mInfoCaptured;

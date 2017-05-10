@@ -570,8 +570,6 @@
     <addaction name="actionContinueDebugging"/>
     <addaction name="separator"/>
     <addaction name="actionStopDebugging"/>
-    <addaction name="separator"/>
-    <addaction name="actionUpdateLocals"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -1030,6 +1028,11 @@
    </property>
    <property name="text">
     <string>Update Locals</string>
+   </property>
+  </action>
+  <action name="actionactionlog">
+   <property name="text">
+    <string>log</string>
    </property>
   </action>
  </widget>
