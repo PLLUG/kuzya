@@ -14,10 +14,8 @@ before_install:
 script:
   - source /opt/qt59/bin/qt59-env.sh
   - wget https://sourceforge.net/projects/pyqt/files/QScintilla2/QScintilla-2.10.1/QScintilla_gpl-2.10.1.tar.gz
-  - zcat QScintilla_gpl-2.10.1.tar.gz > QScintilla_gpl-2.10.1.tar.gz
-  - tar -xf QScintilla_gpl-2.10.1.tar
+  - tar -xvzf QScintilla_gpl-2.10.1.tar.gz
   - cd QScintilla_gpl-2.10.1/Qt4Qt5
-  - ~/Qt/5.9.1/gcc_64/bin/qmake 
   - qmake --version
   - which qmake
   - cd src
