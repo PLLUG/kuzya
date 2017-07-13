@@ -81,6 +81,7 @@ win32 {
 mac {
     CONFIG-=app_bundle
     DESTDIR +=../kuzya
-    TARGET +=kuzya
+    TARGET = ../bin/kuzya
+    INCLUDEPATH = ../3rdparty/QScintilla/2.9.4
 }
 
