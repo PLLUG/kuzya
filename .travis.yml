@@ -18,7 +18,7 @@ script:
   - source /opt/qt59/bin/qt59-env.sh
   - qmake --version
   - which qmake
-  - cd src
+  - cd ../../src
   - python generate.py -v 2.1.12
   - qmake "CONFIG+=release silent" 
   - make -j"$NPROC"
