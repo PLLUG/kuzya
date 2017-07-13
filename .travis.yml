@@ -19,7 +19,7 @@ script:
   - cd QScintilla_gpl-2.10.1/Qt4Qt5
   - qmake --version
   - which qmake
-  - cd src
+  - cd ../../src
   - python generate.py -v 2.1.12
   - qmake "CONFIG+=release silent" 
   - make -j"$NPROC"
