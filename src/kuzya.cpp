@@ -37,11 +37,9 @@
 #include <QSplitter>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QScrollArea>
-#include <QTextStream>
-#include <QFile>
-#include <QVBoxLayout>
-#include <QDialog>
+#include <QVersionNumber>
+#include <QDate>
+#include <QString>
 
 
 #include "gotolinedialog.h"
@@ -52,7 +50,7 @@
 #include "helpbrowser.h"
 #include "translator.h"
 #include "version.h"
-
+#include "aboutkuzya.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -1037,44 +1035,11 @@ void Kuzya::paintWarningMarkers(QList<Compiler::compilerWarning>* warningList)
 **/
 void Kuzya::slotAbout(void)
 {
-    const QString fileName = ":/AUTHORS.txt";
-    QFile file (fileName);
-    //checks file
-    if(!QFile::exists(fileName))
-    {
-        qCritical()<< "File doesn't exist"<<fileName<<endl;
-    }
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qCritical()<<"couldn't open file"<<fileName;
-    }
-
-    QString textInf;
-    QDialog* information {new QDialog};
-    QVBoxLayout* layout {new QVBoxLayout(information)};
-    information->setLayout(layout);
-    QLabel* textInfLabel {new QLabel(information)};
-    QLabel* imgLabel {new QLabel(information)};
-
-    QTextStream in(&file);
-    textInf  = in.readAll();
-
-//set Kuzia version and build date
     QVersionNumber verKuzia(MAJORVER, MINORVER, REVISION);
     QDate buildDate(BUILD_YEAR, BUILD_MONTH, BUILD_DAY);
-    textInfLabel->setText(textInf.arg(verKuzia.toString(), buildDate.toString("MMMM d yyyy")));
-
-
-    imgLabel->setPixmap(QPixmap(":/common/Kuzya_about.png"));
-    layout->addWidget(imgLabel);
-    QScrollArea* scrollAreaAuthors = new QScrollArea(information);
-    scrollAreaAuthors->setWidget(textInfLabel);
-    layout->addWidget(scrollAreaAuthors);
-    information->setWindowIcon(QIcon(QDir::currentPath()+":/../../src/images/kuzya.png"));
-
-    information->exec();
-
-    delete information;
+    QString fileName = ":/AUTHORS.txt";
+    AboutKuzya kuzya(verKuzia, buildDate, fileName);
+    kuzya.exec();
 }
 
 /**
