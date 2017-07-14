@@ -1,0 +1,19 @@
+language: cpp
+sudo: required
+
+os: osx
+osx_image: xcode8
+
+git:
+    submodules: false
+
+compiler: clang
+
+before_install:
+# Mac OS X
+- if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew outdated xctool || brew upgrade xctool
+- gem update --system
+- gem --version   
+
+script:
+ - echo $TRAVIS_OS_NAME
