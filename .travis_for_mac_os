@@ -1,13 +1,20 @@
-dist: trusty
+language: cpp
 sudo: required
-language: c++
+
+os: osx
+osx_image: xcode8
+
 git:
     submodules: false
 
+compiler: clang
+
 before_install:
 # Mac OS X
-- brew update
-- brew outdated xctool || brew upgrade xctool
+- if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew outdated xctool || brew upgrade xctool
+- gem update --system
+- gem --version
+
 - sudo apt-get install --reinstall ca-certificates
 - sudo -E add-apt-repository ppa:beineri/opt-qt591-trusty -y
 - sudo apt-get update -qq
@@ -24,6 +31,3 @@ script:
   - qmake "CONFIG+=release silent" 
   - make -j"$NPROC"
   - sudo make install
-
-os:
-  - osx
