@@ -31,5 +31,4 @@ script:
 #  - qmake "CONFIG+=release silent" 
 #  - make
 #  - sudo make install
-  - cd /Users/travis/
-  - ls -a
+  - find / -name "qmake" -print
