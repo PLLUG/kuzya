@@ -18,9 +18,12 @@ before_install:
  - brew install qt5
  
 script:
+  - pwd
   - wget https://sourceforge.net/projects/pyqt/files/QScintilla2/QScintilla-2.10.1/QScintilla_gpl-2.10.1.tar.gz
   - tar -xvzf QScintilla_gpl-2.10.1.tar.gz
   - cd QScintilla_gpl-2.10.1/Qt4Qt5
+  - ls
+  - pwd
   - qmake qscintilla.pro 
   - make
   - sudo make install
