@@ -21,7 +21,8 @@ script:
   - wget https://sourceforge.net/projects/pyqt/files/QScintilla2/QScintilla-2.10.1/QScintilla_gpl-2.10.1.tar.gz
   - tar -xvzf QScintilla_gpl-2.10.1.tar.gz
   - cd QScintilla_gpl-2.10.1/Qt4Qt5
-#  - qmake qscintilla.pro 
+  - echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.bash_profile
+  - qmake qscintilla.pro 
 #  - make
 #  - sudo make install
 
@@ -31,4 +32,4 @@ script:
 #  - qmake "CONFIG+=release silent" 
 #  - make
 #  - sudo make install
-  - find /Users/travis/.travis/ -name "qmake" -print
+#  - find /Users/travis/.travis/ -name "qmake" -print
