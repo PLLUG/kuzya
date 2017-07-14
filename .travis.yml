@@ -7,7 +7,7 @@ osx_image: xcode8
 git:
     submodules: false
  
-compiler: clang
+compiler: g++
  
 before_install:
 # Mac OS X
@@ -18,7 +18,6 @@ before_install:
  - brew install qt5
  
 script:
-  - source /opt/qt59/bin/qt59-env.sh 
   - wget https://sourceforge.net/projects/pyqt/files/QScintilla2/QScintilla-2.10.1/QScintilla_gpl-2.10.1.tar.gz
   - tar -xvzf QScintilla_gpl-2.10.1.tar.gz
   - cd QScintilla_gpl-2.10.1/Qt4Qt5
