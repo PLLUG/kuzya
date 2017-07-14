@@ -13,22 +13,7 @@ before_install:
 # Mac OS X
 - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew outdated xctool || brew upgrade xctool
 - gem update --system
-- gem --version
-
-#- sudo apt-get install --reinstall ca-certificates
-#- sudo -E add-apt-repository ppa:beineri/opt-qt591-trusty -y
-#- sudo apt-get update -qq
-#- sudo apt-get install --force-yes -qq qt59base qt59tools libqt5scintilla2-dev
-#- sudo ln -s /usr/include/qt5/Qsci /opt/qt59/include/Qsci
-#- sudo ln -s /usr/share/qt5/mkspecs/features/qscintilla2.prf /opt/qt59/mkspecs/features/qscintilla2.prf     
+- gem --version   
 
 script:
  - echo $TRAVIS_OS_NAME
-#  - source /opt/qt59/bin/qt59-env.sh
-#  - qmake --version
-#  - which qmake
-#  - cd src
-#  - python generate.py -v 2.1.12
-#  - qmake "CONFIG+=release silent" 
-#  - make -j"$NPROC"
-#  - sudo make install
