@@ -14,7 +14,8 @@ before_install:
 # - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew outdated xctool || brew upgrade xctool
 # - gem update --system
 # - gem --version
-- sudo apt-get install --force-yes -qq qt59base qt59tools 
+#- sudo apt-get install --force-yes -qq qt59base qt59tools
+brew install qt5
  
 script:
   - source /opt/qt59/bin/qt59-env.sh 
