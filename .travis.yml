@@ -18,20 +18,18 @@ before_install:
  - brew install qt5
  
 script:
-  - pwd
   - wget https://sourceforge.net/projects/pyqt/files/QScintilla2/QScintilla-2.10.1/QScintilla_gpl-2.10.1.tar.gz
   - tar -xvzf QScintilla_gpl-2.10.1.tar.gz
   - cd QScintilla_gpl-2.10.1/Qt4Qt5
-  - ls
-  - pwd
-  - type qmake
-  - qmake qscintilla.pro 
-  - make
-  - sudo make install
+#  - qmake qscintilla.pro 
+#  - make
+#  - sudo make install
 
-  - qmake --version
+#  - qmake --version
   - cd ../../src
   - python generate.py -v 2.1.12
-  - qmake "CONFIG+=release silent" 
-  - make
-  - sudo make install
+#  - qmake "CONFIG+=release silent" 
+#  - make
+#  - sudo make install
+  - cd /Users/travis/Qt/5.9.1/
+  - ls
