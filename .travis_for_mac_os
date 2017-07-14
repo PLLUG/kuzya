@@ -23,6 +23,7 @@ before_install:
 #- sudo ln -s /usr/share/qt5/mkspecs/features/qscintilla2.prf /opt/qt59/mkspecs/features/qscintilla2.prf     
 
 script:
+ - echo $TRAVIS_OS_NAME
 #  - source /opt/qt59/bin/qt59-env.sh
 #  - qmake --version
 #  - which qmake
