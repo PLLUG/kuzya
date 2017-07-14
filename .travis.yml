@@ -23,13 +23,14 @@ script:
   - cd QScintilla_gpl-2.10.1/Qt4Qt5
   - PATH=/usr/local/Qt-x.x.x/bin:$PATH
   - export PATH
-  - /usr/local/Cellar/qt/5.9.1/bin/qmake qscintilla.pro 
+  #/usr/local/Cellar/qt/5.9.1/bin/
+  - qmake qscintilla.pro 
   - make
   - sudo make install
 
   - /usr/local/Cellar/qt/5.9.1/bin/qmake --version
   - cd ../../src
   - python generate.py -v 2.1.12
-  - /usr/local/Cellar/qt/5.9.1/bin/qmake "CONFIG+=release silent" 
+  - qmake "CONFIG+=release silent" 
   - make
   - sudo make install
