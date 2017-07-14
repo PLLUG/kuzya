@@ -4,9 +4,6 @@ language: c++
 git:
     submodules: false
 
-os:
-  - osx
-
 before_install:
 # Mac OS X
 - brew update
@@ -27,3 +24,6 @@ script:
   - qmake "CONFIG+=release silent" 
   - make -j"$NPROC"
   - sudo make install
+
+os:
+  - osx
