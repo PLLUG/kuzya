@@ -11,9 +11,9 @@ compiler: clang
  
 before_install:
 # Mac OS X
- - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew outdated xctool || brew upgrade xctool
- - gem update --system
- - gem --version   
+# - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew outdated xctool || brew upgrade xctool
+# - gem update --system
+# - gem --version   
  
 script:
  - echo $TRAVIS_OS_NAME
