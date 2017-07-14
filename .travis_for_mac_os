@@ -5,7 +5,6 @@ git:
     submodules: false
 
 os:
-  - linux
   - osx
 
 before_install:
