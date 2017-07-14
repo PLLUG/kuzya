@@ -31,5 +31,5 @@ script:
 #  - qmake "CONFIG+=release silent" 
 #  - make
 #  - sudo make install
-  - cd /Users/travis/Qt/5.9.1/
-  - ls
+  - cd /Users/travis/
+  - ls -a
