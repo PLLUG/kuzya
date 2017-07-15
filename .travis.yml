@@ -33,5 +33,5 @@ script:
   - python generate.py -v 2.1.12
   - qmake "CONFIG+=release silent" 
   - make
-  - sudo cp ../bin/kuzya /usr/bin/kuzya
+  - csrutil disable
   - sudo make install
