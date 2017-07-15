@@ -4,7 +4,7 @@ sudo: required
 os: 
  - linux
  - osx
-   osx_image: xcode6.4
+osx_image: xcode6.4
  
 git:
     submodules: false
