@@ -1,4 +1,4 @@
-language: cpp
+langyage: cpp
 sudo: required
  
 os: osx
