@@ -1,7 +1,7 @@
 
 dist: trusty
 sudo: required
-langyage: c++
+language: c++
  
 matrix:
  include:
