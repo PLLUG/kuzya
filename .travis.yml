@@ -1,3 +1,5 @@
+
+dist: trusty
 langyage: cpp
 sudo: required
  
