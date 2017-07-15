@@ -1,9 +1,10 @@
 langyage: cpp
 sudo: required
  
-os: osx
-osx_image: xcode6.4
-os: linux
+os: 
+ - linux
+ - osx
+   osx_image: xcode6.4
  
 git:
     submodules: false
