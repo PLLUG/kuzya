@@ -14,7 +14,6 @@ git:
  
 compiler:
   - g++
-  - clang
  
 before_install:
 # Mac OS X
