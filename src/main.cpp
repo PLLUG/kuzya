@@ -17,23 +17,20 @@
  *   You should have received a copy of the GNU General Public License        *
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>     *
  ******************************************************************************/
-
-
-#include <QSplashScreen>
 #include <QApplication>
+#include <QSplashScreen>
 #include <QTranslator>
 #include <QFile>
+#include <QPixmap>
 #include <QString>
-
 #include <QFileInfo>
-
 #include <QDebug>
 
+#include <time.h>
 #include "kuzya.h"
 
 int main(int argc, char ** argv)
 {
-
     //qDebug()<<argc;
 /*    for(int i = 1;i<argc;i++)
     {
@@ -56,41 +53,39 @@ int main(int argc, char ** argv)
                                 return 0;                               
                     }
                 }
-
             }
-        }
-        
-    }*/
+        }     
+    }
+*/
     Q_INIT_RESOURCE(images);
 
 //    qDebug() << QVariant(QLocale::system().name).toString();
-//    qDebug()<<QLocale::languageToString(QLocale::system().language());
+//    qDebug() << QLocale::languageToString(QLocale::system().language());
 
     QApplication a(argc, argv);
     a.setOrganizationName("PLLUG Community");
     a.setApplicationName("Kuzya");
 
-    QString splashDir;
-    QSplashScreen *splash = new QSplashScreen();
-#ifdef WIN32
-    splashDir=QApplication::applicationDirPath()+"/../resources/SplashCukr.png";
-#else
-    splashDir=QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/SplashCukr.png");
-#endif
-    splash->setPixmap(QPixmap(splashDir));
-    splash->show();
+//    QString splashDir;
+//    QSplashScreen *splash = new QSplashScreen();
+//#ifdef WIN32
+//    splashDir=QApplication::applicationDirPath()+"/../resources/SplashCukr.png";
+//#else
+//    splashDir=QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/SplashCukr.png");
+//#endif
+//    splash->setPixmap(QPixmap(splashDir));
+//    splash->show();
 
     Kuzya * mw = new Kuzya();
 
+    QSplashScreen *splash = new QSplashScreen();
+    splash->setPixmap(QPixmap("/home/vakoms/Qt/QtProjects/kuzya/src/images/SplashCukr.png"));
+    splash->show();
     splash->finish(mw);
     delete splash;
 
     mw->show();
 
-
-
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
-
     return a.exec();
 }
-
