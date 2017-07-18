@@ -25,5 +25,5 @@ script:
   - cd ../../src
   - python generate.py -v 2.1.12
   - qmake "CONFIG+=release silent" 
-  - make
+  - make -j"$NPROC"
   - sudo make install
