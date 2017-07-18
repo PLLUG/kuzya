@@ -18,7 +18,7 @@ script:
   - tar -xvzf QScintilla_gpl-2.10.1.tar.gz
   - cd QScintilla_gpl-2.10.1/Qt4Qt5
   - qmake "CONFIG+=release silent" 
-  - make -j"$NPROC"
+  - make -j$(nproc)
   - sudo make install
 
   - qmake --version
