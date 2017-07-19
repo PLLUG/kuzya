@@ -66,24 +66,12 @@ int main(int argc, char ** argv)
     a.setOrganizationName("PLLUG Community");
     a.setApplicationName("Kuzya");
 
-//    QString splashDir;
-//    QSplashScreen *splash = new QSplashScreen();
-//#ifdef WIN32
-//    splashDir=QApplication::applicationDirPath()+"/../resources/SplashCukr.png";
-//#else
-//    splashDir=QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/SplashCukr.png");
-//#endif
-//    splash->setPixmap(QPixmap(splashDir));
-//    splash->show();
-
     Kuzya * mw = new Kuzya();
-
     QSplashScreen *splash = new QSplashScreen();
     splash->setPixmap(QPixmap(":/menu/images/SplashCukr.png"));
     splash->show();
     splash->finish(mw);
     delete splash;
-
     mw->show();
 
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
