@@ -77,14 +77,14 @@ win32 {
     TARGET = ../bin/kuzya
     LIBS += -L../3rdparty/QScintilla/2.10.1
     INCLUDEPATH = ../3rdparty/QScintilla/2.10.1
-    CONFIG(debug, debug|release):LIBS += -lqscintilla2_qt5d
-    else: LIBS += -lqscintilla2_qt5
+    CONFIG(debug, debug|release):LIBS += -lqscintilla2d
+    else: LIBS += -lqscintilla2
 }
 
 mac {
     CONFIG-=app_bundle
     DESTDIR +=../kuzya
     TARGET = ../bin/kuzya
-    INCLUDEPATH = ../3rdparty/QScintilla/2.9.4
+    INCLUDEPATH = ../3rdparty/QScintilla/2.10.1
 }
 
