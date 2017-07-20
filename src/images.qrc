@@ -26,6 +26,7 @@
         <file alias="templates_menu">images/bricks.png</file>
         <file>images/help.png</file>
         <file>images/escape.png</file>
+        <file>images/SplashCukr.png</file>
     </qresource>
     <qresource prefix="/notifications">
         <file alias="success">images/accept.png</file>
