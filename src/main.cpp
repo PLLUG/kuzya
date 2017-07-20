@@ -73,7 +73,7 @@ int main(int argc, char ** argv)
     QString splashDir;
     QSplashScreen *splash = new QSplashScreen();
 #ifdef WIN32
-    splashDir=QApplication::applicationDirPath()+"/../resources/SplashCukr.png";
+    splashDir=QApplication::applicationDirPath()+"/../../resources/SplashCukr.png";
 #else
     splashDir=QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/SplashCukr.png");
 #endif

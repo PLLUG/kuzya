@@ -54,7 +54,7 @@ void Compiler::refreshSupported()
     profilesPathList.clear();
 
 #ifdef WIN32
-    QString path = QApplication::applicationDirPath();
+    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../profiles");
     path.truncate(path.lastIndexOf("/", -1));
     path = path+"/profiles";
 #else

@@ -63,8 +63,8 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 
 
 #ifdef WIN32
-    stylesDir=QDir(QApplication::applicationDirPath()+"/../resources/qss/");
-    localizationLanguageDir=QDir(QApplication::applicationDirPath()+"/../resources/translations/");
+    stylesDir=QDir::cleanPath(QApplication::applicationDirPath() + "/../../resources/qss/");
+    localizationLanguageDir=QDir::cleanPath(QApplication::applicationDirPath() + "/../../resources/translations/");
 #else
     stylesDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/qss/"));
     if (stylesDir.exists() == false)
@@ -141,7 +141,7 @@ void OptionsDialog::slotChangeStyle(int)
 void OptionsDialog::slotChangeSkin(QString sheetName)
 {
 #ifdef WIN32
-    QFile file(QApplication::applicationDirPath()+"/../resources/qss/"+sheetName.toLower()+".qss");
+    QFile file(QApplication::applicationDirPath()+"/../../resources/qss/"+sheetName.toLower()+".qss");
 #else
     //    QFile file(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/qss/")+sheetName.toLower()+".qss");
     QFile file(stylesDir.absolutePath()+"/"+sheetName.toLower()+".qss");
@@ -257,7 +257,7 @@ void OptionsDialog::readODWSettings()
 
     }
 #ifdef WIN32                
-    translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+settings->value("Language",QLocale::languageToString(QLocale::system().language())).toString()+".qm");
+    translator.load(QApplication::applicationDirPath()+"/../../resources/translations/"+settings->value("Language",QLocale::languageToString(QLocale::system().language())).toString()+".qm");
 
 #else
     //    translator.load(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/translations/") + settings->value("Language",QLocale::languageToString(QLocale::system().language())).toString()+".qm");
@@ -585,7 +585,7 @@ void OptionsDialog::readMainWindowState()
 void OptionsDialog::slotChangsLocalizationLanguage(QString langName)
 {
 #ifdef WIN32
-    translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+langName);
+    translator.load(QApplication::applicationDirPath()+"/../../resources/translations/"+langName);
 
 #else
     //translator.load(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/translations/")+langName);
