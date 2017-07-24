@@ -431,12 +431,16 @@ void Compiler::run(void)
     if (programPath.isEmpty()) return;
 
     QString prevPath = QDir::currentPath();
-    QDir::setCurrent(sourcePath);    
+    QDir::setCurrent(sourcePath);
 
 #ifdef Q_OS_WIN32
     QStringList command;
-    command << "/C" << "title "+programPath+ "&&"+programPath;
-    startDetached("cmd", command);
+    command << "cmd /c";
+    command << "set PATH=C:\\kuzya\\msys64\\mingw64\\bin;%PATH%";
+    command << programPath;
+    command << "pause";
+    system(command.join(" & ").toUtf8().data());
+    //command << "C:/" << "title "+programPath+".exe"+ "&&"+programPath+".exe";
 #endif /*Q_OS_WIN32*/
 
 #ifdef Q_OS_UNIX

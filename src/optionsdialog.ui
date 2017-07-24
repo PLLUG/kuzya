@@ -1127,6 +1127,9 @@ p, li { white-space: pre-wrap; }
                    <bold>false</bold>
                   </font>
                  </property>
+                 <property name="text">
+                  <string>C:\\kuzya\\msys64\\mingw64\\bin</string>
+                 </property>
                 </widget>
                </item>
                <item>
