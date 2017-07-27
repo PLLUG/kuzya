@@ -10,7 +10,8 @@ FORMS += kuzya.ui \
     gotolinedialog.ui \
     optionsdialog.ui \
     finddialog.ui \
-    replacedialog.ui
+    replacedialog.ui \
+    aboutkuzya.ui
 
 HEADERS += kuzya.h \
     gotolinedialog.h \
@@ -20,7 +21,8 @@ HEADERS += kuzya.h \
     replacedialog.h \
     helpbrowser.h \
     translator.h \
-    version.h
+    version.h \
+    aboutkuzya.h
 
 SOURCES += kuzya.cpp \
     main.cpp \
@@ -29,7 +31,8 @@ SOURCES += kuzya.cpp \
     optionsdialog.cpp \
     finddialog.cpp \
     replacedialog.cpp \
-    translator.cpp
+    translator.cpp \
+    aboutkuzya.cpp
 
 RESOURCES = images.qrc \
            ../auth.qrc \
@@ -72,8 +75,8 @@ CONFIG += qscintilla2
 
 win32 {
     TARGET = ../bin/kuzya
-    LIBS += -L../3rdparty/QScintilla/2.9.4
-    INCLUDEPATH = ../3rdparty/QScintilla/2.9.4
+    LIBS += -L../3rdparty/QScintilla/2.10.1
+    INCLUDEPATH = ../3rdparty/QScintilla/2.10.1
     CONFIG(debug, debug|release):LIBS += -lqscintilla2d
     else: LIBS += -lqscintilla2
 }
@@ -81,6 +84,7 @@ win32 {
 mac {
     CONFIG-=app_bundle
     DESTDIR +=../kuzya
-    TARGET +=kuzya
+    TARGET = ../bin/kuzya
+    INCLUDEPATH = ../3rdparty/QScintilla/2.10.1
 }
 
