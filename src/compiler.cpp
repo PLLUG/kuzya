@@ -438,7 +438,6 @@ void Compiler::run(void)
     command << "cmd /c";
     command << "set PATH=C:\\kuzya\\msys64\\mingw64\\bin;%PATH%";
     command << programPath;
-    command << "pause";
     system(command.join(" & ").toUtf8().data());
     //command << "C:/" << "title "+programPath+".exe"+ "&&"+programPath+".exe";
 #endif /*Q_OS_WIN32*/

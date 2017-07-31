@@ -58,6 +58,7 @@ public:
     QString readDefaultCompiler(QString lang);
     QString readCompilerLocation(QString lang, QString comp);
     QString readCompilerOptions(QString lang, QString comp);
+    void setCompilerLocation(QString &pathToCompiler);
 
 public slots:
     void slotCommOptions(void);

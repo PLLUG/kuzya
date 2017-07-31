@@ -273,6 +273,8 @@ Kuzya::Kuzya(QWidget *parent)
     textEditorShortcut->setKey(Qt::CTRL+Qt::Key_Up);
     connect(textEditorShortcut, SIGNAL(activated()), textEditor, SLOT(setFocus()));
 
+    QString pathToCompiler = "C:/kuzya/msys64/mingw64/bin";
+    settings->setCompilerLocation(pathToCompiler);
 //    if (qApp->argc() > 1)
 //    {
 //        this->openFile(qApp->argv()[qApp->argc()-1]);

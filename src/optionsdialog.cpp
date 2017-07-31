@@ -600,3 +600,13 @@ void OptionsDialog::slotChangeOptionPage(int pIndex)
 {
     mStackedWidget->setCurrentIndex(pIndex);
 }
+//-------------------------------------------------------------------------------------------------------------------------------------------------------
+void OptionsDialog::setCompilerLocation(QString &pathToCompiler)
+{
+    if(languageComboBox->currentText() == "c++" && compilerComboBox->currentText() == "g++" && compilerDirLineEdit->text().isEmpty())
+    {
+        compilerDirLineEdit->setText(pathToCompiler);
+        mw->getCurrentCompiler()->setCompilerDir(compilerDirLineEdit->text());
+    }
+    slotApply();
+}
