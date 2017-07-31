@@ -27,6 +27,7 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QLocale>
+
 #include "optionsdialog.h"
 
 OptionsDialog::OptionsDialog(QWidget *parent)
@@ -61,12 +62,14 @@ OptionsDialog::OptionsDialog(QWidget *parent)
     ///-----------------------------Fonts and Colors-------------------------------------------------------
     styleCBox->addItems(QStyleFactory::keys());
 
+    mDefaultTerminalEmulator = defaultTerminalEmulator();
+    terminalCBox->addItems(mDefaultTerminalEmulator);
 
 #ifdef WIN32
     stylesDir=QDir(QApplication::applicationDirPath()+"/../resources/qss/");
     localizationLanguageDir=QDir(QApplication::applicationDirPath()+"/../resources/translations/");
 #else
-    stylesDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/qss/"));
+    stylesDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../../kuzya/resources/qss/"));
     if (stylesDir.exists() == false)
     {
         stylesDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../"+STYLESHEETS_RELATIVE_PATH));
@@ -78,7 +81,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
         }
     }
 
-    localizationLanguageDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/translations/"));
+    localizationLanguageDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../../kuzya/resources/translations/"));
     if (localizationLanguageDir.exists() == false)
     {
         localizationLanguageDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../"+TRANSLATIONS_REALATIVE_PATH));
@@ -463,7 +466,7 @@ void OptionsDialog::slotChangeDefDir(int index)
             directoryBox->insertItem(0,dir);
         }
         directoryBox->setCurrentIndex(0);
-	
+
     }
 }
 void OptionsDialog::slotChangeDefDir(QString dirName)
@@ -547,6 +550,44 @@ QString OptionsDialog::readCompilerOptions(QString lang, QString comp)
     QString options = settings->value(lang+"/"+comp+"/options", "").toString();
     settings->endGroup();
     return options;
+}
+
+static const Terminal knownTerminals[] = {
+    {"x-terminal-emulator", "-e"},
+    {"xterm", "-e"},
+    {"aterm", "-e"},
+    {"Eterm", "-e"},
+    {"rxvt", "-e"},
+    {"urxvt", "-e"},
+    {"xfce4-terminal", "-x"},
+    {"konsole", "-e"},
+    {"gnome-terminal", "-x"}
+};
+
+#include <QMessageBox>
+QList<QString> OptionsDialog:: defaultTerminalEmulator()
+{
+    QList<QString> presentTerminals;
+    const int terminalCount = int(sizeof(knownTerminals) / sizeof(knownTerminals[0]));
+    qDebug() << terminalCount;
+    for (int i = 0; i < terminalCount; ++i)
+    {
+        QString result =  mPathToEmulator + knownTerminals[i].binary;
+        qDebug() << result << result.isEmpty() << QFile(result).exists();
+
+        if (!result.isEmpty() && QFile(result).exists())
+        {
+            presentTerminals.append(QString(result+' '+knownTerminals[i].options));
+        }
+    }
+    if(presentTerminals.isEmpty())
+    {
+        QMessageBox m;
+        m.setText("You don't have instaled terminals!\nPlease will must installing XTerm: \n\r(http://invisible-island.net/xterm/)");
+        m.exec();
+        presentTerminals.append(QString(mPathToEmulator + "xterm -e"));
+    }
+    return presentTerminals;
 }
 
 void OptionsDialog::slotDefaultCompiler()

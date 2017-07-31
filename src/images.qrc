@@ -27,6 +27,7 @@
         <file>images/help.png</file>
         <file>images/escape.png</file>
         <file>images/SplashCukr.png</file>
+        <file>images/RunControl.png</file>
     </qresource>
     <qresource prefix="/notifications">
         <file alias="success">images/accept.png</file>

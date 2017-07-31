@@ -40,7 +40,7 @@
 #include <QVersionNumber>
 #include <QDate>
 #include <QString>
-
+#include <QRegExp>
 
 #include "gotolinedialog.h"
 #include "finddialog.h"
@@ -655,8 +655,9 @@ void Kuzya::slotDynamicLibMode()
 
 void Kuzya::slotSetFileSuffix(QStringList filter)
 {
-    if (filter.count() > 0) {
-        fileDialog->setDefaultSuffix(filter.at(0));
+    if (filter.count() > 0)
+    {
+        fileDialog->setDefaultSuffix(filter.first());
     }
 }
 
@@ -666,32 +667,33 @@ void Kuzya::setUndoRedoEnabled()
     actionRedo->setEnabled(textEditor->isRedoAvailable());
 }
 
-
-
 void Kuzya::refreshDialogSettings()
 {
-    QString filter;
-    QStringList supportedList = compiler->getSupportedLanguages();
-    supportedList.sort();
-    foreach (QString lang, supportedList)
-    {
-        filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
-    }
-    filter = filter+"All Files (*)";
+//    QString filter;
+//    QStringList supportedList = compiler->getSupportedLanguages();
+//    supportedList.sort();
+//    foreach (QString lang, supportedList)
+//    {
+//        filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
+//    }
+//    filter = filter + "All Files (*)";
 
-    fileDialog->setNameFilter(filter);
-    QList<QUrl> list = fileDialog->sidebarUrls();
-    if(!list.isEmpty())
-    {
-        list.removeLast();
-    }
-    list << QUrl::fromLocalFile(DefaultDir);
-    fileDialog->setSidebarUrls(list);
-    QString currentFilter;
-    if (!language.isEmpty()) currentFilter = language + " ("+compiler->getSupportedExtensions(language)+")";
-    else currentFilter = "";
-    fileDialog->selectFile(currentFilter);
-    slotSetFileSuffix(fileDialog->selectedFiles());
+//    fileDialog->setNameFilter(filter);
+//    QList<QUrl> list = fileDialog->sidebarUrls();
+//    qDebug() <<"list1 ---->"<< list;
+//    if(!list.isEmpty())
+//    {
+//        list.removeLast();
+//    }
+//    list << QUrl::fromLocalFile(DefaultDir);
+//    qDebug() <<"list2 ---->"<< list;
+//    fileDialog->setSidebarUrls(list);
+
+//    QString currentFilter;
+//    if (!language.isEmpty()) currentFilter = language + " ("+compiler->getSupportedExtensions(language)+")";
+//    else currentFilter = "";
+//    fileDialog->selectFile(currentFilter);
+//    slotSetFileSuffix(fileDialog->selectedFiles());
 }
 
 void Kuzya::refreshProfileSettings()
@@ -740,8 +742,8 @@ void Kuzya::refreshProfileSettings()
         path.truncate(path.lastIndexOf("/", -1));
         path = path+"/profiles/";
 #else
-        //        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/");
-        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles");
+        //        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../kuzya/profiles/");
+        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../kuzya/profiles");
         if (false == QDir(path).exists())
         {
             path = QDir::cleanPath(QApplication::applicationDirPath() + "/../profiles");
@@ -771,7 +773,7 @@ void Kuzya::refreshProfileSettings()
     path.truncate(path.lastIndexOf("/", -1));
     path = path+"/resources/";
 #else
-    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/");
+    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../kuzya/resources");
 #endif
 
     translator->openFile(fileName, language);
@@ -786,10 +788,10 @@ void Kuzya::refreshProfileSettings()
     {
         disconnect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
         languageComboBox->clear();
-        languageComboBox->addItem(QIcon(path+"english.png"), "english (default)");
+        languageComboBox->addItem(QIcon(path+"/"+"english.png"), "english (default)");
         foreach (QString trans, supportedTranslations)
         {
-            languageComboBox->addItem(QIcon(path+trans+".png"), trans);
+            languageComboBox->addItem(QIcon(path+"/"+trans+".png"), trans);
         }
         QString codeTranslation = translator->translation();
         languageComboBox->setCurrentIndex(supportedTranslations.indexOf(codeTranslation)+1);
@@ -803,48 +805,96 @@ void Kuzya::refreshProfileSettings()
 **/
 bool Kuzya::slotSave(void)
 {
-    QString newFileName;
-    if (fileName.isEmpty())
+// getSaveFileName(this, tr("Save Image"), m_path.toLocalFile(), filterList.join(";;"));
+    QStringList supportedList = compiler->getSupportedLanguages();
+    supportedList.sort();
+
+    QStringList filterList;
+    for (const QString &lang : supportedList)
     {
-        // fileName = fileDialog->getSaveFileName(this, tr("Save as..."), DefaultDir, filter, &currentFilter);
-        refreshDialogSettings();
-        fileDialog->setAcceptMode(QFileDialog::AcceptSave);
-        fileDialog->setFileMode(QFileDialog::AnyFile);
-
-        if (fileDialog->exec())
-            newFileName = fileDialog->selectedFiles().at(0);
-
-        if (newFileName.isEmpty()) return false;
-        else fileName = newFileName;
+        filterList.append(QString("%1(%2)").arg(lang, compiler->getSupportedExtensions(lang)));
     }
 
+    QFileDialog saveFile;
+    saveFile.setAcceptMode(QFileDialog::AcceptSave);
+    saveFile.setNameFilters(filterList);
+    saveFile.setDirectoryUrl(m_path.toLocalFile());
 
-    QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+
+
+    if (saveFile.exec() == QFileDialog::Accepted)
     {
-        QMessageBox *msgBox= new QMessageBox();
-        msgBox->setIcon(QMessageBox::Warning);
-        msgBox->setWindowTitle(tr("File cannot be saved "));
-        msgBox->setText(tr("Do you have permision to access data in this folder? Select another place to save this file"));
-        QAbstractButton *OkBtn = msgBox->addButton(tr("Ok"),QMessageBox::ActionRole);
-        msgBox->exec();
-        if (msgBox->clickedButton()==(OkBtn))
+        QString filename = saveFile.selectedFiles().first();
+        QString expansion = saveFile.selectedNameFilter();
+        int ch = [expansion]() -> int
+                                        {
+                                            for(int i = 0; i < expansion.size(); ++i)
+                                            {
+                                                if(expansion.at(i).toLatin1() == '*')
+                                                    return i;
+                                            }
+                                        }();
+        expansion.remove(0, ch);
+        expansion.remove('*');
+        expansion.remove(')');
+
+        QStringList exteptions = expansion.split(' ');
+
+        QString currentExtension = exteptions.first();
+        if (!filename.endsWith(currentExtension))
         {
-            //slotSave_as();
+            filename.append(currentExtension);
         }
-        delete msgBox;
-        return false ;
+
+        QFile file(filename);
+        qDebug() << filename;
+        if (file.open(QFile::WriteOnly))
+        {
+            QTextStream stream(&file);
+            stream << textEditor->text();
+            textEditor->setModified(false);
+            file.close();
+        }
+        statusBar()->showMessage(tr("Saved"), 2000);
+        addFileNameToList(file.fileName());
+        refreshProfileSettings();
+        slotUpdateWindowName(false);
+        if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
+        return true;
     }
-    QTextStream stream(&file);
-    stream << textEditor->text();
-    textEditor->setModified(false);
-    file.close();
-    statusBar()->showMessage(tr("Saved"), 2000);
-    addFileNameToList(file.fileName());
-    refreshProfileSettings();
-    slotUpdateWindowName(false);
-    if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
-    return true;
+
+
+//    QString newFileName;
+//    if (fileName.isEmpty())
+//    {
+//        // fileName = fileDialog->getSaveFileName(this, tr("Save as..."), DefaultDir, filter, &currentFilter);
+//        refreshDialogSettings();
+//       fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+//        fileDialog->setFileMode(QFileDialog::AnyFile);
+
+//        if (fileDialog->exec())
+//            newFileName = fileDialog->selectedFiles().at(0);
+//        qDebug() <<"--slotSave--"<< newFileName;
+//        if (newFileName.isEmpty()) return false;
+//        else fileName = newFileName;
+//    }
+
+
+//    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+//    {
+//        QMessageBox *msgBox= new QMessageBox();
+//        msgBox->setIcon(QMessageBox::Warning);
+//        msgBox->setWindowTitle(tr("File cannot be saved "));
+//        msgBox->setText(tr("Do you have permission to access data in this folder? Select another place to save this file"));
+//        QAbstractButton *OkBtn = msgBox->addButton(tr("Ok"),QMessageBox::ActionRole);
+//        msgBox->exec();
+//        if (msgBox->clickedButton()==(OkBtn))
+//        {
+//            slotSave_as();
+//        }
+//        delete msgBox;
+//        return false ;
+//    }
 }
 
 /**
@@ -862,7 +912,7 @@ void Kuzya::slotSave_as(void)
     fileDialog->setFileMode(QFileDialog::AnyFile);
 
     if (fileDialog->exec())
-        newFileName = fileDialog->selectedFiles().at(0);
+        newFileName = fileDialog->selectedFiles().first();
 
     if (newFileName.isEmpty()) return;
 
@@ -890,7 +940,6 @@ void Kuzya::slotPrint(void)
                 QRect rect(painter.viewport());
                 painter.drawText(rect,textEditor->text());
               */
-
     }
     delete printer;
 }
@@ -983,7 +1032,6 @@ void Kuzya::slotAfterCompile(int status)
             addNotification(NTYPE_FAILING, tr("Compilation failed!"));
         }
     }
-
 }
 
 /**
@@ -1181,7 +1229,7 @@ void Kuzya::slotHelpKuzya()
     HelpBrowser* helpBrowser = new HelpBrowser(QApplication::applicationDirPath()+"/../doc/Kuzya_Help","main.htm");
 #else
     //    HelpBrowser* helpBrowser = new HelpBrowser(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/doc/"),"main.htm");
-    QDir lHelpDir = QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/doc/"));
+    QDir lHelpDir = QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../../kuzya/doc/"));
     if (lHelpDir.exists() == false)
     {
         lHelpDir = QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../doc/Kuzya_Help/"));
@@ -1355,8 +1403,8 @@ void Kuzya::slotChangeTranslation(QString translation)
     path.truncate(path.lastIndexOf("/", -1));
     path = path+"/profiles/";
 #else
-    //    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/");
-    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles");
+    //    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../kuzya/profiles/");
+    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../kuzya/profiles");
     if (false == QDir(path).exists())
     {
         path = QDir::cleanPath(QApplication::applicationDirPath() + "/../profiles");
@@ -1493,8 +1541,4 @@ void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
     actionStaticLibMode->setIconVisibleInMenu(isVisible);
     actionToggleFolds->setIconVisibleInMenu(isVisible);
     actionUndo->setIconVisibleInMenu(isVisible);
-
-
-
-
 }

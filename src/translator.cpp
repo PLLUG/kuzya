@@ -17,13 +17,11 @@
  *   You should have received a copy of the GNU General Public License        *
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>     *
  ******************************************************************************/
-
-#include "translator.h"
-
 #include <QDirIterator>
 #include <QApplication>
-
 #include <QDebug>
+
+#include "translator.h"
 
 Translator::Translator(QObject *parent) : QObject(parent)
 {
@@ -40,7 +38,7 @@ QStringList Translator::getSupportedTranslations(QString lang)
     path.truncate(path.lastIndexOf("/", -1));
     path = path+"/profiles/"+lang;
 #else
-        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/")+lang;
+        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../kuzya/profiles")+"/"+lang;
 #endif
 
     supportedTranslations.clear();
@@ -111,7 +109,7 @@ void Translator::openFile(QString file, QString lang)
     path.truncate(path.lastIndexOf("/", -1));
     translationsPath = path+"/profiles/"+lang+"/";
 #else
-    translationsPath = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/")+lang+"/";
+    translationsPath = QDir::cleanPath(QApplication::applicationDirPath() + "/../../kuzya/profiles")+"/"+lang;
 #endif
 
     codeTranslation = detectCodeLanguage(file, language);
@@ -243,5 +241,3 @@ void Translator::translateList(QStringList *list)
     }
     fileTrans.close();
 }
-
-
