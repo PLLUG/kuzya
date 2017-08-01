@@ -680,13 +680,11 @@ void Kuzya::refreshDialogSettings()
 
     fileDialog->setNameFilter(filter);
     QList<QUrl> list = fileDialog->sidebarUrls();
-    qDebug() <<"list1 ---->"<< list;
     if(!list.isEmpty())
     {
         list.removeLast();
     }
     list << QUrl::fromLocalFile(DefaultDir);
-    qDebug() <<"list2 ---->"<< list;
     fileDialog->setSidebarUrls(list);
 
     QString currentFilter;

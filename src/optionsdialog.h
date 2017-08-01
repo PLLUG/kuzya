@@ -91,6 +91,7 @@ private slots:
     void slotResetCompilerOptions();
     void slotChangsLocalizationLanguage(QString);
     void slotChangeOptionPage(int);
+    void slotUpdateTerminalCBox();
 
 private:
     QTranslator* trans_ua;
@@ -105,10 +106,6 @@ private:
     QDir localizationLanguageDir;
     QStringList styleFilters;
     QStringList localizationLanguageFilters;
-    QMap<QString, QString> allKnownTerminals;
-
-    QList<QString> mDefaultTerminalEmulator;
-    QString mPathToEmulator = "/usr/bin/";
 
 public:	
     bool isLineMarginVisible;

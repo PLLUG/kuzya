@@ -60,6 +60,7 @@ public:
         void run(void);
         QList<compilerError>* getLastErrors(void);
         QList<compilerWarning>* getLastWarnings(void);
+        void setTerminal(const QString &_terminal);
 
 signals:
         void compileEnded(int status);
@@ -97,7 +98,7 @@ private:
         QStringList supportedCompilers;
         QStringList profilesPathList;
         QString outFile;
-        QStringList presentTerminals;
+        QString terminal;
 };
 
 #endif

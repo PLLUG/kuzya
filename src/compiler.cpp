@@ -438,14 +438,13 @@ void Compiler::run(void)
 #endif /*Q_OS_WIN32*/
 
 #ifdef Q_OS_UNIX
+    QStringList params;
+
+    startDetached(terminal, params << "-e" << "/bin/sh -c \'" + programPath + " && read -p \"Press enter to continue... \" REPLY'");
     //startDetached(QString("xterm") + QString(" -e /bin/sh -c \'") + programPath + QString(" && read -p \"Press enter to continue... \" REPLY'"));
-    startDetached("konsole", QStringList() << "-e" << "/bin/sh -c \'" + programPath + " && read -p \"Press enter to continue... \" REPLY'");
 #ifdef Q_OS_MAC
     startDetached("/usr/bin/open", QStringList() << "-n" << programPath);
 //  startDetached(QString("xterm") + QString(" -e /bin/sh -c \'") + programPath + QString(" && read -p \"Press enter to continue... \" REPLY'"));
-//  qDebug() << QString("xterm") + QString(" -e /bin/sh -c \'") + programPath + QString(" && read -p \"Press enter to continue... \" REPLY'");
-//#else
-//    //startDetached("konsole", QStringList() << "-e" << "/bin/sh -c \'" + programPath + " && read -p \"Press enter to continue... \" REPLY'");
 #endif /*Q_OS_MAC*/
 
 #endif /*Q_OS_UNIX*/
@@ -488,6 +487,11 @@ QList<Compiler::compilerError>* Compiler::getLastErrors(void)
 QList<Compiler::compilerWarning>* Compiler::getLastWarnings(void)
 {
     return &warningList;
+}
+
+void Compiler::setTerminal(const QString &_terminal)
+{
+    terminal = _terminal;
 }
 
 void Compiler::readStdErr(void)
