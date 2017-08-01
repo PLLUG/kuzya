@@ -105,6 +105,7 @@ private:
     QDir localizationLanguageDir;
     QStringList styleFilters;
     QStringList localizationLanguageFilters;
+    QMap<QString, QString> allKnownTerminals;
 
     QList<QString> mDefaultTerminalEmulator;
     QString mPathToEmulator = "/usr/bin/";

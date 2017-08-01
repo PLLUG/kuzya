@@ -552,34 +552,42 @@ QString OptionsDialog::readCompilerOptions(QString lang, QString comp)
     return options;
 }
 
-static const Terminal knownTerminals[] = {
-    {"x-terminal-emulator", "-e"},
-    {"xterm", "-e"},
-    {"aterm", "-e"},
-    {"Eterm", "-e"},
-    {"rxvt", "-e"},
-    {"urxvt", "-e"},
-    {"xfce4-terminal", "-x"},
-    {"konsole", "-e"},
-    {"gnome-terminal", "-x"}
-};
-
-#include <QMessageBox>
 QList<QString> OptionsDialog:: defaultTerminalEmulator()
 {
-    QList<QString> presentTerminals;
-    const int terminalCount = int(sizeof(knownTerminals) / sizeof(knownTerminals[0]));
-    qDebug() << terminalCount;
-    for (int i = 0; i < terminalCount; ++i)
+    QVector<QString> vknownTerminals = {"x-terminal-emulator",
+                                       "xterm",
+                                       "aterm",
+                                       "Eterm",
+                                       "rxvt",
+                                       "urxvt",
+                                       "xfce4-terminal",
+                                       "konsole",
+                                       "gnome-terminal"};
+
+    for(auto &i : vknownTerminals)
     {
-        QString result =  mPathToEmulator + knownTerminals[i].binary;
-        qDebug() << result << result.isEmpty() << QFile(result).exists();
+        if(i == "xfce4-terminal" || i == "gnome-terminal")
+        {
+            allKnownTerminals.insert(i, "-x");
+        }
+        else
+        {
+            allKnownTerminals.insert(i, "-e");
+        }
+    }
+
+    QStringList presentTerminals;
+
+    for(auto &i : allKnownTerminals.toStdMap())
+    {
+        QString result = mPathToEmulator + i.first;
 
         if (!result.isEmpty() && QFile(result).exists())
         {
-            presentTerminals.append(QString(result+' '+knownTerminals[i].options));
+            presentTerminals.append(QString(result + ' ' + i.second));
         }
     }
+
     if(presentTerminals.isEmpty())
     {
         QMessageBox m;
@@ -587,6 +595,7 @@ QList<QString> OptionsDialog:: defaultTerminalEmulator()
         m.exec();
         presentTerminals.append(QString(mPathToEmulator + "xterm -e"));
     }
+
     return presentTerminals;
 }
 

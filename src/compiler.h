@@ -97,6 +97,7 @@ private:
         QStringList supportedCompilers;
         QStringList profilesPathList;
         QString outFile;
+        QStringList presentTerminals;
 };
 
 #endif
