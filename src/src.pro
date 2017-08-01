@@ -90,5 +90,6 @@ mac {
     CONFIG-=app_bundle
     DESTDIR +=../kuzya
     TARGET +=kuzya
+    INCLUDEPATH = ../3rdparty/QScintilla/2.10.1
 }
 
