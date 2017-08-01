@@ -58,7 +58,7 @@ public:
     QString readDefaultCompiler(QString lang);
     QString readCompilerLocation(QString lang, QString comp);
     QString readCompilerOptions(QString lang, QString comp);
-
+    QString debuggerFileLocationText();
 public slots:
     void slotCommOptions(void);
 
