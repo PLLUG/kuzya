@@ -53,7 +53,7 @@
 #include "translator.h"
 #include "version.h"
 #include "gdb.h"
-
+#include "watchwindow.h"
 
 Kuzya::Kuzya(QWidget *parent)
     : QMainWindow(parent)
@@ -122,22 +122,25 @@ Kuzya::Kuzya(QWidget *parent)
     textEditor = new QsciScintilla(this);
     textEditor->setEolMode(QsciScintilla::EolUnix);
 
-    mOutputTabWidget= new QTabWidget(this);
+    mOutputTabWidget = new QTabWidget(this);
 
     notificationList = new QListWidget(this);
     notificationList->setObjectName("notificationList");
     mOutputTabWidget->addTab(notificationList, "Output");
     mOutputTabWidget->setVisible(false);
     //adds debug tab to tabWidget
-    QLabel *innerLabel = new QLabel(this);
-    QVBoxLayout *innerLabelLayout = new QVBoxLayout(this);
-    innerLabel->setLayout(innerLabelLayout);
-    QToolBar *debugButtons = new QToolBar(this);
-    mWatchLocalsWidget = new QTreeWidget(this);
-    innerLabelLayout->addWidget(debugButtons);
-    innerLabelLayout->addWidget(mWatchLocalsWidget);
-    mOutputTabWidget->addTab(innerLabel, "Debug");
-
+    debugTab = new WatchWindow(this);
+    mOutputTabWidget->addTab(debugTab, "Debug");
+    auto debugPanel = debugTab->getDebugButtonPanel();
+    debugPanel->addAction(actionStartDebugging);
+    debugPanel->addSeparator();
+    debugPanel->addAction(actionStepOver);
+    debugPanel->addAction(actionStepIn);
+    debugPanel->addAction(actionStepOut);
+    debugPanel->addAction(actionContinueDebugging);
+    debugPanel->addSeparator();
+    debugPanel->addAction(actionStopDebugging);
+    debugPanel->setAutoFillBackground(true);
 
     QSplitter *splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);
@@ -159,7 +162,6 @@ Kuzya::Kuzya(QWidget *parent)
 
     cppLexer = new QsciLexerCPP(this);
     cppLexer->setFont(font);
-//    cppLexer->
     pascalLexer = new QsciLexerPascal(this);
     pascalLexer->setFont(font);
     fortranLexer = new QsciLexerFortran(this);
@@ -198,6 +200,7 @@ Kuzya::Kuzya(QWidget *parent)
     file = new QFile();
     goToLine = new GoToLineDialog(textEditor);
     compiler = new Compiler(this);
+    compiler->setCompilerMode(Compiler::DEFAULT);
     translator = new Translator(this);
     settings = new OptionsDialog(this);
 
@@ -271,14 +274,7 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionStaticLibMode, SIGNAL(triggered()), this,         SLOT(slotStaticLibMode()));
     connect(actionDynamicLibMode, SIGNAL(triggered()), this,        SLOT(slotDynamicLibMode()));
 
-
-
-
-
     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoRedoEnabled()));
-
-
-
 
 
     connect(textEditor,	SIGNAL(modificationChanged(bool)), this,SLOT(slotModificationChanged(bool)));
@@ -298,15 +294,26 @@ Kuzya::Kuzya(QWidget *parent)
     textEditorShortcut->setKey(Qt::CTRL+Qt::Key_Up);
     connect(textEditorShortcut, SIGNAL(activated()), textEditor, SLOT(setFocus()));
 
-//    if (qApp->argc() > 1)
-//    {
-//        this->openFile(qApp->argv()[qApp->argc()-1]);
-//    }
     QString comp = settings->readDefaultCompiler(language);
     QString compDir = settings->readCompilerLocation(language, comp);
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
-    mGdbDebugger = new Gdb(gdbDir);
-    mGdbDebugger->start();
+    mGdbDebugger = new Gdb("D:/Studying/Programming/Qt/PLLUG/kuzya/msys64/mingw64/bin/bin/gdb.exe");
+    debugTab->setDebugger(mGdbDebugger);
+
+
+    /* connect debug actions */
+    connect(actionStartDebugging, SIGNAL(triggered()), this, SLOT(slotRunDebugMode()));
+    connect(actionStepOver, SIGNAL(triggered()), mGdbDebugger, SLOT(stepOver()));
+    connect(actionStepIn, SIGNAL(triggered()), mGdbDebugger, SLOT(stepIn()));
+    connect(actionStepOut, SIGNAL(triggered()), mGdbDebugger, SLOT(stepOut()));
+    connect(actionContinueDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stepContinue()));
+    connect(actionStopDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stopExecuting()));
+    /* markers action */
+    connect(mGdbDebugger, SIGNAL(signalGdbStopped(int)), this, SLOT(slotStoppedAtLine(int)), Qt::UniqueConnection);
+    connect(mGdbDebugger, SIGNAL(signalDebugEnded(int)), this, SLOT(slotDebugEnded(int)));
+    connect(actionStopDebugging, &QAction::triggered, [&](){slotDebugEnded(-1);});
+    connect(actionContinueDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
+    connect(actionStopDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
@@ -652,7 +659,7 @@ void Kuzya::slotOpen(void)
 void Kuzya::refreshCompileModes()
 {
     actionDefaultMode->setChecked(true);
-    compiler->setCompilerMode(Compiler::DEFAULT);
+//    compiler->setCompilerMode(Compiler::DEFAULT);
     actionAlternativeMode->setVisible(compiler->isModeAvailable(Compiler::ALTERNATIVE));
     actionObjectMode->setVisible(compiler->isModeAvailable(Compiler::OBJECT));
     actionStaticLibMode->setVisible(compiler->isModeAvailable(Compiler::STATIC_LIB));
@@ -699,23 +706,31 @@ void Kuzya::setUndoRedoEnabled()
 
 void Kuzya::slotRunDebugMode()
 {
+    notificationList->clear();
     compiler->setCompilerMode(Compiler::DEBUG);
-    if(recompile())
+    if(!srcRecompiled)
+    {
+        addNotification(NTYPE_WAIT, "Terminating program...");
+        mGdbDebugger->stopExecuting();
+        mGdbDebugger->waitForReadyRead();
+    }
+    mOutputTabWidget->setVisible(true);
+    if(recompile() && compiler->getCompileStatus() == Compiler::STATUS_NOERROR)
     {
         try
         {
-            mGdbDebugger->stopExecuting();
+            mOutputTabWidget->setCurrentIndex(1);
+            if(mGdbDebugger->state() == QProcess::NotRunning)
+            {
+                mGdbDebugger->start();
+            }
             mGdbDebugger->waitForReadyRead(3000);
             QString programPath = compiler->getProgramPath();
             QString fullProgramPath = tr("%1.exe").arg(programPath);
             fullProgramPath = fullProgramPath.replace("\\", "/");
             mGdbDebugger->openProject(fullProgramPath);
-            mGdbDebugger->globalUpdate();   //update to get relevant breakpoints
-            auto oldBreakpoints = mGdbDebugger->getBreakpoints();
-            for(Breakpoint i : oldBreakpoints)
-            { // remove all breakpoints from gdb
-                mGdbDebugger->clearBreakPoint(i.getLine());
-            }
+            mGdbDebugger->write(QByteArray("delete")); //remove all breakpoints
+            mGdbDebugger->waitForReadyRead();
             int breakpoinLine = 0;
             do
             { // set new breakpoints
@@ -723,6 +738,7 @@ void Kuzya::slotRunDebugMode()
                 if(breakpoinLine != -1)
                 { // BE CAREFULL! set breakpoints to -1 may cause undefined behaviour, breakpoints may be everywhere
                     mGdbDebugger->setBreakPoint(breakpoinLine+1);
+                    mGdbDebugger->waitForReadyRead();
                 }
             }
             while(breakpoinLine != -1);
@@ -731,11 +747,53 @@ void Kuzya::slotRunDebugMode()
         catch(std::domain_error error)
         {
             mOutputTabWidget->setVisible(true);
+            mOutputTabWidget->setCurrentIndex(0);
             addNotification(NTYPE_FAILING, error.what());
         }
     }
+    else
+    {
+        mOutputTabWidget->setCurrentIndex(0);
+    }
 }
 
+void Kuzya::slotStoppedAtLine(int line)
+{
+    textEditor->markerDeleteAll(currentMarker);
+    textEditor->markerAdd(line-1, currentMarker);
+}
+
+void Kuzya::slotMoveCurrentMarker()
+{
+    slotStoppedAtLine(mGdbDebugger->getCurrentLine());
+}
+
+void Kuzya::slotClearDebugInformation()
+{
+    textEditor->markerDeleteAll(currentMarker);
+    debugTab->clearWatch();
+}
+
+void Kuzya::slotDebugEnded(int code)
+{
+    mOutputTabWidget->setCurrentIndex(0);
+    if(code == 0)
+    {
+        mOutputTabWidget->setVisible(false);
+        addNotification(NTYPE_SUCCESS, tr("Program finished with code %1").arg(QString::number(code)));
+    }
+    else if(code == -1)
+    {
+        mOutputTabWidget->setVisible(false);
+        addNotification(NTYPE_SUCCESS, tr("Program aborted"));
+    }
+    else
+    {
+        addNotification(NTYPE_FAILING, tr("Program finished with code %1").arg(QString::number(code)));
+        mOutputTabWidget->setVisible(true);
+        mOutputTabWidget->setCurrentIndex(0);
+    }
+}
 
 void Kuzya::refreshDialogSettings()
 {
@@ -866,6 +924,12 @@ void Kuzya::refreshProfileSettings()
         connect(languageComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotChangeTranslation(QString)));
         languageComboBoxAction->setVisible(true);
     }
+}
+
+void Kuzya::updateDebugger(const QString &debuggerLocation)
+{
+    mGdbDebugger->kill();
+    mGdbDebugger->setGdbPath(debuggerLocation);
 }
 
 /**

@@ -61,6 +61,7 @@ public:
         QList<compilerError>* getLastErrors(void);
         QList<compilerWarning>* getLastWarnings(void);
         QString getProgramPath()const;
+        int getCompileStatus()const;
 
 signals:
         void compileEnded(int status);
@@ -83,6 +84,7 @@ private:
         QString sourcePath;
         QString programPath;
         int runStatus;
+        int mCompileStatus; // last compile status
         int compileMode;
         QList<compilerError> errorList;
         QList<compilerWarning> warningList;

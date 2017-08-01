@@ -10,7 +10,7 @@ FORMS += kuzya.ui \
     gotolinedialog.ui \
     optionsdialog.ui \
     finddialog.ui \
-    replacedialog.ui
+    replacedialog.ui \
 
 HEADERS += kuzya.h \
     gotolinedialog.h \
@@ -23,7 +23,8 @@ HEADERS += kuzya.h \
     version.h \
     breakpoint.h \
     gdb.h \
-    variable.h
+    variable.h \
+    watchwindow.h
 
 SOURCES += kuzya.cpp \
     main.cpp \
@@ -35,7 +36,8 @@ SOURCES += kuzya.cpp \
     translator.cpp \
     gdb.cpp \
     breakpoint.cpp \
-    variable.cpp
+    variable.cpp \
+    watchwindow.cpp
 
 RESOURCES = images.qrc \
            ../auth.qrc \

@@ -216,7 +216,7 @@ void Compiler::loadProfile(QString lang, QString profile)
     if (QString::Null() == profPath) return;
 
     compilerProfile = new QSettings(profPath, QSettings::IniFormat);
-    compileMode = DEFAULT;
+//    compileMode = DEFAULT;
 }
 
 void Compiler::setOptions(QString str)
@@ -469,19 +469,19 @@ void Compiler::afterExit(int exitCode, QProcess::ExitStatus exitStatus)
     }
 
     if (!outFile.isEmpty()) readStdErr();
-
+    mCompileStatus = endSt;
     emit compileEnded(endSt);
 }
 
 void Compiler::compilerProcessError(QProcess::ProcessError error)
 {
     int endSt;
-
     if (QProcess::FailedToStart == error) endSt = STATUS_FAILED_TO_START;
     else endSt = STATUS_CRASHED;
 
     programPath = QString::null;
 
+    mCompileStatus = endSt;
     emit compileEnded(endSt);
 }
 
@@ -498,6 +498,11 @@ QList<Compiler::compilerWarning>* Compiler::getLastWarnings(void)
 QString Compiler::getProgramPath() const
 {
     return programPath;
+}
+
+int Compiler::getCompileStatus() const
+{
+    return mCompileStatus;
 }
 
 void Compiler::readStdErr(void)
