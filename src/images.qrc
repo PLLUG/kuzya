@@ -106,4 +106,20 @@
         <file alias="Styling.png">images/styling.png</file>
         <file alias="TextEditor.png">images/texteditor.png</file>
     </qresource>
+    <qresource prefix="/treeView">
+        <file alias="expand">images/expand.png</file>
+        <file alias="hide">images/hide.png</file>
+        <file alias="empty">images/empty.png</file>
+        <file alias="nullptr">images/nullptr_error.png</file>
+        <file alias="pointer">images/pointer.png</file>
+        <file alias="variable">images/variable.png</file>
+    </qresource>
+    <qresource prefix="/debug">
+        <file>images/continue_debug.png</file>
+        <file>images/step_in.png</file>
+        <file>images/step_out.png</file>
+        <file>images/step_over.png</file>
+        <file>images/stop_debug.png</file>
+        <file alias="update">images/update.png</file>
+    </qresource>
 </RCC>
