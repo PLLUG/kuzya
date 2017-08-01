@@ -669,31 +669,31 @@ void Kuzya::setUndoRedoEnabled()
 
 void Kuzya::refreshDialogSettings()
 {
-//    QString filter;
-//    QStringList supportedList = compiler->getSupportedLanguages();
-//    supportedList.sort();
-//    foreach (QString lang, supportedList)
-//    {
-//        filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
-//    }
-//    filter = filter + "All Files (*)";
+    QString filter;
+    QStringList supportedList = compiler->getSupportedLanguages();
+    supportedList.sort();
+    foreach (QString lang, supportedList)
+    {
+        filter = filter+lang+" ("+compiler->getSupportedExtensions(lang)+");;";
+    }
+    filter = filter + "All Files (*)";
 
-//    fileDialog->setNameFilter(filter);
-//    QList<QUrl> list = fileDialog->sidebarUrls();
-//    qDebug() <<"list1 ---->"<< list;
-//    if(!list.isEmpty())
-//    {
-//        list.removeLast();
-//    }
-//    list << QUrl::fromLocalFile(DefaultDir);
-//    qDebug() <<"list2 ---->"<< list;
-//    fileDialog->setSidebarUrls(list);
+    fileDialog->setNameFilter(filter);
+    QList<QUrl> list = fileDialog->sidebarUrls();
+    qDebug() <<"list1 ---->"<< list;
+    if(!list.isEmpty())
+    {
+        list.removeLast();
+    }
+    list << QUrl::fromLocalFile(DefaultDir);
+    qDebug() <<"list2 ---->"<< list;
+    fileDialog->setSidebarUrls(list);
 
-//    QString currentFilter;
-//    if (!language.isEmpty()) currentFilter = language + " ("+compiler->getSupportedExtensions(language)+")";
-//    else currentFilter = "";
-//    fileDialog->selectFile(currentFilter);
-//    slotSetFileSuffix(fileDialog->selectedFiles());
+    QString currentFilter;
+    if (!language.isEmpty()) currentFilter = language + " ("+compiler->getSupportedExtensions(language)+")";
+    else currentFilter = "";
+    fileDialog->selectFile(currentFilter);
+    slotSetFileSuffix(fileDialog->selectedFiles());
 }
 
 void Kuzya::refreshProfileSettings()
@@ -805,7 +805,7 @@ void Kuzya::refreshProfileSettings()
 **/
 bool Kuzya::slotSave(void)
 {
-// getSaveFileName(this, tr("Save Image"), m_path.toLocalFile(), filterList.join(";;"));
+//  getSaveFileName(this, tr("Save Image"), m_path.toLocalFile(), filterList.join(";;"));
     QStringList supportedList = compiler->getSupportedLanguages();
     supportedList.sort();
 
@@ -815,35 +815,40 @@ bool Kuzya::slotSave(void)
         filterList.append(QString("%1(%2)").arg(lang, compiler->getSupportedExtensions(lang)));
     }
 
-    QFileDialog saveFile;
-    saveFile.setAcceptMode(QFileDialog::AcceptSave);
-    saveFile.setNameFilters(filterList);
-    saveFile.setDirectoryUrl(m_path.toLocalFile());
+    QFileDialog saveFileDialog;
+    saveFileDialog.setAcceptMode(QFileDialog::AcceptSave);
+    saveFileDialog.setNameFilters(filterList);
+    saveFileDialog.setDirectoryUrl(m_path.toLocalFile());
 
-
-
-    if (saveFile.exec() == QFileDialog::Accepted)
+    if (saveFileDialog.exec() == QFileDialog::Accepted)
     {
-        QString filename = saveFile.selectedFiles().first();
-        QString expansion = saveFile.selectedNameFilter();
-        int ch = [expansion]() -> int
-                                        {
-                                            for(int i = 0; i < expansion.size(); ++i)
-                                            {
-                                                if(expansion.at(i).toLatin1() == '*')
-                                                    return i;
-                                            }
-                                        }();
+        QString filename = saveFileDialog.selectedFiles().first();
+        QString expansion = saveFileDialog.selectedNameFilter();
+        int ch = [expansion]()
+                                {
+                                    for(int i = 0; i < expansion.size(); ++i)
+                                    {
+                                        if(expansion.at(i).toLatin1() == '*')
+                                            return i;
+                                    }
+                                }();
         expansion.remove(0, ch);
         expansion.remove('*');
         expansion.remove(')');
 
-        QStringList exteptions = expansion.split(' ');
+        QStringList extension = expansion.split(' ');
 
-        QString currentExtension = exteptions.first();
-        if (!filename.endsWith(currentExtension))
+        QString currentExtension = extension.first(); //перше розширення
+        QRegExp exte("[.a-z]");
+        qDebug() <<"cur--"<< currentExtension;
+
+        if (!filename.endsWith(currentExtension)) //якщо назва немає (.cpp .mm .fpc) то дофігаче одне з них у назву
         {
             filename.append(currentExtension);
+        }
+        if (filename.contains(exte))
+        {
+//            filename
         }
 
         QFile file(filename);
@@ -907,7 +912,7 @@ void Kuzya::slotSave_as(void)
     //        newFileName = fileDialog->getSaveFileName(this, tr("Save as..."),
     //                                           DefaultDir , filter, &currentFilter);
 
-    refreshDialogSettings();
+//    refreshDialogSettings();
     fileDialog->setAcceptMode(QFileDialog::AcceptSave);
     fileDialog->setFileMode(QFileDialog::AnyFile);
 
