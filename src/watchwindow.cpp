@@ -151,11 +151,11 @@ void WatchWindow::clearWatch()
 void WatchWindow::setDebugOptionsEnabled(bool enabled)
 {
     auto actions = mDebugButtons->actions();
-
     for(auto i : actions)
     {
         i->setEnabled(enabled);
     }
+    actions.first()->setEnabled(!enabled); //start debug icon
 }
 
 void WatchWindow::slotShowVariables()
