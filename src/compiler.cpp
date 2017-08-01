@@ -435,11 +435,12 @@ void Compiler::run(void)
 
 #ifdef Q_OS_WIN32
     QStringList command;
+//    command << "C:/" << "title "+programPath+".exe"+ "&&"+programPath+".exe";
+//    startDetached("cmd", command);
     command << "cmd /c";
     command << "set PATH=C:\\kuzya\\msys64\\mingw64\\bin;%PATH%";
     command << programPath;
     system(command.join(" & ").toUtf8().data());
-    //command << "C:/" << "title "+programPath+".exe"+ "&&"+programPath+".exe";
 #endif /*Q_OS_WIN32*/
 
 #ifdef Q_OS_UNIX
