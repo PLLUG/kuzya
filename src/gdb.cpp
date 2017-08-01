@@ -48,89 +48,17 @@ void Gdb::write(QByteArray command)
 void Gdb::readStdOutput()
 {   //Reads all standart output from GDB
     mBuffer = QProcess::readAll();
-    QRegExp errorMatch("\\^error"); // match '^error' literally
-    QRegExp info("info\\s"); // match '^info ' literally
-    QRegExp doneOrError("\\^done|\\^error"); // match '^done' or '^error' literally
-    QRegExp whatis("whatis\\s"); // match 'whatis ' literally
-    QRegExp printRegex("print\\s"); // match 'print ' literally
-    QRegExp stop("\\*stopped,reason="); // match stops
-    QRegExp line("line=\"\\d+\""); // match line='$_digits_$'
-    QRegExp exit("exit-code=\"\\d+\"");
 
-    if(stop.indexIn(mBuffer) != -1)
-    {   // if GDB matches breakpoint
-        line.indexIn(mBuffer);
-        QString lineStr = line.cap(); // line="123"
-        if(lineStr.isEmpty())
-        {
-            exit.indexIn(mBuffer);
-            QString codeStr = exit.cap();
-            codeStr = codeStr.replace("[\\w\"=]+", QString());
-            emit signalDebugEnded(codeStr.toInt());
-        }
-        int firstQuote = lineStr.indexOf(tr("\""));
-        int lastQuote = lineStr.indexOf("\"", firstQuote+1);
-        QString bareLine = lineStr.mid(firstQuote+1, lastQuote-firstQuote-1);
-        emit signalGdbStopped(bareLine.toInt());
-    }
+    checkBreakpoint();
 
-    /*print capturing section*/
-    if(printRegex.indexIn(mBuffer) != -1 || mPrintCaptured)
-    {
-        mPrintCaptured = true;
-        mPrintBuffer.append(mBuffer);
-    }
-    if(mPrintCaptured && doneOrError.indexIn(mBuffer) != -1)
-    {
-        readContent(mPrintBuffer);
-        mPrintCaptured = false;
-        mPrintBuffer.clear();
-    }
+    checkPrintCommand();
 
-    /*whatis capturing section*/
-    if(whatis.indexIn(mBuffer) != -1 || mWhatisCaptured)
-    { // is 'whatis' appears in output
-        mWhatisBuffer.append(mBuffer);
-        mWhatisCaptured = true;
-    }
-    int lastDoneorError = mWhatisBuffer.lastIndexOf("^done");
-    int lastWhatis = mWhatisBuffer.lastIndexOf("whatis");
-    if(doneOrError.indexIn(mBuffer) != -1 && mWhatisCaptured
-            && lastWhatis < lastDoneorError) // if 'whatis' does not appear after ^done again
-    {
-        mWhatisCaptured = false;
-        readType(mWhatisBuffer);
-        mWhatisBuffer.clear();
-    }
+    checkWhatIsCommand();
 
-    /*info capturing section*/
-    if(info.indexIn(mBuffer) != -1 || mInfoCaptured)
-    {
-        mInfoCaptured = true;
-        updateVariableFromBuffer();
-    }
-    if(doneOrError.indexIn(mBuffer) != -1 && mInfoCaptured)
-    {
-        mInfoCaptured = false;
-        emit signalUpdatedVariables();
-    }
+    checkInfoCommand();
 
-    /*error capturing section*/
-    if(errorMatch.indexIn(mBuffer) != -1)
-    {
-        QRegExp errorMsg("msg=.*\\(gdb\\)");
-        int pos = -1;
-        do
-        {
-            pos = errorMsg.indexIn(mBuffer, pos+1);
-            mErrorMessage = errorMsg.cap();
-            mErrorMessage.replace(tr("msg=\""), "");
-            mErrorMessage.replace(tr("(gdb)"), "");
-            mErrorMessage.remove(mErrorMessage.length()-2, 1);
-            emit signalErrorOccured(mErrorMessage);
-        }
-        while(pos != -1);
-    }
+    checkError();
+
     emit signalReadyReadGdb();
 }
 
@@ -244,6 +172,106 @@ void Gdb::updateVariableFromBuffer()
 void Gdb::readErrOutput()
 {
     mBuffer = QProcess::readAllStandardError();
+}
+
+void Gdb::checkBreakpoint()
+{
+    QRegExp exit("exit-code=\"\\d+\"");
+    QRegExp stop("\\*stopped,reason="); // match stops
+    QRegExp line("line=\"\\d+\""); // match line='$_digits_$'
+    if(stop.indexIn(mBuffer) != -1)
+    {   // if GDB matches breakpoint
+        line.indexIn(mBuffer);
+        QString lineStr = line.cap(); // line="123"
+        if(lineStr.isEmpty())
+        {
+            exit.indexIn(mBuffer);
+            QString codeStr = exit.cap();
+            codeStr = codeStr.replace("[\\w\"=]+", QString());
+            emit signalDebugEnded(codeStr.toInt());
+        }
+        int firstQuote = lineStr.indexOf(tr("\""));
+        int lastQuote = lineStr.indexOf("\"", firstQuote+1);
+        QString bareLine = lineStr.mid(firstQuote+1, lastQuote-firstQuote-1);
+        emit signalGdbStopped(bareLine.toInt());
+    }
+}
+
+void Gdb::checkPrintCommand()
+{
+    QRegExp doneOrError("\\^done|\\^error"); // match '^done' or '^error' literally
+    QRegExp printRegex("print\\s"); // match 'print ' literally
+    /*print capturing section*/
+    if(printRegex.indexIn(mBuffer) != -1 || mPrintCaptured)
+    {
+        mPrintCaptured = true;
+        mPrintBuffer.append(mBuffer);
+    }
+    if(mPrintCaptured && doneOrError.indexIn(mBuffer) != -1)
+    {
+        readContent(mPrintBuffer);
+        mPrintCaptured = false;
+        mPrintBuffer.clear();
+    }
+}
+
+void Gdb::checkWhatIsCommand()
+{
+    QRegExp whatis("whatis\\s"); // match 'whatis ' literally
+    QRegExp doneOrError("\\^done|\\^error"); // match '^done' or '^error' literally
+    /*whatis capturing section*/
+    if(whatis.indexIn(mBuffer) != -1 || mWhatisCaptured)
+    { // is 'whatis' appears in output
+        mWhatisBuffer.append(mBuffer);
+        mWhatisCaptured = true;
+    }
+    int lastDoneorError = mWhatisBuffer.lastIndexOf("^done");
+    int lastWhatis = mWhatisBuffer.lastIndexOf("whatis");
+    if(doneOrError.indexIn(mBuffer) != -1 && mWhatisCaptured
+            && lastWhatis < lastDoneorError) // if 'whatis' does not appear after ^done again
+    {
+        mWhatisCaptured = false;
+        readType(mWhatisBuffer);
+        mWhatisBuffer.clear();
+    }
+}
+
+void Gdb::checkInfoCommand()
+{
+    QRegExp info("info\\s"); // match '^info ' literally
+    QRegExp doneOrError("\\^done|\\^error"); // match '^done' or '^error' literally
+    /*info capturing section*/
+    if(info.indexIn(mBuffer) != -1 || mInfoCaptured)
+    {
+        mInfoCaptured = true;
+        updateVariableFromBuffer();
+    }
+    if(doneOrError.indexIn(mBuffer) != -1 && mInfoCaptured)
+    {
+        mInfoCaptured = false;
+        emit signalUpdatedVariables();
+    }
+}
+
+void Gdb::checkError()
+{
+    QRegExp errorMatch("\\^error"); // match '^error' literally
+    /*error capturing section*/
+    if(errorMatch.indexIn(mBuffer) != -1)
+    {
+        QRegExp errorMsg("msg=.*\\(gdb\\)");
+        int pos = -1;
+        do
+        {
+            pos = errorMsg.indexIn(mBuffer, pos+1);
+            mErrorMessage = errorMsg.cap();
+            mErrorMessage.replace(tr("msg=\""), "");
+            mErrorMessage.replace(tr("(gdb)"), "");
+            mErrorMessage.remove(mErrorMessage.length()-2, 1);
+            emit signalErrorOccured(mErrorMessage);
+        }
+        while(pos != -1);
+    }
 }
 
 const QString &Gdb::getOutput() const

@@ -24,6 +24,7 @@ public:
     void readStdOutput();
     void readErrOutput();
 
+
     const QString& getOutput()const;
     void openProject(const QString& fileName);
     int getCurrentLine();
@@ -61,6 +62,13 @@ signals:
     void signalReadyReadGdb();
     void signalDebugEnded(int code);
 private:
+    /*inspect QProcess output methods*/
+    void checkBreakpoint();
+    void checkPrintCommand();
+    void checkWhatIsCommand();
+    void checkInfoCommand();
+    void checkError();
+
     QFile mGdbFile;
     QString mErrorMessage;
     QString mBuffer;
