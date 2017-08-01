@@ -559,6 +559,11 @@ QString OptionsDialog::readCompilerOptions(QString lang, QString comp)
     return options;
 }
 
+QString OptionsDialog::debuggerFileLocationText()
+{
+    return debuggerFileLocation->text();
+}
+
 void OptionsDialog::slotDefaultCompiler()
 {
     QString lang = languageComboBox->currentText();

@@ -299,6 +299,7 @@ Kuzya::Kuzya(QWidget *parent)
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
     mGdbDebugger = new Gdb("D:/Studying/Programming/Qt/PLLUG/kuzya/msys64/mingw64/bin/bin/gdb.exe");
     debugTab->setDebugger(mGdbDebugger);
+    updateDebugger(settings->debuggerFileLocationText());
 
 
     /* connect debug actions */
