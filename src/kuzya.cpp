@@ -309,12 +309,12 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionStepIn, SIGNAL(triggered()), mGdbDebugger, SLOT(stepIn()));
     connect(actionStepOut, SIGNAL(triggered()), mGdbDebugger, SLOT(stepOut()));
     connect(actionContinueDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stepContinue()));
+    connect(actionContinueDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
     connect(actionStopDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stopExecuting()));
     /* markers action */
     connect(mGdbDebugger, SIGNAL(signalGdbStopped(int)), this, SLOT(slotStoppedAtLine(int)), Qt::UniqueConnection);
     connect(mGdbDebugger, SIGNAL(signalDebugEnded(int)), this, SLOT(slotDebugEnded(int)));
     connect(actionStopDebugging, &QAction::triggered, [&](){slotDebugEnded(-1);});
-    connect(actionContinueDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
     connect(actionStopDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
 
 #ifdef Q_OS_MAC
@@ -731,7 +731,6 @@ void Kuzya::slotRunDebugMode()
             QString fullProgramPath = tr("%1.exe").arg(programPath);
             fullProgramPath = fullProgramPath.replace("\\", "/");
             mGdbDebugger->openProject(fullProgramPath);
-            debugTab->setDebugOptionsEnabled(true);
             mGdbDebugger->write(QByteArray("delete")); //remove all breakpoints
             mGdbDebugger->waitForReadyRead();
             int breakpoinLine = 0;
@@ -764,6 +763,7 @@ void Kuzya::slotStoppedAtLine(int line)
 {
     textEditor->markerDeleteAll(currentMarker);
     textEditor->markerAdd(line-1, currentMarker);
+    debugTab->setDebugOptionsEnabled(true);
 }
 
 void Kuzya::slotMoveCurrentMarker()
@@ -775,6 +775,7 @@ void Kuzya::slotClearDebugInformation()
 {
     textEditor->markerDeleteAll(currentMarker);
     debugTab->clearWatch();
+    debugTab->setDebugOptionsEnabled(false);
 }
 
 void Kuzya::slotDebugEnded(int code)
