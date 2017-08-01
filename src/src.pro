@@ -76,19 +76,20 @@ unix {
     kuzya_app_desktop
 }
 
-CONFIG += qscintilla2
+CONFIG += qscintilla2_qt5
 
 win32 {
     TARGET = ../bin/kuzya
-    LIBS += -L../3rdparty/QScintilla/2.9.4
-    INCLUDEPATH = ../3rdparty/QScintilla/2.9.4
-    CONFIG(debug, debug|release):LIBS += -lqscintilla2d
-    else: LIBS += -lqscintilla2
+    LIBS += -L../3rdparty/QScintilla/2.10.1
+    INCLUDEPATH = ../3rdparty/QScintilla/2.10.1
+    CONFIG(debug, debug|release):LIBS += -lqscintilla2_qt5d
+    else: LIBS += -lqscintilla2_qt5
 }
 
 mac {
     CONFIG-=app_bundle
     DESTDIR +=../kuzya
     TARGET +=kuzya
+    INCLUDEPATH = ../3rdparty/QScintilla/2.10.1
 }
 
