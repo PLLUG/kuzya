@@ -603,7 +603,7 @@ void Kuzya::slotOpen(void)
     QString openedFileName;
     if (QDialog::Accepted == fileDialog->exec())
     {
-        openedFileName = fileDialog->selectedFiles().at(0);
+        openedFileName = fileDialog->selectedFiles().first();
 
         if ("" != openedFileName)
         {
@@ -723,7 +723,7 @@ void Kuzya::refreshProfileSettings()
         {
             QStringList supportedCompilers = compiler->getSupportedCompilers(language);
             if (!supportedCompilers.isEmpty())
-                comp = compiler->getSupportedCompilers(language).at(0);
+                comp = compiler->getSupportedCompilers(language).first();
             else return;
         }
         compiler->loadProfile(language, comp);
@@ -805,7 +805,6 @@ void Kuzya::refreshProfileSettings()
 **/
 bool Kuzya::slotSave(void)
 {
-//  getSaveFileName(this, tr("Save Image"), m_path.toLocalFile(), filterList.join(";;"));
     QStringList supportedList = compiler->getSupportedLanguages();
     supportedList.sort();
 
@@ -838,21 +837,13 @@ bool Kuzya::slotSave(void)
 
         QStringList extension = expansion.split(' ');
 
-        QString currentExtension = extension.first(); //перше розширення
-        QRegExp exte("[.a-z]");
-        qDebug() <<"cur--"<< currentExtension;
-
-        if (!filename.endsWith(currentExtension)) //якщо назва немає (.cpp .mm .fpc) то дофігаче одне з них у назву
+        QString currentExtension = extension.first();
+        if (filename.indexOf('.') == -1)
         {
             filename.append(currentExtension);
         }
-        if (filename.contains(exte))
-        {
-//            filename
-        }
 
         QFile file(filename);
-        qDebug() << filename;
         if (file.open(QFile::WriteOnly))
         {
             QTextStream stream(&file);
@@ -860,46 +851,15 @@ bool Kuzya::slotSave(void)
             textEditor->setModified(false);
             file.close();
         }
+        fileName = filename;
         statusBar()->showMessage(tr("Saved"), 2000);
         addFileNameToList(file.fileName());
         refreshProfileSettings();
+        removeAllNotifications();
         slotUpdateWindowName(false);
         if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
         return true;
     }
-
-
-//    QString newFileName;
-//    if (fileName.isEmpty())
-//    {
-//        // fileName = fileDialog->getSaveFileName(this, tr("Save as..."), DefaultDir, filter, &currentFilter);
-//        refreshDialogSettings();
-//       fileDialog->setAcceptMode(QFileDialog::AcceptSave);
-//        fileDialog->setFileMode(QFileDialog::AnyFile);
-
-//        if (fileDialog->exec())
-//            newFileName = fileDialog->selectedFiles().at(0);
-//        qDebug() <<"--slotSave--"<< newFileName;
-//        if (newFileName.isEmpty()) return false;
-//        else fileName = newFileName;
-//    }
-
-
-//    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-//    {
-//        QMessageBox *msgBox= new QMessageBox();
-//        msgBox->setIcon(QMessageBox::Warning);
-//        msgBox->setWindowTitle(tr("File cannot be saved "));
-//        msgBox->setText(tr("Do you have permission to access data in this folder? Select another place to save this file"));
-//        QAbstractButton *OkBtn = msgBox->addButton(tr("Ok"),QMessageBox::ActionRole);
-//        msgBox->exec();
-//        if (msgBox->clickedButton()==(OkBtn))
-//        {
-//            slotSave_as();
-//        }
-//        delete msgBox;
-//        return false ;
-//    }
 }
 
 /**
@@ -908,21 +868,10 @@ bool Kuzya::slotSave(void)
 void Kuzya::slotSave_as(void)
 {
     QString oldFileName(fileName);
-    QString newFileName;
-    //        newFileName = fileDialog->getSaveFileName(this, tr("Save as..."),
-    //                                           DefaultDir , filter, &currentFilter);
-
-//    refreshDialogSettings();
-    fileDialog->setAcceptMode(QFileDialog::AcceptSave);
-    fileDialog->setFileMode(QFileDialog::AnyFile);
-
-    if (fileDialog->exec())
-        newFileName = fileDialog->selectedFiles().first();
-
-    if (newFileName.isEmpty()) return;
-
-    fileName = newFileName;
-    if (!slotSave()) fileName = oldFileName;
+    if (!slotSave())
+    {
+        fileName = oldFileName;
+    }
 }
 /**
 *******************************************************************************************************
@@ -955,7 +904,6 @@ void Kuzya::slotExit(void)
 {
     settings->writeSettings();
     settings->writeMainWindowState();
-
 
     //        if (!fileName.isEmpty())
     //            settings->saveLastProjectName(fileName);
