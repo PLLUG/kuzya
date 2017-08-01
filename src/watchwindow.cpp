@@ -1,8 +1,11 @@
 #include "watchwindow.h"
 
-#include <QLabel>
 #include <QVBoxLayout>
-#include <QDebug>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QToolBar>
+
+#include "gdb.h"
 
 WatchWindow::WatchWindow(QWidget* parent):
     QWidget(parent)

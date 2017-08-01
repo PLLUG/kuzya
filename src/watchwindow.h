@@ -3,12 +3,13 @@
 
 #include <QObject>
 #include <QWidget>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
-#include <QToolBar>
 
 #include "variable.h"
-#include "gdb.h"
+
+class Gdb;
+class QToolBar;
+class QTreeWidgetItem;
+class QTreeWidget;
 
 
 struct VarComp {
