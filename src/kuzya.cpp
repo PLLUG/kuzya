@@ -273,6 +273,8 @@ Kuzya::Kuzya(QWidget *parent)
     textEditorShortcut->setKey(Qt::CTRL+Qt::Key_Up);
     connect(textEditorShortcut, SIGNAL(activated()), textEditor, SLOT(setFocus()));
 
+    QString pathToCompiler = "C:/kuzya/msys64/mingw64/bin";
+    settings->setCompilerLocation(pathToCompiler);
 //    if (qApp->argc() > 1)
 //    {
 //        this->openFile(qApp->argv()[qApp->argc()-1]);
@@ -736,9 +738,12 @@ void Kuzya::refreshProfileSettings()
         srcRecompiled = false;
 
 #ifdef WIN32
-        QString path = QApplication::applicationDirPath();
-        path.truncate(path.lastIndexOf("/", -1));
-        path = path+"/profiles/";
+        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../profiles");
+        if (!QDir(path).exists())
+        {
+            path.truncate(path.lastIndexOf("/", -1));
+            path = path+"/profiles";
+        }
 #else
         //        QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles/");
         QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles");
@@ -767,7 +772,7 @@ void Kuzya::refreshProfileSettings()
 
 
 #ifdef WIN32
-    QString path = QApplication::applicationDirPath();
+    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../resources");
     path.truncate(path.lastIndexOf("/", -1));
     path = path+"/resources/";
 #else
@@ -1351,7 +1356,7 @@ void Kuzya::slotChangeTranslation(QString translation)
     qDebug() << "TR CODE: " << translator->translatedCodeFile();
 
 #ifdef WIN32
-    QString path = QApplication::applicationDirPath();
+    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../profiles");
     path.truncate(path.lastIndexOf("/", -1));
     path = path+"/profiles/";
 #else

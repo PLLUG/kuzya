@@ -36,7 +36,7 @@ Translator::~Translator()
 QStringList Translator::getSupportedTranslations(QString lang)
 {
 #ifdef WIN32
-    QString path = QApplication::applicationDirPath();
+    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../profiles");
     path.truncate(path.lastIndexOf("/", -1));
     path = path+"/profiles/"+lang;
 #else
@@ -107,7 +107,7 @@ void Translator::openFile(QString file, QString lang)
     translatedFileName = file;
 
 #ifdef WIN32
-    QString path = QApplication::applicationDirPath();
+    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../profiles");
     path.truncate(path.lastIndexOf("/", -1));
     translationsPath = path+"/profiles/"+lang+"/";
 #else

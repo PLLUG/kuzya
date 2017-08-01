@@ -67,10 +67,12 @@ int main(int argc, char ** argv)
     a.setApplicationName("Kuzya");
 
     Kuzya * mw = new Kuzya();
+
     QSplashScreen *splash = new QSplashScreen();
     splash->setPixmap(QPixmap(":/menu/images/SplashCukr.png"));
     splash->show();
     splash->finish(mw);
+
     delete splash;
     mw->show();
 
