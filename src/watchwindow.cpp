@@ -4,6 +4,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QToolBar>
+#include <algorithm>
 
 #include "gdb.h"
 
@@ -145,6 +146,16 @@ QToolBar *WatchWindow::getDebugButtonPanel() const
 void WatchWindow::clearWatch()
 {
     mWatchLocalsWidget->clear();
+}
+
+void WatchWindow::setDebugOptionsEnabled(bool enabled)
+{
+    auto actions = mDebugButtons->actions();
+
+    for(auto i : actions)
+    {
+        i->setEnabled(enabled);
+    }
 }
 
 void WatchWindow::slotShowVariables()

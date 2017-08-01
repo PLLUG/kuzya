@@ -142,6 +142,8 @@ Kuzya::Kuzya(QWidget *parent)
     debugPanel->addAction(actionStopDebugging);
     debugPanel->setAutoFillBackground(true);
 
+    debugTab->setDebugOptionsEnabled(false);
+
     QSplitter *splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);
     splitter->addWidget(textEditor);
@@ -729,6 +731,7 @@ void Kuzya::slotRunDebugMode()
             QString fullProgramPath = tr("%1.exe").arg(programPath);
             fullProgramPath = fullProgramPath.replace("\\", "/");
             mGdbDebugger->openProject(fullProgramPath);
+            debugTab->setDebugOptionsEnabled(true);
             mGdbDebugger->write(QByteArray("delete")); //remove all breakpoints
             mGdbDebugger->waitForReadyRead();
             int breakpoinLine = 0;
@@ -777,6 +780,7 @@ void Kuzya::slotClearDebugInformation()
 void Kuzya::slotDebugEnded(int code)
 {
     mOutputTabWidget->setCurrentIndex(0);
+    debugTab->setDebugOptionsEnabled(false);
     if(code == 0)
     {
         mOutputTabWidget->setVisible(false);
