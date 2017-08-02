@@ -27,6 +27,7 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QLocale>
+
 #include "optionsdialog.h"
 
 OptionsDialog::OptionsDialog(QWidget *parent)
@@ -58,15 +59,17 @@ OptionsDialog::OptionsDialog(QWidget *parent)
     connect(compilerResetPushButton, SIGNAL(clicked()) ,this, SLOT(slotResetCompilerOptions()));
     connect(localizationLanguageCBox,SIGNAL(activated(QString)),this,SLOT(slotChangsLocalizationLanguage(QString)));
     connect(mTabIconView,SIGNAL(currentRowChanged(int)),this,SLOT(slotChangeOptionPage(int)));
+    connect(terminalCBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdateTerminalCBox()));
     ///-----------------------------Fonts and Colors-------------------------------------------------------
     styleCBox->addItems(QStyleFactory::keys());
 
-
+    terminalCBox->addItems(defaultTerminalEmulator());
+    mw->getCurrentCompiler()->setTerminal(terminalCBox->currentText());
 #ifdef WIN32
     stylesDir=QDir(QApplication::applicationDirPath()+"/../resources/qss/");
     localizationLanguageDir=QDir(QApplication::applicationDirPath()+"/../resources/translations/");
 #else
-    stylesDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/qss/"));
+    stylesDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../../kuzya/resources/qss/"));
     if (stylesDir.exists() == false)
     {
         stylesDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../"+STYLESHEETS_RELATIVE_PATH));
@@ -78,7 +81,7 @@ OptionsDialog::OptionsDialog(QWidget *parent)
         }
     }
 
-    localizationLanguageDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/resources/translations/"));
+    localizationLanguageDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../../kuzya/resources/translations/"));
     if (localizationLanguageDir.exists() == false)
     {
         localizationLanguageDir=QDir(QDir::cleanPath(QApplication::applicationDirPath() + "/../"+TRANSLATIONS_REALATIVE_PATH));
@@ -463,7 +466,7 @@ void OptionsDialog::slotChangeDefDir(int index)
             directoryBox->insertItem(0,dir);
         }
         directoryBox->setCurrentIndex(0);
-	
+
     }
 }
 void OptionsDialog::slotChangeDefDir(QString dirName)
@@ -549,6 +552,42 @@ QString OptionsDialog::readCompilerOptions(QString lang, QString comp)
     return options;
 }
 
+QList<QString> OptionsDialog:: defaultTerminalEmulator()
+{
+    QString mPathToEmulator = "/usr/bin/";
+    QVector<QString> vknownTerminals = {"x-terminal-emulator",
+                                       "xterm",
+                                       "aterm",
+                                       "Eterm",
+                                       "rxvt",
+                                       "urxvt",
+                                       "xfce4-terminal",
+                                       "konsole",
+                                       "gnome-terminal"};
+
+    QStringList presentTerminals;
+
+    for(auto &i : vknownTerminals)
+    {
+        QString result = mPathToEmulator + i;
+
+        if (!result.isEmpty() && QFile(result).exists())
+        {
+            presentTerminals.append(result);
+        }
+    }
+
+    if(presentTerminals.isEmpty())
+    {
+        QMessageBox m;
+        m.setText("You don't have instaled terminals!\nPlease will must installing XTerm: \n\r(http://invisible-island.net/xterm/)");
+        m.exec();
+        presentTerminals.append(QString(mPathToEmulator + "xterm"));
+    }
+
+    return presentTerminals;
+}
+
 void OptionsDialog::slotDefaultCompiler()
 {
     QString lang = languageComboBox->currentText();
@@ -599,4 +638,9 @@ void OptionsDialog::slotChangsLocalizationLanguage(QString langName)
 void OptionsDialog::slotChangeOptionPage(int pIndex)
 {
     mStackedWidget->setCurrentIndex(pIndex);
+}
+
+void OptionsDialog::slotUpdateTerminalCBox()
+{
+    mw->getCurrentCompiler()->setTerminal(terminalCBox->currentText());
 }

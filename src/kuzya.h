@@ -17,9 +17,6 @@
  *   You should have received a copy of the GNU General Public License        *
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>     *
  ******************************************************************************/
-
-
-
 #ifndef KUZYA_H
 #define KUZYA_H
 
@@ -165,6 +162,7 @@ private:
 
 private:
         QFile *file;
+        QUrl m_path;
         QString language; //curren programing language
         QsciScintilla* textEditor;
         QListWidget* notificationList;

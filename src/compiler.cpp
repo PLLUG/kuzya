@@ -17,8 +17,6 @@
  *   You should have received a copy of the GNU General Public License        *
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>     *
  ******************************************************************************/
-
-
 #include <QSettings>
 #include <QDirIterator>
 #include <QMessageBox>
@@ -58,7 +56,7 @@ void Compiler::refreshSupported()
     path.truncate(path.lastIndexOf("/", -1));
     path = path+"/profiles";
 #else
-    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../usr/share/kuzya/profiles");
+    QString path = QDir::cleanPath(QApplication::applicationDirPath() + "/../../kuzya/profiles");
     if (false == QDir(path).exists())
     {
         path = QDir::cleanPath(QApplication::applicationDirPath() + "/../profiles");
@@ -122,12 +120,12 @@ void Compiler::refreshSupported()
                         }
                     }
                 }
-                //if (!compilers.isEmpty())
-                //{
+                if (!compilers.isEmpty())
+                {
                 supportedCompilers << compilers;
                 profilesPathList << profiles;
-                //}
-                //else continue;
+                }
+                else continue;
             }
         }
     }
@@ -167,7 +165,7 @@ QString Compiler::getSupportedExtensions(QString lang)
 
     int index = supportedLanguages.indexOf(lang);
 
-    if (-1 == index) return QString("");
+    if (-1 == index) return QString("--");
     else return supportedExtensions.at(index);
 }
 
@@ -440,14 +438,13 @@ void Compiler::run(void)
 #endif /*Q_OS_WIN32*/
 
 #ifdef Q_OS_UNIX
-    startDetached(QString("xterm") + QString(" -e /bin/sh -c \'") + programPath + QString(" && read -p \"Press enter to continue... \" REPLY'"));
+    QStringList params;
 
+    startDetached(terminal, params << "-e" << "/bin/sh -c \'" + programPath + " && read -p \"Press enter to continue... \" REPLY'");
+    //startDetached(QString("xterm") + QString(" -e /bin/sh -c \'") + programPath + QString(" && read -p \"Press enter to continue... \" REPLY'"));
 #ifdef Q_OS_MAC
     startDetached("/usr/bin/open", QStringList() << "-n" << programPath);
-//    startDetached(QString("xterm") + QString(" -e /bin/sh -c \'") + programPath + QString(" && read -p \"Press enter to continue... \" REPLY'"));
-//    qDebug() << QString("xterm") + QString(" -e /bin/sh -c \'") + programPath + QString(" && read -p \"Press enter to continue... \" REPLY'");
-#else
-    startDetached("xterm", QStringList() << "-e" << "/bin/sh -c \'" + programPath + " && read -p \"Press enter to continue... \" REPLY'");
+//  startDetached(QString("xterm") + QString(" -e /bin/sh -c \'") + programPath + QString(" && read -p \"Press enter to continue... \" REPLY'"));
 #endif /*Q_OS_MAC*/
 
 #endif /*Q_OS_UNIX*/
@@ -490,6 +487,11 @@ QList<Compiler::compilerError>* Compiler::getLastErrors(void)
 QList<Compiler::compilerWarning>* Compiler::getLastWarnings(void)
 {
     return &warningList;
+}
+
+void Compiler::setTerminal(const QString &_terminal)
+{
+    terminal = _terminal;
 }
 
 void Compiler::readStdErr(void)

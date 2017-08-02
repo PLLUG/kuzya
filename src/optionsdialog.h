@@ -27,6 +27,7 @@
 #include <QSettings>
 #include <QTranslator>
 #include <QTextStream>
+#include <QList>
 #include <QFile>
 #include <QDir>
 #include <QStyleFactory>
@@ -40,6 +41,11 @@ class QListWidget;
 class QsciScintilla;
 class Kuzya;
 
+struct Terminal
+{
+    const QString binary;
+    const QString options;
+};
 
 class OptionsDialog : public QDialog, private Ui::optionsForm
 {
@@ -58,6 +64,8 @@ public:
     QString readDefaultCompiler(QString lang);
     QString readCompilerLocation(QString lang, QString comp);
     QString readCompilerOptions(QString lang, QString comp);
+    QList<QString> defaultTerminalEmulator();
+
 
 public slots:
     void slotCommOptions(void);
@@ -83,6 +91,7 @@ private slots:
     void slotResetCompilerOptions();
     void slotChangsLocalizationLanguage(QString);
     void slotChangeOptionPage(int);
+    void slotUpdateTerminalCBox();
 
 private:
     QTranslator* trans_ua;
@@ -97,6 +106,7 @@ private:
     QDir localizationLanguageDir;
     QStringList styleFilters;
     QStringList localizationLanguageFilters;
+
 public:	
     bool isLineMarginVisible;
 };
