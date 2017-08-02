@@ -25,9 +25,14 @@
 #include <QString>
 #include <QFileInfo>
 #include <QDebug>
+#include <QCommandLineOption>
+#include <QCommandLineParser>
+#include <QDir>
+#include <QFileInfo>
 
 #include <time.h>
 #include "kuzya.h"
+
 
 int main(int argc, char ** argv)
 {
@@ -66,12 +71,53 @@ int main(int argc, char ** argv)
     a.setOrganizationName("PLLUG Community");
     a.setApplicationName("Kuzya");
 
+    a.setApplicationVersion("1.0");
+
+    QCommandLineOption formatOption(QStringList() << "o" << "open", "main", "Only one file can be opened");
+
+    QCommandLineParser parser;
+    parser.addOption(formatOption);
+    parser.addVersionOption();
+    parser.addPositionalArgument("file", "Source file to open.", "[FILE]");
+
+    parser.process(a);
+    QString nameOpenFile = parser.value(formatOption);
+
+    const QStringList wrongParameters = parser.positionalArguments();
+
+    if (parser.isSet(formatOption))
+    {
+        qDebug() <<"Your file open -- " << nameOpenFile;
+    }
+
+    if (!wrongParameters.isEmpty())
+    {
+        qCritical() <<"You forgot to enter the parameter. For example: -o, -v.\nOr maybe you enter many text";
+        parser.showHelp(1);
+    }
+
     Kuzya * mw = new Kuzya();
     QSplashScreen *splash = new QSplashScreen();
     splash->setPixmap(QPixmap(":/menu/images/SplashCukr.png"));
     splash->show();
     splash->finish(mw);
     delete splash;
+
+
+
+
+
+
+
+    if (QFileInfo::exists(nameOpenFile))
+    {
+        mw->openFile(nameOpenFile);
+    }
+    else
+    {
+        qDebug() << "Database doesn't exists !";
+    }
+
     mw->show();
 
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
