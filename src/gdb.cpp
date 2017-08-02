@@ -189,6 +189,7 @@ void Gdb::checkBreakpoint()
             QString codeStr = exit.cap();
             codeStr = codeStr.replace("[\\w\"=]+", QString());
             emit signalDebugEnded(codeStr.toInt());
+            return;
         }
         int firstQuote = lineStr.indexOf(tr("\""));
         int lastQuote = lineStr.indexOf("\"", firstQuote+1);

@@ -34,6 +34,8 @@ public:
     void slotUpdateVariables();
     QToolBar* getDebugButtonPanel()const;
     void clearWatch();
+    void setDebugOptionsEnabled(bool enabled);
+
 public slots:
     void slotShowVariables();
     void slotTypeUpdated(Variable var);
