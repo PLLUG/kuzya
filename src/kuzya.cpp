@@ -821,15 +821,8 @@ bool Kuzya::slotSave(void)
     {
         fileName = saveFileDialog.selectedFiles().first();
         QString expansion = saveFileDialog.selectedNameFilter();
-        int ch = [expansion]()
-                                {
-                                    for(int i = 0; i < expansion.size(); ++i)
-                                    {
-                                        if(expansion.at(i).toLatin1() == '*')
-                                            return i;
-                                    }
-                                }();
-        expansion.remove(0, ch);
+
+        expansion.remove(0, expansion.indexOf('*'));
         expansion.remove('*');
         expansion.remove(')');
 
@@ -855,9 +848,13 @@ bool Kuzya::slotSave(void)
         refreshProfileSettings();
         removeAllNotifications();
         slotUpdateWindowName(false);
-        if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
-        return true;
+        if(settings->isLineMarginVisible)
+        {
+            textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
+        }
+    return true;
     }
+    return false;
 }
 
 /**
@@ -865,7 +862,7 @@ bool Kuzya::slotSave(void)
 **/
 void Kuzya::slotSave_as(void)
 {
-    QString oldFileName(fileName);
+    QString oldFileName;
     if (!slotSave())
     {
         fileName = oldFileName;
