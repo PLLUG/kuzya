@@ -300,6 +300,7 @@ Kuzya::Kuzya(QWidget *parent)
     QString compDir = settings->readCompilerLocation(language, comp);
     QString gdbDir = tr("%1\\%2").arg(compDir).arg("bin\\gdb.exe");
     mGdbDebugger = new Gdb("D:/Studying/Programming/Qt/PLLUG/kuzya/msys64/mingw64/bin/bin/gdb.exe");
+    mDebugMode = false;
     debugTab->setDebugger(mGdbDebugger);
     updateDebugger(settings->debuggerFileLocationText());
 
@@ -732,20 +733,11 @@ void Kuzya::slotRunDebugMode()
             QString fullProgramPath = tr("%1.exe").arg(programPath);
             fullProgramPath = fullProgramPath.replace("\\", "/");
             mGdbDebugger->openProject(fullProgramPath);
-            mGdbDebugger->write(QByteArray("delete")); //remove all breakpoints
-            mGdbDebugger->waitForReadyRead();
-            int breakpoinLine = 0;
-            do
-            { // set new breakpoints
-                breakpoinLine = textEditor->markerFindNext(breakpoinLine+1, BREAKPOINT_MARK);
-                if(breakpoinLine != -1)
-                { // BE CAREFULL! set breakpoints to -1 may cause undefined behaviour, breakpoints may be everywhere
-                    mGdbDebugger->setBreakPoint(breakpoinLine+1);
-                    mGdbDebugger->waitForReadyRead();
-                }
-            }
-            while(breakpoinLine != -1);
+
+            updateBreakpoints();
+
             mGdbDebugger->run();
+            mDebugMode = true;
         }
         catch(std::domain_error error)
         {
@@ -799,6 +791,7 @@ void Kuzya::slotDebugEnded(int code)
         mOutputTabWidget->setVisible(true);
         mOutputTabWidget->setCurrentIndex(0);
     }
+    mDebugMode = false;
 }
 
 void Kuzya::refreshDialogSettings()
@@ -936,6 +929,23 @@ void Kuzya::updateDebugger(const QString &debuggerLocation)
 {
     mGdbDebugger->kill();
     mGdbDebugger->setGdbPath(debuggerLocation);
+}
+
+void Kuzya::updateBreakpoints()
+{
+    mGdbDebugger->write(QByteArray("delete")); //remove all breakpoints
+    mGdbDebugger->waitForReadyRead();
+    int breakpoinLine = 0;
+    do
+    { // set new breakpoints
+        breakpoinLine = textEditor->markerFindNext(breakpoinLine+1, BREAKPOINT_MARK);
+        if(breakpoinLine != -1)
+        { // BE CAREFULL! set breakpoints to -1 may cause undefined behaviour, breakpoints may be everywhere
+            mGdbDebugger->setBreakPoint(breakpoinLine+1);
+            mGdbDebugger->waitForReadyRead();
+        }
+    }
+    while(breakpoinLine != -1);
 }
 
 /**
@@ -1243,6 +1253,10 @@ void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers modifi
         else
         {
             textEditor->markerAdd(line, breakpointMarker);
+        }
+        if(mDebugMode)
+        {
+            updateBreakpoints();
         }
     }
     else

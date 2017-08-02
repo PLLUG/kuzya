@@ -113,6 +113,7 @@ public:
         void refreshProfileSettings();
         void LoadTemplates(QString);
         void updateDebugger(const QString& debuggerLocation);
+        void updateBreakpoints();
 
 protected:
 
@@ -227,6 +228,7 @@ private:
         QToolBar *toolBar;
         Gdb* mGdbDebugger;
         WatchWindow* debugTab;
+        bool mDebugMode;
 };
 
 #endif
