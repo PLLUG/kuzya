@@ -821,7 +821,7 @@ bool Kuzya::slotSave(void)
 
     if (saveFileDialog.exec() == QFileDialog::Accepted)
     {
-        QString filename = saveFileDialog.selectedFiles().first();
+        fileName = saveFileDialog.selectedFiles().first();
         QString expansion = saveFileDialog.selectedNameFilter();
         int ch = [expansion]()
                                 {
@@ -838,12 +838,12 @@ bool Kuzya::slotSave(void)
         QStringList extension = expansion.split(' ');
 
         QString currentExtension = extension.first();
-        if (filename.indexOf('.') == -1)
+        if (fileName.indexOf('.') == -1)
         {
-            filename.append(currentExtension);
+            fileName.append(currentExtension);
         }
 
-        QFile file(filename);
+        QFile file(fileName);
         if (file.open(QFile::WriteOnly))
         {
             QTextStream stream(&file);
@@ -851,7 +851,7 @@ bool Kuzya::slotSave(void)
             textEditor->setModified(false);
             file.close();
         }
-        fileName = filename;
+
         statusBar()->showMessage(tr("Saved"), 2000);
         addFileNameToList(file.fileName());
         refreshProfileSettings();
