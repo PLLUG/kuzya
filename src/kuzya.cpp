@@ -730,19 +730,7 @@ void Kuzya::slotRunDebugMode()
             QString fullProgramPath = tr("%1.exe").arg(programPath);
             fullProgramPath = fullProgramPath.replace("\\", "/");
             mGdbDebugger->openProject(fullProgramPath);
-//                mGdbDebugger->write(QByteArray("delete")); //remove all breakpoints
-//                mGdbDebugger->waitForReadyRead();
-//                int breakpoinLine = 0;
-//                do
-//                { // set new breakpoints
-//                    breakpoinLine = textEditor->markerFindNext(breakpoinLine+1, BREAKPOINT_MARK);
-//                    if(breakpoinLine != -1)
-//                    { // BE CAREFULL! set breakpoints to -1 may cause undefined behaviour, breakpoints may be everywhere
-//                        mGdbDebugger->setBreakPoint(breakpoinLine+1);
-//                        mGdbDebugger->waitForReadyRead();
-//                    }
-//                }
-//                while(breakpoinLine != -1);
+
             updateBreakpoints();
 
             mGdbDebugger->run();
