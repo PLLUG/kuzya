@@ -142,6 +142,8 @@ Kuzya::Kuzya(QWidget *parent)
     debugPanel->addAction(actionStopDebugging);
     debugPanel->setAutoFillBackground(true);
 
+    debugTab->setDebugOptionsEnabled(false);
+
     QSplitter *splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);
     splitter->addWidget(textEditor);
@@ -308,12 +310,12 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionStepIn, SIGNAL(triggered()), mGdbDebugger, SLOT(stepIn()));
     connect(actionStepOut, SIGNAL(triggered()), mGdbDebugger, SLOT(stepOut()));
     connect(actionContinueDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stepContinue()));
+    connect(actionContinueDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
     connect(actionStopDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stopExecuting()));
     /* markers action */
     connect(mGdbDebugger, SIGNAL(signalGdbStopped(int)), this, SLOT(slotStoppedAtLine(int)), Qt::UniqueConnection);
     connect(mGdbDebugger, SIGNAL(signalDebugEnded(int)), this, SLOT(slotDebugEnded(int)));
     connect(actionStopDebugging, &QAction::triggered, [&](){slotDebugEnded(-1);});
-    connect(actionContinueDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
     connect(actionStopDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
 
 #ifdef Q_OS_MAC
@@ -762,6 +764,7 @@ void Kuzya::slotStoppedAtLine(int line)
 {
     textEditor->markerDeleteAll(currentMarker);
     textEditor->markerAdd(line-1, currentMarker);
+    debugTab->setDebugOptionsEnabled(true);
 }
 
 void Kuzya::slotMoveCurrentMarker()
@@ -773,11 +776,13 @@ void Kuzya::slotClearDebugInformation()
 {
     textEditor->markerDeleteAll(currentMarker);
     debugTab->clearWatch();
+    debugTab->setDebugOptionsEnabled(false);
 }
 
 void Kuzya::slotDebugEnded(int code)
 {
     mOutputTabWidget->setCurrentIndex(0);
+    debugTab->setDebugOptionsEnabled(false);
     if(code == 0)
     {
         mOutputTabWidget->setVisible(false);
