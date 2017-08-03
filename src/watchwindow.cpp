@@ -146,6 +146,10 @@ QToolBar *WatchWindow::getDebugButtonPanel() const
 void WatchWindow::clearWatch()
 {
     mWatchLocalsWidget->clear();
+    mTypeVar.clear();
+    mPointers.clear();
+    mPointersName.clear();
+    mPointersContent.clear();
 }
 
 void WatchWindow::setDebugOptionsEnabled(bool enabled)
@@ -194,7 +198,7 @@ void WatchWindow::slotTypeUpdated(Variable var)
         addTreeChildren(itemPointer, var, "", true);   //append dereferenced pointer to node with addres
         mPointersContent.erase(iterator);
     }
-    else
+    else if(!mTypeVar.empty())
     {
         QTreeWidgetItem* item = mTypeVar[var];
         item->setText(2, var.getType());
