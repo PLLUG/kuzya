@@ -973,7 +973,7 @@
   <action name="actionStepOver">
    <property name="icon">
     <iconset resource="images.qrc">
-     <normaloff>:/debug/images/step_out.png</normaloff>:/debug/images/step_out.png</iconset>
+     <normaloff>:/debug/images/step_over.png</normaloff>:/debug/images/step_over.png</iconset>
    </property>
    <property name="text">
     <string>Step Over</string>
