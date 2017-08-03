@@ -48,7 +48,8 @@ void Gdb::write(QByteArray command)
 void Gdb::readStdOutput()
 {   //Reads all standart output from GDB
     mBuffer = QProcess::readAll();
-
+    log.append(mBuffer);
+    log.append("\n****************************************\n");
     checkBreakpoint();
 
     checkPrintCommand();
@@ -77,11 +78,17 @@ void Gdb::readType(const QString &varName)
             QString type = findType.cap();
             QString bareType = type.split('=')[1].trimmed(); // type is string after 'type = '
             QString nameStr = findName.cap();
+
+            QRegExp inheritance("<[^<^>]*>.");
+
             QString bareName = nameStr.split(' ')[1].trimmed();
-            auto var = find_if(mVariableTypeQueue.begin(), mVariableTypeQueue.end(), [&](Variable var){return var.getName() == bareName;});
+            bareName.replace(inheritance, "");
+            auto var = find_if(mVariableTypeQueue.begin(), mVariableTypeQueue.end(), [&](Variable var)
+                {return var.getName().replace(inheritance, "") == bareName;}
+                    );
             if(var == mVariableTypeQueue.end())
             {
-                return;
+                continue;
             }
             var->setType(bareType);
             emit signalTypeUpdated(*var);
@@ -172,6 +179,11 @@ void Gdb::updateVariableFromBuffer()
 void Gdb::readErrOutput()
 {
     mBuffer = QProcess::readAllStandardError();
+}
+
+QString Gdb::getLog() const
+{
+    return log;
 }
 
 void Gdb::checkBreakpoint()
@@ -394,7 +406,10 @@ void Gdb::getVarContent(const QString& var)
 QString Gdb::getVarType(Variable var)
 {   // Asks GDB about vairable $var$ and calls signal which will pass relevant info
     mVariableTypeQueue.push_back(var);
-    write(QByteArray("whatis ").append(var.getName()));
+    QString varName = var.getName();
+    QRegExp inheritance("<[^<^>]*>.");
+    varName.replace(inheritance, "");
+    write(QByteArray("whatis ").append(varName));
     return QString();
 }
 

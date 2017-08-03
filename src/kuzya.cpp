@@ -313,6 +313,8 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionContinueDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stepContinue()));
     connect(actionContinueDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
     connect(actionStopDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stopExecuting()));
+
+        connect(actionDebugger_Log, SIGNAL(triggered()), this, SLOT(slotDebuggerLog()));
     /* markers action */
     connect(mGdbDebugger, SIGNAL(signalGdbStopped(int)), this, SLOT(slotStoppedAtLine(int)), Qt::UniqueConnection);
     connect(mGdbDebugger, SIGNAL(signalDebugEnded(int)), this, SLOT(slotDebugEnded(int)));
@@ -792,6 +794,11 @@ void Kuzya::slotDebugEnded(int code)
         mOutputTabWidget->setCurrentIndex(0);
     }
     mDebugMode = false;
+}
+
+void Kuzya::slotDebuggerLog()
+{
+    textEditor->setText(mGdbDebugger->getLog());
 }
 
 void Kuzya::refreshDialogSettings()

@@ -163,6 +163,7 @@ private slots:
         void slotMoveCurrentMarker();
         void slotClearDebugInformation();
         void slotDebugEnded(int code);
+        void slotDebuggerLog();
 
 protected:
         //*DRAG AND DROP

@@ -570,6 +570,7 @@
     <addaction name="actionContinueDebugging"/>
     <addaction name="separator"/>
     <addaction name="actionStopDebugging"/>
+    <addaction name="actionDebugger_Log"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -1033,6 +1034,11 @@
   <action name="actionactionlog">
    <property name="text">
     <string>log</string>
+   </property>
+  </action>
+  <action name="actionDebugger_Log">
+   <property name="text">
+    <string>Debugger Log</string>
    </property>
   </action>
  </widget>

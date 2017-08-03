@@ -24,6 +24,7 @@ public:
     void readStdOutput();
     void readErrOutput();
 
+    QString getLog()const;
 
     const QString& getOutput()const;
     void openProject(const QString& fileName);
@@ -75,7 +76,7 @@ private:
     std::vector<Breakpoint> mBreakpointsList;
     std::vector<Variable> mVariablesList;
 
-    QString temp;
+    QString log;
     bool mInfoCaptured;
     bool mWhatisCaptured;
     QString mWhatisBuffer;
