@@ -163,6 +163,8 @@ private slots:
         void slotMoveCurrentMarker();
         void slotClearDebugInformation();
         void slotDebugEnded(int code);
+        void setBreakPointByCursorPosition();
+
 
 protected:
         //*DRAG AND DROP
@@ -182,6 +184,8 @@ private:
         void refreshDialogSettings();
         void setAllIconsVisibleInMenu(bool isVisible);
         bool recompile();
+        void showBreakpoints(int line);
+        unsigned int findCurrentLine();
 
 private:
         QFile *file;

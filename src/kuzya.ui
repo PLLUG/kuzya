@@ -1043,7 +1043,7 @@
     <string>Toggle Breakpoint</string>
    </property>
    <property name="shortcut">
-    <string>F9</string>
+    <string>F11</string>
    </property>
   </action>
  </widget>

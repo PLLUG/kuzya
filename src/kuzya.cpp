@@ -313,6 +313,8 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionContinueDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stepContinue()));
     connect(actionContinueDebugging, SIGNAL(triggered()), this, SLOT(slotClearDebugInformation()));
     connect(actionStopDebugging, SIGNAL(triggered()), mGdbDebugger, SLOT(stopExecuting()));
+    connect(actionToggleBreakpoint, SIGNAL(triggered()), this, SLOT(setBreakPointByCursorPosition()));
+
     /* markers action */
     connect(mGdbDebugger, SIGNAL(signalGdbStopped(int)), this, SLOT(slotStoppedAtLine(int)), Qt::UniqueConnection);
     connect(mGdbDebugger, SIGNAL(signalDebugEnded(int)), this, SLOT(slotDebugEnded(int)));
@@ -794,6 +796,11 @@ void Kuzya::slotDebugEnded(int code)
     mDebugMode = false;
 }
 
+void Kuzya::setBreakPointByCursorPosition()
+{
+    showBreakpoints(findCurrentLine());
+}
+
 void Kuzya::refreshDialogSettings()
 {
     QString filter;
@@ -1245,19 +1252,7 @@ void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers modifi
 {
     if(modifier == Qt::KeyboardModifier::AltModifier)
     { // breakpoints section
-        int bitMask = textEditor->markersAtLine(line);
-        if(bitMask & 1<<3)  //1<<3 = 0x4 - mask for breakpoint margin
-        {
-            textEditor->markerDelete(line, breakpointMarker);
-        }
-        else
-        {
-            textEditor->markerAdd(line, breakpointMarker);
-        }
-        if(mDebugMode)
-        {
-            updateBreakpoints();
-        }
+        showBreakpoints(line);
     }
     else
     { // errors section
@@ -1714,4 +1709,29 @@ bool Kuzya::recompile()
         compiler->waitForFinished(15000);
     }
     return true;
+}
+
+void Kuzya::showBreakpoints(int line)
+{
+    int bitMask = textEditor->markersAtLine(line);
+    if(bitMask & 1<<3)  //1<<3 = 0x4 - mask for breakpoint margin
+    {
+        textEditor->markerDelete(line, breakpointMarker);
+    }
+    else
+    {
+        textEditor->markerAdd(line, breakpointMarker);
+    }
+    if(mDebugMode)
+    {
+        updateBreakpoints();
+    }
+}
+
+unsigned int Kuzya::findCurrentLine()
+{
+    int line;
+    int index;
+    getTextEditorPointer()->getCursorPosition(&line, &index);
+    return line;
 }
