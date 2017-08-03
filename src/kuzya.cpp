@@ -798,7 +798,7 @@ void Kuzya::slotDebugEnded(int code)
 
 void Kuzya::setBreakPointByCursorPosition()
 {
-    showBreakpoints(findCurrentLine());
+    setBreakpoint(findCurrentLine());
 }
 
 void Kuzya::refreshDialogSettings()
@@ -1252,7 +1252,7 @@ void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers modifi
 {
     if(modifier == Qt::KeyboardModifier::AltModifier)
     { // breakpoints section
-        showBreakpoints(line);
+        setBreakpoint(line);
     }
     else
     { // errors section
@@ -1711,7 +1711,7 @@ bool Kuzya::recompile()
     return true;
 }
 
-void Kuzya::showBreakpoints(int line)
+void Kuzya::setBreakpoint(int line)
 {
     int bitMask = textEditor->markersAtLine(line);
     if(bitMask & 1<<3)  //1<<3 = 0x4 - mask for breakpoint margin

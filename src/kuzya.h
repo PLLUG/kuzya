@@ -184,7 +184,7 @@ private:
         void refreshDialogSettings();
         void setAllIconsVisibleInMenu(bool isVisible);
         bool recompile();
-        void showBreakpoints(int line);
+        void setBreakpoint(int line);
         unsigned int findCurrentLine();
 
 private:
