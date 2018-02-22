@@ -83,7 +83,24 @@ win32 {
 
 mac {
     CONFIG+=app_bundle
-    DESTDIR +=../kuzya
+
+    LAUNCHER_PROFILES.files = \
+        $$_PRO_FILE_PWD_/../profiles
+    LAUNCHER_PROFILES.path = Contents/
+    QMAKE_BUNDLE_DATA += LAUNCHER_PROFILES
+
+    LAUNCHER_RESOURCES.files = \
+        $$_PRO_FILE_PWD_/../resources/english.png \
+    $$_PRO_FILE_PWD_/../resources/ukrainian.png \
+    $$_PRO_FILE_PWD_/../resources/Kuzya.png \
+    $$_PRO_FILE_PWD_/../resources/icon \
+    $$_PRO_FILE_PWD_/../resources/linux \
+    $$_PRO_FILE_PWD_/../resources/qss \
+    $$_PRO_FILE_PWD_/../resources/translations
+    LAUNCHER_RESOURCES.path = Contents/Resources/
+    QMAKE_BUNDLE_DATA += LAUNCHER_RESOURCES
+
+    DESTDIR += ../kuzya
     TARGET = ../bin/kuzya
     INCLUDEPATH = ../3rdparty/QScintilla/2.10.1
 }
