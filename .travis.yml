@@ -17,7 +17,7 @@ compiler:
  
 before_install:
 # Mac OS X
-  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then brew update; brew install qt5 ; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"; brew install qt5 ; fi
   - if [[ "$TRAVIS_OS_NAME" == linux ]]; then sudo apt-get install --reinstall ca-certificates; sudo -E add-apt-repository ppa:beineri/opt-qt591-trusty -y; sudo apt-get update -qq; sudo apt-get install --force-yes -qq qt59base qt59tools; fi
 #/usr/local/Cellar/qt/5.9.1/bin/ 
 script:
