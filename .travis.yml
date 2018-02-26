@@ -17,6 +17,8 @@ compiler:
  
 before_install:
 # Mac OS X
+  - mkdir ~/rubygems-20171031
+  - sudo mv /Library/Ruby/Site/2.0.0/rubygems.rb ~/rubygems-20171031/
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then brew install qt5 ; fi
   - if [[ "$TRAVIS_OS_NAME" == linux ]]; then sudo apt-get install --reinstall ca-certificates; sudo -E add-apt-repository ppa:beineri/opt-qt591-trusty -y; sudo apt-get update -qq; sudo apt-get install --force-yes -qq qt59base qt59tools; fi
 #/usr/local/Cellar/qt/5.9.1/bin/ 
