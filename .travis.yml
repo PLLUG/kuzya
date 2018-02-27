@@ -24,7 +24,7 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then wget https://sourceforge.net/projects/pyqt/files/QScintilla2/QScintilla-2.10.1/QScintilla_gpl-2.10.1.tar.gz; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then tar -xvzf QScintilla_gpl-2.10.1.tar.gz; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then cd QScintilla_gpl-2.10.1/Qt4Qt5; fi
-  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then PATH=/usr/local/Cellar/qt/5.10.1/clang_64/bin:$PATH; fi   
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then PATH=/usr/local/opt/qt/5.10.1/bin:$PATH; fi   
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then export PATH; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; qmake qscintilla.pro; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then make -j$(nproc); fi
