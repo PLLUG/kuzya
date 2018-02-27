@@ -27,7 +27,7 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then pwd; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then PATH=/usr/local/Cellar/qt/5.10.1/bin:$PATH; fi   
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then export PATH; fi
-  - if [[ "$TRAVIS_OS_NAME" == osx ]]; qmake qscintilla.pro; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then qmake qscintilla.pro; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then make -j$(nproc); fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then sudo make install; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then qmake --version; fi
