@@ -31,7 +31,7 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then make -j$(nproc); fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then sudo make install; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then qmake --version; fi
-  - if [[ "$TRAVIS_OS_NAME" == osx ]]; cd ../../kuzya/src; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then cd ../../src; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then python generate.py -v 2.1.12; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then qmake "CONFIG+=release silent"; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then make -j$(nproc); fi
