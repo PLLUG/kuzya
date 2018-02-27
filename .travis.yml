@@ -35,7 +35,6 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then python generate.py -v 2.1.12; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then qmake "CONFIG+=release silent"; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then make -j$(nproc); fi
-  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then cd ../; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then sudo make install; fi
       
       
