@@ -21,7 +21,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == linux ]]; then sudo apt-get install --reinstall ca-certificates; sudo -E add-apt-repository ppa:beineri/opt-qt591-trusty -y; sudo apt-get update -qq; sudo apt-get install --force-yes -qq qt59base qt59tools; fi
 #/usr/local/Cellar/qt/5.9.1/bin/ 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then wget -d https://sourceforge.net/projects/pyqt/files/QScintilla2/QScintilla-2.10.1/QScintilla_gpl-2.10.1.tar.gz; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then wget -d --save-headers https://sourceforge.net/projects/pyqt/files/QScintilla2/QScintilla-2.10.1/QScintilla_gpl-2.10.1.tar.gz; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then tar -xvzf QScintilla_gpl-2.10.1.tar.gz; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then cd QScintilla_gpl-2.10.1/Qt4Qt5; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then PATH=/usr/local/Cellar/qt/5.10.1/bin:$PATH; fi   
