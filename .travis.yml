@@ -35,7 +35,8 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then qmake "CONFIG+=release silent"; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then ./configure --prefix=~/kuzya --sysconfdir=/etc ; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then make -j$(nproc); fi
-  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then cd ../; ls -a; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then cd ../; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then ls -a; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then make install; fi   
       
   - if [[ "$TRAVIS_OS_NAME" == linux ]]; then source /opt/qt59/bin/qt59-env.sh; wget https://sourceforge.net/projects/pyqt/files/QScintilla2/QScintilla-2.10.1/QScintilla_gpl-2.10.1.tar.gz; tar -xvzf QScintilla_gpl-2.10.1.tar.gz; cd QScintilla_gpl-2.10.1/Qt4Qt5; qmake "CONFIG+=release silent"; make -j$(nproc); sudo make install; qmake --version; cd ../../src; python generate.py -v 2.1.12; qmake "CONFIG+=release silent"; make -j$(nproc); sudo make install; fi
