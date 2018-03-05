@@ -35,7 +35,7 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then qmake "CONFIG+=release silent"; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then ./configure --prefix=~/kuzya --sysconfdir=/etc ; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then make -j$(nproc); fi
-  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then cd ../; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then cd ../bin; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then ls -a; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then make install; fi   
       
