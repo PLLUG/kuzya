@@ -75,8 +75,8 @@ CONFIG += qscintilla2
 
 win32 {
     TARGET = ../bin/kuzya
-    LIBS += -L$$_PRO_FILE_PWD_/../3rdparty/QScintilla/2.10.4
-    INCLUDEPATH = $$_PRO_FILE_PWD_/../3rdparty/QScintilla/2.10.4
+    LIBS += -L$$_PRO_FILE_PWD_/../3rdparty/QScintilla/2.10.3
+    INCLUDEPATH = $$_PRO_FILE_PWD_/../3rdparty/QScintilla/2.10.3
     CONFIG(debug, debug|release):LIBS += -lqscintilla2_qt5d
     else: LIBS += -lqscintilla2_qt5
 }
@@ -85,6 +85,6 @@ mac {
     CONFIG-=app_bundle
     DESTDIR +=../kuzya
     TARGET = ../bin/kuzya
-    INCLUDEPATH = ../3rdparty/QScintilla/2.10.1
+    INCLUDEPATH = ../3rdparty/QScintilla/2.10.3
 }
 
