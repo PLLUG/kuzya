@@ -37,6 +37,8 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then cd ../bin; fi
   #- if [[ "$TRAVIS_OS_NAME" == osx ]]; then ls -a; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then /usr/local/Cellar/qt/5.10.1/bin/macdeployqt kuzya; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then cd /Users/travis/build/PLLUG/kuzya/QScintilla_gpl-2.10.1/Qt4Qt5; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then ls -a; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then cp /Users/travis/build/PLLUG/kuzya/QScintilla_gpl-2.10.1/Qt4Qt5/libqscintilla2_qt5_debug.13.1.0.dylib /kuzya.app/Contents/Frameworks/libqscintilla2_qt5_debug.13.1.0.dylib; fi
   #- if [[ "$TRAVIS_OS_NAME" == osx ]]; then make install; fi   
       
