@@ -51,6 +51,8 @@ template <typename T> class QList;
 class Translator;
 class QsciLexer;
 class QFileDialog;
+class ProgrammingLanguageSelectionWidget;
+class QStackedLayout;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -169,6 +171,8 @@ private:
         QFile *file;
         QString language; //curren programing language
         QsciScintilla* textEditor;
+        QStackedLayout *stackedLayout;
+        ProgrammingLanguageSelectionWidget *programmingLanguageSeletionWidget;
         QListWidget* notificationList;
         QString fileName;
         QString DefaultDir;

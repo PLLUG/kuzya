@@ -40,6 +40,7 @@
 #include <QVersionNumber>
 #include <QDate>
 #include <QString>
+#include <QStackedLayout>
 
 
 #include "gotolinedialog.h"
@@ -132,7 +133,7 @@ Kuzya::Kuzya(QWidget *parent)
     splitter->setStretchFactor(1, 2);
     splitter->setHandleWidth(5);
 
-    gridLayout->addWidget(splitter, 0, 0, 1, 1);
+    //gridLayout->addWidget(splitter, 0, 0, 1, 1);
 
     textEditor->setCaretLineBackgroundColor(QColor(215, 215, 250));
     textEditor->setCaretLineVisible(true);
@@ -183,6 +184,22 @@ Kuzya::Kuzya(QWidget *parent)
     signalMapper= new QSignalMapper(this);
 
     RFileList = new QList<QString>();
+
+    stackedLayout = new QStackedLayout;
+    programmingLanguageSeletionWidget = new ProgrammingLanguageSelectionWidget(this);
+    programmingLanguageSeletionWidget->addProgrammingLanguage("cpp", "С++", "");
+    programmingLanguageSeletionWidget->addProgrammingLanguage("c", "С", "");
+    programmingLanguageSeletionWidget->addProgrammingLanguage("python", "Python", "");
+    programmingLanguageSeletionWidget->addProgrammingLanguage("ruby", "Ruby", "");
+    programmingLanguageSeletionWidget->addProgrammingLanguage("js", "Java Script", "");
+
+    stackedLayout->addWidget(programmingLanguageSeletionWidget);
+    stackedLayout->addWidget(splitter);
+
+    gridLayout->addLayout(stackedLayout, 0, 0, 1, 1);
+    //stackedLayout->setCurrentIndex(0);
+    qDebug() << stackedLayout->geometry();
+
 
     DefaultDir=DefaultDir;
     shortcut = new QShortcut(textEditor);
@@ -247,7 +264,8 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionStaticLibMode, SIGNAL(triggered()), this,         SLOT(slotStaticLibMode()));
     connect(actionDynamicLibMode, SIGNAL(triggered()), this,        SLOT(slotDynamicLibMode()));
 
-
+    connect(programmingLanguageSeletionWidget, &ProgrammingLanguageSelectionWidget::languageSelected,
+            this, &Kuzya::slotLanguageSelected);
 
 
 
