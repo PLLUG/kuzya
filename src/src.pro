@@ -11,7 +11,8 @@ FORMS += kuzya.ui \
     optionsdialog.ui \
     finddialog.ui \
     replacedialog.ui \
-    aboutkuzya.ui
+    aboutkuzya.ui \
+    programminglanguageselectionwidget.ui
 
 HEADERS += kuzya.h \
     gotolinedialog.h \
@@ -22,7 +23,8 @@ HEADERS += kuzya.h \
     helpbrowser.h \
     translator.h \
     version.h \
-    aboutkuzya.h
+    aboutkuzya.h \
+    programminglanguageselectionwidget.h
 
 SOURCES += kuzya.cpp \
     main.cpp \
@@ -32,7 +34,8 @@ SOURCES += kuzya.cpp \
     finddialog.cpp \
     replacedialog.cpp \
     translator.cpp \
-    aboutkuzya.cpp
+    aboutkuzya.cpp \
+    programminglanguageselectionwidget.cpp
 
 RESOURCES = images.qrc \
            ../auth.qrc \

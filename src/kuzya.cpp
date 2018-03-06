@@ -51,6 +51,7 @@
 #include "translator.h"
 #include "version.h"
 #include "aboutkuzya.h"
+#include "programminglanguageselectionwidget.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -262,6 +263,8 @@ Kuzya::Kuzya(QWidget *parent)
     {
         slotSetFileSuffix(QStringList() << suffix);
     });
+
+
 
     statusBar()->showMessage(tr("Ready"));
 
@@ -666,6 +669,10 @@ void Kuzya::setUndoRedoEnabled()
     actionRedo->setEnabled(textEditor->isRedoAvailable());
 }
 
+void Kuzya::slotLanguageSelected(QString id)
+{
+    qDebug() << "SELECTED: " << id;
+}
 
 
 void Kuzya::refreshDialogSettings()

@@ -67,7 +67,7 @@ public:
 
     Kuzya(QWidget *parent = 0);
     ~Kuzya();
-    
+
         void openFile(QString);
         void markerDeleteAll(void);
         void setText(QString);
@@ -144,6 +144,8 @@ private slots:
         void slotSetFileSuffix(QStringList);
 
         void setUndoRedoEnabled();
+
+        void slotLanguageSelected(QString id);
 
 
 protected:
