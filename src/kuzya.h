@@ -169,6 +169,7 @@ private:
 
 private:
         QFile *file;
+        QFile project_file;
         QString language; //curren programing language
         QsciScintilla* textEditor;
         QStackedLayout *stackedLayout;

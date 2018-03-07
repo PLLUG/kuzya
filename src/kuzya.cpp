@@ -187,11 +187,13 @@ Kuzya::Kuzya(QWidget *parent)
 
     stackedLayout = new QStackedLayout;
     programmingLanguageSeletionWidget = new ProgrammingLanguageSelectionWidget(this);
-    programmingLanguageSeletionWidget->addProgrammingLanguage("cpp", "С++", "");
-    programmingLanguageSeletionWidget->addProgrammingLanguage("c", "С", "");
-    programmingLanguageSeletionWidget->addProgrammingLanguage("python", "Python", "");
-    programmingLanguageSeletionWidget->addProgrammingLanguage("ruby", "Ruby", "");
-    programmingLanguageSeletionWidget->addProgrammingLanguage("js", "Java Script", "");
+
+    for(int i = 0; i < compiler->getSupportedLanguages().size(); i++)
+    {
+        QString programmingLanguage = compiler->getSupportedLanguages().at(i);
+        qDebug() << "EXTENSIONS" <<compiler->getSupportedExtensions(programmingLanguage);
+        programmingLanguageSeletionWidget->addProgrammingLanguage("", programmingLanguage, "");
+    }
 
     stackedLayout->addWidget(programmingLanguageSeletionWidget);
     stackedLayout->addWidget(splitter);
@@ -690,6 +692,21 @@ void Kuzya::setUndoRedoEnabled()
 void Kuzya::slotLanguageSelected(QString id)
 {
     qDebug() << "SELECTED: " << id;
+    stackedLayout->setCurrentIndex(1);
+    //refreshDialogSettings();
+   // QString language = programmingLanguageSeletionWidget->
+
+
+//    QStringList languageList = compiler->getSupportedLanguages().at();
+//    int defLangInd = OptionsDialog::defaultLanguageComboBox->currentIndex();
+//    languageComboBox->setCurrentIndex(0);
+//    QString language = languageComboBox->currentText();
+//    int langIndex = languageComboBox->currentIndex();
+//    qDebug() << "LANGUAGE: " << languageList;
+//    QString fileName = "C:\\project." + id;
+//    qDebug() << "FILENAME " << fileName;
+//    project_file.setFileName(fileName);
+
 }
 
 
@@ -717,6 +734,7 @@ void Kuzya::refreshDialogSettings()
     else currentFilter = "";
     fileDialog->selectFile(currentFilter);
     slotSetFileSuffix(fileDialog->selectedFiles());
+
 }
 
 void Kuzya::refreshProfileSettings()
