@@ -191,8 +191,8 @@ Kuzya::Kuzya(QWidget *parent)
     for(int i = 0; i < compiler->getSupportedLanguages().size(); i++)
     {
         QString programmingLanguage = compiler->getSupportedLanguages().at(i);
-        qDebug() << "EXTENSIONS" <<compiler->getSupportedExtensions(programmingLanguage);
-        programmingLanguageSeletionWidget->addProgrammingLanguage("", programmingLanguage, "");
+        qDebug() << "EXTENSIONS" << compiler->getSupportedExtensions(programmingLanguage);
+        programmingLanguageSeletionWidget->addProgrammingLanguage(programmingLanguage, programmingLanguage, "");
     }
 
     stackedLayout->addWidget(programmingLanguageSeletionWidget);
@@ -587,6 +587,8 @@ void Kuzya::slotNew(void)
 {
     if(slotSaveChangesNotifier()==false) return;
 
+    stackedLayout->setCurrentIndex(0);
+
     textEditor->markerDeleteAll();
     notificationList->clear();
     languageComboBox->clear();
@@ -680,6 +682,7 @@ void Kuzya::slotSetFileSuffix(QStringList filter)
 {
     if (filter.count() > 0) {
         fileDialog->setDefaultSuffix(filter.at(0));
+        qDebug() << "FILAT0" << filter.at(0);
     }
 }
 
@@ -691,11 +694,18 @@ void Kuzya::setUndoRedoEnabled()
 
 void Kuzya::slotLanguageSelected(QString id)
 {
+    language = id;
+
     qDebug() << "SELECTED: " << id;
     stackedLayout->setCurrentIndex(1);
-    //refreshDialogSettings();
-   // QString language = programmingLanguageSeletionWidget->
 
+    if ("pascal" == language) currentLexer = pascalLexer;
+    else if ("c++" == language || "obj-c" == language) currentLexer = cppLexer;
+    else if ("fortran" == language) currentLexer = fortranLexer;
+    else if ("java" == language) currentLexer = javaLexer;
+    else currentLexer = 0;
+
+    textEditor->setLexer(currentLexer);
 
 //    QStringList languageList = compiler->getSupportedLanguages().at();
 //    int defLangInd = OptionsDialog::defaultLanguageComboBox->currentIndex();
