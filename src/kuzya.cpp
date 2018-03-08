@@ -698,14 +698,15 @@ void Kuzya::slotLanguageSelected(QString id)
 
     qDebug() << "SELECTED: " << id;
     stackedLayout->setCurrentIndex(1);
+    refreshProfileSettings();
 
-    if ("pascal" == language) currentLexer = pascalLexer;
-    else if ("c++" == language || "obj-c" == language) currentLexer = cppLexer;
-    else if ("fortran" == language) currentLexer = fortranLexer;
-    else if ("java" == language) currentLexer = javaLexer;
-    else currentLexer = 0;
+//    if ("pascal" == language) currentLexer = pascalLexer;
+//    else if ("c++" == language || "obj-c" == language) currentLexer = cppLexer;
+//    else if ("fortran" == language) currentLexer = fortranLexer;
+//    else if ("java" == language) currentLexer = javaLexer;
+//    else currentLexer = 0;
 
-    textEditor->setLexer(currentLexer);
+//    textEditor->setLexer(currentLexer);
 
 //    QStringList languageList = compiler->getSupportedLanguages().at();
 //    int defLangInd = OptionsDialog::defaultLanguageComboBox->currentIndex();
@@ -742,7 +743,7 @@ void Kuzya::refreshDialogSettings()
     QString currentFilter;
     if (!language.isEmpty()) currentFilter = language + " ("+compiler->getSupportedExtensions(language)+")";
     else currentFilter = "";
-    fileDialog->selectFile(currentFilter);
+//    fileDialog->selectFile(currentFilter);
     slotSetFileSuffix(fileDialog->selectedFiles());
 
 }
@@ -750,26 +751,26 @@ void Kuzya::refreshDialogSettings()
 void Kuzya::refreshProfileSettings()
 {
     languageComboBoxAction->setVisible(false);
-
-    if (fileName.isEmpty()) return;
+   // if (fileName.isEmpty()) return;
 
     QStringList supportedList = compiler->getSupportedLanguages();
     QString ex(fileName);
     ex = ex.remove(0, ex.lastIndexOf("."));
     ex = ex.toLower();
 
-    foreach (QString lang, supportedList)
-    {
-        if (compiler->getSupportedExtensions(lang).contains(ex))
-        {
-            language = lang;
-            break;
-        }
-    }
+//    foreach (QString lang, supportedList)
+//    {
+//        if (compiler->getSupportedExtensions(lang).contains(ex))
+//        {
+//            language = lang;
+//            break;
+//        }
+//    }
 
     if (!language.isEmpty())
     {
         QString comp = settings->readDefaultCompiler(language);
+
         if (comp.isEmpty())
         {
             QStringList supportedCompilers = compiler->getSupportedCompilers(language);
@@ -778,6 +779,9 @@ void Kuzya::refreshProfileSettings()
             else return;
         }
         compiler->loadProfile(language, comp);
+        qDebug() << "LANGUAGE" << language;
+        qDebug() << "COMP" << comp;
+
         compiler->setCompilerDir(settings->readCompilerLocation(language, comp));
         compiler->setOptions(settings->readCompilerOptions(language, comp));
 
