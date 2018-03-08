@@ -74,7 +74,9 @@ unix {
     kuzya_app_desktop
 }
 
-CONFIG += qscintilla2
+unix {
+    CONFIG += qscintilla2
+}
 
 win32 {
     TARGET = ../bin/kuzya
