@@ -211,6 +211,19 @@ Kuzya::Kuzya(QWidget *parent)
     settings->readODWSettings();
     settings->openLastProject();
     settings->readMainWindowState();
+    mTemporaryFile = new QTemporaryFile;
+    if(settings->isFileReopenEnabled())
+    {
+        readTemporaryFileState();
+    }
+    else if(settings->getDefaultLanguage() != "<None>")
+    {
+        QString extesnion = compiler->getSupportedExtensions(settings->getDefaultLanguage());
+        mTemporaryFile->setFileName(tr("%1.%2").arg(std::tmpnam(nullptr)).arg(extesnion)); //create file in %TMP%
+        mTemporaryFile->open(); //create file
+        mTemporaryFile->close(); //close file in order to let Kuzya open it successfully
+        openFile(mTemporaryFile->fileName()); //open it
+    }
     ActOpenRecentFileVector.clear();
 
     srcRecompiled = false;
@@ -1143,7 +1156,9 @@ void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers)
 **/
 bool Kuzya::slotSaveChangesNotifier(void)
 {
-    if (textEditor->isModified())
+    QString tempFileName = mTemporaryFile->fileName();
+    QString realFileName = file->fileName();
+    if (textEditor->isModified() || tempFileName == realFileName)
     {
         QMessageBox *msgBox= new QMessageBox();
         msgBox->setIcon(QMessageBox::Warning);
@@ -1208,14 +1223,23 @@ void Kuzya :: slotOpenRecentFile(QString FileName)
 **/
 void Kuzya::closeEvent(QCloseEvent *event)
 {
-
     settings->writeSettings();
     settings->writeMainWindowState();
-    if(slotSaveChangesNotifier()==false)
+    if(!settings->isFileReopenEnabled())
     {
-        event->ignore();
+        if(slotSaveChangesNotifier()==false)
+        {
+            event->ignore();
+        }
+        else
+        {
+            delete mTemporaryFile; // destructor will delete file from temp;
+        }
     }
-
+    else
+    {
+        writeTemporaryFileState();
+    }
 
     //        if (!fileName.isEmpty())
     //            settings->saveLastProjectName(fileName);
@@ -1554,4 +1578,51 @@ void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
 
 
 
+}
+
+void Kuzya::writeTemporaryFileState()
+{
+    QSettings* settingsWrite = this->settings->getSettings();
+    QTemporaryFile tFile;
+    settingsWrite->beginGroup("temp_file");
+    QString tFileName = settingsWrite->value("file").toString();
+    if(!tFileName.isEmpty())
+    {
+        tFile.setFileName(tFileName);
+    }
+    QString fileExtenstion = compiler->getSupportedExtensions(languageComboBox->currentText());
+    if(!fileExtenstion.isEmpty())
+    tFile.setFileName(tFile.fileName().append(".").append(fileExtenstion));
+    tFile.setAutoRemove(false);
+    tFile.open();
+    tFile.resize(0);
+    QTextStream stream(&tFile);
+    stream << textEditor->text();
+    tFile.close();
+
+    int line;
+    int index;
+    textEditor->getCursorPosition(&line, &index);
+
+    settingsWrite->setValue("file", tFile.fileName());
+    settingsWrite->setValue("cursor_pos/line", line);
+    settingsWrite->setValue("cursor_pos/index", index);
+    settingsWrite->endGroup();
+    settingsWrite->sync();
+}
+
+void Kuzya::readTemporaryFileState()
+{
+    QSettings* settings = new QSettings(QApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat);
+    settings->beginGroup("temp_file");
+    QFile tFile;
+    tFile.setFileName(settings->value("file").toString());
+    if(tFile.open(QIODevice::ReadOnly))
+    {
+        openFile(tFile.fileName());
+        int line = settings->value("cursor_pos/line").toInt();
+        int index = settings->value("cursor_pos/index").toInt();
+        textEditor->setCursorPosition(line,index);
+    }
+    settings->endGroup();
 }

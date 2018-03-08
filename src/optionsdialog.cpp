@@ -27,6 +27,7 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QLocale>
+#include <QTemporaryFile>
 #include "optionsdialog.h"
 
 OptionsDialog::OptionsDialog(QWidget *parent)
@@ -160,6 +161,7 @@ void OptionsDialog::writeSettings(void)
     ///--------------------MainWindow--------------------------------------------
     settings->beginGroup("Settings/MainWindow");
     settings->setValue("StartupPro", checkBox->isChecked());
+    settings->setValue("ReopenFile", reopenFile->isChecked());
 
     ///------------------------------------------------------------------------------------------
     mw->setMaxCount_RFileList(sB_LOFCount->value());
@@ -227,6 +229,8 @@ void OptionsDialog::readODWSettings()
 {	
     settings->beginGroup("Settings/MainWindow");
     checkBox->setChecked(settings->value("StartupPro",false).toBool());
+    reopenFile->setChecked(settings->value("ReopenFile",false).toBool());
+    isReopenFile = reopenFile->isChecked();
     ///-----------------------------------------------------------------------------
     sB_LOFCount->setValue(settings->value("LOFCount",5).toInt());
     mw->setMaxCount_RFileList(sB_LOFCount->value());
@@ -547,6 +551,21 @@ QString OptionsDialog::readCompilerOptions(QString lang, QString comp)
     QString options = settings->value(lang+"/"+comp+"/options", "").toString();
     settings->endGroup();
     return options;
+}
+
+bool OptionsDialog::isFileReopenEnabled() const
+{
+    return isReopenFile;
+}
+
+QString OptionsDialog::getDefaultLanguage() const
+{
+    return defaultLanguageComboBox->currentText();
+}
+
+QSettings *OptionsDialog::getSettings() const
+{
+    return settings;
 }
 
 void OptionsDialog::slotDefaultCompiler()

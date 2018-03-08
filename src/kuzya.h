@@ -53,6 +53,7 @@ class QsciLexer;
 class QFileDialog;
 class ProgrammingLanguageSelectionWidget;
 class QStackedLayout;
+class QTemporaryFile;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -150,6 +151,7 @@ private slots:
         void slotLanguageSelected(QString id);
 
 
+
 protected:
         //*DRAG AND DROP
         void dragEnterEvent(QDragEnterEvent *event);
@@ -166,6 +168,8 @@ private:
         void refreshCompileModes();
         void refreshDialogSettings();
         void setAllIconsVisibleInMenu(bool isVisible);
+        void writeTemporaryFileState();
+        void readTemporaryFileState();
 
 private:
         QFile *file;
@@ -211,6 +215,7 @@ private:
         QFileDialog *fileDialog;
 
         QToolBar *toolBar;
+        QTemporaryFile* mTemporaryFile; //used to create file with default language
 };
 
 #endif
