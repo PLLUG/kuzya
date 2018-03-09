@@ -93,15 +93,6 @@ void ProgrammingLanguageSelectionWidget::updateActionsForButtons()
     QMenu *additionalMenu = ui->additionalLanguageSelectionToolButton->menu();
     additionalMenu->addActions(listActions);
 
-//    if(actionsIterator < 3)
-//    {
-//        ui->additionalLanguageSelectionToolButton->setVisible(false);
-//    }
-//    if(actionsIterator < 2)
-//    {
-//        ui->languageSelectionButton2->setVisible(false);
-//    }
-
 }
 
 

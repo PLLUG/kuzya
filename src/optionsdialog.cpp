@@ -226,7 +226,7 @@ void OptionsDialog::writeSettings(void)
 
 
 void OptionsDialog::readODWSettings()
-{	
+{
     settings->beginGroup("Settings/MainWindow");
     checkBox->setChecked(settings->value("StartupPro",false).toBool());
     reopenFile->setChecked(settings->value("ReopenFile",false).toBool());
@@ -260,7 +260,7 @@ void OptionsDialog::readODWSettings()
         }
 
     }
-#ifdef WIN32                
+#ifdef WIN32
     translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+settings->value("Language",QLocale::languageToString(QLocale::system().language())).toString()+".qm");
 
 #else
@@ -467,7 +467,7 @@ void OptionsDialog::slotChangeDefDir(int index)
             directoryBox->insertItem(0,dir);
         }
         directoryBox->setCurrentIndex(0);
-	
+
     }
 }
 void OptionsDialog::slotChangeDefDir(QString dirName)
@@ -492,6 +492,7 @@ void OptionsDialog::slotChangeDefDir(QString dirName)
 
 void OptionsDialog::slotUpdateCompilerCBox(QString lang)
 {
+    qDebug() << "LANG111" << lang;
     QStringList compilers = mw->getCurrentCompiler()->getSupportedCompilers(lang);
     compilers.sort();
     compilerComboBox->clear();

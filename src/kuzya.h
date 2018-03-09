@@ -54,6 +54,8 @@ class QFileDialog;
 class ProgrammingLanguageSelectionWidget;
 class QStackedLayout;
 class QTemporaryFile;
+class QStateMachine;
+class QState;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -105,7 +107,13 @@ public:
         void refreshProfileSettings();
         void LoadTemplates(QString);
 
+signals:
+    void goToStateLanguageSelection();
+    void goToStateOfWritingCode();
+
 protected:
+
+
 
 private slots:
         void slotUpdateStatusLabel(int line, int pos);
@@ -176,6 +184,9 @@ private:
         QFile project_file;
         QString language; //curren programing language
         QsciScintilla* textEditor;
+        QStateMachine *machine;
+        QState *stateLanguageSelection;
+        QState *stateOfWritingCode;
         QStackedLayout *stackedLayout;
         ProgrammingLanguageSelectionWidget *programmingLanguageSeletionWidget;
         QListWidget* notificationList;

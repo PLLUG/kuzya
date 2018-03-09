@@ -41,6 +41,8 @@
 #include <QDate>
 #include <QString>
 #include <QStackedLayout>
+#include <QStateMachine>
+#include <QState>
 
 
 #include "gotolinedialog.h"
@@ -185,6 +187,10 @@ Kuzya::Kuzya(QWidget *parent)
 
     RFileList = new QList<QString>();
 
+    machine = new QStateMachine();
+    stateLanguageSelection = new QState(machine);
+    stateOfWritingCode = new QState(machine);
+
     stackedLayout = new QStackedLayout;
     programmingLanguageSeletionWidget = new ProgrammingLanguageSelectionWidget(this);
 
@@ -198,10 +204,17 @@ Kuzya::Kuzya(QWidget *parent)
     stackedLayout->addWidget(programmingLanguageSeletionWidget);
     stackedLayout->addWidget(splitter);
 
-    gridLayout->addLayout(stackedLayout, 0, 0, 1, 1);
-    //stackedLayout->setCurrentIndex(0);
-    qDebug() << stackedLayout->geometry();
 
+    stateLanguageSelection->assignProperty(stackedLayout, "currentIndex", "0");
+    stateOfWritingCode->assignProperty(stackedLayout, "currentIndex", "1");
+
+    stateLanguageSelection->addTransition(this, SIGNAL(goToStateOfWritingCode()), stateOfWritingCode);
+    stateOfWritingCode->addTransition(this,	SIGNAL(goToStateLanguageSelection()), stateLanguageSelection);
+
+    machine->setInitialState(stateLanguageSelection);
+    machine->start();
+
+    gridLayout->addLayout(stackedLayout, 0, 0, 1, 1);
 
     DefaultDir=DefaultDir;
     shortcut = new QShortcut(textEditor);
@@ -600,7 +613,7 @@ void Kuzya::slotNew(void)
 {
     if(slotSaveChangesNotifier()==false) return;
 
-    stackedLayout->setCurrentIndex(0);
+    emit goToStateLanguageSelection();
 
     textEditor->markerDeleteAll();
     notificationList->clear();
@@ -634,6 +647,9 @@ void Kuzya::slotOpen(void)
     {
         return;
     }
+
+    emit goToStateOfWritingCode();
+
     refreshDialogSettings();
     fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
     fileDialog->setFileMode(QFileDialog::ExistingFile);
@@ -708,29 +724,15 @@ void Kuzya::setUndoRedoEnabled()
 void Kuzya::slotLanguageSelected(QString id)
 {
     language = id;
-
     qDebug() << "SELECTED: " << id;
-    stackedLayout->setCurrentIndex(1);
-    refreshProfileSettings();
+    emit goToStateOfWritingCode();
 
-//    if ("pascal" == language) currentLexer = pascalLexer;
-//    else if ("c++" == language || "obj-c" == language) currentLexer = cppLexer;
-//    else if ("fortran" == language) currentLexer = fortranLexer;
-//    else if ("java" == language) currentLexer = javaLexer;
-//    else currentLexer = 0;
-
-//    textEditor->setLexer(currentLexer);
-
-//    QStringList languageList = compiler->getSupportedLanguages().at();
-//    int defLangInd = OptionsDialog::defaultLanguageComboBox->currentIndex();
-//    languageComboBox->setCurrentIndex(0);
-//    QString language = languageComboBox->currentText();
-//    int langIndex = languageComboBox->currentIndex();
-//    qDebug() << "LANGUAGE: " << languageList;
-//    QString fileName = "C:\\project." + id;
-//    qDebug() << "FILENAME " << fileName;
-//    project_file.setFileName(fileName);
-
+    if ("pascal" == language) currentLexer = pascalLexer;
+    else if ("c++" == language || "obj-c" == language) currentLexer = cppLexer;
+    else if ("fortran" == language) currentLexer = fortranLexer;
+    else if ("java" == language) currentLexer = javaLexer;
+    else currentLexer = 0;
+    textEditor->setLexer(currentLexer);
 }
 
 
@@ -764,21 +766,21 @@ void Kuzya::refreshDialogSettings()
 void Kuzya::refreshProfileSettings()
 {
     languageComboBoxAction->setVisible(false);
-   // if (fileName.isEmpty()) return;
+    if (fileName.isEmpty()) return;
 
     QStringList supportedList = compiler->getSupportedLanguages();
     QString ex(fileName);
     ex = ex.remove(0, ex.lastIndexOf("."));
     ex = ex.toLower();
 
-//    foreach (QString lang, supportedList)
-//    {
-//        if (compiler->getSupportedExtensions(lang).contains(ex))
-//        {
-//            language = lang;
-//            break;
-//        }
-//    }
+    foreach (QString lang, supportedList)
+    {
+        if (compiler->getSupportedExtensions(lang).contains(ex))
+        {
+            language = lang;
+            break;
+        }
+    }
 
     if (!language.isEmpty())
     {
@@ -792,8 +794,6 @@ void Kuzya::refreshProfileSettings()
             else return;
         }
         compiler->loadProfile(language, comp);
-        qDebug() << "LANGUAGE" << language;
-        qDebug() << "COMP" << comp;
 
         compiler->setCompilerDir(settings->readCompilerLocation(language, comp));
         compiler->setOptions(settings->readCompilerOptions(language, comp));
@@ -1202,6 +1202,9 @@ bool Kuzya::slotSaveChangesNotifier(void)
 void Kuzya :: slotOpenRecentFile(QString FileName)
 {
     if(slotSaveChangesNotifier()==false) return;
+
+     emit goToStateOfWritingCode();
+
     if(QFile::exists(FileName))
     {
         openFile(FileName);
