@@ -492,7 +492,6 @@ void OptionsDialog::slotChangeDefDir(QString dirName)
 
 void OptionsDialog::slotUpdateCompilerCBox(QString lang)
 {
-    qDebug() << "LANG111" << lang;
     QStringList compilers = mw->getCurrentCompiler()->getSupportedCompilers(lang);
     compilers.sort();
     compilerComboBox->clear();

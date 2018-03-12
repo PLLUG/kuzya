@@ -181,7 +181,7 @@ private:
 
 private:
         QFile *file;
-        QFile project_file;
+        //QFile project_file;
         QString language; //curren programing language
         QsciScintilla* textEditor;
         QStateMachine *machine;

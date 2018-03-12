@@ -197,7 +197,6 @@ Kuzya::Kuzya(QWidget *parent)
     for(int i = 0; i < compiler->getSupportedLanguages().size(); i++)
     {
         QString programmingLanguage = compiler->getSupportedLanguages().at(i);
-        qDebug() << "EXTENSIONS" << compiler->getSupportedExtensions(programmingLanguage);
         programmingLanguageSeletionWidget->addProgrammingLanguage(programmingLanguage, programmingLanguage, "");
     }
 
@@ -237,6 +236,7 @@ Kuzya::Kuzya(QWidget *parent)
         mTemporaryFile->close(); //close file in order to let Kuzya open it successfully
         openFile(mTemporaryFile->fileName()); //open it
     }
+
     ActOpenRecentFileVector.clear();
 
     srcRecompiled = false;
@@ -724,7 +724,6 @@ void Kuzya::setUndoRedoEnabled()
 void Kuzya::slotLanguageSelected(QString id)
 {
     language = id;
-    qDebug() << "SELECTED: " << id;
     emit goToStateOfWritingCode();
 
     if ("pascal" == language) currentLexer = pascalLexer;
@@ -733,6 +732,11 @@ void Kuzya::slotLanguageSelected(QString id)
     else if ("java" == language) currentLexer = javaLexer;
     else currentLexer = 0;
     textEditor->setLexer(currentLexer);
+
+    QString comp = settings->readDefaultCompiler(language);
+    compiler->loadProfile(language, comp);
+    compiler->setCompilerDir(settings->readCompilerLocation(language, comp));
+    compiler->setOptions(settings->readCompilerOptions(language, comp));
 }
 
 
@@ -794,7 +798,8 @@ void Kuzya::refreshProfileSettings()
             else return;
         }
         compiler->loadProfile(language, comp);
-
+        qDebug() << "COMP" << comp;
+        qDebug() << "LANGUAGE" << language;
         compiler->setCompilerDir(settings->readCompilerLocation(language, comp));
         compiler->setOptions(settings->readCompilerOptions(language, comp));
 
