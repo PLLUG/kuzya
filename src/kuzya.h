@@ -104,6 +104,7 @@ public:
         void setAutoCompletionEnabled(bool b);
         Compiler* getCurrentCompiler();
 
+        void createTemporaryFile();
         void refreshProfileSettings();
         void LoadTemplates(QString);
 
