@@ -226,7 +226,7 @@ private:
         bool srcRecompiled;
         QFileDialog *fileDialog;
 
-        QToolBar *toolBar;
+//        QToolBar *toolBar;
         QTemporaryFile* mTemporaryFile; //used to create file with default language
 };
 

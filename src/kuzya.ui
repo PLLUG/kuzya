@@ -491,8 +491,8 @@
    <widget class="QMenu" name="menuBuild">
     <property name="geometry">
      <rect>
-      <x>802</x>
-      <y>104</y>
+      <x>578</x>
+      <y>100</y>
       <width>143</width>
       <height>94</height>
      </rect>
@@ -570,12 +570,33 @@
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>30</width>
+     <height>30</height>
+    </size>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionNew"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="separator"/>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
+   <addaction name="actionCut"/>
+   <addaction name="actionCopy"/>
+   <addaction name="actionPaste"/>
+   <addaction name="separator"/>
+   <addaction name="actionNotificationList"/>
+   <addaction name="separator"/>
+   <addaction name="actionCompile"/>
+   <addaction name="actionRun"/>
+   <addaction name="separator"/>
   </widget>
   <action name="actionNew">
    <property name="icon">

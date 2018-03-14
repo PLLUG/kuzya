@@ -65,39 +65,39 @@ Kuzya::Kuzya(QWidget *parent)
     setObjectName("Kuzya");
     setWindowTitle("Kuzya");
     languageComboBox = new QComboBox(this);
-    toolBar = addToolBar("General");
-    toolBar->setObjectName("KuzyaToolBar");
-    toolBar->setIconSize(QSize(30,30));
-    toolBar->addAction(actionNew);
-    toolBar->addAction(actionOpen);
-    toolBar->addAction(actionSave);
-#ifdef Q_OS_MAC
-#else
-    toolBar->addSeparator();
-#endif
-    toolBar->addAction(actionUndo);
-    toolBar->addAction(actionRedo);
-    actionCut->setShortcuts(QKeySequence::Cut);
-    toolBar->addAction(actionCut);
-    actionCopy->setShortcuts(QKeySequence::Copy);
-    toolBar->addAction(actionCopy);
-    actionPaste->setShortcuts(QKeySequence::Paste);
-    toolBar->addAction(actionPaste);
-#ifdef Q_OS_MAC
-#else
-    toolBar->addSeparator();
-#endif
-    toolBar->addAction(actionNotificationList);
-#ifdef Q_OS_MAC
-#else
-    toolBar->addSeparator();
-#endif
-    toolBar->addAction(actionCompile);
-    toolBar->addAction(actionRun);
-#ifdef Q_OS_MAC
-#else
-    toolBar->addSeparator();
-#endif
+//    toolBar = addToolBar("General");
+//    toolBar->setObjectName("KuzyaToolBar");
+//    toolBar->setIconSize(QSize(30,30));
+//    toolBar->addAction(actionNew);
+//    toolBar->addAction(actionOpen);
+//    toolBar->addAction(actionSave);
+//#ifdef Q_OS_MAC
+//#else
+//    toolBar->addSeparator();
+//#endif
+//    toolBar->addAction(actionUndo);
+//    toolBar->addAction(actionRedo);
+//    actionCut->setShortcuts(QKeySequence::Cut);
+//    toolBar->addAction(actionCut);
+//    actionCopy->setShortcuts(QKeySequence::Copy);
+//    toolBar->addAction(actionCopy);
+//    actionPaste->setShortcuts(QKeySequence::Paste);
+//    toolBar->addAction(actionPaste);
+//#ifdef Q_OS_MAC
+//#else
+//    toolBar->addSeparator();
+//#endif
+//    toolBar->addAction(actionNotificationList);
+//#ifdef Q_OS_MAC
+//#else
+//    toolBar->addSeparator();
+//#endif
+//    toolBar->addAction(actionCompile);
+//    toolBar->addAction(actionRun);
+//#ifdef Q_OS_MAC
+//#else
+//    toolBar->addSeparator();
+//#endif
     languageComboBoxAction = toolBar->addWidget(languageComboBox);
     languageComboBoxAction->setVisible(false);
 
@@ -1142,7 +1142,7 @@ bool Kuzya::slotSaveChangesNotifier(void)
 {
     QString tempFileName = mTemporaryFile->fileName();
     QString realFileName = file->fileName();
-    if (textEditor->isModified() || tempFileName == realFileName)
+    if (textEditor->isModified() /*|| tempFileName == realFileName*/)
     {
         QMessageBox *msgBox= new QMessageBox();
         msgBox->setIcon(QMessageBox::Warning);
