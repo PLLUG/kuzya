@@ -10,12 +10,6 @@
     <height>557</height>
    </rect>
   </property>
-  <property name="baseSize">
-   <size>
-    <width>150</width>
-    <height>0</height>
-   </size>
-  </property>
   <property name="palette">
    <palette>
     <active>
@@ -445,7 +439,7 @@
      <x>0</x>
      <y>0</y>
      <width>773</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -493,8 +487,8 @@
      <rect>
       <x>802</x>
       <y>104</y>
-      <width>193</width>
-      <height>92</height>
+      <width>152</width>
+      <height>84</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -737,8 +731,7 @@
   <action name="actionGoToLine">
    <property name="icon">
     <iconset>
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Go to line...</string>
