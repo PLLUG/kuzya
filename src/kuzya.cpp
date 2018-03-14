@@ -136,8 +136,6 @@ Kuzya::Kuzya(QWidget *parent)
     splitter->setStretchFactor(1, 2);
     splitter->setHandleWidth(5);
 
-    //gridLayout->addWidget(splitter, 0, 0, 1, 1);
-
     textEditor->setCaretLineBackgroundColor(QColor(215, 215, 250));
     textEditor->setCaretLineVisible(true);
 
@@ -147,7 +145,7 @@ Kuzya::Kuzya(QWidget *parent)
 
     cppLexer = new QsciLexerCPP(this);
     cppLexer->setFont(font);
-//    cppLexer->
+
     pascalLexer = new QsciLexerPascal(this);
     pascalLexer->setFont(font);
     fortranLexer = new QsciLexerFortran(this);
@@ -162,7 +160,6 @@ Kuzya::Kuzya(QWidget *parent)
 
     textEditor->setSelectionBackgroundColor(QColor(100, 100, 200));
     textEditor->setUtf8(true);
-
 
     warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor));
     errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
@@ -204,22 +201,17 @@ Kuzya::Kuzya(QWidget *parent)
     stackedLayout->addWidget(programmingLanguageSeletionWidget);
     stackedLayout->addWidget(splitter);
 
-
     stateLanguageSelection->assignProperty(stackedLayout, "currentIndex", "0");
     stateOfWritingCode->assignProperty(stackedLayout, "currentIndex", "1");
 
     stateLanguageSelection->addTransition(this, SIGNAL(goToStateOfWritingCode()), stateOfWritingCode);
     stateOfWritingCode->addTransition(this,	SIGNAL(goToStateLanguageSelection()), stateLanguageSelection);
 
-    machine->setInitialState(stateLanguageSelection);
-    machine->start();
-
     gridLayout->addLayout(stackedLayout, 0, 0, 1, 1);
 
     DefaultDir=DefaultDir;
     shortcut = new QShortcut(textEditor);
     shortcut->setKey(Qt::CTRL+Qt::Key_Space);
-
 
     settings->readODWSettings();
     settings->openLastProject();
@@ -230,30 +222,10 @@ Kuzya::Kuzya(QWidget *parent)
         machine->setInitialState(stateOfWritingCode);
         readTemporaryFileState();
     }
-//    else if(settings->getDefaultLanguage() != "<None>")
-//    {
-//        machine->setInitialState(stateOfWritingCode);
-//        QString extesnion = compiler->getSupportedExtensions(settings->getDefaultLanguage());
-//        qDebug() << "extension" << extesnion;
-//        QString temporaryFileName = QUuid::createUuid().toString();
-//        temporaryFileName.remove("{");
-//        temporaryFileName.remove("}");
-//        temporaryFileName.remove("-");
-//        QString name1 = std::tmpnam(nullptr);
-//        name1.remove(".0");
-//        qDebug() << "name1 " << name1;
-
-//        QStringList extentions = extesnion.split(" ");
-//        QString defaultExtansion = extentions.at(0);\
-
-
-//        mTemporaryFile->setFileName(tr("%1%2").arg("F:/Kuzya/build-kuzya-Desktop_Qt_5_9_4_MSVC2017_64bit-Debug/src/bin/"+temporaryFileName/*"C:/Users/olehs/AppData/Local/Temp/main4"*/).arg(defaultExtansion.remove(QChar('*'), Qt::CaseInsensitive))); //create file in %TMP%
-//        mTemporaryFile->open(); //create file
-//        mTemporaryFile->close(); //close file in order to let Kuzya open it successfully
-//        openFile(mTemporaryFile->fileName()); //open it
-//        qDebug() << "FileName: " << mTemporaryFile->fileName() ;
-//    }
-
+    else
+    {
+        machine->setInitialState(stateLanguageSelection);
+    }
 
     ActOpenRecentFileVector.clear();
 
@@ -263,6 +235,8 @@ Kuzya::Kuzya(QWidget *parent)
     QList<QUrl> list = fileDialog->sidebarUrls();
     list << QUrl::fromLocalFile(DefaultDir);
     fileDialog->setSidebarUrls(list);
+
+    machine->start();
 
     ///-------------------------------------------------------------------------------------------------------------------
 
@@ -322,7 +296,6 @@ Kuzya::Kuzya(QWidget *parent)
         slotSetFileSuffix(QStringList() << suffix);
     });
 
-
     statusBar()->showMessage(tr("Ready"));
 
     QShortcut *notificationListShortcut = new QShortcut(textEditor);
@@ -332,11 +305,6 @@ Kuzya::Kuzya(QWidget *parent)
     QShortcut *textEditorShortcut = new QShortcut(textEditor);
     textEditorShortcut->setKey(Qt::CTRL+Qt::Key_Up);
     connect(textEditorShortcut, SIGNAL(activated()), textEditor, SLOT(setFocus()));
-
-//    if (qApp->argc() > 1)
-//    {
-//        this->openFile(qApp->argv()[qApp->argc()-1]);
-//    }
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
@@ -622,7 +590,7 @@ ________________________________________________________________________________
 
 void Kuzya::slotNew(void)
 {
-    if(slotSaveChangesNotifier()==false) return;
+    if(!slotSaveChangesNotifier()) return;
     emit goToStateLanguageSelection();
 
     textEditor->markerDeleteAll();
@@ -721,7 +689,6 @@ void Kuzya::slotSetFileSuffix(QStringList filter)
 {
     if (filter.count() > 0) {
         fileDialog->setDefaultSuffix(filter.at(0));
-        qDebug() << "FILAT0" << filter.at(0);
     }
 }
 
@@ -736,20 +703,7 @@ void Kuzya::slotLanguageSelected(QString id)
     language = id;
     createTemporaryFile();
     emit goToStateOfWritingCode();
-
-//    if ("pascal" == language) currentLexer = pascalLexer;
-//    else if ("c++" == language || "obj-c" == language) currentLexer = cppLexer;
-//    else if ("fortran" == language) currentLexer = fortranLexer;
-//    else if ("java" == language) currentLexer = javaLexer;
-//    else currentLexer = 0;
-//    textEditor->setLexer(currentLexer);
-
-//    QString comp = settings->readDefaultCompiler(language);
-//    compiler->loadProfile(language, comp);
-//    compiler->setCompilerDir(settings->readCompilerLocation(language, comp));
-//    compiler->setOptions(settings->readCompilerOptions(language, comp));
 }
-
 
 void Kuzya::refreshDialogSettings()
 {
@@ -773,7 +727,6 @@ void Kuzya::refreshDialogSettings()
     QString currentFilter;
     if (!language.isEmpty()) currentFilter = language + " ("+compiler->getSupportedExtensions(language)+")";
     else currentFilter = "";
-//    fileDialog->selectFile(currentFilter);
     slotSetFileSuffix(fileDialog->selectedFiles());
 
 }
@@ -789,9 +742,9 @@ void Kuzya::createTemporaryFile()
     QStringList extentions = extesnion.split(" ");
     QString defaultExtansion = extentions.at(0);
     mTemporaryFile->setFileName(tr("%1%2").arg(qApp->applicationDirPath()+ "/" +temporaryFileName).arg(defaultExtansion.remove(QChar('*'), Qt::CaseInsensitive))); //create file in %TMP%
-    mTemporaryFile->open(); //create file
-    mTemporaryFile->close(); //close file in order to let Kuzya open it successfully
-    openFile(mTemporaryFile->fileName()); //open it
+    mTemporaryFile->open();
+    mTemporaryFile->close();
+    openFile(mTemporaryFile->fileName());
     qDebug() << "FileName" << mTemporaryFile->fileName();
 }
 
@@ -1036,7 +989,6 @@ void Kuzya::slotCompile(void)
 
     removeAllNotifications();
     textEditor->markerDeleteAll(currentMarker);
-    qDebug() << "FILENAME111" << fileName;
     if (fileName.isEmpty())
     {
         addNotification(NTYPE_FAILING, tr("No source to compile"));
@@ -1233,7 +1185,7 @@ bool Kuzya::slotSaveChangesNotifier(void)
 **/
 void Kuzya :: slotOpenRecentFile(QString FileName)
 {
-    if(slotSaveChangesNotifier()==false) return;
+    if(!slotSaveChangesNotifier()) return;
 
      emit goToStateOfWritingCode();
 
@@ -1262,7 +1214,7 @@ void Kuzya::closeEvent(QCloseEvent *event)
     settings->writeMainWindowState();
     if(!settings->isFileReopenEnabled())
     {
-        if(slotSaveChangesNotifier()==false)
+        if(!slotSaveChangesNotifier())
         {
             event->ignore();
         }
