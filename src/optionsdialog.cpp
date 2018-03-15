@@ -103,8 +103,6 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 
     slotUpdateSkinsCBox();
     slotUpdatelocalizationLanguageCBox();
-
-
 }
 void OptionsDialog::slotUpdateSkinsCBox(void)
 {
@@ -268,7 +266,7 @@ void OptionsDialog::readODWSettings()
     qApp->installTranslator(&translator);
     mw->retranslateAll();
 
-    localizationLanguageCBox->setCurrentIndex(localizationLanguageCBox->findText(settings->value("Language","English.qm").toString()));
+    localizationLanguageCBox->setCurrentIndex(localizationLanguageCBox->findText(settings->value("Language","English").toString()));
     ///-----DefaultDirectory-------------------------------------------------------------------------
     directoryBox->setCurrentIndex(0);
     if(directoryBox->findText(settings->value("DefaultDir",QDir::homePath()).toString())==-1)
