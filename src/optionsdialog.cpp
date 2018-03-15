@@ -103,8 +103,6 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 
     slotUpdateSkinsCBox();
     slotUpdatelocalizationLanguageCBox();
-
-
 }
 void OptionsDialog::slotUpdateSkinsCBox(void)
 {
@@ -112,8 +110,8 @@ void OptionsDialog::slotUpdateSkinsCBox(void)
     for(int i = 0;i<skinsNameList.count();i++)
     {
         skinsNameList[i]=skinsNameList.at(i).left(skinsNameList.at(i).lastIndexOf("."));
+        skinCBox->addItem(skinsNameList[i]);
     }
-    skinCBox->addItems(skinsNameList);
     //skinCBox->addItems(stylesDir.entryList(stylesDir.nameFilters(),QDir::Files,QDir::Name));
 }
 void OptionsDialog::slotUpdatelocalizationLanguageCBox()
@@ -124,6 +122,8 @@ void OptionsDialog::slotUpdatelocalizationLanguageCBox()
         localizationLanguageList[i]=localizationLanguageList.at(i).left(localizationLanguageList.at(i).lastIndexOf("."));
         localizationLanguageCBox->addItem(QIcon(":flags/images/flags/"+localizationLanguageList[i]+".png"),localizationLanguageList[i]);
     }
+
+    localizationLanguageCBox->setCurrentIndex(localizationLanguageList.indexOf("English"));
 }
 
 OptionsDialog::~OptionsDialog()
@@ -238,7 +238,7 @@ void OptionsDialog::readODWSettings()
     {
         settings->setValue("Skin","creation");
     }
-    skinCBox->setCurrentIndex(skinCBox->findText(settings->value("Skin","creation").toString()));
+    skinCBox->setCurrentIndex(skinCBox->findText(settings->value("Skin","new").toString()));
     slotChangeSkin(settings->value("Skin","creation").toString());
     settings->endGroup();
     ///-----LANGUAGE-------------------------------------------------------------------------
@@ -268,7 +268,7 @@ void OptionsDialog::readODWSettings()
     qApp->installTranslator(&translator);
     mw->retranslateAll();
 
-    localizationLanguageCBox->setCurrentIndex(localizationLanguageCBox->findText(settings->value("Language","English.qm").toString()));
+    //localizationLanguageCBox->setCurrentIndex(localizationLanguageCBox->findText(settings->value("Language","English.qm").toString()));
     ///-----DefaultDirectory-------------------------------------------------------------------------
     directoryBox->setCurrentIndex(0);
     if(directoryBox->findText(settings->value("DefaultDir",QDir::homePath()).toString())==-1)
