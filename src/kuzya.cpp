@@ -151,7 +151,34 @@ Kuzya::Kuzya(QWidget *parent)
     }
 
     stateLanguageSelection->assignProperty(stackedWidget, "currentIndex", "0");
+    stateLanguageSelection->assignProperty(actionNew, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionSave, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionSave_as, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionPrint, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionCut, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionCopy, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionPaste, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionNotificationList, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionCompile, "enabled", "false");
+    stateLanguageSelection->assignProperty(menuEdit, "enabled", "false");
+    stateLanguageSelection->assignProperty(menuBuild, "enabled", "false");
+    stateLanguageSelection->assignProperty(menuView, "enabled", "false");
+    stateLanguageSelection->assignProperty(statusLabel, "visible", "false");
+
     stateOfWritingCode->assignProperty(stackedWidget, "currentIndex", "1");
+    stateOfWritingCode->assignProperty(actionNew, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionSave, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionSave_as, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionPrint, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionCut, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionCopy, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionPaste, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionNotificationList, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionCompile, "enabled", "true");
+    stateOfWritingCode->assignProperty(menuEdit, "enabled", "true");
+    stateOfWritingCode->assignProperty(menuBuild, "enabled", "true");
+    stateOfWritingCode->assignProperty(menuView, "enabled", "true");
+    stateOfWritingCode->assignProperty(statusLabel, "visible", "true");
 
     stateLanguageSelection->addTransition(this, SIGNAL(goToStateOfWritingCode()), stateOfWritingCode);
     stateOfWritingCode->addTransition(this,	SIGNAL(goToStateLanguageSelection()), stateLanguageSelection);
