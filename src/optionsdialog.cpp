@@ -112,7 +112,6 @@ void OptionsDialog::slotUpdateSkinsCBox(void)
         skinsNameList[i]=skinsNameList.at(i).left(skinsNameList.at(i).lastIndexOf("."));
         skinCBox->addItem(skinsNameList[i]);
     }
-    skinCBox->setCurrentIndex(skinsNameList.indexOf("new"));
     //skinCBox->addItems(stylesDir.entryList(stylesDir.nameFilters(),QDir::Files,QDir::Name));
 }
 void OptionsDialog::slotUpdatelocalizationLanguageCBox()
@@ -239,7 +238,7 @@ void OptionsDialog::readODWSettings()
     {
         settings->setValue("Skin","creation");
     }
-    //skinCBox->setCurrentIndex(skinCBox->findText(settings->value("Skin","creation").toString()));
+    skinCBox->setCurrentIndex(skinCBox->findText(settings->value("Skin","new").toString()));
     slotChangeSkin(settings->value("Skin","creation").toString());
     settings->endGroup();
     ///-----LANGUAGE-------------------------------------------------------------------------
