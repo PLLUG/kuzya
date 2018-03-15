@@ -230,7 +230,7 @@ void OptionsDialog::readODWSettings()
     mw->setMaxCount_RFileList(sB_LOFCount->value());
     ///-----Style&Skins----------------------------------------------------------------------
     settings->beginGroup("Interface");
-    styleCBox->setCurrentIndex(styleCBox->findText(settings->value("Style","Cleanlooks").toString()));
+    styleCBox->setCurrentIndex(styleCBox->findText(settings->value("Style","Macintosh").toString()));
     qApp->setStyle(settings->value("Style","Cleanlooks").toString());
     if ("empty" == settings->value("Skin","empty").toString())
     {
