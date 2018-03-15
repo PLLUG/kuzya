@@ -182,15 +182,10 @@ private:
 
 private:
         QFile *file;
-        //QFile project_file;
         QString language; //curren programing language
-        QsciScintilla* textEditor;
         QStateMachine *machine;
         QState *stateLanguageSelection;
         QState *stateOfWritingCode;
-        QStackedLayout *stackedLayout;
-        ProgrammingLanguageSelectionWidget *programmingLanguageSeletionWidget;
-        QListWidget* notificationList;
         QString fileName;
         QString DefaultDir;
         //QString CurrentDir;
@@ -226,7 +221,6 @@ private:
         bool srcRecompiled;
         QFileDialog *fileDialog;
 
-//        QToolBar *toolBar;
         QTemporaryFile* mTemporaryFile; //used to create file with default language
 };
 

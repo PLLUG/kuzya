@@ -65,39 +65,7 @@ Kuzya::Kuzya(QWidget *parent)
     setObjectName("Kuzya");
     setWindowTitle("Kuzya");
     languageComboBox = new QComboBox(this);
-//    toolBar = addToolBar("General");
-//    toolBar->setObjectName("KuzyaToolBar");
-//    toolBar->setIconSize(QSize(30,30));
-//    toolBar->addAction(actionNew);
-//    toolBar->addAction(actionOpen);
-//    toolBar->addAction(actionSave);
-//#ifdef Q_OS_MAC
-//#else
-//    toolBar->addSeparator();
-//#endif
-//    toolBar->addAction(actionUndo);
-//    toolBar->addAction(actionRedo);
-//    actionCut->setShortcuts(QKeySequence::Cut);
-//    toolBar->addAction(actionCut);
-//    actionCopy->setShortcuts(QKeySequence::Copy);
-//    toolBar->addAction(actionCopy);
-//    actionPaste->setShortcuts(QKeySequence::Paste);
-//    toolBar->addAction(actionPaste);
-//#ifdef Q_OS_MAC
-//#else
-//    toolBar->addSeparator();
-//#endif
-//    toolBar->addAction(actionNotificationList);
-//#ifdef Q_OS_MAC
-//#else
-//    toolBar->addSeparator();
-//#endif
-//    toolBar->addAction(actionCompile);
-//    toolBar->addAction(actionRun);
-//#ifdef Q_OS_MAC
-//#else
-//    toolBar->addSeparator();
-//#endif
+
     languageComboBoxAction = toolBar->addWidget(languageComboBox);
     languageComboBoxAction->setVisible(false);
 
@@ -116,25 +84,12 @@ Kuzya::Kuzya(QWidget *parent)
     statusLabel = new QLabel(this);
     statusBar()->addPermanentWidget(statusLabel);
 
-    QGridLayout *gridLayout;
-    gridLayout = new QGridLayout(centralwidget);
-    gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-
-    textEditor = new QsciScintilla(this);
     textEditor->setEolMode(QsciScintilla::EolUnix);
 
-    notificationList = new QListWidget(this);
-    notificationList->setObjectName("notificationList");
     notificationList->setVisible(false);
 
-    QSplitter *splitter = new QSplitter(this);
-    splitter->setOrientation(Qt::Vertical);
-    splitter->addWidget(textEditor);
-    splitter->addWidget(notificationList);
-    splitter->setChildrenCollapsible(false);
     splitter->setStretchFactor(0, 5);
     splitter->setStretchFactor(1, 2);
-    splitter->setHandleWidth(5);
 
     textEditor->setCaretLineBackgroundColor(QColor(215, 215, 250));
     textEditor->setCaretLineVisible(true);
@@ -189,25 +144,17 @@ Kuzya::Kuzya(QWidget *parent)
     stateLanguageSelection = new QState(machine);
     stateOfWritingCode = new QState(machine);
 
-    stackedLayout = new QStackedLayout;
-    programmingLanguageSeletionWidget = new ProgrammingLanguageSelectionWidget(this);
-
     for(int i = 0; i < compiler->getSupportedLanguages().size(); i++)
     {
         QString programmingLanguage = compiler->getSupportedLanguages().at(i);
         programmingLanguageSeletionWidget->addProgrammingLanguage(programmingLanguage, programmingLanguage, "");
     }
 
-    stackedLayout->addWidget(programmingLanguageSeletionWidget);
-    stackedLayout->addWidget(splitter);
-
-    stateLanguageSelection->assignProperty(stackedLayout, "currentIndex", "0");
-    stateOfWritingCode->assignProperty(stackedLayout, "currentIndex", "1");
+    stateLanguageSelection->assignProperty(stackedWidget, "currentIndex", "0");
+    stateOfWritingCode->assignProperty(stackedWidget, "currentIndex", "1");
 
     stateLanguageSelection->addTransition(this, SIGNAL(goToStateOfWritingCode()), stateOfWritingCode);
     stateOfWritingCode->addTransition(this,	SIGNAL(goToStateLanguageSelection()), stateLanguageSelection);
-
-    gridLayout->addLayout(stackedLayout, 0, 0, 1, 1);
 
     DefaultDir=DefaultDir;
     shortcut = new QShortcut(textEditor);
