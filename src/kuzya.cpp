@@ -56,7 +56,7 @@
 #include "version.h"
 #include "aboutkuzya.h"
 #include "programminglanguageselectionwidget.h"
-#include "codefile.h"
+#include "sourcefile.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -140,7 +140,7 @@ Kuzya::Kuzya(QWidget *parent)
 
     RFileList = new QList<QString>();
 
-    myFile = new CodeFile();
+    myFile = nullptr;
 
     machine = new QStateMachine();
     stateLanguageSelection = new QState(machine);
@@ -438,8 +438,15 @@ void Kuzya::retranslate(void)
 
 void Kuzya::openFile(QString FileName)
 {
-    if (FileName.isEmpty()) return;
+    if (FileName.isEmpty())
+    {
+        return;
+    }
+
     fileName=FileName;
+
+    delete myFile;
+    myFile = new SourceFile(fileName);
 
     textEditor->setText(myFile->readFromFile());
 
@@ -451,7 +458,7 @@ void Kuzya::openFile(QString FileName)
 
     slotUpdateWindowName(false);
 
-    addFileNameToList(FileName);
+    addFileNameToList(fileName);
     settings->saveLastProjectName(fileName);
 
     refreshProfileSettings();
@@ -702,18 +709,15 @@ void Kuzya::slotLanguageSelected(QString id)
 {
     language = id;
 
-    QString extesnions = compiler->getSupportedExtensions(language);
-    QString temporaryFileName = QUuid::createUuid().toString();
-    temporaryFileName.remove("{");
-    temporaryFileName.remove("}");
-    temporaryFileName.remove("-");
-    QStringList extentionsList = extesnions.split(" ");
-    QString defaultExtansion = extentionsList.at(0);
-    defaultExtansion = defaultExtansion.remove(QChar('*'), Qt::CaseInsensitive);
-    temporaryFileName = qApp->applicationDirPath()+ "/" + temporaryFileName + defaultExtansion;
-    qDebug() << "temporaryFileName" << temporaryFileName;
-    myFile->Save(temporaryFileName);
-    openFile(temporaryFileName);
+    myFile = new SourceFile();
+
+    qDebug() << "!!!temporaryFileName" << myFile->getFileName();
+
+    fileName = myFile->getFileName();
+
+    textEditor->setText(myFile->readFromFile());
+
+    refreshProfileSettings();
 
     emit goToStateOfWritingCode();
 }
@@ -930,15 +934,9 @@ bool Kuzya::slotSave(void)
         {
             fileName = newFileName;
         }
-        qDebug() << "newFileName" << fileName;
-        if(!myFile->isSaved())
-        {
-            delete myFile;
-            myFile = new CodeFile(fileName);
-        }
     }
 
-    myFile->Save(fileName);
+    myFile->save(fileName);
 
 //    if(!myFile->isFileExists(fileName))
 //    {
@@ -957,10 +955,8 @@ bool Kuzya::slotSave(void)
 //    }
 
     myFile->writeToFile(textEditor->text());
-    if(myFile->isSaved())
-    {
-        textEditor->setModified(false);
-    }
+
+    textEditor->setModified(false);
     statusBar()->showMessage(tr("Saved"), 2000);
     addFileNameToList(myFile->getFileName());
     refreshProfileSettings();
@@ -1001,11 +997,11 @@ void Kuzya::slotSave_as(void)
     {
         fileName = oldFileName;
     }
-    if(!myFile->isSaved())
-    {
-        delete myFile;
-        myFile = new CodeFile(fileName);
-    }
+//    if(!myFile->isSaved())
+//    {
+//        delete myFile;
+//        myFile = new SourceFile(fileName);
+//    }
 }
 /**
 *******************************************************************************************************
@@ -1061,6 +1057,7 @@ void Kuzya::slotRun(void)
         slotCompile();
         compiler->waitForFinished(15000);
     }
+    qDebug() << "RUN";
     compiler->run();
 }
 
@@ -1069,10 +1066,9 @@ void Kuzya::slotRun(void)
 **/
 void Kuzya::slotCompile(void)
 {
-    qDebug() << "slotCompile()";
     if (textEditor->isModified())
     {
-        slotSave();
+            myFile->writeToFile(textEditor->text());
     }
 
     removeAllNotifications();
@@ -1233,6 +1229,7 @@ bool Kuzya::slotSaveChangesNotifier(void)
 {
     if (textEditor->isModified())
     {
+        QString oldFileName = fileName;
         QMessageBox *msgBox= new QMessageBox();
         msgBox->setIcon(QMessageBox::Warning);
         msgBox->setWindowTitle(tr("File was modified"));
@@ -1260,6 +1257,7 @@ bool Kuzya::slotSaveChangesNotifier(void)
             }
             else
             {
+                fileName = oldFileName;
                 delete msgBox;
                 return false;///false - Saving was canceled
             }

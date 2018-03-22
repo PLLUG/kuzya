@@ -1,25 +1,25 @@
-#ifndef CODEFILE_H
-#define CODEFILE_H
+#ifndef SOURCEFILE_H
+#define SOURCEFILE_H
 
 class QTemporaryFile;
 class QFile;
 class QString;
 
-class CodeFile
+class SourceFile
 {
 public:
-    CodeFile();
-    CodeFile(QString fileName);
-    ~CodeFile();
+    SourceFile();
+    SourceFile(QString fileName);
+    ~SourceFile();
 
     bool writeToFile(QString text);
     QString readFromFile() const;
     QString getFileName() const;
     bool isSaved() const;
-    void Save(QString fileName);
+    void save(QString fileName);
 
 private:
     QFile *mFile;
 };
 
-#endif // CODEFILE_H
+#endif // SOURCEFILE_H

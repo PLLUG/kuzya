@@ -55,7 +55,7 @@ class ProgrammingLanguageSelectionWidget;
 class QStackedLayout;
 class QStateMachine;
 class QState;
-class CodeFile;
+class SourceFile;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -218,7 +218,7 @@ private:
 
         bool srcRecompiled;
         QFileDialog *fileDialog;
-        CodeFile *myFile;
+        SourceFile *myFile;
 };
 
 #endif
