@@ -1,4 +1,4 @@
-/******************************************************************************
+﻿/******************************************************************************
  *   Copyright (C) 2008 by                                                    *
  *                     Volodymyr Shevchyk (volder@users.sourceforge.net),     *
  *                     Victor Sklyar (bouyantgrambler@users.sourceforge.net), *
@@ -56,6 +56,7 @@
 #include "version.h"
 #include "aboutkuzya.h"
 #include "programminglanguageselectionwidget.h"
+#include "codefile.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -128,7 +129,6 @@ Kuzya::Kuzya(QWidget *parent)
     textEditor->setMarginSensitivity(1, true);
     //textEditor->setMarginsBackgroundColor(QColor(190, 178, 157,255));
 
-    file = new QFile();
     goToLine = new GoToLineDialog(textEditor);
     compiler = new Compiler(this);
     translator = new Translator(this);
@@ -139,6 +139,8 @@ Kuzya::Kuzya(QWidget *parent)
     signalMapper= new QSignalMapper(this);
 
     RFileList = new QList<QString>();
+
+    myFile = new CodeFile();
 
     machine = new QStateMachine();
     stateLanguageSelection = new QState(machine);
@@ -160,6 +162,7 @@ Kuzya::Kuzya(QWidget *parent)
     stateLanguageSelection->assignProperty(actionPaste, "enabled", "false");
     stateLanguageSelection->assignProperty(actionNotificationList, "enabled", "false");
     stateLanguageSelection->assignProperty(actionCompile, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionRun, "enabled", "false");
     stateLanguageSelection->assignProperty(menuEdit, "enabled", "false");
     stateLanguageSelection->assignProperty(menuBuild, "enabled", "false");
     stateLanguageSelection->assignProperty(menuView, "enabled", "false");
@@ -190,11 +193,9 @@ Kuzya::Kuzya(QWidget *parent)
     settings->readODWSettings();
     settings->openLastProject();
     settings->readMainWindowState();
-    mTemporaryFile = new QTemporaryFile;
     if(settings->isFileReopenEnabled())
     {
         machine->setInitialState(stateOfWritingCode);
-        readTemporaryFileState();
     }
     else
     {
@@ -216,7 +217,7 @@ Kuzya::Kuzya(QWidget *parent)
 
     connect(actionNew,	SIGNAL(triggered()),this,		SLOT(slotNew()));
     connect(actionOpen, 	SIGNAL(triggered()),this,		SLOT(slotOpen()));
-    connect(actionSave,	SIGNAL(triggered()),this,		SLOT(slotSave()));
+    connect(actionSave,	SIGNAL(triggered()),this,		SLOT(slotBeforeSave()));
     connect(actionSave_as,	SIGNAL(triggered()),this,		SLOT(slotSave_as()));
     connect(actionPrint,	SIGNAL(triggered()),this,		SLOT(slotPrint()));
     connect(actionExit, 	SIGNAL(triggered()), this,		SLOT(slotExit()));
@@ -407,17 +408,40 @@ void Kuzya::retranslate(void)
 *********openFile*****************************************************************************************************
 **/
 
+//void Kuzya::openFile(QString FileName)
+//{
+//    fileName=FileName;
+//    if (FileName.isEmpty()) return;
+
+//    file->setFileName(FileName);
+//    if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) return;
+
+//    QTextStream stream(file);
+//    textEditor->setText(stream.readAll());
+//    file->close();
+
+//    if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
+
+//    textEditor->setModified(false);
+
+//    statusBar()->showMessage(tr("Opened"), 2000);
+
+//    slotUpdateWindowName(false);
+
+//    addFileNameToList(FileName);
+//    settings->saveLastProjectName(fileName);
+
+//    refreshProfileSettings();
+//    removeAllNotifications();
+//}
+
+
 void Kuzya::openFile(QString FileName)
 {
-    fileName=FileName;
     if (FileName.isEmpty()) return;
+    fileName=FileName;
 
-    file->setFileName(FileName);
-    if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) return;
-
-    QTextStream stream(file);
-    textEditor->setText(stream.readAll());
-    file->close();
+    textEditor->setText(myFile->readFromFile());
 
     if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
 
@@ -565,7 +589,6 @@ ________________________________________________________________________________
 void Kuzya::slotNew(void)
 {
     if(!slotSaveChangesNotifier()) return;
-    emit goToStateLanguageSelection();
 
     textEditor->markerDeleteAll();
     notificationList->clear();
@@ -588,6 +611,8 @@ void Kuzya::slotNew(void)
     languageComboBoxAction->setVisible(false);
 
     srcRecompiled  = false;
+
+    emit goToStateLanguageSelection();
 }
 
 /**
@@ -610,6 +635,7 @@ void Kuzya::slotOpen(void)
     if (QDialog::Accepted == fileDialog->exec())
     {
         openedFileName = fileDialog->selectedFiles().at(0);
+        qDebug() << "openedFileName:" << openedFileName;
 
         if ("" != openedFileName)
         {
@@ -675,7 +701,20 @@ void Kuzya::setUndoRedoEnabled()
 void Kuzya::slotLanguageSelected(QString id)
 {
     language = id;
-    createTemporaryFile();
+
+    QString extesnions = compiler->getSupportedExtensions(language);
+    QString temporaryFileName = QUuid::createUuid().toString();
+    temporaryFileName.remove("{");
+    temporaryFileName.remove("}");
+    temporaryFileName.remove("-");
+    QStringList extentionsList = extesnions.split(" ");
+    QString defaultExtansion = extentionsList.at(0);
+    defaultExtansion = defaultExtansion.remove(QChar('*'), Qt::CaseInsensitive);
+    temporaryFileName = qApp->applicationDirPath()+ "/" + temporaryFileName + defaultExtansion;
+    qDebug() << "temporaryFileName" << temporaryFileName;
+    myFile->Save(temporaryFileName);
+    openFile(temporaryFileName);
+
     emit goToStateOfWritingCode();
 }
 
@@ -703,23 +742,6 @@ void Kuzya::refreshDialogSettings()
     else currentFilter = "";
     slotSetFileSuffix(fileDialog->selectedFiles());
 
-}
-
-void Kuzya::createTemporaryFile()
-{
-    QString extesnion = compiler->getSupportedExtensions(language);
-    QString temporaryFileName = QUuid::createUuid().toString();
-    temporaryFileName.remove("{");
-    temporaryFileName.remove("}");
-    temporaryFileName.remove("-");
-
-    QStringList extentions = extesnion.split(" ");
-    QString defaultExtansion = extentions.at(0);
-    mTemporaryFile->setFileName(tr("%1%2").arg(qApp->applicationDirPath()+ "/" +temporaryFileName).arg(defaultExtansion.remove(QChar('*'), Qt::CaseInsensitive))); //create file in %TMP%
-    mTemporaryFile->open();
-    mTemporaryFile->close();
-    openFile(mTemporaryFile->fileName());
-    qDebug() << "FileName" << mTemporaryFile->fileName();
 }
 
 void Kuzya::refreshProfileSettings()
@@ -829,9 +851,65 @@ void Kuzya::refreshProfileSettings()
 /**
 *******************************************************************************************************
 **/
+//bool Kuzya::slotSave(void)
+//{
+//    QString newFileName;
+//    if (fileName.isEmpty())
+//    {
+//        // fileName = fileDialog->getSaveFileName(this, tr("Save as..."), DefaultDir, filter, &currentFilter);
+//        refreshDialogSettings();
+//        fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+//        fileDialog->setFileMode(QFileDialog::AnyFile);
+
+//        if (fileDialog->exec())
+//            newFileName = fileDialog->selectedFiles().at(0);
+
+//        if (newFileName.isEmpty()) return false;
+//        else fileName = newFileName;
+//    }
+
+
+//    QFile file(fileName);
+//    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+//    {
+//        QMessageBox *msgBox= new QMessageBox();
+//        msgBox->setIcon(QMessageBox::Warning);
+//        msgBox->setWindowTitle(tr("File cannot be saved "));
+//        msgBox->setText(tr("Do you have permision to access data in this folder? Select another place to save this file"));
+//        QAbstractButton *OkBtn = msgBox->addButton(tr("Ok"),QMessageBox::ActionRole);
+//        msgBox->exec();
+//        if (msgBox->clickedButton()==(OkBtn))
+//        {
+//            //slotSave_as();
+//        }
+//        delete msgBox;
+//        return false ;
+//    }
+//    QTextStream stream(&file);
+//    stream << textEditor->text();
+//    textEditor->setModified(false);
+//    file.close();
+//    statusBar()->showMessage(tr("Saved"), 2000);
+//    addFileNameToList(file.fileName());
+//    refreshProfileSettings();
+//    slotUpdateWindowName(false);
+//    if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
+//    return true;
+//}
+
+void Kuzya::slotBeforeSave(void)
+{
+    if(!myFile->isSaved())
+    {
+        fileName = QString::null;
+    }
+    slotSave();
+}
+
 bool Kuzya::slotSave(void)
 {
     QString newFileName;
+    qDebug() << "fileNameSlotSave" << fileName;
     if (fileName.isEmpty())
     {
         // fileName = fileDialog->getSaveFileName(this, tr("Save as..."), DefaultDir, filter, &currentFilter);
@@ -840,39 +918,57 @@ bool Kuzya::slotSave(void)
         fileDialog->setFileMode(QFileDialog::AnyFile);
 
         if (fileDialog->exec())
-            newFileName = fileDialog->selectedFiles().at(0);
-
-        if (newFileName.isEmpty()) return false;
-        else fileName = newFileName;
-    }
-
-
-    QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        QMessageBox *msgBox= new QMessageBox();
-        msgBox->setIcon(QMessageBox::Warning);
-        msgBox->setWindowTitle(tr("File cannot be saved "));
-        msgBox->setText(tr("Do you have permision to access data in this folder? Select another place to save this file"));
-        QAbstractButton *OkBtn = msgBox->addButton(tr("Ok"),QMessageBox::ActionRole);
-        msgBox->exec();
-        if (msgBox->clickedButton()==(OkBtn))
         {
-            //slotSave_as();
+            newFileName = fileDialog->selectedFiles().at(0);
         }
-        delete msgBox;
-        return false ;
+
+        if (newFileName.isEmpty())
+        {
+            return false;
+        }
+        else
+        {
+            fileName = newFileName;
+        }
+        qDebug() << "newFileName" << fileName;
+        if(!myFile->isSaved())
+        {
+            delete myFile;
+            myFile = new CodeFile(fileName);
+        }
     }
-    QTextStream stream(&file);
-    stream << textEditor->text();
-    textEditor->setModified(false);
-    file.close();
+
+    myFile->Save(fileName);
+
+//    if(!myFile->isFileExists(fileName))
+//    {
+//        QMessageBox *msgBox= new QMessageBox();
+//        msgBox->setIcon(QMessageBox::Warning);
+//        msgBox->setWindowTitle(tr("File cannot be saved "));
+//        msgBox->setText(tr("Do you have permision to access data in this folder? Select another place to save this file"));
+//        QAbstractButton *OkBtn = msgBox->addButton(tr("Ok"),QMessageBox::ActionRole);
+//        msgBox->exec();
+//        if (msgBox->clickedButton()==(OkBtn))
+//        {
+//            //slotSave_as();
+//        }
+//        delete msgBox;
+//        return false ;
+//    }
+
+    myFile->writeToFile(textEditor->text());
+    if(myFile->isSaved())
+    {
+        textEditor->setModified(false);
+    }
     statusBar()->showMessage(tr("Saved"), 2000);
-    addFileNameToList(file.fileName());
+    addFileNameToList(myFile->getFileName());
     refreshProfileSettings();
     slotUpdateWindowName(false);
     if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
-    return true;
+    {
+        return true;
+    }
 }
 
 /**
@@ -890,12 +986,26 @@ void Kuzya::slotSave_as(void)
     fileDialog->setFileMode(QFileDialog::AnyFile);
 
     if (fileDialog->exec())
+    {
         newFileName = fileDialog->selectedFiles().at(0);
+    }
 
-    if (newFileName.isEmpty()) return;
+    if (newFileName.isEmpty())
+    {
+        return;
+    }
 
     fileName = newFileName;
-    if (!slotSave()) fileName = oldFileName;
+
+    if (!slotSave())
+    {
+        fileName = oldFileName;
+    }
+    if(!myFile->isSaved())
+    {
+        delete myFile;
+        myFile = new CodeFile(fileName);
+    }
 }
 /**
 *******************************************************************************************************
@@ -959,7 +1069,11 @@ void Kuzya::slotRun(void)
 **/
 void Kuzya::slotCompile(void)
 {
-    if (textEditor->isModified()) slotSave();
+    qDebug() << "slotCompile()";
+    if (textEditor->isModified())
+    {
+        slotSave();
+    }
 
     removeAllNotifications();
     textEditor->markerDeleteAll(currentMarker);
@@ -978,7 +1092,10 @@ void Kuzya::slotCompile(void)
         compiler->compile();
         srcRecompiled = true;
     }
-    else addNotification(NTYPE_FAILING, tr("Could not open compiler profile"));
+    else
+    {
+        addNotification(NTYPE_FAILING, tr("Could not open compiler profile"));
+    }
 }
 
 Compiler* Kuzya::getCurrentCompiler(void)
@@ -1114,9 +1231,7 @@ void Kuzya::slotMarginClicked(int margin, int line, Qt::KeyboardModifiers)
 **/
 bool Kuzya::slotSaveChangesNotifier(void)
 {
-    QString tempFileName = mTemporaryFile->fileName();
-    QString realFileName = file->fileName();
-    if (textEditor->isModified() /*|| tempFileName == realFileName*/)
+    if (textEditor->isModified())
     {
         QMessageBox *msgBox= new QMessageBox();
         msgBox->setIcon(QMessageBox::Warning);
@@ -1131,8 +1246,12 @@ bool Kuzya::slotSaveChangesNotifier(void)
         {
             return false;	// false - cancelbtn pressed
         }
-        if (msgBox->clickedButton() ==yesBtn)
+        if (msgBox->clickedButton() == yesBtn)
         {
+            if(!myFile->isSaved())
+            {
+                fileName = QString::null;
+            }
             if(slotSave()==true)
             {
                 addFileNameToList(fileName);
@@ -1152,7 +1271,6 @@ bool Kuzya::slotSaveChangesNotifier(void)
         }
     }
     return true;/// true - File was saved
-
 }
 /**
 *******************************************************************************************************
@@ -1194,12 +1312,8 @@ void Kuzya::closeEvent(QCloseEvent *event)
         }
         else
         {
-            delete mTemporaryFile; // destructor will delete file from temp;
+            delete myFile;
         }
-    }
-    else
-    {
-        writeTemporaryFileState();
     }
 
     //        if (!fileName.isEmpty())
@@ -1536,54 +1650,4 @@ void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
     actionToggleFolds->setIconVisibleInMenu(isVisible);
     actionUndo->setIconVisibleInMenu(isVisible);
 
-
-
-
-}
-
-void Kuzya::writeTemporaryFileState()
-{
-    QSettings* settingsWrite = this->settings->getSettings();
-    QTemporaryFile tFile;
-    settingsWrite->beginGroup("temp_file");
-    QString tFileName = settingsWrite->value("file").toString();
-    if(!tFileName.isEmpty())
-    {
-        tFile.setFileName(tFileName);
-    }
-    QString fileExtenstion = compiler->getSupportedExtensions(languageComboBox->currentText());
-    if(!fileExtenstion.isEmpty())
-    tFile.setFileName(tFile.fileName().append(".").append(fileExtenstion));
-    tFile.setAutoRemove(false);
-    tFile.open();
-    tFile.resize(0);
-    QTextStream stream(&tFile);
-    stream << textEditor->text();
-    tFile.close();
-
-    int line;
-    int index;
-    textEditor->getCursorPosition(&line, &index);
-
-    settingsWrite->setValue("file", tFile.fileName());
-    settingsWrite->setValue("cursor_pos/line", line);
-    settingsWrite->setValue("cursor_pos/index", index);
-    settingsWrite->endGroup();
-    settingsWrite->sync();
-}
-
-void Kuzya::readTemporaryFileState()
-{
-    QSettings* settings = new QSettings(QApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat);
-    settings->beginGroup("temp_file");
-    QFile tFile;
-    tFile.setFileName(settings->value("file").toString());
-    if(tFile.open(QIODevice::ReadOnly))
-    {
-        openFile(tFile.fileName());
-        int line = settings->value("cursor_pos/line").toInt();
-        int index = settings->value("cursor_pos/index").toInt();
-        textEditor->setCursorPosition(line,index);
-    }
-    settings->endGroup();
 }

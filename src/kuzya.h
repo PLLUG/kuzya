@@ -53,9 +53,9 @@ class QsciLexer;
 class QFileDialog;
 class ProgrammingLanguageSelectionWidget;
 class QStackedLayout;
-class QTemporaryFile;
 class QStateMachine;
 class QState;
+class CodeFile;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -121,6 +121,7 @@ private slots:
         void slotUpdateWindowName(bool m);
         void slotNew(void);
         void slotOpen(void);
+        void slotBeforeSave(void);
         bool slotSave(void);
         void slotSave_as(void);
         void slotPrint(void);
@@ -177,11 +178,8 @@ private:
         void refreshCompileModes();
         void refreshDialogSettings();
         void setAllIconsVisibleInMenu(bool isVisible);
-        void writeTemporaryFileState();
-        void readTemporaryFileState();
 
 private:
-        QFile *file;
         QString language; //curren programing language
         QStateMachine *machine;
         QState *stateLanguageSelection;
@@ -220,9 +218,9 @@ private:
 
         bool srcRecompiled;
         QFileDialog *fileDialog;
-
-        QTemporaryFile* mTemporaryFile; //used to create file with default language
+        CodeFile *myFile;
 };
 
 #endif
+
 

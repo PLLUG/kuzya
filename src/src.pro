@@ -24,7 +24,8 @@ HEADERS += kuzya.h \
     translator.h \
     version.h \
     aboutkuzya.h \
-    programminglanguageselectionwidget.h
+    programminglanguageselectionwidget.h \
+    codefile.h
 
 SOURCES += kuzya.cpp \
     main.cpp \
@@ -35,7 +36,8 @@ SOURCES += kuzya.cpp \
     replacedialog.cpp \
     translator.cpp \
     aboutkuzya.cpp \
-    programminglanguageselectionwidget.cpp
+    programminglanguageselectionwidget.cpp \
+    codefile.cpp
 
 RESOURCES = images.qrc \
            ../auth.qrc \
