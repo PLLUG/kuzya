@@ -121,7 +121,6 @@ private slots:
         void slotUpdateWindowName(bool m);
         void slotNew(void);
         void slotOpen(void);
-        void slotBeforeSave(void);
         bool slotSave(void);
         void slotSave_as(void);
         void slotPrint(void);

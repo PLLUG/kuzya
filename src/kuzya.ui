@@ -506,7 +506,7 @@
      <x>0</x>
      <y>0</y>
      <width>623</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -554,8 +554,8 @@
      <rect>
       <x>578</x>
       <y>100</y>
-      <width>143</width>
-      <height>94</height>
+      <width>172</width>
+      <height>92</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -808,6 +808,12 @@
    <property name="text">
     <string>Cut</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
   </action>
   <action name="actionCopy">
    <property name="icon">
@@ -817,6 +823,9 @@
    <property name="text">
     <string>Copy</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
   </action>
   <action name="actionPaste">
    <property name="icon">
@@ -825,6 +834,9 @@
    </property>
    <property name="text">
     <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
    </property>
   </action>
   <action name="actionGoToLine">

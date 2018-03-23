@@ -19,8 +19,6 @@ SourceFile::SourceFile()
 
     temporaryFileName = qApp->applicationDirPath()+ "/" + temporaryFileName + ".txt";
 
-    qDebug() << "SFtemporaryFileName" << temporaryFileName;
-
     mFile->setFileName(temporaryFileName);
 }
 
@@ -78,7 +76,6 @@ void SourceFile::save(QString fileName)
 {
     if(!isSaved())
     {
-        qDebug() << "SAVE_FileName" << mFile->fileName();
         delete mFile;
         mFile = new QFile(fileName);
     }
