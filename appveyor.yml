@@ -3,24 +3,49 @@ pull_requests:
   do_not_increment_build_number: true
 environment:
   priv_key: MIIEpQIBAAKCAQEAv4fBo1XxZHg495pz+so9he1zutEAS+ah3/rt83OQYgJggRoH l5lVnYsoVkfu5l53RtaIO4Qb62Vv7G1qh91xGwv5KqI/q2iHT+kdtBEBIPQADJzA 4hnseeaqadHndwP44KjiAu/mxeU+9iwv3Cosa4f6wmD1A6/5xqLu0C4vOqc71bze 0oZzMLPlTxP/9XQdXxKkbGzjniQd8QQuCtjdXGm3UPtah9/CmWPp05V0Z0as2ezh 2xlMvy0RH0UuuIRbiyWi1Y0HP7zfCs0GyhBvAhhkKSX7pZNKwu/Q5se14/aiteoP X/WXnmeXlSzZgd5EpxWS4ADkkPKa2jnBgkA/sQIDAQABAoIBAHZ/ZINMseuqIfy3 F5iLNaM9tQNZOai8CVzNIBkmX6bzt4dIdngJyxmMtikjmh/3RC6UnnbMFoX+HVAW pflnPQoxzzfcaC4Bnu4G2XTFrIAZ1kn3VbLNvSvyVW7hCibtUzaT5jlQ+eNoIRsn XXkGsrLYz4EhgZWFc7C8r6onWNsc+G8WBshUUowIVkcc5MFB3qP8M6MznFtq2gmn YV+DTTtsRCLIrlhi90CFXd5CHpGTNjolX/8a72iEYNOUQmzTTOz7EzprkZsCv1Ag hOayoVoTCrOBOZtNTTnRt/g2+/EAHPT+kyN6EdxKerfrgeG5tENBK9GzJthIa1eM Gavq9gECgYEA4fpmdcW9FdS1pGYlo1zo7+y7pCbBttVv7Lp30bUaXic5sIMV4/MI qeT5jH/iZ2duGdJotjB0MMwYXS0KHP+5Uf+JvbTSDEL+3ffzZ9kPhbZ7CYsQ91/R lrp6jzHygUwMR3q2XFzXgp2meluwNm97TM80l0chysnmicSmYmA3U5ECgYEA2PnF 1ayahkAtCSuIZzok6NSoPCk2H1ktlQXFyiFS6EzmCIPU+jiGtpf8y3o5t0ffpZoV iQ/Amhf3dLPZ6iJ5D/IUZW/vwZLQ0R2o/izhA66ZBjNOUZrtsyeY7IKgfEKHdzzs FsFL2P7iJA9Kjuxn/m9cGUWtM00IspaCrUol2iECgYEAlem9EUJ2F0Z+niqZq4+W hJxjOxnvBvD/iGeH15oyfOW+0seTvR5c0AC0QK4SL5EhLIY2qy7n1ft/6khX3jcT 5T8GTNDpS/MiC3VTh8ArGQSfCQy127Y4X6skZVy4SWh++OiClDGPUvptF909wE8i 2CjZ9cXduB9LDnhj/P1hltECgYEAhkDuV4soRd9Zvm3QRcclZWeH/Ummsnj0ilv7 CVnbOd+zChvAYV8ug7bBdYnYQn7XdFlF7/vuOaqQtAZA1O2lqOcqFaXQXR8h0/Kd SUCtriCPkNWYJUhOwebDabxd3uUveukYT/AkpUz40kUf5hWDN1ziSMTjKXYF5rLY gq75guECgYEAqjMLd+wBtDuZUqVi7Fcukje/ORpzPWspLf3UiTJ+vVaZXJC93y/s NtiRcbhB2njDcg2MbPI9hva7PD/JaSxEC9H6oOKizCazI4hwr94tFLQ9LITI8Szb kokSNRQ8foc+hOuNcvOdU3kXDuUR5CGgHS1C/F/f2jOw1DYwsfcgCFY=
-  QT_INSTALL_ROOT: C:\Qt\5.8\msvc2015_64
+
+  QT_INSTALL_ROOT: C:\Qt\5.7\msvc2015_64
+
+init:
+- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 install:
 - cmd: >-
     git submodule update --init --recursive
-    
+
 build_script:
 - cmd: >-
     %QT_INSTALL_ROOT%\bin\qtenv2.bat
-    
-    "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64 
-    
+
+    "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+
     cd %APPVEYOR_BUILD_FOLDER%\src
-    
+
     python generate.py -v 2.1.12
-    
+
     qmake "CONFIG+=release silent"
-    
+
     %QT_INSTALL_ROOT%\..\..\Tools\QtCreator\bin\jom
-    
+
+    cd %APPVEYOR_BUILD_FOLDER%\tools
+
+    make-installer.bat
+
 build:
   verbosity: minimal
+
+artifacts:
+- path: tools\kuzya-2.1.12-win64-full.exe
+  name: kuzya-installer
+
+deploy:
+- provider: GitHub
+  artifact: kuzya-installer
+  auth_token:
+    secure: NOVV+lEGGXaX9+iGzZfR3P5SJdty4aO6gRVCDwFSVd9o21pHvJFGRzVaUw2zqLa7
+  draft: true
+  prerelease: false
+  description: ''
+  on:
+    branch: development
+    appveyor_repo_tag: false
