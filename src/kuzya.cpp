@@ -51,6 +51,7 @@
 #include "translator.h"
 #include "version.h"
 #include "aboutkuzya.h"
+#include "awesomeicon.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -1461,40 +1462,55 @@ void Kuzya::slotModificationChanged(bool modified)
 
 void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
 {
+    actionAbout->setIcon(AwesomeIcon::setIcon("\uf05a"));
     actionAbout->setIconVisibleInMenu(isVisible);
     actionAbout_Qt->setIconVisibleInMenu(isVisible);
     actionAlternativeMode->setIconVisibleInMenu(isVisible);
     actionCommon->setIconVisibleInMenu(isVisible);
+    actionCompile->setIcon(AwesomeIcon::setIcon("\uf0ad"));
     actionCompile->setIconVisibleInMenu(isVisible);
+    actionCopy->setIcon(AwesomeIcon::setIcon("\uf0c5"));
     actionCopy->setIconVisibleInMenu(isVisible);
+    actionCut->setIcon(AwesomeIcon::setIcon("\uf0c4"));
     actionCut->setIconVisibleInMenu(isVisible);
     actionDefaultMode->setIconVisibleInMenu(isVisible);
+    actionDefFontSize->setIcon(AwesomeIcon::setIcon("\uf031"));
     actionDefFontSize->setIconVisibleInMenu(isVisible);
     actionDynamicLibMode->setIconVisibleInMenu(isVisible);
     actionEnlFont->setIconVisibleInMenu(isVisible);
+    actionExit->setIcon(AwesomeIcon::setIcon("\uf057"));
     actionExit->setIconVisibleInMenu(isVisible);
+    actionFind->setIcon(AwesomeIcon::setIcon("\uf002"));
     actionFind->setIconVisibleInMenu(isVisible);
     actionGoToLine->setIconVisibleInMenu(isVisible);
     actionGoToMatchingBracket->setIconVisibleInMenu(isVisible);
+    actionKuzya_Help->setIcon(AwesomeIcon::setIcon("\uf059"));
     actionKuzya_Help->setIconVisibleInMenu(isVisible);
+    actionNew->setIcon(AwesomeIcon::setIcon("\uf067"));
     actionNew->setIconVisibleInMenu(isVisible);
+    actionNotificationList->setIcon(AwesomeIcon::setIcon("\uf022"));
     actionNotificationList->setIconVisibleInMenu(isVisible);
     actionObjectMode->setIconVisibleInMenu(isVisible);
+    actionOpen->setIcon(AwesomeIcon::setIcon("\uf07c"));
     actionOpen->setIconVisibleInMenu(isVisible);
+    actionPaste->setIcon(AwesomeIcon::setIcon("\uf0ea"));
     actionPaste->setIconVisibleInMenu(isVisible);
+    actionPrint->setIcon(AwesomeIcon::setIcon("\uf02f"));
     actionPrint->setIconVisibleInMenu(isVisible);
+    actionRedo->setIcon(AwesomeIcon::setIcon("\uf01e"));
     actionRedo->setIconVisibleInMenu(isVisible);
     actionReplace->setIconVisibleInMenu(isVisible);
+    actionRun->setIcon(AwesomeIcon::setIcon("\uf04b"));
     actionRun->setIconVisibleInMenu(isVisible);
+    actionSave->setIcon(AwesomeIcon::setIcon("\uf0c7"));
     actionSave->setIconVisibleInMenu(isVisible);
     actionSave_as->setIconVisibleInMenu(isVisible);
     actionSelect_all->setIconVisibleInMenu(isVisible);
     actionShrinkFont->setIconVisibleInMenu(isVisible);
     actionStaticLibMode->setIconVisibleInMenu(isVisible);
     actionToggleFolds->setIconVisibleInMenu(isVisible);
+    actionUndo->setIcon(AwesomeIcon::setIcon("\uf0e2"));
     actionUndo->setIconVisibleInMenu(isVisible);
-
-
 
 
 }

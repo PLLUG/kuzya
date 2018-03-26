@@ -22,7 +22,8 @@ HEADERS += kuzya.h \
     helpbrowser.h \
     translator.h \
     version.h \
-    aboutkuzya.h
+    aboutkuzya.h \
+    awesomeicon.h
 
 SOURCES += kuzya.cpp \
     main.cpp \
@@ -32,7 +33,8 @@ SOURCES += kuzya.cpp \
     finddialog.cpp \
     replacedialog.cpp \
     translator.cpp \
-    aboutkuzya.cpp
+    aboutkuzya.cpp \
+    awesomeicon.cpp
 
 RESOURCES = images.qrc \
            ../auth.qrc \
