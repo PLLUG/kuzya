@@ -59,6 +59,8 @@ public:
     QString readCompilerLocation(QString lang, QString comp);
     QString readCompilerOptions(QString lang, QString comp);
 
+    QSettings* getSettings()const;
+
 public slots:
     void slotCommOptions(void);
 
@@ -97,7 +99,8 @@ private:
     QDir localizationLanguageDir;
     QStringList styleFilters;
     QStringList localizationLanguageFilters;
-public:	
+    bool isReopenFile;
+public:
     bool isLineMarginVisible;
 };
 

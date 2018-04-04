@@ -428,10 +428,12 @@ void Compiler::compile()
 
 void Compiler::run(void)
 {
-    if (programPath.isEmpty()) return;
-
+    if (programPath.isEmpty())
+       {
+        return;
+        }
     QString prevPath = QDir::currentPath();
-    QDir::setCurrent(sourcePath);    
+    QDir::setCurrent(sourcePath);
 
 #ifdef Q_OS_WIN32
     QStringList command;

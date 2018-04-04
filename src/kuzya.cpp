@@ -1,4 +1,4 @@
-/******************************************************************************
+﻿/******************************************************************************
  *   Copyright (C) 2008 by                                                    *
  *                     Volodymyr Shevchyk (volder@users.sourceforge.net),     *
  *                     Victor Sklyar (bouyantgrambler@users.sourceforge.net), *
@@ -40,6 +40,10 @@
 #include <QVersionNumber>
 #include <QDate>
 #include <QString>
+#include <QStackedLayout>
+#include <QStateMachine>
+#include <QState>
+#include <QUuid>
 
 
 #include "gotolinedialog.h"
@@ -51,6 +55,8 @@
 #include "translator.h"
 #include "version.h"
 #include "aboutkuzya.h"
+#include "programminglanguageselectionwidget.h"
+#include "sourcefile.h"
 
 
 Kuzya::Kuzya(QWidget *parent)
@@ -60,39 +66,7 @@ Kuzya::Kuzya(QWidget *parent)
     setObjectName("Kuzya");
     setWindowTitle("Kuzya");
     languageComboBox = new QComboBox(this);
-    toolBar = addToolBar("General");
-    toolBar->setObjectName("KuzyaToolBar");
-    toolBar->setIconSize(QSize(30,30));
-    toolBar->addAction(actionNew);
-    toolBar->addAction(actionOpen);
-    toolBar->addAction(actionSave);
-#ifdef Q_OS_MAC
-#else
-    toolBar->addSeparator();
-#endif
-    toolBar->addAction(actionUndo);
-    toolBar->addAction(actionRedo);
-    actionCut->setShortcuts(QKeySequence::Cut);
-    toolBar->addAction(actionCut);
-    actionCopy->setShortcuts(QKeySequence::Copy);
-    toolBar->addAction(actionCopy);
-    actionPaste->setShortcuts(QKeySequence::Paste);
-    toolBar->addAction(actionPaste);
-#ifdef Q_OS_MAC
-#else
-    toolBar->addSeparator();
-#endif
-    toolBar->addAction(actionNotificationList);
-#ifdef Q_OS_MAC
-#else
-    toolBar->addSeparator();
-#endif
-    toolBar->addAction(actionCompile);
-    toolBar->addAction(actionRun);
-#ifdef Q_OS_MAC
-#else
-    toolBar->addSeparator();
-#endif
+
     languageComboBoxAction = toolBar->addWidget(languageComboBox);
     languageComboBoxAction->setVisible(false);
 
@@ -111,27 +85,12 @@ Kuzya::Kuzya(QWidget *parent)
     statusLabel = new QLabel(this);
     statusBar()->addPermanentWidget(statusLabel);
 
-    QGridLayout *gridLayout;
-    gridLayout = new QGridLayout(centralwidget);
-    gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-
-    textEditor = new QsciScintilla(this);
     textEditor->setEolMode(QsciScintilla::EolUnix);
 
-    notificationList = new QListWidget(this);
-    notificationList->setObjectName("notificationList");
     notificationList->setVisible(false);
 
-    QSplitter *splitter = new QSplitter(this);
-    splitter->setOrientation(Qt::Vertical);
-    splitter->addWidget(textEditor);
-    splitter->addWidget(notificationList);
-    splitter->setChildrenCollapsible(false);
     splitter->setStretchFactor(0, 5);
     splitter->setStretchFactor(1, 2);
-    splitter->setHandleWidth(5);
-
-    gridLayout->addWidget(splitter, 0, 0, 1, 1);
 
     textEditor->setCaretLineBackgroundColor(QColor(215, 215, 250));
     textEditor->setCaretLineVisible(true);
@@ -142,7 +101,7 @@ Kuzya::Kuzya(QWidget *parent)
 
     cppLexer = new QsciLexerCPP(this);
     cppLexer->setFont(font);
-//    cppLexer->
+
     pascalLexer = new QsciLexerPascal(this);
     pascalLexer->setFont(font);
     fortranLexer = new QsciLexerFortran(this);
@@ -158,7 +117,6 @@ Kuzya::Kuzya(QWidget *parent)
     textEditor->setSelectionBackgroundColor(QColor(100, 100, 200));
     textEditor->setUtf8(true);
 
-
     warningMarker = textEditor->markerDefine(QPixmap(":/markers/warning_line","",Qt::AutoColor));
     errorMarker = textEditor->markerDefine(QPixmap(":/markers/bug_line","",Qt::AutoColor));
     currentMarker = textEditor->markerDefine(QPixmap(":/markers/current_line","",Qt::AutoColor));
@@ -171,7 +129,6 @@ Kuzya::Kuzya(QWidget *parent)
     textEditor->setMarginSensitivity(1, true);
     //textEditor->setMarginsBackgroundColor(QColor(190, 178, 157,255));
 
-    file = new QFile();
     goToLine = new GoToLineDialog(textEditor);
     compiler = new Compiler(this);
     translator = new Translator(this);
@@ -183,14 +140,60 @@ Kuzya::Kuzya(QWidget *parent)
 
     RFileList = new QList<QString>();
 
+    myFile = nullptr;
+
+    machine = new QStateMachine();
+    stateLanguageSelection = new QState(machine);
+    stateOfWritingCode = new QState(machine);
+
+    for(auto &i : compiler->getSupportedLanguages())
+    {
+        QString programmingLanguage = i;
+        programmingLanguageSeletionWidget->addProgrammingLanguage(programmingLanguage, programmingLanguage, "");
+    }
+
+    stateLanguageSelection->assignProperty(stackedWidget, "currentIndex", "0");
+    stateLanguageSelection->assignProperty(actionNew, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionSave, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionSave_as, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionPrint, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionCut, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionCopy, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionPaste, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionNotificationList, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionCompile, "enabled", "false");
+    stateLanguageSelection->assignProperty(actionRun, "enabled", "false");
+    stateLanguageSelection->assignProperty(menuEdit, "enabled", "false");
+    stateLanguageSelection->assignProperty(menuBuild, "enabled", "false");
+    stateLanguageSelection->assignProperty(menuView, "enabled", "false");
+    stateLanguageSelection->assignProperty(statusLabel, "visible", "false");
+
+    stateOfWritingCode->assignProperty(stackedWidget, "currentIndex", "1");
+    stateOfWritingCode->assignProperty(actionNew, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionSave, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionSave_as, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionPrint, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionCut, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionCopy, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionPaste, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionNotificationList, "enabled", "true");
+    stateOfWritingCode->assignProperty(actionCompile, "enabled", "true");
+    stateOfWritingCode->assignProperty(menuEdit, "enabled", "true");
+    stateOfWritingCode->assignProperty(menuBuild, "enabled", "true");
+    stateOfWritingCode->assignProperty(menuView, "enabled", "true");
+    stateOfWritingCode->assignProperty(statusLabel, "visible", "true");
+
+    stateLanguageSelection->addTransition(this, SIGNAL(goToStateOfWritingCode()), stateOfWritingCode);
+    stateOfWritingCode->addTransition(this,	SIGNAL(goToStateLanguageSelection()), stateLanguageSelection);
+
     DefaultDir=DefaultDir;
     shortcut = new QShortcut(textEditor);
     shortcut->setKey(Qt::CTRL+Qt::Key_Space);
 
-
     settings->readODWSettings();
     settings->openLastProject();
     settings->readMainWindowState();
+
     ActOpenRecentFileVector.clear();
 
     srcRecompiled = false;
@@ -199,6 +202,9 @@ Kuzya::Kuzya(QWidget *parent)
     QList<QUrl> list = fileDialog->sidebarUrls();
     list << QUrl::fromLocalFile(DefaultDir);
     fileDialog->setSidebarUrls(list);
+
+    machine->setInitialState(stateLanguageSelection);
+    machine->start();
 
     ///-------------------------------------------------------------------------------------------------------------------
 
@@ -246,17 +252,12 @@ Kuzya::Kuzya(QWidget *parent)
     connect(actionStaticLibMode, SIGNAL(triggered()), this,         SLOT(slotStaticLibMode()));
     connect(actionDynamicLibMode, SIGNAL(triggered()), this,        SLOT(slotDynamicLibMode()));
 
-
-
-
+    connect(programmingLanguageSeletionWidget, &ProgrammingLanguageSelectionWidget::languageSelected,
+            this, &Kuzya::slotLanguageSelected);
 
     connect(textEditor, SIGNAL(textChanged()), this, SLOT(setUndoRedoEnabled()));
 
-
-
-
-
-    connect(textEditor,	SIGNAL(modificationChanged(bool)), this,SLOT(slotModificationChanged(bool)));
+    connect(textEditor,	SIGNAL(modificationChanged(bool)), this, SLOT(slotModificationChanged(bool)));
 
     connect(fileDialog, &QFileDialog::fileSelected, this, [this](const QString& suffix)
     {
@@ -272,11 +273,6 @@ Kuzya::Kuzya(QWidget *parent)
     QShortcut *textEditorShortcut = new QShortcut(textEditor);
     textEditorShortcut->setKey(Qt::CTRL+Qt::Key_Up);
     connect(textEditorShortcut, SIGNAL(activated()), textEditor, SLOT(setFocus()));
-
-//    if (qApp->argc() > 1)
-//    {
-//        this->openFile(qApp->argv()[qApp->argc()-1]);
-//    }
 
 #ifdef Q_OS_MAC
     setAllIconsVisibleInMenu(false);
@@ -407,15 +403,22 @@ void Kuzya::retranslate(void)
 
 void Kuzya::openFile(QString FileName)
 {
+    if (FileName.isEmpty())
+    {
+        return;
+    }
+
     fileName=FileName;
-    if (FileName.isEmpty()) return;
 
-    file->setFileName(FileName);
-    if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) return;
+    if(myFile)
+    {
+        delete myFile;
+        myFile = nullptr;
+    }
 
-    QTextStream stream(file);
-    textEditor->setText(stream.readAll());
-    file->close();
+    myFile = new SourceFile(fileName);
+
+    textEditor->setText(myFile->readFromFile());
 
     if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
 
@@ -425,7 +428,7 @@ void Kuzya::openFile(QString FileName)
 
     slotUpdateWindowName(false);
 
-    addFileNameToList(FileName);
+    addFileNameToList(fileName);
     settings->saveLastProjectName(fileName);
 
     refreshProfileSettings();
@@ -467,8 +470,6 @@ void Kuzya::slotUpdateRecentFileList(void)
     }
     connect(signalMapper,SIGNAL(mapped(QString)),this,SLOT(slotOpenRecentFile(QString)));
 }
-
-
 
 /**
 ***********getFileListCount****************************************************************************************
@@ -562,11 +563,11 @@ ________________________________________________________________________________
 
 void Kuzya::slotNew(void)
 {
-    if(slotSaveChangesNotifier()==false) return;
+    if(!slotSaveChangesNotifier()) return;
 
     textEditor->markerDeleteAll();
     notificationList->clear();
-    languageComboBox->clear();
+//    languageComboBox->clear();
     textEditor->setLexer(0);
 
     fileName = QString::null;
@@ -585,6 +586,8 @@ void Kuzya::slotNew(void)
     languageComboBoxAction->setVisible(false);
 
     srcRecompiled  = false;
+
+    emit goToStateLanguageSelection();
 }
 
 /**
@@ -596,6 +599,9 @@ void Kuzya::slotOpen(void)
     {
         return;
     }
+
+    emit goToStateOfWritingCode();
+
     refreshDialogSettings();
     fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
     fileDialog->setFileMode(QFileDialog::ExistingFile);
@@ -604,6 +610,7 @@ void Kuzya::slotOpen(void)
     if (QDialog::Accepted == fileDialog->exec())
     {
         openedFileName = fileDialog->selectedFiles().at(0);
+        qDebug() << "openedFileName:" << openedFileName;
 
         if ("" != openedFileName)
         {
@@ -666,7 +673,20 @@ void Kuzya::setUndoRedoEnabled()
     actionRedo->setEnabled(textEditor->isRedoAvailable());
 }
 
+void Kuzya::slotLanguageSelected(QString id)
+{
+    language = id;
 
+    myFile = new SourceFile();
+
+    fileName = myFile->getFileName();
+
+    textEditor->setText(myFile->readFromFile());
+
+    refreshProfileSettings();
+
+    emit goToStateOfWritingCode();
+}
 
 void Kuzya::refreshDialogSettings()
 {
@@ -690,14 +710,12 @@ void Kuzya::refreshDialogSettings()
     QString currentFilter;
     if (!language.isEmpty()) currentFilter = language + " ("+compiler->getSupportedExtensions(language)+")";
     else currentFilter = "";
-    fileDialog->selectFile(currentFilter);
     slotSetFileSuffix(fileDialog->selectedFiles());
 }
 
 void Kuzya::refreshProfileSettings()
 {
     languageComboBoxAction->setVisible(false);
-
     if (fileName.isEmpty()) return;
 
     QStringList supportedList = compiler->getSupportedLanguages();
@@ -717,6 +735,7 @@ void Kuzya::refreshProfileSettings()
     if (!language.isEmpty())
     {
         QString comp = settings->readDefaultCompiler(language);
+
         if (comp.isEmpty())
         {
             QStringList supportedCompilers = compiler->getSupportedCompilers(language);
@@ -801,9 +820,16 @@ void Kuzya::refreshProfileSettings()
 /**
 *******************************************************************************************************
 **/
+
 bool Kuzya::slotSave(void)
 {
     QString newFileName;
+
+    if(!myFile->isSaved())
+    {
+        fileName.clear();
+    }
+
     if (fileName.isEmpty())
     {
         // fileName = fileDialog->getSaveFileName(this, tr("Save as..."), DefaultDir, filter, &currentFilter);
@@ -812,39 +838,33 @@ bool Kuzya::slotSave(void)
         fileDialog->setFileMode(QFileDialog::AnyFile);
 
         if (fileDialog->exec())
-            newFileName = fileDialog->selectedFiles().at(0);
-
-        if (newFileName.isEmpty()) return false;
-        else fileName = newFileName;
-    }
-
-
-    QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        QMessageBox *msgBox= new QMessageBox();
-        msgBox->setIcon(QMessageBox::Warning);
-        msgBox->setWindowTitle(tr("File cannot be saved "));
-        msgBox->setText(tr("Do you have permision to access data in this folder? Select another place to save this file"));
-        QAbstractButton *OkBtn = msgBox->addButton(tr("Ok"),QMessageBox::ActionRole);
-        msgBox->exec();
-        if (msgBox->clickedButton()==(OkBtn))
         {
-            //slotSave_as();
+            newFileName = fileDialog->selectedFiles().at(0);
         }
-        delete msgBox;
-        return false ;
+
+        if (newFileName.isEmpty())
+        {
+            return false;
+        }
+        else
+        {
+            fileName = newFileName;
+        }
     }
-    QTextStream stream(&file);
-    stream << textEditor->text();
+
+    myFile->save(fileName);
+
+    myFile->writeToFile(textEditor->text());
+
     textEditor->setModified(false);
-    file.close();
     statusBar()->showMessage(tr("Saved"), 2000);
-    addFileNameToList(file.fileName());
+    addFileNameToList(myFile->getFileName());
     refreshProfileSettings();
     slotUpdateWindowName(false);
     if(settings->isLineMarginVisible) textEditor->setMarginWidth(3,QVariant(textEditor->lines()).toString());
-    return true;
+    {
+        return true;
+    }
 }
 
 /**
@@ -862,12 +882,21 @@ void Kuzya::slotSave_as(void)
     fileDialog->setFileMode(QFileDialog::AnyFile);
 
     if (fileDialog->exec())
+    {
         newFileName = fileDialog->selectedFiles().at(0);
+    }
 
-    if (newFileName.isEmpty()) return;
+    if (newFileName.isEmpty())
+    {
+        return;
+    }
 
     fileName = newFileName;
-    if (!slotSave()) fileName = oldFileName;
+
+    if (!slotSave())
+    {
+        fileName = oldFileName;
+    }
 }
 /**
 *******************************************************************************************************
@@ -931,7 +960,10 @@ void Kuzya::slotRun(void)
 **/
 void Kuzya::slotCompile(void)
 {
-    if (textEditor->isModified()) slotSave();
+    if (textEditor->isModified())
+    {
+            myFile->writeToFile(textEditor->text());
+    }
 
     removeAllNotifications();
     textEditor->markerDeleteAll(currentMarker);
@@ -950,7 +982,10 @@ void Kuzya::slotCompile(void)
         compiler->compile();
         srcRecompiled = true;
     }
-    else addNotification(NTYPE_FAILING, tr("Could not open compiler profile"));
+    else
+    {
+        addNotification(NTYPE_FAILING, tr("Could not open compiler profile"));
+    }
 }
 
 Compiler* Kuzya::getCurrentCompiler(void)
@@ -1088,6 +1123,7 @@ bool Kuzya::slotSaveChangesNotifier(void)
 {
     if (textEditor->isModified())
     {
+        QString oldFileName = fileName;
         QMessageBox *msgBox= new QMessageBox();
         msgBox->setIcon(QMessageBox::Warning);
         msgBox->setWindowTitle(tr("File was modified"));
@@ -1101,8 +1137,12 @@ bool Kuzya::slotSaveChangesNotifier(void)
         {
             return false;	// false - cancelbtn pressed
         }
-        if (msgBox->clickedButton() ==yesBtn)
+        if (msgBox->clickedButton() == yesBtn)
         {
+            if(!myFile->isSaved())
+            {
+                fileName.clear();
+            }
             if(slotSave()==true)
             {
                 addFileNameToList(fileName);
@@ -1111,6 +1151,7 @@ bool Kuzya::slotSaveChangesNotifier(void)
             }
             else
             {
+                fileName = oldFileName;
                 delete msgBox;
                 return false;///false - Saving was canceled
             }
@@ -1122,14 +1163,16 @@ bool Kuzya::slotSaveChangesNotifier(void)
         }
     }
     return true;/// true - File was saved
-
 }
 /**
 *******************************************************************************************************
 **/
 void Kuzya :: slotOpenRecentFile(QString FileName)
 {
-    if(slotSaveChangesNotifier()==false) return;
+    if(!slotSaveChangesNotifier()) return;
+
+     emit goToStateOfWritingCode();
+
     if(QFile::exists(FileName))
     {
         openFile(FileName);
@@ -1151,14 +1194,20 @@ void Kuzya :: slotOpenRecentFile(QString FileName)
 **/
 void Kuzya::closeEvent(QCloseEvent *event)
 {
-
     settings->writeSettings();
     settings->writeMainWindowState();
-    if(slotSaveChangesNotifier()==false)
+    if(!slotSaveChangesNotifier())
     {
         event->ignore();
     }
-
+    else
+    {
+        if(myFile)
+            {
+                delete myFile;
+                myFile = nullptr;
+            }
+    }
 
     //        if (!fileName.isEmpty())
     //            settings->saveLastProjectName(fileName);
@@ -1493,8 +1542,5 @@ void Kuzya::setAllIconsVisibleInMenu(bool isVisible)
     actionStaticLibMode->setIconVisibleInMenu(isVisible);
     actionToggleFolds->setIconVisibleInMenu(isVisible);
     actionUndo->setIconVisibleInMenu(isVisible);
-
-
-
 
 }

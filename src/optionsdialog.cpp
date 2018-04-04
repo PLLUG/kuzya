@@ -27,6 +27,7 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QLocale>
+#include <QTemporaryFile>
 #include "optionsdialog.h"
 
 OptionsDialog::OptionsDialog(QWidget *parent)
@@ -177,8 +178,7 @@ void OptionsDialog::writeSettings(void)
     settings->endGroup();
     ///-----PROGRAMING--LANGUAGE---------------------------------------------------
     settings->beginGroup("compilation_settings");
-    settings->setValue("defaultLanguage/text",defaultLanguageComboBox->currentText());
-    settings->setValue("defaultLanguage/index", defaultLanguageComboBox->currentIndex());
+
     QString val = languageComboBox->currentText()+"/"+compilerComboBox->currentText();
     QString location = compilerDirLineEdit->text().replace("/", QDir::separator());
     if (!location.isEmpty())
@@ -222,7 +222,7 @@ void OptionsDialog::writeSettings(void)
 
 
 void OptionsDialog::readODWSettings()
-{	
+{
     settings->beginGroup("Settings/MainWindow");
     checkBox->setChecked(settings->value("StartupPro",false).toBool());
     ///-----------------------------------------------------------------------------
@@ -254,7 +254,7 @@ void OptionsDialog::readODWSettings()
         }
 
     }
-#ifdef WIN32                
+#ifdef WIN32
     translator.load(QApplication::applicationDirPath()+"/../resources/translations/"+settings->value("Language",QLocale::languageToString(QLocale::system().language())).toString()+".qm");
 
 #else
@@ -461,7 +461,7 @@ void OptionsDialog::slotChangeDefDir(int index)
             directoryBox->insertItem(0,dir);
         }
         directoryBox->setCurrentIndex(0);
-	
+
     }
 }
 void OptionsDialog::slotChangeDefDir(QString dirName)
@@ -501,7 +501,6 @@ void OptionsDialog::slotLoadCompilerOptions(QString comp)
     QString info = mw->getCurrentCompiler()->getCompilerInfo(lang, comp);
     compilerInfo->setText(info);
     settings->beginGroup("compilation_settings");
-    defaultLanguageComboBox->setCurrentIndex(settings->value("defaultLanguage/index").toString().toInt());
     QString val = languageComboBox->currentText()+"/"+compilerComboBox->currentText();
     compilerDirLineEdit->setText(settings->value(val+"/location", "").toString());
     compilerOptionsEdit->setPlainText(settings->value(val+"/options", "").toString());
@@ -545,6 +544,11 @@ QString OptionsDialog::readCompilerOptions(QString lang, QString comp)
     QString options = settings->value(lang+"/"+comp+"/options", "").toString();
     settings->endGroup();
     return options;
+}
+
+QSettings *OptionsDialog::getSettings() const
+{
+    return settings;
 }
 
 void OptionsDialog::slotDefaultCompiler()

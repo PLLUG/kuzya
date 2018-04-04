@@ -51,6 +51,11 @@ template <typename T> class QList;
 class Translator;
 class QsciLexer;
 class QFileDialog;
+class ProgrammingLanguageSelectionWidget;
+class QStackedLayout;
+class QStateMachine;
+class QState;
+class SourceFile;
 
 class Kuzya: public QMainWindow, private Ui::kuzyaForm
 {
@@ -67,7 +72,7 @@ public:
 
     Kuzya(QWidget *parent = 0);
     ~Kuzya();
-    
+
         void openFile(QString);
         void markerDeleteAll(void);
         void setText(QString);
@@ -99,10 +104,17 @@ public:
         void setAutoCompletionEnabled(bool b);
         Compiler* getCurrentCompiler();
 
+        void createTemporaryFile();
         void refreshProfileSettings();
         void LoadTemplates(QString);
 
+signals:
+    void goToStateLanguageSelection();
+    void goToStateOfWritingCode();
+
 protected:
+
+
 
 private slots:
         void slotUpdateStatusLabel(int line, int pos);
@@ -145,6 +157,9 @@ private slots:
 
         void setUndoRedoEnabled();
 
+        void slotLanguageSelected(QString id);
+
+
 
 protected:
         //*DRAG AND DROP
@@ -164,10 +179,10 @@ private:
         void setAllIconsVisibleInMenu(bool isVisible);
 
 private:
-        QFile *file;
         QString language; //curren programing language
-        QsciScintilla* textEditor;
-        QListWidget* notificationList;
+        QStateMachine *machine;
+        QState *stateLanguageSelection;
+        QState *stateOfWritingCode;
         QString fileName;
         QString DefaultDir;
         //QString CurrentDir;
@@ -202,9 +217,9 @@ private:
 
         bool srcRecompiled;
         QFileDialog *fileDialog;
-
-        QToolBar *toolBar;
+        SourceFile *myFile;
 };
 
 #endif
+
 
