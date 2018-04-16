@@ -1,6 +1,6 @@
 # spec file for package kuzya (Version 2.0.0)
 #
-# Copyright (c) 2009 Fedora Linux, Lviv, Ukrain.
+# Copyright (c) 2009 Fedora Linux, Lviv, Ukraine.
 # This file and all modifications and additions to the pristine
 # package are under the same license as the package itself.
 #
